@@ -40,9 +40,10 @@ public class Member {
         INACTIVE
     }
 
-    @Builder(builderMethodName = "commonBuilder", buildMethodName = "buildCommonMember")
-    private static Member createCommonMember(String name, String email, String password){
+    @Builder(builderMethodName = "generalBuilder", buildMethodName = "buildGeneralMember")
+    private static Member createGeneralMember(String name, String email, String password){
         Member member = new Member();
+        member.initDefaultRolesAndStatus();
         member.name = name;
         member.email = email;
         member.password = password;
@@ -52,10 +53,16 @@ public class Member {
     @Builder(builderMethodName = "oauth2Builder", buildMethodName = "buildOAuth2Member")
     private static Member createOAuth2Member(String name, String provider, String providerId){
         Member member = new Member();
+        member.initDefaultRolesAndStatus();
         member.name = name;
         member.provider = provider;
         member.providerId = providerId;
         return member;
+    }
+
+    private void initDefaultRolesAndStatus(){
+        this.roles = "ROLE_USER";
+        this.status = MemberStatus.ACTIVE;
     }
 
     public List<String> getRoleList() {
@@ -66,4 +73,7 @@ public class Member {
                 .collect(Collectors.toList());
     }
 
+    public void saveEncryptedPassword(String encryptedPassword){
+        this.password = encryptedPassword;
+    }
 }

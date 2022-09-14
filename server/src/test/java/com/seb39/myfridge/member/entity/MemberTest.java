@@ -10,11 +10,11 @@ class MemberTest {
 
     @Test
     void commonBuilderTest(){
-        Member m = Member.commonBuilder()
+        Member m = Member.generalBuilder()
                 .name("common")
                 .password("1234")
                 .email("dog@cat.com")
-                .buildCommonMember();
+                .buildGeneralMember();
 
         assertThat(m.getName()).isEqualTo("common");
         assertThat(m.getPassword()).isEqualTo("1234");

@@ -1,6 +1,7 @@
 package com.seb39.myfridge.auth.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.seb39.myfridge.auth.dto.AuthResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
