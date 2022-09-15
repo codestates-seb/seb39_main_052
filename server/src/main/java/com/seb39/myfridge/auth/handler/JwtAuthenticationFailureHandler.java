@@ -2,6 +2,7 @@ package com.seb39.myfridge.auth.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seb39.myfridge.auth.dto.AuthResponse;
+import com.seb39.myfridge.auth.exception.AppAuthenticationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,9 +27,10 @@ public class JwtAuthenticationFailureHandler implements AuthenticationFailureHan
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        log.info("Authentication failure.",exception);
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        AuthResponse authResponse = AuthResponse.failure("Invalid username or password");
-        objectMapper.writeValue(response.getWriter(),authResponse);
+//        log.info("Authentication failure.",exception);
+//        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+//        AuthResponse authResponse = AuthResponse.failure("Invalid username or password");
+//        objectMapper.writeValue(response.getWriter(),authResponse);
+        throw new AppAuthenticationException("Invalid username or password");
     }
 }

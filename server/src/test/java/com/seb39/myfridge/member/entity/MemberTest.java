@@ -3,6 +3,9 @@ package com.seb39.myfridge.member.entity;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,4 +36,5 @@ class MemberTest {
         assertThat(m.getProvider()).isEqualTo("KAKAO");
         assertThat(m.getProviderId()).isEqualTo("123456789");
     }
+
 }

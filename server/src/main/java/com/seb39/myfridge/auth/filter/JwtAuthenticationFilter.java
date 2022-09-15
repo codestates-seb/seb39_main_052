@@ -4,6 +4,8 @@ package com.seb39.myfridge.auth.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seb39.myfridge.auth.PrincipalDetails;
 import com.seb39.myfridge.auth.dto.LoginRequest;
+import com.seb39.myfridge.auth.enums.AuthCookieType;
+import com.seb39.myfridge.auth.exception.AppAuthenticationException;
 import com.seb39.myfridge.auth.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -46,8 +49,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         try {
             loginRequest = objectMapper.readValue(request.getInputStream(), LoginRequest.class);
         } catch (IOException e) {
-            log.error("Failed to login request body deserialization", e);
-            throw new RuntimeException(e);
+            throw new AppAuthenticationException("Failed to login request body deserialization");
         }
         return loginRequest;
     }
@@ -55,10 +57,19 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         PrincipalDetails principal = (PrincipalDetails) authResult.getPrincipal();
-        String jwtToken = jwtService.createJwtToken(principal.getUsername());
-        response.addHeader(HttpHeaders.AUTHORIZATION, getAuthorizationHeader(jwtToken));
+
+        String accessToken = jwtService.createAccessToken(principal.getMemberId(), principal.getUsername());
+        String headerValue = jwtService.accessTokenToAuthorizationHeader(accessToken);
+        response.addHeader(HttpHeaders.AUTHORIZATION, headerValue);
+
+        String refreshToken = jwtService.createRefreshToken(accessToken);
+        response.addCookie(createRefreshTokenCookie(refreshToken));
     }
-    private String getAuthorizationHeader(String token) {
-        return "Bearer " + token;
+
+    private Cookie createRefreshTokenCookie(String token){
+        Cookie cookie = new Cookie(AuthCookieType.REFRESH_TOKEN.getName(), token);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        return cookie;
     }
 }

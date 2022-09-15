@@ -2,12 +2,12 @@ package com.seb39.myfridge.auth;
 
 import com.seb39.myfridge.auth.filter.JwtAuthenticationFilter;
 import com.seb39.myfridge.auth.filter.JwtAuthorizationFilter;
-import com.seb39.myfridge.auth.handler.ExceptionHandlingEntryPoint;
+import com.seb39.myfridge.auth.filter.JwtExceptionHandlingFilter;
 import com.seb39.myfridge.auth.handler.JwtAuthenticationFailureHandler;
+import com.seb39.myfridge.auth.handler.AuthenticationExceptionEntryPoint;
 import com.seb39.myfridge.auth.service.JwtService;
 import com.seb39.myfridge.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,14 +26,8 @@ public class SecurityConfig {
 
     private final MemberService memberService;
     private final JwtAuthenticationFailureHandler jwtAuthenticationFailureHandler;
+    private final AuthenticationExceptionEntryPoint authenticationExceptionEntryPoint;
     private final JwtService jwtService;
-
-
-    @Value("${app.auth.jwt.secret}")
-    private String secret;
-
-    @Value("${app.auth.jwt.expiration-time-millis}")
-    private long expirationTimeMillis;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -49,8 +43,7 @@ public class SecurityConfig {
                 .authorizeRequests().anyRequest().permitAll()
                 .and()
                 .exceptionHandling()
-                .authenticationEntryPoint(new ExceptionHandlingEntryPoint());
-
+                .authenticationEntryPoint(authenticationExceptionEntryPoint);
 
         return http.build();
     }
@@ -63,9 +56,12 @@ public class SecurityConfig {
             JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtService);
             jwtAuthenticationFilter.setFilterProcessesUrl("/api/login");
             jwtAuthenticationFilter.setAuthenticationFailureHandler(jwtAuthenticationFailureHandler);
+
+            JwtAuthorizationFilter jwtAuthorizationFilter = new JwtAuthorizationFilter(authenticationManager, memberService, jwtService);
             builder
                     .addFilter(jwtAuthenticationFilter)
-                    .addFilter(new JwtAuthorizationFilter(authenticationManager,memberService, jwtService));
+                    .addFilter(jwtAuthorizationFilter)
+                    .addFilterBefore(new JwtExceptionHandlingFilter(),JwtAuthenticationFilter.class);
         }
     }
 }
