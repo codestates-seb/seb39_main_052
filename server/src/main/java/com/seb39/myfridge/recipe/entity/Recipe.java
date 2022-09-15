@@ -43,12 +43,6 @@ public class Recipe {
     @OneToMany(mappedBy = "recipe")
     private List<Step> steps = new ArrayList<>();
 
-    public void addSteps(Step step) {
-        this.steps.add(step);
-        step.setRecipe(this);
-    }
-
-
     /**
      * 1. Member 엔티티와 연동 필요
      * 2. RecipeIngredients 엔티티와 연동 필요
