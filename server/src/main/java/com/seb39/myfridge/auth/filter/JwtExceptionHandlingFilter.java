@@ -20,8 +20,8 @@ public class JwtExceptionHandlingFilter implements Filter {
         try {
             chain.doFilter(request, response);
         } catch (AppAuthenticationException e) {
-            log.info("error",e);
-            AuthResponse responseBody = AuthResponse.failure(e.getMessage());
+            log.info("AppAuthenticationException", e);
+            AuthResponse responseBody = AuthResponse.failure(e.getExceptionCode());
             objectMapper.writeValue(response.getWriter(),responseBody);
         }
     }

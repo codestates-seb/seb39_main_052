@@ -2,6 +2,7 @@ package com.seb39.myfridge.auth.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seb39.myfridge.auth.dto.AuthResponse;
+import com.seb39.myfridge.auth.enums.AppAuthExceptionCode;
 import com.seb39.myfridge.auth.exception.AppAuthenticationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,6 @@ public class JwtAuthenticationFailureHandler implements AuthenticationFailureHan
 //        response.setStatus(HttpStatus.UNAUTHORIZED.value());
 //        AuthResponse authResponse = AuthResponse.failure("Invalid username or password");
 //        objectMapper.writeValue(response.getWriter(),authResponse);
-        throw new AppAuthenticationException("Invalid username or password");
+        throw new AppAuthenticationException(AppAuthExceptionCode.INVALID_EMAIL_OR_PASSWORD);
     }
 }

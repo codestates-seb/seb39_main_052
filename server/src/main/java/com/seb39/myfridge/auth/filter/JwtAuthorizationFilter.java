@@ -1,7 +1,9 @@
 package com.seb39.myfridge.auth.filter;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.seb39.myfridge.auth.PrincipalDetails;
+import com.seb39.myfridge.auth.enums.AppAuthExceptionCode;
 import com.seb39.myfridge.auth.enums.AuthCookieType;
 import com.seb39.myfridge.auth.exception.AppAuthenticationException;
 import com.seb39.myfridge.auth.service.JwtService;
@@ -41,38 +43,28 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
 
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (!isJwtAccessTokenHeader(header)) {
+        if (!jwtService.isJwtAccessTokenHeader(header)) {
             chain.doFilter(request, response);
             return;
         }
 
-        String email = null;
-        String accessToken = jwtService.authorizationHeaderToAccessToken(header);
         try {
-            email = jwtService.decodeJwtTokenAndGetEmail(accessToken);
+            String accessToken = jwtService.authorizationHeaderToAccessToken(header);
+            String email = jwtService.decodeJwtTokenAndGetEmail(accessToken);
+
+            if (StringUtils.hasText(email) && memberService.exist(email)) {
+                Member member = memberService.findByEmail(email);
+                PrincipalDetails principal = new PrincipalDetails(member);
+                Authentication authentication = new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+
         } catch (TokenExpiredException e) {
-            String refreshToken = jwtService.takeRefreshToken(request.getCookies())
-                    .orElseThrow(() -> new AppAuthenticationException("Refresh token is empty"));
-
-            String newAccessToken = jwtService.createNewAccessToken(accessToken, refreshToken);
-            String headerValue = jwtService.accessTokenToAuthorizationHeader(newAccessToken);
-            response.addHeader(HttpHeaders.AUTHORIZATION, headerValue);
-            email = jwtService.decodeJwtTokenAndGetEmail(newAccessToken);
+            throw new AppAuthenticationException(AppAuthExceptionCode.ACCESS_TOKEN_EXPIRED);
+        }catch(JWTVerificationException e){
+            throw new AppAuthenticationException(AppAuthExceptionCode.UNDEFINED);
         }
 
-        if (StringUtils.hasText(email) && memberService.exist(email)) {
-            Member member = memberService.findByEmail(email);
-            PrincipalDetails principal = new PrincipalDetails(member);
-            Authentication authentication = new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            chain.doFilter(request, response);
-            return;
-        }
-
-        super.doFilterInternal(request, response, chain);
-    }
-
-    private boolean isJwtAccessTokenHeader(String header) {
-        return StringUtils.hasText(header) && header.startsWith("Bearer");
+        chain.doFilter(request,response);
     }
 }

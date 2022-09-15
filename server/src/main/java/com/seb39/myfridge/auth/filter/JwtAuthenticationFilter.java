@@ -4,6 +4,7 @@ package com.seb39.myfridge.auth.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seb39.myfridge.auth.PrincipalDetails;
 import com.seb39.myfridge.auth.dto.LoginRequest;
+import com.seb39.myfridge.auth.enums.AppAuthExceptionCode;
 import com.seb39.myfridge.auth.enums.AuthCookieType;
 import com.seb39.myfridge.auth.exception.AppAuthenticationException;
 import com.seb39.myfridge.auth.service.JwtService;
@@ -49,7 +50,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         try {
             loginRequest = objectMapper.readValue(request.getInputStream(), LoginRequest.class);
         } catch (IOException e) {
-            throw new AppAuthenticationException("Failed to login request body deserialization");
+            throw new AppAuthenticationException(AppAuthExceptionCode.DATA_DESERIALIZE_ERROR);
         }
         return loginRequest;
     }

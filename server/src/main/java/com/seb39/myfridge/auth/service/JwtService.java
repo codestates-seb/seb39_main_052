@@ -3,6 +3,7 @@ package com.seb39.myfridge.auth.service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.seb39.myfridge.auth.enums.AppAuthExceptionCode;
 import com.seb39.myfridge.auth.enums.AuthCookieType;
 import com.seb39.myfridge.auth.enums.JwtClaim;
 import com.seb39.myfridge.auth.enums.JwtTokenType;
@@ -10,6 +11,7 @@ import com.seb39.myfridge.auth.exception.AppAuthenticationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.Cookie;
 import java.util.*;
@@ -62,7 +64,7 @@ public class JwtService {
                     .verify(refreshToken);
         }catch(TokenExpiredException e){
             repository.remove(refreshToken);
-            throw new AppAuthenticationException("Refresh token expired");
+            throw new AppAuthenticationException(AppAuthExceptionCode.REFRESH_TOKEN_EXPIRED);
         }
     }
 
@@ -71,10 +73,10 @@ public class JwtService {
         log.info("access = {}, refresh = {}",accessToken, refreshToken);
 
         String savedAccessToken = Optional.ofNullable(repository.get(refreshToken))
-                .orElseThrow(() -> new AppAuthenticationException("Refresh token is empty"));
+                .orElseThrow(() -> new AppAuthenticationException(AppAuthExceptionCode.INVALID_ACCESS_TOKEN));
 
         if(!savedAccessToken.equals(accessToken))
-            throw new AppAuthenticationException("Not equal to saved access token");
+            throw new AppAuthenticationException(AppAuthExceptionCode.INVALID_ACCESS_TOKEN);
     }
 
     public String createRefreshToken(String accessToken){
@@ -103,6 +105,11 @@ public class JwtService {
         repository.put(refreshToken,accessToken);
     }
 
+
+    public boolean isJwtAccessTokenHeader(String header) {
+        return StringUtils.hasText(header) && header.startsWith("Bearer");
+    }
+
     public String accessTokenToAuthorizationHeader(String token){
         return "Bearer " + token;
     }
@@ -110,6 +117,7 @@ public class JwtService {
     public String authorizationHeaderToAccessToken(String authorizationHeader) {
         return authorizationHeader.replace("Bearer ", "");
     }
+
 
     public void removeRefreshToken(String token){
         repository.remove(token);
