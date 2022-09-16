@@ -50,7 +50,6 @@ public class RecipeController {
         requestBody.setId(id);
         List<Step> stepList = recipeMapper.recipeDtoStepsToStepList(requestBody.getSteps());
         Recipe recipe = recipeService.updateRecipe(recipeMapper.recipePatchToRecipe(requestBody), stepList);
-
         RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(recipe);
         return new ResponseEntity(response, HttpStatus.OK);
     }
