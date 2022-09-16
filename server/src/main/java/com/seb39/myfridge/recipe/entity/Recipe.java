@@ -40,7 +40,7 @@ public class Recipe {
     @LastModifiedDate
     private LocalDateTime lastModifiedAt;
 
-    @OneToMany(mappedBy = "recipe")
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     private List<Step> steps = new ArrayList<>();
 
     /**

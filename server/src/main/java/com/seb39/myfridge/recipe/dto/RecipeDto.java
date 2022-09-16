@@ -12,7 +12,6 @@ import java.util.List;
 public class RecipeDto {
 
     @Getter
-    @Setter
     public static class Post{
         @NotBlank(message = "레시피 제목은 공백이 아니어야 합니다.")
         private String title;
@@ -30,17 +29,38 @@ public class RecipeDto {
     }
 
     @Getter
-    @Setter
+    @Builder
+    public static class Patch{
+
+        private Long id;
+        @NotBlank(message = "수정할 레시피 제목은 공백이 아니어야 합니다.")
+        private String title;
+
+        private String imagePath;
+
+        private List<Step> steps;
+
+
+        public Patch(Long id, String title, String imagePath, List<Step> steps) {
+            this.id = id;
+            this.title = title;
+            this.imagePath = imagePath;
+            this.steps = steps;
+        }
+        public void setId(long id) {
+            this.id = id;
+        }
+    }
+
+    @Getter
     public static class Step{
-//        private Long id;
         private int sequence;
         private String title;
         private String content;
         private String imagePath;
 
         @Builder
-        public Step(Long id, int sequence, String title, String content, String imagePath) {
-//            this.id = id;
+        public Step(int sequence, String title, String content, String imagePath) {
             this.sequence = sequence;
             this.title = title;
             this.content = content;

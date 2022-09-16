@@ -27,23 +27,27 @@ public class RecipeService {
         //2. 레시피를 등록할 때 입력한 재료 저장
 
         steps.forEach(step -> step.addRecipe(recipe));
-        /*for (Step step : steps) {
-            step.addRecipe(recipe);
-        }*/
         Recipe savedRecipe = recipeRepository.save(recipe);
         stepRepository.saveAll(steps);
         return savedRecipe;
     }
 
     @Transactional
-    public Recipe updateRecipe(Recipe recipe) {
+    public Recipe updateRecipe(Recipe recipe, List<Step> steps) {
         Recipe findRecipe = findRecipeById(recipe.getId());
 
         //수정하는 사람이 recipe 작성자인지 검색하는 로직 필요
         Optional.ofNullable(recipe.getTitle()).ifPresent(findRecipe::setTitle);
 
-        Recipe savedRecipe = recipeRepository.save(findRecipe);
-        return savedRecipe;
+        if(!findRecipe.getSteps().isEmpty()) {
+            findRecipe.getSteps().clear();
+        }
+        steps.forEach(step -> step.addRecipe(findRecipe));
+        Recipe updateRecipe = recipeRepository.save(findRecipe);
+
+        stepRepository.saveAll(steps);
+
+        return updateRecipe;
     }
 
     @Transactional

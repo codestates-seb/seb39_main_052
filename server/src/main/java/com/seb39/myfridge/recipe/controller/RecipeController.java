@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -28,7 +27,7 @@ public class RecipeController {
     @PostMapping
     public ResponseEntity postRecipe(@Valid @RequestBody RecipeDto.Post requestBody) {
         List<Step> stepList = recipeMapper.recipeDtoStepsToStepList(requestBody.getSteps());
-        Recipe recipe = recipeMapper.recipeDtoToRecipe(requestBody);
+        Recipe recipe = recipeMapper.recipePostToRecipe(requestBody);
 
         Recipe savedRecipe = recipeService.createRecipe(recipe, stepList);
         RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(savedRecipe);
@@ -38,10 +37,27 @@ public class RecipeController {
 
     @GetMapping("/{id}")
     public ResponseEntity findRecipe(@PathVariable("id") @Positive Long id) {
-        Recipe recipe= recipeService.findRecipeById(id);
+        Recipe recipe = recipeService.findRecipeById(id);
 
         RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(recipe);
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
+    //update 구현
+    @PatchMapping("/{id}")
+    public ResponseEntity updateRecipe(@PathVariable("id") @Positive Long id,
+                                       @Valid @RequestBody RecipeDto.Patch requestBody) {
+        requestBody.setId(id);
+        List<Step> stepList = recipeMapper.recipeDtoStepsToStepList(requestBody.getSteps());
+        Recipe recipe = recipeService.updateRecipe(recipeMapper.recipePatchToRecipe(requestBody), stepList);
+
+        RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(recipe);
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteRecipe(@PathVariable("id") @Positive Long id) {
+        recipeService.deleteRecipe(id);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 }

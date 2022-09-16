@@ -19,6 +19,7 @@ public class Step {
     @Column(name = "step_id")
     private Long id;
 
+    @GeneratedValue
     private int sequence;
 
     private String title;
