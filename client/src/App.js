@@ -16,8 +16,8 @@ function App() {
 }
 
 const Test = styled.div`
-  color: var(--primary-900);
-  background-color: var(--blue-500);
+  color: var(--red-500);
+  box-shadow: var(--shadow-high);
 `
 
 export default App;

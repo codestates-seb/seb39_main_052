@@ -1,11 +1,11 @@
 import { createGlobalStyle } from "styled-components";
-import reset from 'styled-reset'
+import "./style.css";
 
 const GlobalStyle = createGlobalStyle`
-
     * {
         box-sizing: border-box;
         font-family: 'GmarketSansMedium';
+        color: var(--black);
     }
     a {
         text-decoration: none;
