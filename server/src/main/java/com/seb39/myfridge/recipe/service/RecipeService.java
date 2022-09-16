@@ -26,9 +26,8 @@ public class RecipeService {
         //1. 레시피를 등록한 member 값 저장
         //2. 레시피를 등록할 때 입력한 재료 저장
 
-        steps.forEach(step -> step.addRecipe(recipe));
         Recipe savedRecipe = recipeRepository.save(recipe);
-        stepRepository.saveAll(steps);
+        steps.forEach(step -> step.addRecipe(recipe));
         return savedRecipe;
     }
 
@@ -38,14 +37,10 @@ public class RecipeService {
 
         //수정하는 사람이 recipe 작성자인지 검색하는 로직 필요
         Optional.ofNullable(recipe.getTitle()).ifPresent(findRecipe::setTitle);
-
-        if(!findRecipe.getSteps().isEmpty()) {
-            findRecipe.getSteps().clear();
-        }
+        //update를 하면 기존의 step이 중복으로 들어가는 문제 발생 -> update를 하기 이전에, step을 삭제(더 좋은 방법이 있을까?)
+        stepRepository.deleteStepByRecipeId(findRecipe.getId());
         steps.forEach(step -> step.addRecipe(findRecipe));
         Recipe updateRecipe = recipeRepository.save(findRecipe);
-
-        stepRepository.saveAll(steps);
 
         return updateRecipe;
     }
@@ -61,6 +56,4 @@ public class RecipeService {
         Optional<Recipe> optionalRecipe = recipeRepository.findById(recipeId);
         return optionalRecipe.orElseThrow(() -> new IllegalArgumentException("해당 레시피를 찾을 수 없습니다."));
     }
-
-
 }
