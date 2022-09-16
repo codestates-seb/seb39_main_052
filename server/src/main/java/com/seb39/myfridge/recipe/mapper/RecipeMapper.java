@@ -6,6 +6,7 @@ import com.seb39.myfridge.step.entity.Step;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 public interface RecipeMapper {
 
 
-//    List<Step> recipeDtoStepsToStepList(List<RecipeDto.Step> steps);
+    //List<Step> recipeDtoStepsToStepList(List<RecipeDto.Step> steps);
     //requestBody에 담긴 List를 step으로 변환하여 저장하는 로직 필요
 
     default List<Step> recipeDtoStepsToStepList(List<RecipeDto.Step> steps) {
@@ -69,6 +70,7 @@ public interface RecipeMapper {
                 .title(step.getTitle())
                 .sequence(step.getSequence())
                 .build();
+
     }
 
 }

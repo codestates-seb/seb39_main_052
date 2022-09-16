@@ -37,11 +37,11 @@ public class RecipeService {
 
         //수정하는 사람이 recipe 작성자인지 검색하는 로직 필요
         Optional.ofNullable(recipe.getTitle()).ifPresent(findRecipe::setTitle);
+
         //update를 하면 기존의 step이 중복으로 들어가는 문제 발생 -> update를 하기 이전에, step을 삭제(더 좋은 방법이 있을까?)
         stepRepository.deleteStepByRecipeId(findRecipe.getId());
         steps.forEach(step -> step.addRecipe(findRecipe));
         Recipe updateRecipe = recipeRepository.save(findRecipe);
-
         return updateRecipe;
     }
 
