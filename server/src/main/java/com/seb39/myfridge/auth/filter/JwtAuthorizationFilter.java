@@ -24,6 +24,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -53,10 +54,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             String email = jwtService.decodeJwtTokenAndGetEmail(accessToken);
 
             if (StringUtils.hasText(email) && memberService.exist(email)) {
-                Member member = memberService.findByEmail(email);
-                PrincipalDetails principal = new PrincipalDetails(member);
-                Authentication authentication = new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                PrincipalDetails principal = loadPrincipalDetails(email);
+                savePrincipalInSecurityContext(principal);
             }
 
         } catch (TokenExpiredException e) {
@@ -66,5 +65,18 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         }
 
         chain.doFilter(request,response);
+    }
+    private PrincipalDetails loadPrincipalDetails(String email) {
+        Member member = memberService.findByEmail(email);
+        return new PrincipalDetails(member);
+    }
+    private void savePrincipalInSecurityContext(PrincipalDetails principal) {
+        Authentication authentication = new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        return request.getRequestURI().equals("/api/auth/refresh");
     }
 }

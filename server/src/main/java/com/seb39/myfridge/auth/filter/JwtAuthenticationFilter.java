@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seb39.myfridge.auth.PrincipalDetails;
 import com.seb39.myfridge.auth.dto.LoginRequest;
 import com.seb39.myfridge.auth.enums.AppAuthExceptionCode;
-import com.seb39.myfridge.auth.enums.AuthCookieType;
 import com.seb39.myfridge.auth.exception.AppAuthenticationException;
 import com.seb39.myfridge.auth.service.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -64,13 +62,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.addHeader(HttpHeaders.AUTHORIZATION, headerValue);
 
         String refreshToken = jwtService.createRefreshToken(accessToken);
-        response.addCookie(createRefreshTokenCookie(refreshToken));
-    }
-
-    private Cookie createRefreshTokenCookie(String token){
-        Cookie cookie = new Cookie(AuthCookieType.REFRESH_TOKEN.getName(), token);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        return cookie;
+        response.addCookie(jwtService.refreshTokenToCookie(refreshToken));
     }
 }

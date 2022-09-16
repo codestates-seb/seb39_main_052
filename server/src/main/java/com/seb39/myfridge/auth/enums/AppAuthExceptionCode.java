@@ -5,14 +5,15 @@ import lombok.Getter;
 @Getter
 public enum AppAuthExceptionCode {
 
-    DATA_DESERIALIZE_ERROR(401,"Failed to login request body deserialization"),
-    REFRESH_TOKEN_EMPTY(401,"Refresh token is empty"),
-    INVALID_EMAIL_OR_PASSWORD(401,"Invalid email or password"),
-    ACCESS_TOKEN_EXPIRED(401, "Access token expired"),
-    REFRESH_TOKEN_EXPIRED(401,"Refresh token expired"),
-    INVALID_ACCESS_TOKEN(401,"Invalid access token"),
-    REFRESH_TOKEN_NOT_EXIST(401, "Refresh token not exist"),
-    UNDEFINED(401, "Undefined");
+    ACCESS_TOKEN_EXPIRED(1, "Access token expired"),
+    INVALID_ACCESS_TOKEN(2,"Invalid access token"),
+    ACCESS_TOKEN_NOT_EXIST(3,"Access token not exist"),
+    REFRESH_TOKEN_EXPIRED(4,"Refresh token expired"),
+    INVALID_REFRESH_TOKEN(5,"Refresh token is empty"),
+    REFRESH_TOKEN_NOT_EXIST(6, "Refresh token not exist"),
+    INVALID_EMAIL_OR_PASSWORD(7,"Invalid email or password"),
+    DATA_DESERIALIZE_ERROR(8,"Failed to login request body deserialization"),
+    UNDEFINED(99, "Undefined");
 
     private final int code;
     private final String description;

@@ -58,10 +58,11 @@ public class SecurityConfig {
             jwtAuthenticationFilter.setAuthenticationFailureHandler(jwtAuthenticationFailureHandler);
 
             JwtAuthorizationFilter jwtAuthorizationFilter = new JwtAuthorizationFilter(authenticationManager, memberService, jwtService);
+            JwtExceptionHandlingFilter jwtExceptionHandlingFilter = new JwtExceptionHandlingFilter(authenticationManager);
             builder
                     .addFilter(jwtAuthenticationFilter)
                     .addFilter(jwtAuthorizationFilter)
-                    .addFilterBefore(new JwtExceptionHandlingFilter(),JwtAuthenticationFilter.class);
+                    .addFilterBefore(jwtExceptionHandlingFilter,JwtAuthenticationFilter.class);
         }
     }
 }

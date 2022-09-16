@@ -18,7 +18,4 @@ public class AppAuthenticationException extends AuthenticationException {
         super(exceptionCode.getDescription());
         this.exceptionCode = exceptionCode;
     }
-
-
-
 }

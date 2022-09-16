@@ -3,6 +3,8 @@ package com.seb39.myfridge.auth.controller;
 import com.seb39.myfridge.auth.PrincipalDetails;
 import com.seb39.myfridge.auth.dto.AuthResponse;
 import com.seb39.myfridge.auth.dto.SignUpRequest;
+import com.seb39.myfridge.auth.enums.AppAuthExceptionCode;
+import com.seb39.myfridge.auth.exception.AppAuthenticationException;
 import com.seb39.myfridge.auth.service.JwtService;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.service.MemberService;
@@ -47,7 +49,25 @@ public class AuthController {
         return ResponseEntity.ok(AuthResponse.success());
     }
 
-    @GetMapping("/authtest")
+    @PostMapping("/api/auth/refresh")
+    public ResponseEntity<AuthResponse> refresh(HttpServletRequest request, HttpServletResponse response){
+        String accessTokenHeader = Optional.ofNullable(request.getHeader(HttpHeaders.AUTHORIZATION))
+                .orElseThrow(() -> new AppAuthenticationException(AppAuthExceptionCode.ACCESS_TOKEN_NOT_EXIST));
+        String accessToken = jwtService.authorizationHeaderToAccessToken(accessTokenHeader);
+
+        String refreshToken = jwtService.takeRefreshToken(request.getCookies())
+                .orElseThrow(() -> new AppAuthenticationException(AppAuthExceptionCode.REFRESH_TOKEN_NOT_EXIST));
+
+        String newAccessToken = jwtService.createNewAccessToken(accessToken, refreshToken);
+        String headerValue = jwtService.accessTokenToAuthorizationHeader(newAccessToken);
+        response.setHeader(HttpHeaders.AUTHORIZATION,headerValue);
+        return ResponseEntity.ok(AuthResponse.success());
+    }
+
+    /**
+     * 인증 테스트를 위한 Method
+     */
+    @GetMapping("/api/authtest")
     @Secured("ROLE_USER")
     public String authTest(@AuthenticationPrincipal PrincipalDetails principal){
         return principal.getMemberId() + " / " + principal.getUsername();

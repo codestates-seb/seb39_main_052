@@ -123,6 +123,13 @@ public class JwtService {
         repository.remove(token);
     }
 
+    public Cookie refreshTokenToCookie(String token){
+        Cookie cookie = new Cookie(AuthCookieType.REFRESH_TOKEN.getName(), token);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        return cookie;
+    }
+
     public Optional<String> takeRefreshToken(Cookie[] cookies){
         if(cookies == null){
             return Optional.empty();
