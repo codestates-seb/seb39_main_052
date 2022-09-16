@@ -1,31 +1,23 @@
-import './App.css';
-import React, { useState } from 'react';
-
+import React from 'react';
+import GlobalStyle from './GlobalStyle';
+import styled from 'styled-components';
+import "./style.css";
 
 function App() {
-  // const [message, setMessage] = useState("message");
-  
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    httpGet();
-  };
-  
-  const httpGet = () => {
-    fetch("/json")
-    .then((res) => {
-        return res.json(); //Promise 반환
-    })
-    .then((json) => {
-        console.log(json); // 서버에서 주는 json데이터가 출력 됨
-    });
-  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <button onClick={handleSubmit}>FETCH</button>
-      </header>
-    </div>
+    <>
+      {/* Global Styles는 Router 안, 컴포넌트 상단에 위치  */}
+      <GlobalStyle />
+      <Test> 나만의 냉장고 </Test>
+      <div> My Fridge </div>
+    </>
   );
 }
+
+const Test = styled.div`
+  color: var(--primary-900);
+  background-color: var(--blue-500);
+`
 
 export default App;
