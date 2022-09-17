@@ -1,5 +1,6 @@
 package com.seb39.myfridge.recipe.entity;
 
+import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.step.entity.Step;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,8 +44,12 @@ public class Recipe {
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     private List<Step> steps = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+
     /**
-     * 1. Member 엔티티와 연동 필요
-     * 2. RecipeIngredients 엔티티와 연동 필요
+     * 1. RecipeIngredients 엔티티와 연동 필요
      */
 }

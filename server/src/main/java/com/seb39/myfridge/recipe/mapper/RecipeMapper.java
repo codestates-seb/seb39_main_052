@@ -39,6 +39,7 @@ public interface RecipeMapper {
                 .lastModifiedAt(recipe.getLastModifiedAt())
                 .title(recipe.getTitle())
                 .steps(stepsToDto(recipe.getSteps()))
+                .member(recipe.getMember())
                 .build();
     }
 
