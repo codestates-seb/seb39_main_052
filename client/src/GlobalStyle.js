@@ -5,7 +5,6 @@ const GlobalStyle = createGlobalStyle`
     * {
         box-sizing: border-box;
         font-family: 'GmarketSansMedium';
-        color: var(--black);
     }
     a {
         text-decoration: none;
@@ -23,6 +22,13 @@ const GlobalStyle = createGlobalStyle`
     }
     button {
       cursor: pointer;
+      border: none;
+      border-radius: 50%;
+      background-color: var(--white);
+      :hover {
+        background-color: var(--mintgreen-400);
+        box-shadow: var(--shadow-high);
+      }
     }
 
     @font-face {
