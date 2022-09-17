@@ -76,15 +76,17 @@ public class RecipeDto {
         private String title;
         private LocalDateTime createdAt;
         private LocalDateTime lastModifiedAt;
+        private String imagePath;
         private List<Step> steps;
         private String memberName;
 
         @Builder
-        public Response(Long id, String title, LocalDateTime createdAt, LocalDateTime lastModifiedAt, List<Step> steps, Member member) {
+        public Response(Long id, String title, LocalDateTime createdAt, LocalDateTime lastModifiedAt, String imagePath, List<Step> steps, Member member) {
             this.id = id;
             this.title = title;
             this.createdAt = createdAt;
             this.lastModifiedAt = lastModifiedAt;
+            this.imagePath = imagePath;
             this.steps = steps;
             this.memberName = member.getName();
         }

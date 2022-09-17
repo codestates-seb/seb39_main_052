@@ -38,6 +38,7 @@ public interface RecipeMapper {
                 .createdAt(recipe.getCreatedAt())
                 .lastModifiedAt(recipe.getLastModifiedAt())
                 .title(recipe.getTitle())
+                .imagePath(recipe.getImagePath())
                 .steps(stepsToDto(recipe.getSteps()))
                 .member(recipe.getMember())
                 .build();

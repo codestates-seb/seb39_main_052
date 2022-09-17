@@ -111,7 +111,7 @@ class RecipeServiceTest {
         //when
         String updateTitle = "Update title!!";
         savedRecipe.setTitle(updateTitle);
-        Recipe updateRecipe = recipeService.updateRecipe(savedRecipe, new ArrayList<>(), 1L);
+        Recipe updateRecipe = recipeService.updateRecipe(savedRecipe, new ArrayList<>(), member.getId());
 //        System.out.println(updateRecipe.getTitle());
 
         //then
@@ -129,7 +129,14 @@ class RecipeServiceTest {
         recipe.setCreatedAt(LocalDateTime.now());
         recipe.setLastModifiedAt(LocalDateTime.now());
 
-        Recipe savedRecipe = recipeService.createRecipe(recipe, new ArrayList<>(), 1L);
+        Member member = Member.generalBuilder()
+                .name("nameA")
+                .email("test@naver.com")
+                .password("1234")
+                .buildGeneralMember();
+        memberService.signUpGeneral(member);
+
+        Recipe savedRecipe = recipeService.createRecipe(recipe, new ArrayList<>(), member.getId());
         //when
         recipeService.deleteRecipe(savedRecipe.getId(),1L);
         //then
