@@ -35,4 +35,10 @@ public class MemberService {
     public void signUpOauth2(Member member){
 
     }
+
+    //findById 추가
+    public Member findById(Long id) {
+        Optional<Member> optionalMember = memberRepository.findById(id);
+        return optionalMember.orElseThrow(() -> new IllegalArgumentException("Member not exist. id = " + id));
+    }
 }

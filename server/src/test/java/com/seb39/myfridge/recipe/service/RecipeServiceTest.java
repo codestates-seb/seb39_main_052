@@ -1,5 +1,7 @@
 package com.seb39.myfridge.recipe.service;
 
+import com.seb39.myfridge.member.entity.Member;
+import com.seb39.myfridge.member.service.MemberService;
 import com.seb39.myfridge.recipe.entity.Recipe;
 import com.seb39.myfridge.recipe.mapper.RecipeMapper;
 import com.seb39.myfridge.recipe.repository.RecipeRepository;
@@ -23,6 +25,9 @@ class RecipeServiceTest {
 
     @Autowired
     private RecipeRepository recipeRepository;
+
+    @Autowired
+    private MemberService memberService;
 
     @Autowired
     private RecipeMapper recipeMapper;
@@ -56,12 +61,20 @@ class RecipeServiceTest {
         recipe1.setCreatedAt(LocalDateTime.now());
         recipe1.setLastModifiedAt(LocalDateTime.now());
 
+        Member member = Member.generalBuilder()
+                .name("nameA")
+                .email("test@naver.com")
+                .password("1234")
+                .buildGeneralMember();
+        memberService.signUpGeneral(member);
+        
         //when
-        Recipe savedRecipe = recipeService.createRecipe(recipe, steps);
+        Recipe savedRecipe = recipeService.createRecipe(recipe, steps, member.getId());
         System.out.println(recipe);
 
         //then
         assertEquals(savedRecipe.getId(), recipe.getId());
+        assertEquals(savedRecipe.getMember().getEmail(), member.getEmail());
     }
 
     @Test
@@ -87,15 +100,24 @@ class RecipeServiceTest {
         step2.setSequence(2);
         steps.add(step2);
 
-        Recipe savedRecipe = recipeService.createRecipe(recipe, steps);
+        Member member = Member.generalBuilder()
+                .name("nameA")
+                .email("test@naver.com")
+                .password("1234")
+                .buildGeneralMember();
+        memberService.signUpGeneral(member);
+
+        Recipe savedRecipe = recipeService.createRecipe(recipe, steps, member.getId());
         //when
         String updateTitle = "Update title!!";
         savedRecipe.setTitle(updateTitle);
-        Recipe updateRecipe = recipeService.updateRecipe(savedRecipe, new ArrayList<>());
+        Recipe updateRecipe = recipeService.updateRecipe(savedRecipe, new ArrayList<>(), 1L);
 //        System.out.println(updateRecipe.getTitle());
 
         //then
-        assertEquals(recipeRepository.findById(savedRecipe.getId()).get().getTitle(), updateTitle);
+        assertEquals(updateRecipe.getTitle(), updateTitle);
+        assertEquals(updateRecipe.getMember().getId(), member.getId());
+
     }
 
     @Test
@@ -107,9 +129,9 @@ class RecipeServiceTest {
         recipe.setCreatedAt(LocalDateTime.now());
         recipe.setLastModifiedAt(LocalDateTime.now());
 
-        Recipe savedRecipe = recipeService.createRecipe(recipe, new ArrayList<>());
+        Recipe savedRecipe = recipeService.createRecipe(recipe, new ArrayList<>(), 1L);
         //when
-        recipeService.deleteRecipe(savedRecipe.getId());
+        recipeService.deleteRecipe(savedRecipe.getId(),1L);
         //then
         assertEquals(0, recipeRepository.findAll().size());
     }
