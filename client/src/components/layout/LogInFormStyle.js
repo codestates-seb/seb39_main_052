@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const LogInContainer = styled.section`
+export const LogInFormContainer = styled.section`
   display: flex;
   justify-content: center;
 

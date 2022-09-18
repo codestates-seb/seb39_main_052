@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
 import GeneralButton from "../common/Button/GeneralButton";
-import { LogInContainer } from "./LogInStyle";
+import { LogInFormContainer } from "./LogInFormStyle";
 
-const LogIn = () => {
+const LogInForm = () => {
   const {
     register,
     handleSubmit,
@@ -12,7 +12,7 @@ const LogIn = () => {
   //isDirty: form 양식 어떤 input이라도 건드렸으면 true?
 
   return (
-    <LogInContainer>
+    <LogInFormContainer>
       <form onSubmit={handleSubmit((data) => console.log(data))}>
         {/* {email: 'test@email.com', password: '1111'} */}
         <label>이메일</label>
@@ -23,15 +23,15 @@ const LogIn = () => {
           name="email"
           placeholder="이메일을 입력해주세요"
           {...register("email", {
-            //   required: "",
+            // required: true,
             pattern: {
               value: /\S+@\S+\.\S+/,
               message: "올바른 이메일 형식이 아니에요",
             },
           })}
         ></input>
-
         {errors.email && <span>{errors.email.message}</span>}
+
         <label>비밀번호</label>
         <input
           id="password"
@@ -39,7 +39,7 @@ const LogIn = () => {
           name="password"
           placeholder="비밀번호를 입력해주세요"
           {...register("password", {
-            //   required: "",
+            // required: true,
             minLength: {
               value: 8,
               message: "비밀번호는 8자 이상이에요",
@@ -60,8 +60,8 @@ const LogIn = () => {
         </GeneralButton>
         {/* props로 width, height 내려주는 코드로 다시짜기 */}
       </form>
-    </LogInContainer>
+    </LogInFormContainer>
   );
 };
 
-export default LogIn;
+export default LogInForm;
