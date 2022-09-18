@@ -1,23 +1,35 @@
-import styled from "styled-components"
+import styled from "styled-components";
 
-const GeneralButton = ({width, height, children}) => {
-    return (
-        <Button width={width} height={height}> {children} </Button>
-    )
-
-}
+const GeneralButton = ({ disabled, width, height, children, className }) => {
+  return (
+    <Button
+      disabled={disabled}
+      width={width}
+      height={height}
+      className={className}
+    >
+      {" "}
+      {children}{" "}
+    </Button>
+  );
+};
 
 const Button = styled.button`
-    border-radius: 10px;
-    border: none;
-    background-color: var(--fridge-500);
-    color: var(--white);
-    width: 250px;
-    height: 35px;
+  border-radius: 10px;
+  border: none;
+  background-color: var(--fridge-500);
+  color: var(--white);
+  width: 300px;
+  height: 35px;
+  margin-top: 20px;
 
-    &:hover {
-        background-color: var(--mint-500);
-}
-`
+  &:hover {
+    background-color: var(--fridge-700);
+  }
 
-export default GeneralButton
+  &.disabled-btn {
+    background-color: var(--gray-400);
+  }
+`;
+
+export default GeneralButton;
