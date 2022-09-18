@@ -3,7 +3,7 @@ package com.seb39.myfridge.auth.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.seb39.myfridge.auth.enums.JwtClaim;
+import com.seb39.myfridge.auth.enums.JwtClaims;
 import com.seb39.myfridge.auth.enums.JwtTokenType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -26,8 +26,8 @@ public class JwtProvider {
         return JWT.create()
                 .withSubject(JwtTokenType.ACCESS.getSubject())
                 .withExpiresAt(getExpiredDate(accessExpirationTimeMillis))
-                .withClaim(JwtClaim.ID.toString(),id)
-                .withClaim(JwtClaim.EMAIL.toString(), email)
+                .withClaim(JwtClaims.ID,id)
+                .withClaim(JwtClaims.EMAIL, email)
                 .sign(Algorithm.HMAC512(secret));
     }
 

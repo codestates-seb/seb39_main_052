@@ -5,7 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seb39.myfridge.auth.dto.LoginRequest;
 import com.seb39.myfridge.auth.dto.SignUpRequest;
-import com.seb39.myfridge.auth.enums.JwtClaim;
+import com.seb39.myfridge.auth.enums.JwtClaims;
 import com.seb39.myfridge.auth.enums.JwtTokenType;
 import com.seb39.myfridge.auth.service.JwtProvider;
 import com.seb39.myfridge.auth.service.JwtService;
@@ -30,6 +30,7 @@ import javax.servlet.http.Cookie;
 
 import java.util.Date;
 
+import static com.seb39.myfridge.auth.enums.JwtClaims.*;
 import static com.seb39.myfridge.auth.util.AppAuthNames.*;
 import static com.seb39.myfridge.util.ApiDocumentUtils.*;
 import static org.assertj.core.api.Assertions.*;
@@ -334,8 +335,8 @@ class AuthenticationTest {
     private String createExpiredAccessToken(Long id, String email) {
         return JWT.create()
                 .withSubject(JwtTokenType.ACCESS.getSubject())
-                .withClaim(JwtClaim.ID.toString(), id)
-                .withClaim(JwtClaim.EMAIL.toString(), email)
+                .withClaim(ID, id)
+                .withClaim(EMAIL, email)
                 .withExpiresAt(new Date(System.currentTimeMillis() - 10000))
                 .sign(Algorithm.HMAC512(secret));
     }
