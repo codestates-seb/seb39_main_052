@@ -29,12 +29,6 @@ public class AuthController {
         return new ResponseEntity<>(AuthResponse.success(), HttpStatus.CREATED);
     }
 
-    @GetMapping("/api/logout")
-    public ResponseEntity<AuthResponse> logout(HttpServletRequest request, HttpServletResponse response){
-        jwtService.removeRefreshToken(request,response);
-        return ResponseEntity.ok(AuthResponse.success());
-    }
-
     @PostMapping("/api/auth/refresh")
     public ResponseEntity<AuthResponse> refresh(HttpServletRequest request, HttpServletResponse response){
         jwtService.refresh(request,response);

@@ -166,8 +166,7 @@ class AuthenticationTest {
                         .accept(APPLICATION_JSON)
                         .header(ACCESS_TOKEN, accessToken)
                         .cookie(refreshTokenCookie))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.success").value(true));
+                .andExpect(status().is3xxRedirection());
 
         assertThat(jwtService.hasRefreshToken(refreshToken)).isFalse();
 
@@ -177,14 +176,8 @@ class AuthenticationTest {
                 getResponsePreProcessor(),
                 requestHeaders(
                         headerWithName(ACCESS_TOKEN).description("Access token. (만료 여부 상관 없음), Refresh Token은 refresh-token Cookie에 담아 전송")
-                ),
-                responseFields(
-                        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
-                        fieldWithPath("code").type(JsonFieldType.NUMBER).description("실패시 실패 사유 Code (성공시 0)"),
-                        fieldWithPath("failureReason").type(JsonFieldType.STRING).description("실패 사유 (성공시 공백)")
                 )
         ));
-
     }
 
     @Test

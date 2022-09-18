@@ -3,10 +3,7 @@ package com.seb39.myfridge.auth;
 import com.seb39.myfridge.auth.filter.JwtAuthenticationFilter;
 import com.seb39.myfridge.auth.filter.JwtAuthorizationFilter;
 import com.seb39.myfridge.auth.filter.JwtExceptionHandlingFilter;
-import com.seb39.myfridge.auth.handler.JwtAuthenticationFailureHandler;
-import com.seb39.myfridge.auth.handler.AuthenticationExceptionEntryPoint;
-import com.seb39.myfridge.auth.handler.OAuth2FailureHandler;
-import com.seb39.myfridge.auth.handler.OAuth2SuccessHandler;
+import com.seb39.myfridge.auth.handler.*;
 import com.seb39.myfridge.auth.service.JwtService;
 import com.seb39.myfridge.auth.service.OAuth2UserService;
 import com.seb39.myfridge.member.service.MemberService;
@@ -33,6 +30,7 @@ public class SecurityConfig {
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
     private final OAuth2UserService oAuth2UserService;
     private final JwtService jwtService;
+    private final JwtLogoutHandler logoutHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -50,6 +48,11 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.NEVER)
                 .and()
                 .apply(new CustomJwtConfigurer())
+                .and()
+                .logout()
+                .logoutUrl("/api/logout")
+                .logoutSuccessUrl("/")
+                .addLogoutHandler(logoutHandler)
                 .and()
                 .authorizeRequests().anyRequest().permitAll()
                 .and()
