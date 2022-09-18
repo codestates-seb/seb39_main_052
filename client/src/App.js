@@ -2,7 +2,7 @@ import React from 'react';
 import GlobalStyle from './GlobalStyle';
 import styled from 'styled-components';
 
-import RecipeEditor from './pages/RecipeEditor/RecipeEditor';
+import RecipeEditor from './components/layout/RecipeEditor/RecipeEditor';
 
 function App() {
 
