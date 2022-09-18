@@ -30,6 +30,14 @@ const GlobalStyle = createGlobalStyle`
         box-shadow: var(--shadow-low);
       }
     }
+    h1 {
+      margin-top: 0;
+      font-size: 40px;
+    }
+    h2 {
+      font-size: 24px;
+      margin: 0 0 12px 0;
+    }
 
     @font-face {
     font-family: 'GmarketSansMedium';
