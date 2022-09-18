@@ -28,10 +28,6 @@ public class JwtAuthenticationFailureHandler implements AuthenticationFailureHan
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-//        log.info("Authentication failure.",exception);
-//        response.setStatus(HttpStatus.UNAUTHORIZED.value());
-//        AuthResponse authResponse = AuthResponse.failure("Invalid username or password");
-//        objectMapper.writeValue(response.getWriter(),authResponse);
         throw new AppAuthenticationException(AppAuthExceptionCode.INVALID_EMAIL_OR_PASSWORD);
     }
 }

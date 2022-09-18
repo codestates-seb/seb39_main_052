@@ -4,7 +4,6 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.seb39.myfridge.auth.PrincipalDetails;
 import com.seb39.myfridge.auth.enums.AppAuthExceptionCode;
-import com.seb39.myfridge.auth.enums.AuthCookieType;
 import com.seb39.myfridge.auth.exception.AppAuthenticationException;
 import com.seb39.myfridge.auth.service.JwtService;
 import com.seb39.myfridge.member.entity.Member;
@@ -20,13 +19,9 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.security.Principal;
-import java.util.Arrays;
-import java.util.Optional;
 
 @Slf4j
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
@@ -51,7 +46,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         try {
             String accessToken = jwtService.authorizationHeaderToAccessToken(header);
-            String email = jwtService.decodeJwtTokenAndGetEmail(accessToken);
+            String email = jwtService.verifyJwtTokenAndGetEmail(accessToken);
 
             if (StringUtils.hasText(email) && memberService.exist(email)) {
                 PrincipalDetails principal = loadPrincipalDetails(email);

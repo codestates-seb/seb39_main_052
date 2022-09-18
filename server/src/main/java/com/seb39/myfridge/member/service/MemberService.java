@@ -27,12 +27,24 @@ public class MemberService {
     }
 
     public void signUpGeneral(Member member){
+        String email = member.getEmail();
+        if(exist(email))
+            throw new RuntimeException("Member already exist. email = " + email);
+
         String encryptedPassword = passwordEncoder.encode(member.getPassword());
         member.saveEncryptedPassword(encryptedPassword);
         memberRepository.save(member);
     }
 
     public void signUpOauth2(Member member){
+        String email = member.getEmail();
+        if(exist(email))
+            throw new RuntimeException("Member already exist. email = " + email);
 
+        memberRepository.save(member);
+    }
+
+    public boolean existOAuth2Member(String provider, String providerId){
+        return memberRepository.existsByProviderAndProviderId(provider,providerId);
     }
 }

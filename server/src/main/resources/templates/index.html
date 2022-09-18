@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>OAuth2 Test</title>
+</head>
+<body>
+<div th:if="${username} == null">
+    <h2>미로그인 상태</h2>
+    <div>
+        <a href="/oauth2/authorization/google">구글 로그인</a>
+        <a href="/oauth2/authorization/kakao">카카오 로그인</a>
+    </div>
+</div>
+<div th:if="${username} != null">
+    <h2 th:text="'사용자 ' + ${username} + ' 로그인'">사용자 xxx 로그인</h2>
+    <a href="/api/logout">로그아웃</a>
+</div>
+</body>
+</html>

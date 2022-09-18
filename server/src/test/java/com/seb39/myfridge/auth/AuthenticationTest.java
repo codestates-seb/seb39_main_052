@@ -5,10 +5,11 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seb39.myfridge.auth.dto.LoginRequest;
 import com.seb39.myfridge.auth.dto.SignUpRequest;
-import com.seb39.myfridge.auth.enums.AuthCookieType;
 import com.seb39.myfridge.auth.enums.JwtClaim;
 import com.seb39.myfridge.auth.enums.JwtTokenType;
+import com.seb39.myfridge.auth.service.JwtProvider;
 import com.seb39.myfridge.auth.service.JwtService;
+import com.seb39.myfridge.auth.util.CookieUtil;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.service.MemberService;
 import org.hamcrest.Matchers;
@@ -19,20 +20,19 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.Cookie;
 
 import java.util.Date;
 
+import static com.seb39.myfridge.auth.util.AppAuthNames.*;
 import static com.seb39.myfridge.util.ApiDocumentUtils.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.springframework.http.HttpHeaders.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
@@ -44,7 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
-@AutoConfigureRestDocs(uriHost = "api.myfridge.com")
+@AutoConfigureRestDocs(uriHost = "seb39myfridge.ml", uriScheme = "https" , uriPort = 443)
 class AuthenticationTest {
 
     @Autowired
@@ -53,6 +53,8 @@ class AuthenticationTest {
     MemberService memberService;
     @Autowired
     JwtService jwtService;
+    @Autowired
+    JwtProvider jwtProvider;
     @Value("${app.auth.jwt.secret}")
     private String secret;
 
@@ -123,8 +125,8 @@ class AuthenticationTest {
                         .contentType(APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isOk())
-                .andExpect(header().exists(AUTHORIZATION))
-                .andExpect(cookie().exists(AuthCookieType.REFRESH_TOKEN.getName()));
+                .andExpect(header().exists(ACCESS_TOKEN))
+                .andExpect(cookie().exists(REFRESH_TOKEN));
 
         // docs
         result.andDo(document("login-success",
@@ -135,9 +137,53 @@ class AuthenticationTest {
                         fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호")
                 ),
                 responseHeaders(
-                        headerWithName(AUTHORIZATION).description("Access Token이 담긴 헤더. (Refresh token은 refresh-token 쿠키에 담아 전송)")
+                        headerWithName(ACCESS_TOKEN).description("Access Token이 담긴 헤더. (Refresh token은 refresh-token 쿠키에 담아 전송)")
                 )
         ));
+    }
+
+    @Test
+    @DisplayName("로그아웃시 서버에서 보관중인 Refresh token을 삭제한다")
+    void logout() throws Exception{
+        // given
+        String email = "abcd@gmail.com";
+        String name = "test01";
+        String password = "password1234";
+        Member member = Member.generalBuilder()
+                .email(email)
+                .name(name)
+                .password(password)
+                .buildGeneralMember();
+        memberService.signUpGeneral(member);
+
+        String accessToken = jwtProvider.createAccessToken(member.getId(), member.getEmail());
+        String refreshToken = jwtProvider.createRefreshToken(accessToken);
+        Cookie refreshTokenCookie = CookieUtil.createHttpOnlyCookie(REFRESH_TOKEN, refreshToken);
+
+        // expected
+        ResultActions result = mockMvc.perform(get("/api/logout")
+                        .accept(APPLICATION_JSON)
+                        .header(ACCESS_TOKEN, accessToken)
+                        .cookie(refreshTokenCookie))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true));
+
+        assertThat(jwtService.hasRefreshToken(refreshToken)).isFalse();
+
+        // docs
+        result.andDo(document("logout-success",
+                getRequestPreProcessor(),
+                getResponsePreProcessor(),
+                requestHeaders(
+                        headerWithName(ACCESS_TOKEN).description("Access token. (만료 여부 상관 없음), Refresh Token은 refresh-token Cookie에 담아 전송")
+                ),
+                responseFields(
+                        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
+                        fieldWithPath("code").type(JsonFieldType.NUMBER).description("실패시 실패 사유 Code (성공시 0)"),
+                        fieldWithPath("failureReason").type(JsonFieldType.STRING).description("실패 사유 (성공시 공백)")
+                )
+        ));
+
     }
 
     @Test
@@ -205,7 +251,7 @@ class AuthenticationTest {
         // expected
         ResultActions result = mockMvc.perform(get("/api/authtest")
                         .accept(APPLICATION_JSON)
-                        .header(AUTHORIZATION, jwtService.accessTokenToAuthorizationHeader(expiredToken)))
+                        .header(AUTHORIZATION, "Bearer " + expiredToken))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.success").value(false))
                 .andExpect(jsonPath("$.code").value(1));
@@ -225,17 +271,18 @@ class AuthenticationTest {
                 .buildGeneralMember();
         memberService.signUpGeneral(member);
         String expiredAccessToken = createExpiredAccessToken(member.getId(), member.getEmail());
-        String refreshToken = jwtService.createRefreshToken(expiredAccessToken);
-        Cookie refreshTokenCookie = jwtService.refreshTokenToCookie(refreshToken);
+        String refreshToken = jwtProvider.createRefreshToken(expiredAccessToken);
+        ReflectionTestUtils.invokeMethod(jwtService,"saveToken",refreshToken,expiredAccessToken);
+        Cookie refreshTokenCookie = CookieUtil.createHttpOnlyCookie(REFRESH_TOKEN,refreshToken);
 
         // expected
         ResultActions result = mockMvc.perform(post("/api/auth/refresh")
                         .accept(APPLICATION_JSON)
-                        .header(AUTHORIZATION, jwtService.accessTokenToAuthorizationHeader(expiredAccessToken))
+                        .header(AUTHORIZATION, "Bearer " + expiredAccessToken)
                         .cookie(refreshTokenCookie))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(header().string(AUTHORIZATION, Matchers.not(expiredAccessToken)));
+                .andExpect(header().string(ACCESS_TOKEN, Matchers.not(expiredAccessToken)));
 
         // docs
         result.andDo(document("refresh-access-token",
@@ -245,7 +292,12 @@ class AuthenticationTest {
                         headerWithName(AUTHORIZATION).description("Access token. (만료 여부 상관 없음), Refresh Token은 refresh-token Cookie에 담아 전송")
                 ),
                 responseHeaders(
-                        headerWithName(AUTHORIZATION).description("새로 생성한 Access Token")
+                        headerWithName(ACCESS_TOKEN).description("새로 생성한 Access Token")
+                ),
+                responseFields(
+                        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
+                        fieldWithPath("code").type(JsonFieldType.NUMBER).description("실패시 실패 사유 Code (성공시 0)"),
+                        fieldWithPath("failureReason").type(JsonFieldType.STRING).description("실패 사유 (성공시 공백)")
                 )
         ));
     }
@@ -266,13 +318,13 @@ class AuthenticationTest {
         String expiredAccessToken = createExpiredAccessToken(member.getId(), member.getEmail());
         String expiredRefreshToken = createExpiredRefreshToken();
         ReflectionTestUtils.invokeMethod(jwtService,"saveToken",expiredRefreshToken,expiredAccessToken);
-        Cookie refreshTokenCookie = jwtService.refreshTokenToCookie(expiredRefreshToken);
+        Cookie refreshTokenCookie = CookieUtil.createHttpOnlyCookie(REFRESH_TOKEN,expiredRefreshToken);
 
 
         // expected
         ResultActions result = mockMvc.perform(post("/api/auth/refresh")
                         .accept(APPLICATION_JSON)
-                        .header(AUTHORIZATION, jwtService.accessTokenToAuthorizationHeader(expiredAccessToken))
+                        .header(AUTHORIZATION, "Bearer " +expiredAccessToken)
                         .cookie(refreshTokenCookie))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.success").value(false))
