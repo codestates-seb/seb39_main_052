@@ -2,16 +2,34 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export const Container = styled.div`
-    height: 360px;
-    width: 360px;
     position: relative;
+    &.big {
+        height: 280px;
+        width: 280px;
+        border-radius: 10px;
+    }
+    /* &.mobile {
+        height: 360px;
+        width: 360px;
+        border-radius: 10px;
+    } */
+    &.small {
+        height: 160px;
+        width: 160px;
+        border-radius: 10px;
+    }
+    &.round {
+        height: 280px;
+        width: 280px;
+        border-radius: 50%;
+    }
 `
 
 export const Img = styled.img`
-    border-radius: 10px;
     object-fit: cover;
     height: 100%;
     width: 100%;
+    border-radius: inherit;
 `
 
 export const Input = styled.input`
@@ -21,7 +39,7 @@ export const Input = styled.input`
 export const Button = styled.button`
     width: 100px;
     position: absolute;
-    left: 72%;
+    right: 0%;
     bottom: 0%;
 `
 

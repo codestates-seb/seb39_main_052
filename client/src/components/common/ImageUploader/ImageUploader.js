@@ -4,7 +4,7 @@ import blankImage from "../../../assets/blankImage.webp";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { Container ,Img, Input, Button, StyledFontAwesomeIcon } from "./ImageUploaderStyle";
 
-const ImageUploader = ( {imgPostApi} ) => {
+const ImageUploader = ( {imgPostApi, size} ) => {
 
     const [imageUrl, setImageUrl] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -45,7 +45,7 @@ const ImageUploader = ( {imgPostApi} ) => {
     }
 
     return (
-        <Container>
+        <Container className={size}>
             <Img
                 src={imageUrl? imageUrl : blankImage}
                 onLoad={() => setIsLoading(false)}
