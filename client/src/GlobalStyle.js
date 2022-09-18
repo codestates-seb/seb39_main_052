@@ -23,11 +23,11 @@ const GlobalStyle = createGlobalStyle`
     button {
       cursor: pointer;
       border: none;
-      border-radius: 50%;
+      border-radius: 10%;
       background-color: var(--white);
       :hover {
-        background-color: var(--mintgreen-400);
-        box-shadow: var(--shadow-high);
+        /* background-color: var(--mintgreen-300); */
+        box-shadow: var(--shadow-low);
       }
     }
 
