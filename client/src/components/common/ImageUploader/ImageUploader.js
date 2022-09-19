@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import axios from "axios";
 import blankImage from "../../../assets/blankImage.webp";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faSpinner, faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Container ,Img, Input, Button, StyledFontAwesomeIcon } from "./ImageUploaderStyle";
 
 const ImageUploader = ( {imgPostApi, size} ) => {
@@ -50,7 +50,7 @@ const ImageUploader = ( {imgPostApi, size} ) => {
                 src={imageUrl? imageUrl : blankImage}
                 onLoad={() => setIsLoading(false)}
             />
-            {isLoading && <StyledFontAwesomeIcon icon={faSpinner} spin/>}
+            {isLoading && <StyledFontAwesomeIcon icon={faSpinner} className="loading" spin/>}
             <Input 
                 type="file"
                 accept="image/*"
@@ -59,8 +59,11 @@ const ImageUploader = ( {imgPostApi, size} ) => {
                 onChange={imageHandler}
             />
             {imageUrl && !isLoading
+                ? <StyledFontAwesomeIcon icon={faXmark} className="cancel" onClick={handleDelete} />
+                : <StyledFontAwesomeIcon icon={faPlus} className="upload" onClick={handleClick}/>}
+            {/* {imageUrl && !isLoading
                 ? <Button onClick={handleDelete}>이미지 삭제</Button>
-                : <Button onClick={handleClick}>이미지 업로드</Button>}
+                : <Button onClick={handleClick}>이미지 업로드</Button>} */}
         </Container>
     )
 };
