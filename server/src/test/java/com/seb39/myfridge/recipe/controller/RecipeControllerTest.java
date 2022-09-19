@@ -228,6 +228,9 @@ class RecipeControllerTest {
                 .andDo(document("recipe-update",
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
+                        pathParameters(
+                                parameterWithName("id").description("수정할 레시피 식별자")
+                        ),
                         requestFields(
                                 List.of(
                                         fieldWithPath("title").type(JsonFieldType.STRING).description("수정할 레시피 제목"),

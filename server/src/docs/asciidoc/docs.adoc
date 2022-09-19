@@ -103,6 +103,9 @@ include::{snippets}/recipe-create/response-fields.adoc[]
   - 요리 재료와 관련된 작업이 마무리되면, 요청 데이터에 재료 관련 데이터도 포함할 예정입니다.
   - 작성자가 아니면 수정할 수 없습니다.
 
+.path-parameters
+include::{snippets}/recipe-update/path-parameters.adoc[]
+
 .http-request
 include::{snippets}/recipe-update/http-request.adoc[]
 
@@ -121,7 +124,7 @@ include::{snippets}/recipe-update/response-fields.adoc[]
   - 레시피를 삭제할 때는 요청 Header에 'Authorization : {Access Token 값}'을 담아 요청해야 합니다.
   - 작성자가 아니면 삭제할 수 없습니다.
 
-.http-request
+.path-parameters
 include::{snippets}/recipe-delete/path-parameters.adoc[]
 
 .http-request
