@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import axios from "axios";
 
 import GeneralButton from "../common/Button/GeneralButton";
 import { SignUpFormContainer } from "./SignUpFormStyle";
@@ -8,7 +9,7 @@ import { SignUpFormContainer } from "./SignUpFormStyle";
 const SignUpForm = () => {
   const formSchema = yup.object({
     email: yup.string().email("이메일 형식이 아닙니다").required(""),
-    username: yup
+    name: yup
       .string()
       .min(2, "2자 이상으로 입력해주세요")
       .max(10, "10자 이하로 입력해주세요")
@@ -36,35 +37,41 @@ const SignUpForm = () => {
     formState: { isSubmitting, errors, isValid },
   } = useForm({ resolver: yupResolver(formSchema) });
 
+  const onSubmit = (data) => {
+    console.log(data); // {name: '나나', email: 'test@email.com', password: 'aaaa1111', passwordConfirm: 'aaaa1111'}
+    let newUser = {
+      email: data.email,
+      password: data.password,
+      name: data.name,
+    };
+    axios
+      .post("/api/signup", newUser)
+      .then((response) => {
+        // console.log(response.data)// {success: true, code: 0, failureReason: ''}
+        //회원가입 요청 성공시
+        if (response.status === 201) {
+          alert("회원가입 성공");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        alert(error.message);
+        //서버에서 예외처리 구현하면 실패 코드 응답에 따라 분기 나누기. 이미 가입된 회원입니다.
+      });
+  };
+
   return (
     <SignUpFormContainer>
-      <form onSubmit={handleSubmit((data) => console.log(data))}>
-        {/* {email: 'test@email.com', password: '1111'} */}
+      <form onSubmit={handleSubmit(onSubmit)}>
         <label>이름</label>
         <input
-          id="username"
-          type="username"
-          name="username"
+          id="name"
+          type="name"
+          name="name"
           placeholder="닉네임을 입력해주세요"
-          {...register("username")}
-          //react hook form 기존 코드
-          //   {...register("username", {
-          //     // required: true,
-          //     pattern: {
-          //       value: /[a-z]/ || /[0-9]/ || /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/,
-          //       message: "닉네임은 영소문자, 한글, 숫자로 만들 수 있어요",
-          //     },
-          //     minLength: {
-          //       value: 2,
-          //       message: "닉네임은 2자 이상 10자 이하로 만들 수 있어요",
-          //     },
-          //     maxLength: {
-          //       value: 10,
-          //       message: "닉네임은 2자 이상 10자 이하로 만들 수 있어요",
-          //     },
-          //   })}
+          {...register("name")}
         ></input>
-        {errors.username && <span>{errors.username.message}</span>}
+        {errors.name && <span>{errors.name.message}</span>}
 
         <label>이메일</label>
         <input
@@ -99,7 +106,6 @@ const SignUpForm = () => {
         )}
 
         <GeneralButton>회원가입</GeneralButton>
-        {/* props로 width, height 내려주는 코드로 다시짜기 */}
       </form>
     </SignUpFormContainer>
   );
