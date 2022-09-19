@@ -24,6 +24,9 @@ include::{snippets}/login-success/http-response.adoc[]
 .response-headers
 include::{snippets}/login-success/response-headers.adoc[]
 
+.response-fields
+include::{snippets}/login-success/response-fields.adoc[]
+
 === 로그아웃
 ***
 

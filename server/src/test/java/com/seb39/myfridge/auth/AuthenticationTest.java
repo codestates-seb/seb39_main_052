@@ -5,7 +5,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seb39.myfridge.auth.dto.LoginRequest;
 import com.seb39.myfridge.auth.dto.SignUpRequest;
-import com.seb39.myfridge.auth.enums.JwtClaims;
 import com.seb39.myfridge.auth.enums.JwtTokenType;
 import com.seb39.myfridge.auth.service.JwtProvider;
 import com.seb39.myfridge.auth.service.JwtService;
@@ -30,7 +29,7 @@ import javax.servlet.http.Cookie;
 
 import java.util.Date;
 
-import static com.seb39.myfridge.auth.enums.JwtClaims.*;
+import static com.seb39.myfridge.auth.util.JwtClaims.*;
 import static com.seb39.myfridge.auth.util.AppAuthNames.*;
 import static com.seb39.myfridge.util.ApiDocumentUtils.*;
 import static org.assertj.core.api.Assertions.*;
@@ -139,6 +138,11 @@ class AuthenticationTest {
                 ),
                 responseHeaders(
                         headerWithName(ACCESS_TOKEN).description("Access Token이 담긴 헤더. (Refresh token은 refresh-token 쿠키에 담아 전송)")
+                ),
+                responseFields(
+                        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
+                        fieldWithPath("code").type(JsonFieldType.NUMBER).description("실패시 실패 사유 Code (성공시 0)"),
+                        fieldWithPath("failureReason").type(JsonFieldType.STRING).description("실패 사유 (성공시 공백)")
                 )
         ));
     }

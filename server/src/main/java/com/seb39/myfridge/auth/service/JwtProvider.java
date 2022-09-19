@@ -3,7 +3,7 @@ package com.seb39.myfridge.auth.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.seb39.myfridge.auth.enums.JwtClaims;
+import com.seb39.myfridge.auth.util.JwtClaims;
 import com.seb39.myfridge.auth.enums.JwtTokenType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

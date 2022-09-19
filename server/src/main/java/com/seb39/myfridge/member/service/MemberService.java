@@ -1,6 +1,8 @@
 package com.seb39.myfridge.member.service;
 
 
+import com.seb39.myfridge.auth.enums.AppAuthExceptionCode;
+import com.seb39.myfridge.auth.exception.AppAuthenticationException;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +29,7 @@ public class MemberService {
     }
 
     public void signUpGeneral(Member member){
-        String email = member.getEmail();
-        if(exist(email))
-            throw new RuntimeException("Member already exist. email = " + email);
+        verifyBeforeSignUp(member);
 
         String encryptedPassword = passwordEncoder.encode(member.getPassword());
         member.saveEncryptedPassword(encryptedPassword);
@@ -37,11 +37,14 @@ public class MemberService {
     }
 
     public void signUpOauth2(Member member){
+        verifyBeforeSignUp(member);
+        memberRepository.save(member);
+    }
+
+    private void verifyBeforeSignUp(Member member){
         String email = member.getEmail();
         if(exist(email))
-            throw new RuntimeException("Member already exist. email = " + email);
-
-        memberRepository.save(member);
+            throw new AppAuthenticationException(AppAuthExceptionCode.EXISTS_EMAIL);
     }
 
     public boolean existOAuth2Member(String provider, String providerId){

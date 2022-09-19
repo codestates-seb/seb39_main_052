@@ -3,6 +3,7 @@ package com.seb39.myfridge.auth.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seb39.myfridge.auth.PrincipalDetails;
+import com.seb39.myfridge.auth.dto.AuthResponse;
 import com.seb39.myfridge.auth.dto.LoginRequest;
 import com.seb39.myfridge.auth.enums.AppAuthExceptionCode;
 import com.seb39.myfridge.auth.exception.AppAuthenticationException;
@@ -61,5 +62,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String accessToken = jwtService.issueAccessToken(id, email);
         response.addHeader(ACCESS_TOKEN,accessToken);
         jwtService.issueRefreshToken(response,accessToken);
+        objectMapper.writeValue(response.getWriter(), AuthResponse.success());
     }
 }

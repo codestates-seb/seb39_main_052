@@ -6,7 +6,7 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seb39.myfridge.auth.enums.AppAuthExceptionCode;
-import com.seb39.myfridge.auth.enums.JwtClaims;
+import com.seb39.myfridge.auth.util.JwtClaims;
 import com.seb39.myfridge.auth.util.AppAuthNames;
 import com.seb39.myfridge.auth.exception.AppAuthenticationException;
 import com.seb39.myfridge.auth.util.CookieUtil;
