@@ -61,6 +61,7 @@
     --shadow-low: 0 2px 8px 0 rgba(0,0,0,0.1);
     --shadow-medium: 0 4px 16px 0 rgba(0,0,0,0.12);
     --shadow-high: 0 8px 36px 0 rgba(0,0,0,0.15);
+    --text-shadow: 0 0 1px #777;
     -webkit-tap-highlight-color: transparent;
 }
   

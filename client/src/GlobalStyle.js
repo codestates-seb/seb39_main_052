@@ -27,7 +27,10 @@ const GlobalStyle = createGlobalStyle`
       background-color: var(--white);
       :hover {
         /* background-color: var(--mintgreen-300); */
-        box-shadow: var(--shadow-low);
+        text-shadow: var(--text-shadow);
+      }
+      &.large {
+        font-size: 28px;
       }
     }
     h1 {
