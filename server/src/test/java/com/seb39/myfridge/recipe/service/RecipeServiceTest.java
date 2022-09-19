@@ -61,11 +61,11 @@ class RecipeServiceTest {
 
         Member member = Member.generalBuilder()
                 .name("nameA")
-                .email("test@naver.com")
+                .email("test1@naver.com")
                 .password("1234")
                 .buildGeneralMember();
         memberService.signUpGeneral(member);
-        
+
         //when
         Recipe savedRecipe = recipeService.createRecipe(recipe, steps, member.getId());
         System.out.println(recipe);
@@ -98,7 +98,7 @@ class RecipeServiceTest {
 
         Member member = Member.generalBuilder()
                 .name("nameA")
-                .email("test@naver.com")
+                .email("test2@naver.com")
                 .password("1234")
                 .buildGeneralMember();
         memberService.signUpGeneral(member);
@@ -127,7 +127,7 @@ class RecipeServiceTest {
 
         Member member = Member.generalBuilder()
                 .name("nameA")
-                .email("test@naver.com")
+                .email("test3@naver.com")
                 .password("1234")
                 .buildGeneralMember();
         memberService.signUpGeneral(member);
