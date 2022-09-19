@@ -34,6 +34,12 @@ public class Recipe {
 
     private String imagePath;
 
+    //몇 인분
+    private int portion;
+
+    //요리 소요 시간 ex) 1시간, 30분
+    private String time;
+
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;

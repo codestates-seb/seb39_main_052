@@ -19,12 +19,18 @@ public class RecipeDto {
 
         private String imagePath;
 
+        private int portion;
+
+        private String time;
+
         private List<Step> steps;
 
         @Builder
-        public Post(String title, String imagePath, List<Step> steps) {
+        public Post(String title, String imagePath, int portion, String time, List<Step> steps) {
             this.title = title;
             this.imagePath = imagePath;
+            this.portion = portion;
+            this.time = time;
             this.steps = steps;
         }
     }
@@ -39,15 +45,22 @@ public class RecipeDto {
 
         private String imagePath;
 
+        private int portion;
+
+        private String time;
+
         private List<Step> steps;
 
 
-        public Patch(Long id, String title, String imagePath, List<Step> steps) {
+        public Patch(Long id, String title, String imagePath, int portion, String time, List<Step> steps) {
             this.id = id;
             this.title = title;
             this.imagePath = imagePath;
+            this.portion = portion;
+            this.time = time;
             this.steps = steps;
         }
+
         public void setId(long id) {
             this.id = id;
         }
@@ -56,14 +69,12 @@ public class RecipeDto {
     @Getter
     public static class Step{
         private int sequence;
-        private String title;
         private String content;
         private String imagePath;
 
         @Builder
-        public Step(int sequence, String title, String content, String imagePath) {
+        public Step(int sequence, String content, String imagePath) {
             this.sequence = sequence;
-            this.title = title;
             this.content = content;
             this.imagePath = imagePath;
         }
@@ -74,17 +85,23 @@ public class RecipeDto {
     public static class Response{
         private Long id;
         private String title;
+        private int portion;
+        private String time;
         private LocalDateTime createdAt;
         private LocalDateTime lastModifiedAt;
+        private String imagePath;
         private List<Step> steps;
         private String memberName;
 
         @Builder
-        public Response(Long id, String title, LocalDateTime createdAt, LocalDateTime lastModifiedAt, List<Step> steps, Member member) {
+        public Response(Long id, String title, int portion, String time, LocalDateTime createdAt, LocalDateTime lastModifiedAt, String imagePath, List<Step> steps, Member member) {
             this.id = id;
             this.title = title;
+            this.portion = portion;
+            this.time = time;
             this.createdAt = createdAt;
             this.lastModifiedAt = lastModifiedAt;
+            this.imagePath = imagePath;
             this.steps = steps;
             this.memberName = member.getName();
         }

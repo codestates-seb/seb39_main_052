@@ -44,13 +44,11 @@ class RecipeServiceTest {
         List<Step> steps = new ArrayList<>();
 
         Step step = new Step();
-        step.setTitle("라면 만들기 1단계");
         step.setContent("물을 끓인다");
         step.setSequence(1);
         steps.add(step);
 
         Step step2 = new Step();
-        step2.setTitle("라면 만들기 2단계");
         step2.setContent("스프를 넣는다");
         step2.setSequence(2);
         steps.add(step2);
@@ -89,13 +87,11 @@ class RecipeServiceTest {
         List<Step> steps = new ArrayList<>();
 
         Step step = new Step();
-        step.setTitle("라면 만들기 1단계");
         step.setContent("물을 끓인다");
         step.setSequence(1);
         steps.add(step);
 
         Step step2 = new Step();
-        step2.setTitle("라면 만들기 2단계");
         step2.setContent("스프를 넣는다");
         step2.setSequence(2);
         steps.add(step2);
@@ -111,7 +107,7 @@ class RecipeServiceTest {
         //when
         String updateTitle = "Update title!!";
         savedRecipe.setTitle(updateTitle);
-        Recipe updateRecipe = recipeService.updateRecipe(savedRecipe, new ArrayList<>(), 1L);
+        Recipe updateRecipe = recipeService.updateRecipe(savedRecipe, new ArrayList<>(), member.getId());
 //        System.out.println(updateRecipe.getTitle());
 
         //then
@@ -129,9 +125,16 @@ class RecipeServiceTest {
         recipe.setCreatedAt(LocalDateTime.now());
         recipe.setLastModifiedAt(LocalDateTime.now());
 
-        Recipe savedRecipe = recipeService.createRecipe(recipe, new ArrayList<>(), 1L);
+        Member member = Member.generalBuilder()
+                .name("nameA")
+                .email("test@naver.com")
+                .password("1234")
+                .buildGeneralMember();
+        memberService.signUpGeneral(member);
+
+        Recipe savedRecipe = recipeService.createRecipe(recipe, new ArrayList<>(), member.getId());
         //when
-        recipeService.deleteRecipe(savedRecipe.getId(),1L);
+        recipeService.deleteRecipe(savedRecipe.getId(),member.getId());
         //then
         assertEquals(0, recipeRepository.findAll().size());
     }

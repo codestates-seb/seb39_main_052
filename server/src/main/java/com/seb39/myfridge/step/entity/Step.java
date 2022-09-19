@@ -22,8 +22,6 @@ public class Step {
     @GeneratedValue
     private int sequence;
 
-    private String title;
-
     @Lob
     private String content;
 
@@ -46,7 +44,6 @@ public class Step {
         return "Step{" +
                 "id=" + id +
                 ", sequence=" + sequence +
-                ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 ", imagePath='" + imagePath + '\'' +
                 '}';
