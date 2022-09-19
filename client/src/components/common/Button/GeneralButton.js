@@ -1,12 +1,26 @@
 import styled from "styled-components";
 
-const GeneralButton = ({ disabled, width, height, children, className }) => {
+const GeneralButton = ({
+  disabled,
+  children,
+  className,
+  width,
+  height,
+  backgroundColor,
+  color,
+  hoverBackgroundColor,
+  hoverColor,
+}) => {
   return (
     <Button
       disabled={disabled}
+      className={className}
       width={width}
       height={height}
-      className={className}
+      backgroundColor={backgroundColor}
+      color={color}
+      hoverBackgroundColor={hoverBackgroundColor}
+      hoverColor={hoverColor}
     >
       {" "}
       {children}{" "}
@@ -17,14 +31,21 @@ const GeneralButton = ({ disabled, width, height, children, className }) => {
 const Button = styled.button`
   border-radius: 10px;
   border: none;
-  background-color: var(--fridge-500);
-  color: var(--white);
-  width: 300px;
-  height: 35px;
+  /* width: 300px; */
+  /* height: 35px; */
+  /* background-color: var(--fridge-500); */
+  /* color: var(--white); */
+  width: ${(props) => props.width};
+  height: ${(props) => props.height};
+  background-color: ${(props) => props.backgroundColor};
+  color: ${(props) => props.color};
   margin-top: 20px;
+  font-size: 16px;
 
   &:hover {
-    background-color: var(--fridge-700);
+    /* background-color: var(--fridge-700); */
+    background-color: ${(props) => props.hoverBackgroundColor};
+    color: ${(props) => props.hoverColor};
   }
 
   &.disabled-btn {
