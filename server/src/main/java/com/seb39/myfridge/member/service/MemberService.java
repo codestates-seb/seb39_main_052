@@ -40,7 +40,10 @@ public class MemberService {
     }
 
     public void signUpOauth2IfNotExists(Member member){
-        verifyBeforeSignUpOAuth2(member);
+        String provider = member.getProvider();
+        String providerId = member.getProviderId();
+        if(existOAuth2Member(provider,providerId))
+            return;
         memberRepository.save(member);
     }
 
@@ -50,12 +53,6 @@ public class MemberService {
             throw new AppAuthenticationException(AppAuthExceptionCode.EXISTS_MEMBER);
     }
 
-    private void verifyBeforeSignUpOAuth2(Member member){
-        String provider = member.getProvider();
-        String providerId = member.getProviderId();
-        if(existOAuth2Member(provider,providerId))
-            throw new AppAuthenticationException(AppAuthExceptionCode.EXISTS_MEMBER);
-    }
 
     public boolean existOAuth2Member(String provider, String providerId){
         return memberRepository.existsByProviderAndProviderId(provider,providerId);
