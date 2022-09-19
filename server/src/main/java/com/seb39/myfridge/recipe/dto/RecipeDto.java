@@ -1,5 +1,6 @@
 package com.seb39.myfridge.recipe.dto;
 
+import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.step.entity.Step;
 import lombok.Builder;
 import lombok.Getter;
@@ -76,14 +77,16 @@ public class RecipeDto {
         private LocalDateTime createdAt;
         private LocalDateTime lastModifiedAt;
         private List<Step> steps;
+        private String memberName;
 
         @Builder
-        public Response(Long id, String title, LocalDateTime createdAt, LocalDateTime lastModifiedAt, List<Step> steps) {
+        public Response(Long id, String title, LocalDateTime createdAt, LocalDateTime lastModifiedAt, List<Step> steps, Member member) {
             this.id = id;
             this.title = title;
             this.createdAt = createdAt;
             this.lastModifiedAt = lastModifiedAt;
             this.steps = steps;
+            this.memberName = member.getName();
         }
     }
 }

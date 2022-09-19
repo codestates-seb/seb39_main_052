@@ -47,4 +47,10 @@ public class MemberService {
     public boolean existOAuth2Member(String provider, String providerId){
         return memberRepository.existsByProviderAndProviderId(provider,providerId);
     }
+
+    //findById 추가
+    public Member findById(Long id) {
+        Optional<Member> optionalMember = memberRepository.findById(id);
+        return optionalMember.orElseThrow(() -> new IllegalArgumentException("Member not exist. id = " + id));
+    }
 }
