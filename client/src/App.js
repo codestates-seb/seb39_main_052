@@ -4,16 +4,21 @@ import styled from "styled-components";
 import "./style.css";
 import LogInForm from "./components/layout/LogInForm";
 import SignUpForm from "./components/layout/SignUpForm";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
     <>
       {/* Global Styles는 Router 안, 컴포넌트 상단에 위치  */}
       <GlobalStyle />
-      {/* <Test> 나만의 냉장고 </Test>
+      <BrowserRouter>
+        {/* <Test> 나만의 냉장고 </Test>
       <div> My Fridge </div> */}
-      {/* <LogInForm></LogInForm> */}
-      <SignUpForm></SignUpForm>
+        <Routes>
+          <Route path="/login" element={<LogInForm />}></Route>
+          <Route path="/signup" element={<SignUpForm />}></Route>
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
