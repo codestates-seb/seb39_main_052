@@ -28,6 +28,8 @@ include::{snippets}/login-success/response-headers.adoc[]
 ***
 
  로그아웃을 위한 API 입니다.
+ 로그아웃시 Refresh-token은 서버에서 Set-cookie를 통해 삭제
+ Access token은 클라이언트에서 별도 삭제 필요
 
 .http-request
 include::{snippets}/logout-success/http-request.adoc[]
