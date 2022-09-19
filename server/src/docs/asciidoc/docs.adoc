@@ -1,0 +1,77 @@
+= My Fridge API Docs
+:sectnums:
+:toc: left
+:toclevels: 4
+:toc-title: 목차
+:source-highlighter: prettify
+
+***
+== 인증 관련 API
+=== 로그인
+***
+
+ 사용자 로그인을 위한 API 입니다.
+
+.http-request
+include::{snippets}/login-success/http-request.adoc[]
+
+.request-fields
+include::{snippets}/login-success/request-fields.adoc[]
+
+.http-response
+include::{snippets}/login-success/http-response.adoc[]
+
+.response-headers
+include::{snippets}/login-success/response-headers.adoc[]
+
+=== 로그아웃
+***
+
+ 로그아웃을 위한 API 입니다.
+ 로그아웃시 Refresh-token은 서버에서 Set-cookie를 통해 삭제
+ Access token은 클라이언트에서 별도 삭제 필요
+
+.http-request
+include::{snippets}/logout-success/http-request.adoc[]
+
+.request-headers
+include::{snippets}/logout-success/request-headers.adoc[]
+
+.http-response
+include::{snippets}/logout-success/http-response.adoc[]
+
+=== 회원가입
+***
+
+ 회원가입을 위한 API 입니다.
+
+.http-request
+include::{snippets}/signup-success/http-request.adoc[]
+
+.request-fields
+include::{snippets}/signup-success/request-fields.adoc[]
+
+.http-response
+include::{snippets}/signup-success/http-response.adoc[]
+
+.response-fields
+include::{snippets}/signup-success/response-fields.adoc[]
+
+=== Access Token 재발급
+***
+
+ Access token 재발급을 위한 API 입니다.
+  - Access Token이 필요한 주소로 요청했을 때 Status 401에 code가 1인 경우 Access Token 만료를 의미한다.
+  - 이 때 /api/auth/refresh 로 Access Token 재발급 요청을 할 수 있다.
+
+.http-request
+include::{snippets}/refresh-access-token/http-request.adoc[]
+
+.request-headers
+include::{snippets}/refresh-access-token/request-headers.adoc[]
+
+.http-response
+include::{snippets}/refresh-access-token/http-response.adoc[]
+
+.response-fields
+include::{snippets}/refresh-access-token/response-fields.adoc[]

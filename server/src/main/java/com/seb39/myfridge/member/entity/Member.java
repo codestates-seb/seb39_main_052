@@ -51,10 +51,11 @@ public class Member {
     }
 
     @Builder(builderMethodName = "oauth2Builder", buildMethodName = "buildOAuth2Member")
-    private static Member createOAuth2Member(String name, String provider, String providerId){
+    private static Member createOAuth2Member(String name, String email, String provider, String providerId){
         Member member = new Member();
         member.initDefaultRolesAndStatus();
         member.name = name;
+        member.email = email;
         member.provider = provider;
         member.providerId = providerId;
         return member;

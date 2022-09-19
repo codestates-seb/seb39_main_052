@@ -22,6 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static com.seb39.myfridge.auth.util.AppAuthNames.ACCESS_TOKEN;
+
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -34,7 +36,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
-        LoginRequest loginRequest = getLoginRequest(request);
+        LoginRequest loginRequest = requestBodyToLoginRequest(request);
 
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();
@@ -43,25 +45,21 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         return authenticationManager.authenticate(token);
     }
 
-    private LoginRequest getLoginRequest(HttpServletRequest request) {
-        LoginRequest loginRequest = null;
+    private LoginRequest requestBodyToLoginRequest(HttpServletRequest request) {
         try {
-            loginRequest = objectMapper.readValue(request.getInputStream(), LoginRequest.class);
+            return objectMapper.readValue(request.getInputStream(), LoginRequest.class);
         } catch (IOException e) {
             throw new AppAuthenticationException(AppAuthExceptionCode.DATA_DESERIALIZE_ERROR);
         }
-        return loginRequest;
     }
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         PrincipalDetails principal = (PrincipalDetails) authResult.getPrincipal();
-
-        String accessToken = jwtService.createAccessToken(principal.getMemberId(), principal.getUsername());
-        String headerValue = jwtService.accessTokenToAuthorizationHeader(accessToken);
-        response.addHeader(HttpHeaders.AUTHORIZATION, headerValue);
-
-        String refreshToken = jwtService.createRefreshToken(accessToken);
-        response.addCookie(jwtService.refreshTokenToCookie(refreshToken));
+        Long id = principal.getMemberId();
+        String email = principal.getEmail();
+        String accessToken = jwtService.issueAccessToken(id, email);
+        response.addHeader(ACCESS_TOKEN,accessToken);
+        jwtService.issueRefreshToken(response,accessToken);
     }
 }

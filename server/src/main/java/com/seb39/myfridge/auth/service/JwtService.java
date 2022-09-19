@@ -3,141 +3,128 @@ package com.seb39.myfridge.auth.service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.auth0.jwt.interfaces.Claim;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seb39.myfridge.auth.enums.AppAuthExceptionCode;
-import com.seb39.myfridge.auth.enums.AuthCookieType;
-import com.seb39.myfridge.auth.enums.JwtClaim;
-import com.seb39.myfridge.auth.enums.JwtTokenType;
+import com.seb39.myfridge.auth.enums.JwtClaims;
+import com.seb39.myfridge.auth.util.AppAuthNames;
 import com.seb39.myfridge.auth.exception.AppAuthenticationException;
+import com.seb39.myfridge.auth.util.CookieUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class JwtService {
 
     @Value("${app.auth.jwt.secret}")
     private String secret;
 
-    @Value("${app.auth.jwt.expiration-time-millis.access-token}")
-    private long accessExpirationTimeMillis;
+    private final Map<String, String> repository = new HashMap<>();
 
-    @Value("${app.auth.jwt.expiration-time-millis.refresh-token}")
-    private long refreshExpirationTimeMillis;
+    private final JwtProvider jwtProvider;
 
-    private final Map<String,String> repository = new HashMap<>();
+    private ObjectMapper om = new ObjectMapper();
 
-
-    public String createAccessToken(Long id, String email) {
-        return JWT.create()
-                .withSubject(JwtTokenType.ACCESS.getSubject())
-                .withExpiresAt(getExpiredDate(accessExpirationTimeMillis))
-                .withClaim(JwtClaim.ID.toString(),id)
-                .withClaim(JwtClaim.EMAIL.toString(), email)
-                .sign(Algorithm.HMAC512(secret));
+    public String issueAccessToken(Long memberId, String username) {
+        return jwtProvider.createAccessToken(memberId, username);
     }
 
-    public String createNewAccessToken(String prevAccessToken, String refreshToken){
+    public void issueRefreshToken(HttpServletResponse response, String accessToken) {
+        String refreshToken = jwtProvider.createRefreshToken(accessToken);
+        Cookie cookie = CookieUtil.createHttpOnlyCookie(AppAuthNames.REFRESH_TOKEN, refreshToken);
+        response.addCookie(cookie);
+        saveToken(refreshToken, accessToken);
+    }
+
+    public void refresh(HttpServletRequest request, HttpServletResponse response) {
+        String prevAccessToken = getAccessToken(request);
+        String refreshToken = getRefreshToken(request);
+
         verifyRefreshToken(refreshToken);
         verifyTokenPair(prevAccessToken, refreshToken);
 
-        Long id = JWT.decode(prevAccessToken)
-                .getClaim(JwtClaim.ID.toString())
-                .asLong();
-        String email = JWT.decode(prevAccessToken)
-                .getClaim(JwtClaim.EMAIL.toString())
-                .asString();
+        Long id = decodeClaim(prevAccessToken, JwtClaims.ID).asLong();
+        String email = decodeClaim(prevAccessToken, JwtClaims.EMAIL).asString();
 
-        String newAccessToken = createAccessToken(id, email);
-        saveToken(refreshToken,newAccessToken);
-        return newAccessToken;
+        String newAccessToken = jwtProvider.createAccessToken(id, email);
+        saveToken(refreshToken, newAccessToken);
+        response.setHeader(AppAuthNames.ACCESS_TOKEN, newAccessToken);
     }
 
-    private void verifyRefreshToken(String refreshToken){
-        try{
+    private String getAccessToken(HttpServletRequest request) {
+        String accessTokenHeader = Optional.ofNullable(request.getHeader(HttpHeaders.AUTHORIZATION))
+                .orElseThrow(() -> new AppAuthenticationException(AppAuthExceptionCode.ACCESS_TOKEN_NOT_EXIST));
+        return authorizationHeaderToAccessToken(accessTokenHeader);
+    }
+
+    private String getRefreshToken(HttpServletRequest request){
+        return CookieUtil.getCookieValue(AppAuthNames.REFRESH_TOKEN, request.getCookies())
+                .orElseThrow(() -> new AppAuthenticationException(AppAuthExceptionCode.REFRESH_TOKEN_NOT_EXIST));
+    }
+
+    private void verifyRefreshToken(String refreshToken) {
+        try {
             JWT.require(Algorithm.HMAC512(secret))
                     .build()
                     .verify(refreshToken);
-        }catch(TokenExpiredException e){
+        } catch (TokenExpiredException e) {
             repository.remove(refreshToken);
             throw new AppAuthenticationException(AppAuthExceptionCode.REFRESH_TOKEN_EXPIRED);
         }
     }
 
-    private void verifyTokenPair(String accessToken, String refreshToken){
-        log.info("repository = {}",repository);
-        log.info("access = {}, refresh = {}",accessToken, refreshToken);
-
+    private void verifyTokenPair(String accessToken, String refreshToken) {
         String savedAccessToken = Optional.ofNullable(repository.get(refreshToken))
                 .orElseThrow(() -> new AppAuthenticationException(AppAuthExceptionCode.INVALID_ACCESS_TOKEN));
 
-        if(!savedAccessToken.equals(accessToken))
+        if (!savedAccessToken.equals(accessToken))
             throw new AppAuthenticationException(AppAuthExceptionCode.INVALID_ACCESS_TOKEN);
     }
 
-    public String createRefreshToken(String accessToken){
-        String refreshToken =  JWT.create()
-                .withSubject(JwtTokenType.REFRESH.getSubject())
-                .withExpiresAt(getExpiredDate(refreshExpirationTimeMillis))
-                .sign(Algorithm.HMAC512(secret));
-
-        saveToken(refreshToken,accessToken);
-        return refreshToken;
-    }
-
-    private Date getExpiredDate(long expirationTime) {
-        return new Date(System.currentTimeMillis() + expirationTime);
-    }
-
-    public String decodeJwtTokenAndGetEmail(String jwtToken){
+    public String verifyJwtTokenAndGetEmail(String jwtToken) {
         return JWT.require(Algorithm.HMAC512(secret))
                 .build()
                 .verify(jwtToken)
-                .getClaim(JwtClaim.EMAIL.toString())
+                .getClaim(JwtClaims.EMAIL)
                 .asString();
     }
 
-    private void saveToken(String refreshToken, String accessToken){
-        repository.put(refreshToken,accessToken);
+    private void saveToken(String refreshToken, String accessToken) {
+        repository.put(refreshToken, accessToken);
     }
-
 
     public boolean isJwtAccessTokenHeader(String header) {
         return StringUtils.hasText(header) && header.startsWith("Bearer");
-    }
-
-    public String accessTokenToAuthorizationHeader(String token){
-        return "Bearer " + token;
     }
 
     public String authorizationHeaderToAccessToken(String authorizationHeader) {
         return authorizationHeader.replace("Bearer ", "");
     }
 
-
-    public void removeRefreshToken(String token){
-        repository.remove(token);
+    public boolean hasRefreshToken(String token) {
+        return repository.containsKey(token);
     }
 
-    public Cookie refreshTokenToCookie(String token){
-        Cookie cookie = new Cookie(AuthCookieType.REFRESH_TOKEN.getName(), token);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        return cookie;
+    public void removeRefreshToken(HttpServletRequest request, HttpServletResponse response) {
+        String cookieName = AppAuthNames.REFRESH_TOKEN;
+        CookieUtil.getCookieValue(cookieName, request.getCookies())
+                .ifPresent(repository::remove);
+        response.addCookie(CookieUtil.createExpiredCookie(cookieName));
     }
 
-    public Optional<String> takeRefreshToken(Cookie[] cookies){
-        if(cookies == null){
-            return Optional.empty();
-        }
-
-        return Arrays.stream(cookies)
-                .filter(cookie -> cookie.getName().equals(AuthCookieType.REFRESH_TOKEN.getName()))
-                .map(Cookie::getValue)
-                .findAny();
+    private Claim decodeClaim(String token, String claim) {
+        return JWT.decode(token)
+                .getClaim(JwtClaims.ID);
     }
 }
