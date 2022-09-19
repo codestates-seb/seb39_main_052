@@ -45,6 +45,8 @@ dependencies {
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+	//aws 설정
+	implementation('org.springframework.cloud:spring-cloud-starter-aws:2.26.RELEASE')
 }
 
 tasks.named('test') {
