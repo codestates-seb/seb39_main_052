@@ -64,7 +64,6 @@ const Ingredients = ({ titlesArr, placeholders }) => {
                             {/* 마지막 input에만 추가 옵션이 생긴다 */}
                             {ingredients.length - 1 === idx &&
                                 <Button
-                                    
                                     onClick={() => handleAddClick(idx)}
                                 >
                                     <StyledFontAwesomeIcon icon={faPlus} className="add"/>
