@@ -28,30 +28,27 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         String provider = userRequest.getClientRegistration().getRegistrationId();
 
         OAuth2UserInfo userInfo;
-        if(provider.equals("google")){
+        if (provider.equals("google")) {
             userInfo = new GoogleUserInfo(oAuth2User.getAttributes());
-        }
-        else if(provider.equals("kakao")){
+        } else if (provider.equals("kakao")) {
             userInfo = new KakaoUserInfo(oAuth2User.getAttributes());
-        }else{
-            throw new RuntimeException("OAuth2 provider is not supported. Provider = " + provider);
+        } else {
+            throw new RuntimeException("OAuth2 provider " + provider + " is not supported.");
         }
 
         String username = userInfo.getUsername();
         String email = userInfo.getEmail();
         String providerId = userInfo.getProviderId();
 
-        if(!memberService.existOAuth2Member(provider, providerId)){
-            Member member = Member.oauth2Builder()
-                    .name(username)
-                    .email(email)
-                    .provider(provider)
-                    .providerId(providerId)
-                    .buildOAuth2Member();
-            memberService.signUpOauth2(member);
-        }
+        Member member = Member.oauth2Builder()
+                .name(username)
+                .email(email)
+                .provider(provider)
+                .providerId(providerId)
+                .buildOAuth2Member();
+        memberService.signUpOauth2IfNotExists(member);
 
-        Member member = memberService.findByEmail(email);
-        return new PrincipalDetails(member, oAuth2User.getAttributes());
+        Member findMember = memberService.findByEmail(email);
+        return new PrincipalDetails(findMember, oAuth2User.getAttributes());
     }
 }

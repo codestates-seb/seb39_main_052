@@ -27,12 +27,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
         return member.getId();
     }
 
-    public String getEmail(){
-        return member.getEmail();
-    }
-
     //region UserDetails
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
@@ -48,7 +43,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     @Override
     public String getUsername() {
-        return member.getEmail();
+        return member.getName();
     }
 
     @Override

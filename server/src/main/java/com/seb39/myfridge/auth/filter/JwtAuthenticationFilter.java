@@ -31,7 +31,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
@@ -58,8 +57,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         PrincipalDetails principal = (PrincipalDetails) authResult.getPrincipal();
         Long id = principal.getMemberId();
-        String email = principal.getEmail();
-        String accessToken = jwtService.issueAccessToken(id, email);
+        String accessToken = jwtService.issueAccessToken(id);
         response.addHeader(ACCESS_TOKEN,accessToken);
         jwtService.issueRefreshToken(response,accessToken);
         objectMapper.writeValue(response.getWriter(), AuthResponse.success());

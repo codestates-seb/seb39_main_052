@@ -23,6 +23,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.Cookie;
@@ -39,7 +40,9 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 
 @SpringBootTest
 @Transactional
@@ -161,7 +164,7 @@ class AuthenticationTest {
                 .buildGeneralMember();
         memberService.signUpGeneral(member);
 
-        String accessToken = jwtProvider.createAccessToken(member.getId(), member.getEmail());
+        String accessToken = jwtProvider.createAccessToken(member.getId());
         String refreshToken = jwtProvider.createRefreshToken(accessToken);
         Cookie refreshTokenCookie = CookieUtil.createHttpOnlyCookie(REFRESH_TOKEN, refreshToken);
 
@@ -329,11 +332,24 @@ class AuthenticationTest {
                 .andExpect(jsonPath("$.code").value(4));
     }
 
+
+    @Test
+    @DisplayName("구글 로그인 요청시 구글 로그인 페이지로 Redirect")
+    void googleOauth2Test() throws Exception {
+        // given
+        String redirectUriPrefix = "https://accounts.google.com/o/oauth2/v2/auth";
+        // when
+        mockMvc.perform(get("/oauth2/authorization/google"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location",Matchers.startsWith(redirectUriPrefix)))
+                .andDo(print());
+    }
+
     private String createExpiredAccessToken(Long id, String email) {
         return JWT.create()
                 .withSubject(JwtTokenType.ACCESS.getSubject())
                 .withClaim(ID, id)
-                .withClaim(EMAIL, email)
+                //.withClaim(EMAIL, email)
                 .withExpiresAt(new Date(System.currentTimeMillis() - 10000))
                 .sign(Algorithm.HMAC512(secret));
     }

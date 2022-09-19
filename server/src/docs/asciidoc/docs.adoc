@@ -27,6 +27,19 @@ include::{snippets}/login-success/response-headers.adoc[]
 .response-fields
 include::{snippets}/login-success/response-fields.adoc[]
 
+=== OAuth2 Login
+***
+    구글 로그인 주소 : https://seb39myfridge.com/oauth2/authorization/google
+    카카오 로그인 주소 : https://seb39myfridge.com/oauth2/authorization/kakao
+
+    OAuth2 Login은 일반 Login과 다르게 동작한다.
+    위 주소로 요청을 하면 각 OAuth2 제공자의 로그인 페이지로 Redirect 되고,
+    Login을 성공시 {frontEnd 주소}/auth/redirect?access-token={access-token}
+    으로 redirect한다.
+
+    Access token은 redirect 주소에 Query Parameter로 전달된다.
+    Refresh token은 일반 로그인과 마찬가지로 HttpOnly cookie로 전달된다.
+
 === 로그아웃
 ***
 

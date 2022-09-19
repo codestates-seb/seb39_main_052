@@ -22,12 +22,11 @@ public class JwtProvider {
     @Value("${app.auth.jwt.expiration-time-millis.refresh-token}")
     private long refreshExpirationTimeMillis;
 
-    public String createAccessToken(Long id, String email) {
+    public String createAccessToken(Long id) {
         return JWT.create()
                 .withSubject(JwtTokenType.ACCESS.getSubject())
                 .withExpiresAt(getExpiredDate(accessExpirationTimeMillis))
                 .withClaim(JwtClaims.ID,id)
-                .withClaim(JwtClaims.EMAIL, email)
                 .sign(Algorithm.HMAC512(secret));
     }
 

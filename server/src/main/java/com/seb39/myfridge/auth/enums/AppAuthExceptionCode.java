@@ -13,7 +13,7 @@ public enum AppAuthExceptionCode {
     REFRESH_TOKEN_NOT_EXIST(6, "Refresh token not exist"),
     INVALID_EMAIL_OR_PASSWORD(7,"Invalid email or password"),
     DATA_DESERIALIZE_ERROR(8,"Failed to login request body deserialization"),
-    EXISTS_EMAIL(9,"Email already exists"),
+    EXISTS_MEMBER(9,"Member already exists"),
     UNDEFINED(99, "Undefined");
 
     private final int code;

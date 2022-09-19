@@ -24,27 +24,37 @@ public class MemberService {
                 .orElseThrow(() -> new IllegalArgumentException("Member not exist. email = " + email));
     }
 
-    public boolean exist(String email){
+    private boolean existByEmail(String email){
         return memberRepository.existsByEmail(email);
     }
 
-    public void signUpGeneral(Member member){
-        verifyBeforeSignUp(member);
+    public boolean existById(Long id){
+        return memberRepository.existsById(id);
+    }
 
+    public void signUpGeneral(Member member){
+        verifyBeforeSignUpGeneral(member);
         String encryptedPassword = passwordEncoder.encode(member.getPassword());
         member.saveEncryptedPassword(encryptedPassword);
         memberRepository.save(member);
     }
 
-    public void signUpOauth2(Member member){
-        verifyBeforeSignUp(member);
+    public void signUpOauth2IfNotExists(Member member){
+        verifyBeforeSignUpOAuth2(member);
         memberRepository.save(member);
     }
 
-    private void verifyBeforeSignUp(Member member){
+    private void verifyBeforeSignUpGeneral(Member member){
         String email = member.getEmail();
-        if(exist(email))
-            throw new AppAuthenticationException(AppAuthExceptionCode.EXISTS_EMAIL);
+        if(existByEmail(email))
+            throw new AppAuthenticationException(AppAuthExceptionCode.EXISTS_MEMBER);
+    }
+
+    private void verifyBeforeSignUpOAuth2(Member member){
+        String provider = member.getProvider();
+        String providerId = member.getProviderId();
+        if(existOAuth2Member(provider,providerId))
+            throw new AppAuthenticationException(AppAuthExceptionCode.EXISTS_MEMBER);
     }
 
     public boolean existOAuth2Member(String provider, String providerId){

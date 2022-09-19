@@ -28,7 +28,7 @@ class MemberServiceTest {
                 .provider(provider)
                 .providerId(providerId)
                 .buildOAuth2Member();
-        memberService.signUpOauth2(member);
+        memberService.signUpOauth2IfNotExists(member);
 
         // when
         boolean exist = memberService.existOAuth2Member(provider, providerId);
