@@ -29,9 +29,6 @@ const GlobalStyle = createGlobalStyle`
         /* background-color: var(--mintgreen-300); */
         text-shadow: var(--text-shadow);
       }
-      &.large {
-        font-size: 28px;
-      }
     }
     h1 {
       margin-top: 0;

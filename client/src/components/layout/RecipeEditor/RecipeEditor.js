@@ -6,6 +6,7 @@ import ImageUploader from "../../common/ImageUploader/ImageUploader";
 import InputList from "../../common/InputList/InputList";
 import ImageInputList from "../ImageInputList/ImageInputList";
 import { Container, Header, Warning, Main, ImageWrap, Input, Select, Ingredients, Steps, Portion, Time, Button, ButtonWrap } from "./RecipeEditorStyle";
+import GeneralButton from "../../common/Button/GeneralButton";
 import { setTitle, setPortion, setTime, clearRecipe } from "../../../features/recipeSlice";
 import { clearImages } from "../../../features/imageSlice";
 
@@ -40,13 +41,13 @@ const RecipeEditor = ({ editMode }) => {
     const recipe = useSelector((state) => {
         return state.recipe;
     });
-    console.log(`recipe`, recipe);
+    // console.log(`recipe`, recipe);
 
     // 전체 레시피 데이터
     const files = useSelector((state) => {
         return state.images;
     });
-    console.log(files);
+    // console.log(files);
 
     // 재료 유효성 경고 창 뜬 후 재작성 했을 때 유효하다면 경고창 없애기 
     useEffect(() => {
@@ -56,12 +57,14 @@ const RecipeEditor = ({ editMode }) => {
                 : setIsIngrEmpty(true);
         }
     }, [recipe.ingredients])
+
     // 요리 순서 유효성 경고 창 뜬 후 재작성 했을 때 유효하다면 경고창 없애기 
     useEffect(() => {
         if (recipe.steps[0].content.length > 0) {
             recipe.steps[0].content.length > 0 ? setIsStepsEmpty(false) : setIsStepsEmpty(true);
         }
     }, [recipe.steps])
+    
     // 이미지 관련 경고 창 뜬 후 재업로드 했을 때 유효하다면 경고창 없애기 
     useEffect(() => {
         files[0] === null ? setIsMainImgEmpty(true) : setIsMainImgEmpty(false);
@@ -222,15 +225,15 @@ const RecipeEditor = ({ editMode }) => {
             {editMode === "post" && 
                 <ButtonWrap>
                     {/* 작성페이지에서 취소시 메인페이지로 연결 */}
-                    <Button className="large" onClick={() => navigate("/")} >취소하기</Button>
-                    <Button className="large" onClick={handleSaveClick}>게시하기</Button>
+                    <GeneralButton className="large" onClick={() => navigate("/")} >취소하기</GeneralButton>
+                    <GeneralButton className="large" onClick={handleSaveClick}>게시하기</GeneralButton>
                 </ButtonWrap>
             }
             {editMode === "patch" &&
                 <ButtonWrap>
                     {/* 수정페이지에서 취소시 레시피 상세 페이지로 연결 예정 */}
-                    <Button className="large" >취소하기</Button>
-                    <Button className="large" onClick={handleSaveClick}>수정하기</Button>
+                    <GeneralButton className="large gray" >취소하기</GeneralButton>
+                    <GeneralButton className="large" onClick={handleSaveClick}>수정하기</GeneralButton>
                 </ButtonWrap>
             }
         </ Container>
