@@ -2,9 +2,11 @@ import React from "react";
 import GlobalStyle from "./GlobalStyle";
 import styled from "styled-components";
 import "./style.css";
-import LogInForm from "./components/layout/LogInForm";
-import SignUpForm from "./components/layout/SignUpForm";
+import LogInForm from "./components/layout/RegisterForm/LogInForm";
+import SignUpForm from "./components/layout/RegisterForm/SignUpForm";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home/Home";
+import LogIn from "./pages/LogIn/LogIn";
 
 function App() {
   return (
@@ -15,8 +17,9 @@ function App() {
         {/* <Test> 나만의 냉장고 </Test>
       <div> My Fridge </div> */}
         <Routes>
-          <Route path="/login" element={<LogInForm />}></Route>
-          <Route path="/signup" element={<SignUpForm />}></Route>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<LogIn />} />
+          <Route path="/signup" element={<SignUpForm />} />
         </Routes>
       </BrowserRouter>
     </>

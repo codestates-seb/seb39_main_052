@@ -3,7 +3,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import axios from "axios";
 
-import GeneralButton from "../common/Button/GeneralButton";
+import GeneralButton from "../../common/Button/GeneralButton";
+
 import { SignUpFormContainer } from "./SignUpFormStyle";
 
 const SignUpForm = () => {
