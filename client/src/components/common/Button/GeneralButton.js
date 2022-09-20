@@ -47,6 +47,11 @@ const Button = styled.button`
     width: 200px;
     font-size: 20px;
   }
+  &.small {
+    margin: 0;
+    height: 40px;
+    width: 56px;
+  }
   &.gray {
     background: var(--gray-400);
   }

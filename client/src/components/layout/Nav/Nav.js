@@ -9,6 +9,7 @@ const Nav = () => {
             <Link to="/signup">회원가입</Link>
             <Link to="/recipes/new">새 레시피 작성하기</Link>
             <Link to="/recipes/edit">레시피 수정하기</Link>
+            <Link to="/recipes">레시피 상세보기</Link>
         </NavWrapper>
     )
 };
