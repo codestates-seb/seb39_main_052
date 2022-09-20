@@ -32,7 +32,7 @@ public class MemberService {
                 .orElseThrow(()-> new IllegalArgumentException("Member not exist. provider = " + provider + " " + "providerId = " + providerId));
     }
 
-    private boolean existByEmail(String email){
+    public boolean existByEmail(String email){
         return memberRepository.existsByEmail(email);
     }
 
