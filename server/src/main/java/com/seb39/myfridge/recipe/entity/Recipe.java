@@ -1,5 +1,6 @@
 package com.seb39.myfridge.recipe.entity;
 
+import com.seb39.myfridge.helper.BaseTimeEntity;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.step.entity.Step;
 import lombok.Getter;
@@ -20,7 +21,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @ToString
-public class Recipe {
+public class Recipe extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,12 +41,12 @@ public class Recipe {
     //요리 소요 시간 ex) 1시간, 30분
     private String time;
 
-    @CreatedDate
+    /*@CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    private LocalDateTime lastModifiedAt;
+    private LocalDateTime lastModifiedAt;*/
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     private List<Step> steps = new ArrayList<>();
