@@ -46,7 +46,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	//aws 설정
-	implementation('org.springframework.cloud:spring-cloud-starter-aws:2.26.RELEASE')
+	// https://mavenlibs.com/maven/dependency/io.awspring.cloud/spring-cloud-starter-aws
+	implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.2'
 }
 
 tasks.named('test') {

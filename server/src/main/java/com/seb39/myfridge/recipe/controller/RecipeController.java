@@ -9,9 +9,11 @@ import com.seb39.myfridge.step.entity.Step;
 import com.seb39.myfridge.step.service.StepService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -26,7 +28,8 @@ public class RecipeController {
     private final RecipeService recipeService;
     private final RecipeMapper recipeMapper;
 
-    @PostMapping
+
+    @PostMapping()
     public ResponseEntity postRecipe(@Valid @RequestBody RecipeDto.Post requestBody,
                                      @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long memberId = principalDetails.getMemberId();
@@ -68,5 +71,26 @@ public class RecipeController {
         Long memberId = principalDetails.getMemberId();
         recipeService.deleteRecipe(id, memberId);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/image", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity postRecipeImage(@Valid @RequestPart RecipeDto.Post requestBody,
+                                     @RequestPart List<MultipartFile> files,
+                                     @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Long memberId = principalDetails.getMemberId();
+
+        //이미지 업로드
+        //이미지 업로드, s3에 저장까지 완료
+        //1. 이미지를 1개밖에 저장할 수 없음 List<MultipartFile> 사용해야 할 듯
+        //2. 이미지 불러오는법?
+        //3. 이미지 관련 exception 처리 필요
+
+        List<Step> stepList = recipeMapper.recipeDtoStepsToStepList(requestBody.getSteps());
+        Recipe recipe = recipeMapper.recipePostToRecipe(requestBody);
+
+        Recipe savedRecipe = recipeService.createRecipeImage(recipe, stepList, memberId, files);
+        RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(savedRecipe);
+
+        return new ResponseEntity(response, HttpStatus.OK);
     }
 }

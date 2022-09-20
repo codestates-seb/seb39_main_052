@@ -127,7 +127,7 @@ class RecipeServiceTest {
 
         Member member = Member.generalBuilder()
                 .name("nameA")
-                .email("test3@naver.com")
+                .email("test@naver.com")
                 .password("1234")
                 .buildGeneralMember();
         memberService.signUpGeneral(member);
