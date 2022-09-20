@@ -1,4 +1,4 @@
-package com.seb39.myfridge.uploadTest;
+package com.seb39.myfridge.upload;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;

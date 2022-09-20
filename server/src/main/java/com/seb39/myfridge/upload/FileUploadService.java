@@ -1,10 +1,11 @@
-package com.seb39.myfridge.uploadTest;
+package com.seb39.myfridge.upload;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
@@ -26,15 +27,19 @@ public class FileUploadService {
         } catch (IOException e) {
             throw new IllegalArgumentException(String.format("파일 변환 중 에러가 발생하였습니다.(%s)", file.getOriginalFilename()));
         }
-        System.out.println("s3Service.getFileUrl(fileName) = " + s3Service.getFileUrl(fileName));
         return s3Service.getFileUrl(fileName);
-
     }
+
+//    public void deleteImage(String bucket, String fileName) {
+//        s3Service.
+//    }
+
 
     //기존 확장자명을 유지하고, 유니크한 파일의 이름을 생성
     //s3에 같은 이름의 파일이 들어가지 않도록
+    //s3 images 디렉토리에 저장
     private String createFileName(String originalFileName) {
-        return UUID.randomUUID().toString().concat(getFileExtension(originalFileName));
+        return "images" + "/" + UUID.randomUUID().toString().concat(getFileExtension(originalFileName));
     }
 
     //파일의 확장자명을 가져옴

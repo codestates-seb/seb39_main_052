@@ -7,7 +7,6 @@ import com.seb39.myfridge.recipe.mapper.RecipeMapper;
 import com.seb39.myfridge.recipe.service.RecipeService;
 import com.seb39.myfridge.step.entity.Step;
 import com.seb39.myfridge.step.service.StepService;
-import com.seb39.myfridge.uploadTest.FileUploadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,7 +27,7 @@ public class RecipeController {
     private final StepService stepService;
     private final RecipeService recipeService;
     private final RecipeMapper recipeMapper;
-    private final FileUploadService fileUploadService;
+
 
     @PostMapping()
     public ResponseEntity postRecipe(@Valid @RequestBody RecipeDto.Post requestBody,
@@ -76,7 +75,7 @@ public class RecipeController {
 
     @PostMapping(value = "/image", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity postRecipeImage(@Valid @RequestPart RecipeDto.Post requestBody,
-                                     @RequestPart MultipartFile file,
+                                     @RequestPart List<MultipartFile> files,
                                      @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long memberId = principalDetails.getMemberId();
 
@@ -84,13 +83,12 @@ public class RecipeController {
         //이미지 업로드, s3에 저장까지 완료
         //1. 이미지를 1개밖에 저장할 수 없음 List<MultipartFile> 사용해야 할 듯
         //2. 이미지 불러오는법?
-        String image = fileUploadService.uploadImage(file);
-        System.out.println("image = " + image);
+        //3. 이미지 관련 exception 처리 필요
 
         List<Step> stepList = recipeMapper.recipeDtoStepsToStepList(requestBody.getSteps());
         Recipe recipe = recipeMapper.recipePostToRecipe(requestBody);
 
-        Recipe savedRecipe = recipeService.createRecipe(recipe, stepList, memberId);
+        Recipe savedRecipe = recipeService.createRecipeImage(recipe, stepList, memberId, files);
         RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(savedRecipe);
 
         return new ResponseEntity(response, HttpStatus.OK);

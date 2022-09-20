@@ -1,4 +1,4 @@
-package com.seb39.myfridge.uploadTest;
+package com.seb39.myfridge.upload;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
 
@@ -8,4 +8,6 @@ public interface UploadService {
     void uploadFile(InputStream inputStream, ObjectMetadata objectMetadata, String fileName);
 
     String getFileUrl(String fileName);
+
+//    void deleteFile(String bucket, String fileName)
 }

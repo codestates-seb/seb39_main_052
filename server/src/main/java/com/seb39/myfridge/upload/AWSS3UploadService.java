@@ -1,10 +1,11 @@
-package com.seb39.myfridge.uploadTest;
+package com.seb39.myfridge.upload;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
@@ -18,7 +19,7 @@ public class AWSS3UploadService implements UploadService{
 
     @Override
     public void uploadFile(InputStream inputStream, ObjectMetadata objectMetadata, String fileName) {
-        System.out.println("inputStream = " + inputStream);
+
         amazonS3.putObject(new PutObjectRequest(component.getBucket(), fileName, inputStream, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
     }
 
@@ -26,4 +27,9 @@ public class AWSS3UploadService implements UploadService{
     public String getFileUrl(String fileName) {
         return amazonS3.getUrl(component.getBucket(), fileName).toString();
     }
+//    @Override
+//    public void deleteFile(String fileName) {
+//        amazonS3.deleteObject(component.getBucket(), fileName);
+//    }
+
 }
