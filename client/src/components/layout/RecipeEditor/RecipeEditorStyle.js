@@ -82,6 +82,12 @@ export const Steps = styled.div`
     align-items: flex-start;
     width: 842px;
 `
+export const ButtonWrap = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 842px;
+`
 
 export const Button = styled.button`
 

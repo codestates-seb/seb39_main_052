@@ -5,12 +5,17 @@
 import { configureStore } from '@reduxjs/toolkit';
 import counterSlice from './features/counterSlice'; // store에 slice 연결 방법 예시
 import recipeSlice from './features/recipeSlice';
+import imageSlice from './features/imageSlice';
 
 const store = configureStore({
     reducer: {
         counter: counterSlice.reducer, // store에 slice 연결 방법 예시
         recipe: recipeSlice.reducer,
-    }
-  });
-  
-  export default store;
+        images: imageSlice.reducer,
+    },
+    middleware: getDefaultMiddleware => getDefaultMiddleware({
+        serializableCheck: false,
+    }),
+});
+
+export default store;

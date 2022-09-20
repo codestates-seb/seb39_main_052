@@ -4,14 +4,19 @@ import axios from "axios";
 import ImageUploader from "../../common/ImageUploader/ImageUploader";
 import InputList from "../../common/InputList/InputList";
 import ImageInputList from "../ImageInputList/ImageInputList";
-import { Container, Header, Warning, Main, ImageWrap, Input, Select, Ingredients, Steps, Portion, Time, Button } from "./RecipeEditorStyle";
+import { Container, Header, Warning, Main, ImageWrap, Input, Select, Ingredients, Steps, Portion, Time, Button, ButtonWrap } from "./RecipeEditorStyle";
 import { setTitle, setImagePath, setPortion, setTime, clearRecipe } from "../../../features/recipeSlice";
 
-const RecipeEditor = () => {
+const RecipeEditor = ({ editMode }) => {
+    const token = `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqd3QtYWNjZXNzLXRva2VuIiwiaWQiOjIsImV4cCI6MTY2MzY1NzE0OX0.pN8Vi_Aoy2KpuGdxd6pnYUgJIvc7SJyTXHbhI5Vm-ZLhZXYf2HPwIJytameU-t9dfnwfzAID_EbUKzFoA0C7ug`;
+    const refresh = `refresh-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqd3QtcmVmcmVzaC10b2tlbiIsImV4cCI6MTY2MzczMjQ3OX0.HSggtx9AuoGKi7IZBozhgAtlNXdltqKao6f3onf5kWJrj9Ck4LJ56qapb9gsMpNMIVSgIcIMZ_sVebM-3Jbn1A`;
+
     const [isTitleEmpty, setIsTitleEmpty] = useState(false);
     const [isTimeEmpty, setIsTimeEmpty] = useState(false);
     const [isIngrEmpty, setIsIngrEmpty] = useState(false);
     const [isStepsEmpty, setIsStepsEmpty] = useState(false);
+
+    const [stepFiles, setStepFiles] = useState([null]);
 
     const titlesArr = ["food", "amount"]; //재료 입력에서 각 column의 키값 배열
     const placeholders = ["예) 감자", "예) 100g"];
@@ -25,6 +30,12 @@ const RecipeEditor = () => {
         return state.recipe;
     });
     // console.log(recipe);
+
+    // 전체 레시피 데이터
+    const files = useSelector((state) => {
+        return state.images;
+    });
+    console.log(files);
 
     // 재료 유효성 경고 창 뜬 후 재작성 했을 때 유효하다면 경고창 없애기 
     useEffect(() => {
@@ -51,11 +62,28 @@ const RecipeEditor = () => {
         recipe.steps[0].content.length > 0 ? setIsStepsEmpty(false) : setIsStepsEmpty(true);
 
         // 유효성 검사 통과시 서버에 데이터 전달
-        if (!isTitleEmpty && !isTimeEmpty && !isIngrEmpty && !isStepsEmpty) {
-            axios.post('/api/recipes', recipe, {
-                // headers: {
-                //     'Content-Type': 'multipart/form-data'
-                // }
+        // 재료 부분 구현 후
+        // if (!isTitleEmpty && !isTimeEmpty && !isIngrEmpty && !isStepsEmpty) {
+        // 재료 부분 구현 전
+        if (!isTitleEmpty && !isTimeEmpty && !isStepsEmpty) {
+            const formData = new FormData();
+
+            for (let i = 0; i < files.length; i++) {
+                formData.append('files', files[i]);
+            }
+
+            formData.append('requestBody', new Blob([JSON.stringify(recipe)], {
+                type: "application/json"
+            }))
+
+            axios({
+                method: 'post',
+                url: '/api/recipes/image',
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'multipart/form-data',
+                },
+                data: formData,
             })
             .then((response) => {
                 // 응답 처리
@@ -63,8 +91,9 @@ const RecipeEditor = () => {
             })
             .catch((error) => {
                 // 예외 처리
-                console.log(error);
+                console.log(error.response);
             })
+
         };
 
     }
@@ -134,7 +163,7 @@ const RecipeEditor = () => {
                     </Time>
                 </Main>
                 <ImageWrap>
-                    <ImageUploader imgPostApi={imgPostApi} size={`big`} />
+                    <ImageUploader imgPostApi={imgPostApi} size={`big`} mode={`main`} />
                 </ImageWrap>
             </Header>
             <Ingredients>
@@ -147,11 +176,19 @@ const RecipeEditor = () => {
             </Ingredients>
             <Steps>
                 <h2>요리 순서</h2>
-                <ImageInputList />
+                <ImageInputList  stepFiles={stepFiles} setStepFiles={setStepFiles}/>
                 <Warning className={isStepsEmpty? null : "invisible"}>요리 순서를 최소 하나 이상 입력해주세요</Warning>
             </Steps>
-            <Button className="large" >취소하기</Button>
-            <Button className="large" onClick={handleSaveClick}>저장하기</Button>
+            <ButtonWrap>
+                {/* 작성페이지에서 취소시 메인페이지로 연결 */}
+                <Button className="large" >취소하기</Button>
+                <Button className="large" onClick={handleSaveClick}>게시하기</Button>
+            </ButtonWrap>
+            <ButtonWrap>
+                {/* 수정페이지에서 취소시 레시피 상세 페이지로 연결  */}
+                <Button className="large" >취소하기</Button>
+                <Button className="large" onClick={handleSaveClick}>수정하기</Button>
+            </ButtonWrap>
         </ Container>
     )
 };

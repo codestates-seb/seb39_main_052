@@ -4,10 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import ImageUploader from "../../common/ImageUploader/ImageUploader";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { editSteps, addStepsInput, deleteStepsInput } from "../../../features/recipeSlice";
+import { addElement } from "../../../features/imageSlice";
 import { Block, Order, Input, ButtonWrapper, Button, StyledFontAwesomeIcon } from "./ImageInputListStyle";
 
-const ImageInputList = () => {
-    
+const ImageInputList = ({ stepFiles, setStepFiles }) => {
+
     const dispatch = useDispatch();
 
     const steps = useSelector((state) => {
@@ -17,15 +18,16 @@ const ImageInputList = () => {
 
     const handleInputChange = (e, i) => {
         const { name, value } = e.target;
-        dispatch(editSteps({index: i, key: name, value: value}))
+        dispatch(editSteps({ index: i, key: name, value: value }))
     };
 
     const handleAddClick = (i) => {
-        dispatch(addStepsInput({index: i}));
+        dispatch(addStepsInput({ index: i }));
+        dispatch(addElement());
     };
 
     const handleRemoveClick = (i) => {
-        dispatch(deleteStepsInput({index: i}));
+        dispatch(deleteStepsInput({ index: i }));
     };
 
     return (
@@ -34,9 +36,9 @@ const ImageInputList = () => {
                 return (
                     <Block key={idx} id="row">
                         {/* 순서 번호 */}
-                        <Order htmlFor="row">{idx+1}</Order>
+                        <Order htmlFor="row">{idx + 1}</Order>
                         {/* 요리 순서별 이미지 */}
-                        <ImageUploader imgPostApi={``} size={`small`} />
+                        <ImageUploader size={`small`} index={idx} stepFiles={stepFiles} setStepFiles={setStepFiles} mode={`steps`} />
                         {/* 요리 순서 내용 */}
                         <Input
                             type='text'
