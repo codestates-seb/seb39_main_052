@@ -55,8 +55,6 @@ public class JwtService {
         verifyTokenPair(prevAccessToken, refreshToken);
 
         Long id = decodeClaim(prevAccessToken, JwtClaims.ID).asLong();
-        // String email = decodeClaim(prevAccessToken, JwtClaims.EMAIL).asString();
-        // String newAccessToken = jwtProvider.createAccessToken(id, email);
         String newAccessToken = jwtProvider.createAccessToken(id);
         saveToken(refreshToken, newAccessToken);
         response.setHeader(AppAuthNames.ACCESS_TOKEN, newAccessToken);
@@ -125,6 +123,6 @@ public class JwtService {
 
     private Claim decodeClaim(String token, String claim) {
         return JWT.decode(token)
-                .getClaim(JwtClaims.ID);
+                .getClaim(claim);
     }
 }

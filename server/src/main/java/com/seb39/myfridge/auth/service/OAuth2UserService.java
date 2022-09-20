@@ -1,9 +1,12 @@
 package com.seb39.myfridge.auth.service;
 
 import com.seb39.myfridge.auth.PrincipalDetails;
+import com.seb39.myfridge.auth.enums.AppAuthExceptionCode;
+import com.seb39.myfridge.auth.exception.AppAuthenticationException;
 import com.seb39.myfridge.auth.userinfo.GoogleUserInfo;
 import com.seb39.myfridge.auth.userinfo.KakaoUserInfo;
 import com.seb39.myfridge.auth.userinfo.OAuth2UserInfo;
+import com.seb39.myfridge.auth.userinfo.UserInfoFactory;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -19,22 +22,13 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
 
     private final MemberService memberService;
 
-    /**
-     * 인증 서비스 제공자로부터 받은 userRequest 데이터를 후처리하기 위한 함수.
-     */
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
         String provider = userRequest.getClientRegistration().getRegistrationId();
 
-        OAuth2UserInfo userInfo;
-        if (provider.equals("google")) {
-            userInfo = new GoogleUserInfo(oAuth2User.getAttributes());
-        } else if (provider.equals("kakao")) {
-            userInfo = new KakaoUserInfo(oAuth2User.getAttributes());
-        } else {
-            throw new RuntimeException("OAuth2 provider " + provider + " is not supported.");
-        }
+        OAuth2UserInfo userInfo = UserInfoFactory.create(provider,oAuth2User.getAttributes())
+                .orElseThrow(()-> new AppAuthenticationException(AppAuthExceptionCode.INVALID_OAUTH2_PROVIDER));
 
         String username = userInfo.getUsername();
         String email = userInfo.getEmail();
@@ -48,7 +42,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
                 .buildOAuth2Member();
         memberService.signUpOauth2IfNotExists(member);
 
-        Member findMember = memberService.findByEmail(email);
-        return new PrincipalDetails(findMember, oAuth2User.getAttributes());
+        Member findMember = memberService.findOAuth2Member(provider,providerId);
+        return PrincipalDetails.oauth2(findMember, oAuth2User.getAttributes());
     }
 }

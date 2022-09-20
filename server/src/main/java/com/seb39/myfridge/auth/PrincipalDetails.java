@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import javax.print.DocFlavor;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
@@ -14,13 +15,18 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     private final Member member;
     private Map<String, Object> attributes;
-    public PrincipalDetails(Member member) {
-        this.member = member;
-    }
 
-    public PrincipalDetails(Member member, Map<String, Object> attributes) {
+    private PrincipalDetails(Member member, Map<String, Object> attributes) {
         this.member = member;
         this.attributes = attributes;
+    }
+
+    public static PrincipalDetails general(Member member){
+        return new PrincipalDetails(member,null);
+    }
+
+    public static PrincipalDetails oauth2(Member member, Map<String,Object> attributes){
+        return new PrincipalDetails(member,attributes);
     }
 
     public Long getMemberId() {
@@ -43,7 +49,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     @Override
     public String getUsername() {
-        return member.getName();
+        return member.getEmail();
     }
 
     @Override

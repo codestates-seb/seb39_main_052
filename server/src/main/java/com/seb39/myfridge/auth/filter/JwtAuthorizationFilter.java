@@ -15,7 +15,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.util.StringUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -51,7 +50,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             if (!memberService.existById(memberId))
                 throw new AppAuthenticationException(AppAuthExceptionCode.INVALID_ACCESS_TOKEN);
 
-            PrincipalDetails principal = loadPrincipalDetails(memberId);
+            PrincipalDetails principal = createPrincipalDetails(memberId);
             savePrincipalInSecurityContext(principal);
 
         } catch (TokenExpiredException e) {
@@ -62,9 +61,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         chain.doFilter(request,response);
     }
-    private PrincipalDetails loadPrincipalDetails(Long memberId) {
+    private PrincipalDetails createPrincipalDetails(Long memberId) {
         Member member = memberService.findById(memberId);
-        return new PrincipalDetails(member);
+        return PrincipalDetails.general(member);
     }
     private void savePrincipalInSecurityContext(PrincipalDetails principal) {
         Authentication authentication = new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());

@@ -14,6 +14,8 @@ public enum AppAuthExceptionCode {
     INVALID_EMAIL_OR_PASSWORD(7,"Invalid email or password"),
     DATA_DESERIALIZE_ERROR(8,"Failed to login request body deserialization"),
     EXISTS_MEMBER(9,"Member already exists"),
+    OAUTH2_AUTH_FAILURE(10, "Oauth2 Authentication failure"),
+    INVALID_OAUTH2_PROVIDER(11,"Invalid oauth2 provider"),
     UNDEFINED(99, "Undefined");
 
     private final int code;

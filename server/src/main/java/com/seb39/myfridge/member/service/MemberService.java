@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,10 +17,19 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
+    public Member findById(Long id) {
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Member not exist. id = " + id));
+    }
+
     public Member findByEmail(String email){
-        Optional<Member> optionalMember = memberRepository.findByEmail(email);
-        return optionalMember
+        return memberRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Member not exist. email = " + email));
+    }
+
+    public Member findOAuth2Member(String provider, String providerId){
+        return memberRepository.findByProviderAndProviderId(provider,providerId)
+                .orElseThrow(()-> new IllegalArgumentException("Member not exist. provider = " + provider + " " + "providerId = " + providerId));
     }
 
     private boolean existByEmail(String email){
@@ -39,6 +47,12 @@ public class MemberService {
         memberRepository.save(member);
     }
 
+    private void verifyBeforeSignUpGeneral(Member member){
+        String email = member.getEmail();
+        if(existByEmail(email))
+            throw new AppAuthenticationException(AppAuthExceptionCode.EXISTS_MEMBER);
+    }
+
     public void signUpOauth2IfNotExists(Member member){
         String provider = member.getProvider();
         String providerId = member.getProviderId();
@@ -47,20 +61,7 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    private void verifyBeforeSignUpGeneral(Member member){
-        String email = member.getEmail();
-        if(existByEmail(email))
-            throw new AppAuthenticationException(AppAuthExceptionCode.EXISTS_MEMBER);
-    }
-
-
     public boolean existOAuth2Member(String provider, String providerId){
         return memberRepository.existsByProviderAndProviderId(provider,providerId);
-    }
-
-    //findById 추가
-    public Member findById(Long id) {
-        Optional<Member> optionalMember = memberRepository.findById(id);
-        return optionalMember.orElseThrow(() -> new IllegalArgumentException("Member not exist. id = " + id));
     }
 }
