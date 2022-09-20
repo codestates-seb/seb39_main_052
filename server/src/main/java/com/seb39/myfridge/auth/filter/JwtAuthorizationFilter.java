@@ -15,7 +15,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.util.StringUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -46,24 +45,25 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         try {
             String accessToken = jwtService.authorizationHeaderToAccessToken(header);
-            String email = jwtService.verifyJwtTokenAndGetEmail(accessToken);
+            Long memberId = jwtService.verifyJwtTokenAndGetId(accessToken);
 
-            if (StringUtils.hasText(email) && memberService.exist(email)) {
-                PrincipalDetails principal = loadPrincipalDetails(email);
-                savePrincipalInSecurityContext(principal);
-            }
+            if (!memberService.existById(memberId))
+                throw new AppAuthenticationException(AppAuthExceptionCode.INVALID_ACCESS_TOKEN);
+
+            PrincipalDetails principal = createPrincipalDetails(memberId);
+            savePrincipalInSecurityContext(principal);
 
         } catch (TokenExpiredException e) {
             throw new AppAuthenticationException(AppAuthExceptionCode.ACCESS_TOKEN_EXPIRED);
         }catch(JWTVerificationException e){
-            throw new AppAuthenticationException(AppAuthExceptionCode.UNDEFINED);
+            throw new AppAuthenticationException(AppAuthExceptionCode.INVALID_ACCESS_TOKEN);
         }
 
         chain.doFilter(request,response);
     }
-    private PrincipalDetails loadPrincipalDetails(String email) {
-        Member member = memberService.findByEmail(email);
-        return new PrincipalDetails(member);
+    private PrincipalDetails createPrincipalDetails(Long memberId) {
+        Member member = memberService.findById(memberId);
+        return PrincipalDetails.general(member);
     }
     private void savePrincipalInSecurityContext(PrincipalDetails principal) {
         Authentication authentication = new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());

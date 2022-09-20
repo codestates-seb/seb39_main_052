@@ -9,13 +9,16 @@ public class AppAuthenticationException extends AuthenticationException {
     @Getter
     private final AppAuthExceptionCode exceptionCode;
 
-    public AppAuthenticationException(String msg) {
+    public AppAuthenticationException(AppAuthExceptionCode exceptionCode, String msg){
         super(msg);
-        this.exceptionCode = AppAuthExceptionCode.UNDEFINED;
+        this.exceptionCode = exceptionCode;
     }
 
-    public AppAuthenticationException(AppAuthExceptionCode exceptionCode){
-        super(exceptionCode.getDescription());
-        this.exceptionCode = exceptionCode;
+    public AppAuthenticationException(String msg) {
+        this(AppAuthExceptionCode.UNDEFINED,msg);
+    }
+
+    public AppAuthenticationException(AppAuthExceptionCode exceptionCode) {
+        this(exceptionCode,exceptionCode.getDescription());
     }
 }

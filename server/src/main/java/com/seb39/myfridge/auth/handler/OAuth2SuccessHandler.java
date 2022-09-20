@@ -34,11 +34,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
         Long id = principal.getMemberId();
-        String email = principal.getEmail();
-
-        String accessToken = jwtService.issueAccessToken(id, email);
+        String accessToken = jwtService.issueAccessToken(id);
         jwtService.issueRefreshToken(response,accessToken);
-
         getRedirectStrategy().sendRedirect(request,response,createUriWithAccessToken(accessToken));
     }
 

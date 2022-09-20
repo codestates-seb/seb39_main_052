@@ -32,7 +32,7 @@ class RecipeServiceTest {
     @Autowired
     private RecipeMapper recipeMapper;
 
-    @Test
+    // @Test
     public void 레시피등록_테스트() {
         //given
         Recipe recipe = new Recipe();
@@ -75,7 +75,7 @@ class RecipeServiceTest {
         assertEquals(savedRecipe.getMember().getEmail(), member.getEmail());
     }
 
-    @Test
+    // @Test
     public void 레시피수정_테스트() {
         //given
         Recipe recipe = new Recipe();

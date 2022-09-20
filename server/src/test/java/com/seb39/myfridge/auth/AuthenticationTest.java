@@ -5,7 +5,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seb39.myfridge.auth.dto.LoginRequest;
 import com.seb39.myfridge.auth.dto.SignUpRequest;
-import com.seb39.myfridge.auth.enums.JwtClaims;
 import com.seb39.myfridge.auth.enums.JwtTokenType;
 import com.seb39.myfridge.auth.service.JwtProvider;
 import com.seb39.myfridge.auth.service.JwtService;
@@ -24,13 +23,14 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.Cookie;
 
 import java.util.Date;
 
-import static com.seb39.myfridge.auth.enums.JwtClaims.*;
+import static com.seb39.myfridge.auth.util.JwtClaims.*;
 import static com.seb39.myfridge.auth.util.AppAuthNames.*;
 import static com.seb39.myfridge.util.ApiDocumentUtils.*;
 import static org.assertj.core.api.Assertions.*;
@@ -40,7 +40,9 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 
 @SpringBootTest
 @Transactional
@@ -139,6 +141,11 @@ class AuthenticationTest {
                 ),
                 responseHeaders(
                         headerWithName(ACCESS_TOKEN).description("Access Token이 담긴 헤더. (Refresh token은 refresh-token 쿠키에 담아 전송)")
+                ),
+                responseFields(
+                        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
+                        fieldWithPath("code").type(JsonFieldType.NUMBER).description("실패시 실패 사유 Code (성공시 0)"),
+                        fieldWithPath("failureReason").type(JsonFieldType.STRING).description("실패 사유 (성공시 공백)")
                 )
         ));
     }
@@ -157,7 +164,7 @@ class AuthenticationTest {
                 .buildGeneralMember();
         memberService.signUpGeneral(member);
 
-        String accessToken = jwtProvider.createAccessToken(member.getId(), member.getEmail());
+        String accessToken = jwtProvider.createAccessToken(member.getId());
         String refreshToken = jwtProvider.createRefreshToken(accessToken);
         Cookie refreshTokenCookie = CookieUtil.createHttpOnlyCookie(REFRESH_TOKEN, refreshToken);
 
@@ -325,11 +332,24 @@ class AuthenticationTest {
                 .andExpect(jsonPath("$.code").value(4));
     }
 
+
+    @Test
+    @DisplayName("구글 로그인 요청시 구글 로그인 페이지로 Redirect")
+    void googleOauth2Test() throws Exception {
+        // given
+        String redirectUriPrefix = "https://accounts.google.com/o/oauth2/v2/auth";
+        // when
+        mockMvc.perform(get("/oauth2/authorization/google"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location",Matchers.startsWith(redirectUriPrefix)))
+                .andDo(print());
+    }
+
     private String createExpiredAccessToken(Long id, String email) {
         return JWT.create()
                 .withSubject(JwtTokenType.ACCESS.getSubject())
                 .withClaim(ID, id)
-                .withClaim(EMAIL, email)
+                //.withClaim(EMAIL, email)
                 .withExpiresAt(new Date(System.currentTimeMillis() - 10000))
                 .sign(Algorithm.HMAC512(secret));
     }

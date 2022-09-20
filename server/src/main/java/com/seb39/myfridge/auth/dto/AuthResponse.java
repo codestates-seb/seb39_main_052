@@ -23,6 +23,7 @@ public class AuthResponse {
     public static AuthResponse failure(String reason){
         return new AuthResponse(false, 0, reason);
     }
+
     public static AuthResponse failure(AppAuthExceptionCode exceptionCode){
         return new AuthResponse(false,exceptionCode.getCode(), exceptionCode.getDescription());
     }
