@@ -98,7 +98,13 @@ public class RecipeService {
     public void deleteRecipeImage(long id, long memberId) {
         Recipe findRecipe = findRecipeById(id);
         verifyWriter(findRecipe, memberId);
-        //삭제하는 사람이 recipe 작성자인지 검색하는 로직 필요
+        fileUploadService.deleteImage(findRecipe.getImagePath());
+        List<Step> steps = findRecipe.getSteps();
+        for (Step step : steps) {
+            if(step.getImagePath() != null){
+                fileUploadService.deleteImage(step.getImagePath());
+            }
+        }
         recipeRepository.delete(findRecipe);
     }
 }

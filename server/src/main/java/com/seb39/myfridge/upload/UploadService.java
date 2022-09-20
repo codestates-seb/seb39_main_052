@@ -9,5 +9,5 @@ public interface UploadService {
 
     String getFileUrl(String fileName);
 
-//    void deleteFile(String bucket, String fileName)
+    void deleteFile(String fileName);
 }

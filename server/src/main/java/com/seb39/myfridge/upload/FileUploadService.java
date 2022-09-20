@@ -30,9 +30,9 @@ public class FileUploadService {
         return s3Service.getFileUrl(fileName);
     }
 
-//    public void deleteImage(String bucket, String fileName) {
-//        s3Service.
-//    }
+    public void deleteImage(String fileName) {
+        s3Service.deleteFile(fileName);
+    }
 
 
     //기존 확장자명을 유지하고, 유니크한 파일의 이름을 생성

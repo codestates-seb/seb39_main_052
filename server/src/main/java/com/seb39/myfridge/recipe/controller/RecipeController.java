@@ -73,6 +73,10 @@ public class RecipeController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    /**
+     * image 업로드 관련 test 중
+     */
+
     @PostMapping(value = "/image", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity postRecipeImage(@Valid @RequestPart RecipeDto.Post requestBody,
                                      @RequestPart List<MultipartFile> files,
@@ -92,5 +96,14 @@ public class RecipeController {
         RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(savedRecipe);
 
         return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/image/{id}")
+    public ResponseEntity deleteRecipeImage(@PathVariable("id") @Positive Long id,
+                                       @AuthenticationPrincipal PrincipalDetails principalDetails) {
+
+        Long memberId = principalDetails.getMemberId();
+        recipeService.deleteRecipeImage(id, memberId);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
