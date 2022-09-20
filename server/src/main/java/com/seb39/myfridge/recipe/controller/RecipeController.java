@@ -98,6 +98,7 @@ public class RecipeController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
+
     @DeleteMapping("/image/{id}")
     public ResponseEntity deleteRecipeImage(@PathVariable("id") @Positive Long id,
                                        @AuthenticationPrincipal PrincipalDetails principalDetails) {

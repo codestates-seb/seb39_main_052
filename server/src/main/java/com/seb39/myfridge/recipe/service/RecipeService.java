@@ -46,6 +46,9 @@ public class RecipeService {
         verifyWriter(findRecipe, memberId);
 
         Optional.ofNullable(recipe.getTitle()).ifPresent(findRecipe::setTitle);
+        Optional.ofNullable(recipe.getImagePath()).ifPresent(findRecipe::setImagePath);
+        Optional.ofNullable(recipe.getTime()).ifPresent(findRecipe::setTime);
+        Optional.ofNullable(recipe.getPortion()).ifPresent(findRecipe::setPortion);
 
         //update를 하면 기존의 step이 중복으로 들어가는 문제 발생 -> update를 하기 이전에, step을 삭제(더 좋은 방법이 있을까?)
         stepRepository.deleteStepByRecipeId(findRecipe.getId());
@@ -98,6 +101,7 @@ public class RecipeService {
     public void deleteRecipeImage(long id, long memberId) {
         Recipe findRecipe = findRecipeById(id);
         verifyWriter(findRecipe, memberId);
+        //s3 버킷에서 해당 레시피에 관련된 이미지 삭제
         fileUploadService.deleteImage(findRecipe.getImagePath());
         List<Step> steps = findRecipe.getSteps();
         for (Step step : steps) {

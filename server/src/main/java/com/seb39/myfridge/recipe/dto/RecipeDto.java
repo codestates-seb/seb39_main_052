@@ -17,6 +17,7 @@ public class RecipeDto {
         @NotBlank(message = "레시피 제목은 공백이 아니어야 합니다.")
         private String title;
 
+        @NotBlank(message = "레시피 대표 이미지를 삽입해주세요!")
         private String imagePath;
 
         private int portion;
@@ -43,6 +44,7 @@ public class RecipeDto {
         @NotBlank(message = "수정할 레시피 제목은 공백이 아니어야 합니다.")
         private String title;
 
+        @NotBlank(message = "수정할 레시피 대표 이미지를 삽입해주세요!")
         private String imagePath;
 
         private int portion;
