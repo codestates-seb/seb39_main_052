@@ -5,7 +5,6 @@ const GlobalStyle = createGlobalStyle`
     * {
         box-sizing: border-box;
         font-family: 'GmarketSansMedium';
-        color: var(--black);
     }
     a {
         text-decoration: none;
@@ -23,6 +22,24 @@ const GlobalStyle = createGlobalStyle`
     }
     button {
       cursor: pointer;
+      border: none;
+      border-radius: 10%;
+      background-color: var(--white);
+      :hover {
+        /* background-color: var(--mintgreen-300); */
+        text-shadow: var(--text-shadow);
+      }
+      &.large {
+        font-size: 28px;
+      }
+    }
+    h1 {
+      margin-top: 0;
+      font-size: 40px;
+    }
+    h2 {
+      font-size: 24px;
+      margin: 0 0 12px 0;
     }
 
     @font-face {

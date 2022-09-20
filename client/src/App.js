@@ -1,10 +1,12 @@
-import React from "react";
-import GlobalStyle from "./GlobalStyle";
-import styled from "styled-components";
-import "./style.css";
+import React from 'react';
+import GlobalStyle from './GlobalStyle';
+import styled from 'styled-components';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Nav from './components/layout/Nav/Nav';
 import LogInForm from "./components/layout/RegisterForm/LogInForm";
 import SignUpForm from "./components/layout/RegisterForm/SignUpForm";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import NewRecipe from './pages/NewRecipe/NewRecipe';
 import Home from "./pages/Home/Home";
 import LogIn from "./pages/LogIn/LogIn";
 
@@ -14,21 +16,17 @@ function App() {
       {/* Global Styles는 Router 안, 컴포넌트 상단에 위치  */}
       <GlobalStyle />
       <BrowserRouter>
-        {/* <Test> 나만의 냉장고 </Test>
-      <div> My Fridge </div> */}
+      <Nav />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LogIn />} />
           <Route path="/signup" element={<SignUpForm />} />
+          <Route path="/recipes/new" element={<NewRecipe />} />
+        <RecipeEditor />
         </Routes>
       </BrowserRouter>
     </>
   );
 }
-
-const Test = styled.div`
-  color: var(--red-500);
-  box-shadow: var(--shadow-high);
-`;
 
 export default App;
