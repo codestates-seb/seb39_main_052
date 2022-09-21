@@ -9,17 +9,19 @@ const ImageUploader = ({ size, index, mode }) => {
 
     const [imageUrl, setImageUrl] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [isUploadMode, setIsUploadMode] = useState(true);
 
     const dispatch = useDispatch();
     const imgRef = useRef();
 
-    const imageHandler = async (e) => {
+    const imageHandler = (e) => {
         e.preventDefault();
         setIsLoading(true);
 
         if (e.target.files[0]) {
             const uploadFile = e.target.files[0]
             setImageUrl(URL.createObjectURL(uploadFile));
+            setIsUploadMode(false);
             // 메인 사진을 추가하는 경우
             if (mode === `main`) {
                 dispatch(addMainImage({ image: uploadFile }))
@@ -29,15 +31,19 @@ const ImageUploader = ({ size, index, mode }) => {
                 dispatch(addImage({ index: index, image: uploadFile }));
             }
         }
+        else {
+            setIsLoading(false);
+        }
     };
 
-    const handleClick = () => {
+    const handleClick = async() => {
         // 버튼 클릭으로 input 클릭과 동일한 기능을 한다.
-        imgRef.current.click();
+        await imgRef.current.click();
     };
 
     const handleDelete = () => {
         setImageUrl(null);
+        imgRef.current.value="";
         // 메인 사진을 지우는 경우
         if (mode === `main`) {
             dispatch(deleteMainImage());
