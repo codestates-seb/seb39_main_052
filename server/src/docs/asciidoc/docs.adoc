@@ -18,6 +18,9 @@ include::{snippets}/login-success/http-request.adoc[]
 .request-fields
 include::{snippets}/login-success/request-fields.adoc[]
 
+==== 응답 (성공)
+***
+
 .http-response
 include::{snippets}/login-success/http-response.adoc[]
 
@@ -27,6 +30,16 @@ include::{snippets}/login-success/response-headers.adoc[]
 .response-fields
 include::{snippets}/login-success/response-fields.adoc[]
 
+==== 응답 (실패)
+***
+.http-response
+include::{snippets}/login-fail/http-response.adoc[]
+
+.response-fields
+include::{snippets}/login-fail/response-fields.adoc[]
+
+
+
 === OAuth2 Login
 ***
     구글 로그인 주소 : https://seb39myfridge.ml/oauth2/authorization/google
@@ -34,10 +47,11 @@ include::{snippets}/login-success/response-fields.adoc[]
 
     OAuth2 Login은 일반 Login과 다르게 동작한다.
     위 주소로 요청을 하면 각 OAuth2 제공자의 로그인 페이지로 Redirect 되고,
-    Login을 성공시 {frontEnd 주소}/auth/redirect?access-token={access-token}
+    Login을 성공시 {frontEnd 주소}/auth/redirect?access-token={access-token}&member-id={member-id}
     으로 redirect한다.
 
     Access token은 redirect 주소에 Query Parameter로 전달된다.
+    로그인한 사용자의 id는 redirect 주소에 Query Parameter로 전달된다.
     Refresh token은 일반 로그인과 마찬가지로 HttpOnly cookie로 전달된다.
 
 === 로그아웃

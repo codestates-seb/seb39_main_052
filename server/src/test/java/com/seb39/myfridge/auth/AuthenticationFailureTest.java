@@ -80,7 +80,7 @@ public class AuthenticationFailureTest {
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.code").value(AppAuthExceptionCode.INVALID_EMAIL_OR_PASSWORD.getCode()));
 
-        result.andDo(document("signup-fail",
+        result.andDo(document("login-fail",
                 getRequestPreProcessor(),
                 getResponsePreProcessor(),
                 requestFields(
