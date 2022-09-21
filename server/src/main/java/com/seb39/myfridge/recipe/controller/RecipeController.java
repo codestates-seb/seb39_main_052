@@ -61,6 +61,9 @@ public class RecipeController {
                                        @RequestPart List<MultipartFile> files,
                                        @AuthenticationPrincipal PrincipalDetails principalDetails){
         requestBody.setId(id);
+        for (MultipartFile file : files) {
+            System.out.println("file name : " + file.getName());
+        }
         Long memberId = principalDetails.getMemberId();
         List<Step> stepList = recipeMapper.recipeDtoStepsToStepList(requestBody.getSteps());
         Recipe recipe = recipeService.updateRecipe(recipeMapper.recipePatchToRecipe(requestBody), stepList, memberId, files);
@@ -75,4 +78,12 @@ public class RecipeController {
         RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(recipe);
         return new ResponseEntity(response, HttpStatus.OK);
     }
+
+    /**
+     * 이미지 수정
+     * 원래 db에 저장되어 있던 imagePath와 달라짐
+     * 만약 3번 step에 해당하는 이미지를 사용자가 수정한다 ?
+     *  메인, 1번, 2번, 4번에는 db에 저장된 것과 같은 imagePath가 요청으로 올 것임
+     *  3번만 다른 imagePath가 저장될것
+     */
 }

@@ -22,9 +22,9 @@ public class FileUploadService {
         objectMetadata.setContentLength(file.getSize());
         objectMetadata.setContentType(file.getContentType());
 
-        if (s3Service.isFileExist(fileName)) {
-            s3Service.deleteFile(fileName);
-        }
+//        if (s3Service.isFileExist(fileName)) {
+//            s3Service.deleteFile(fileName);
+//        }
 
         try (InputStream inputStream = file.getInputStream()) {
             s3Service.uploadFile(inputStream, objectMetadata, fileName);

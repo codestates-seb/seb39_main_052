@@ -31,6 +31,7 @@ public class RecipeService {
     public Recipe createRecipe(Recipe recipe, List<Step> steps, Long memberId, List<MultipartFile> files) {
         //변경해야 할 사항
         //1. 레시피를 등록할 때 입력한 재료 저장
+        System.out.println("files.size() = " + files.size());
         Member member = memberService.findById(memberId);
         recipe.setMember(member);
         createImage(recipe, files, steps);
@@ -49,7 +50,7 @@ public class RecipeService {
         Optional.ofNullable(recipe.getTime()).ifPresent(findRecipe::setTime);
         Optional.ofNullable(recipe.getPortion()).ifPresent(findRecipe::setPortion);
         //1. 이미지 삭제
-        deleteImage(findRecipe);
+//        deleteImage(findRecipe);
         findRecipe.getSteps().clear();
         //2. 이미지 재업로드
         createImage(findRecipe, files, steps);
@@ -72,12 +73,17 @@ public class RecipeService {
     //이미지 생성 메서드
     private void createImage(Recipe findRecipe, List<MultipartFile> files, List<Step> steps) {
         if (!CollectionUtils.isEmpty(files)) {
-            findRecipe.setImagePath(fileUploadService.uploadImage(files.get(0)));
-            files.remove(0);
-            //첫 번째 레시피 사진은 비어있고, 두 번째 레시피 사진을 넣고싶다면???
-            for (int i = 0; i < files.size(); i++) {
-                steps.get(i).setImagePath(fileUploadService.uploadImage(files.get(i)));
+            if (findRecipe.getImagePath() == null) {
+                findRecipe.setImagePath(fileUploadService.uploadImage(files.get(0)));
+                files.remove(0);
             }
+            for (Step step : steps) {
+                if (step.getImagePath() == null) {
+                    step.setImagePath(fileUploadService.uploadImage(files.get(0)));
+                    files.remove(0);
+                }
+            }
+            //첫 번째 레시피 사진은 비어있고, 두 번째 레시피 사진을 넣고싶다면???
         }
     }
 
