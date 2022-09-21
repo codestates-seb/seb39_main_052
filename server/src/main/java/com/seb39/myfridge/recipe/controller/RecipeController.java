@@ -29,40 +29,22 @@ public class RecipeController {
     private final RecipeMapper recipeMapper;
 
 
-    @PostMapping()
-    public ResponseEntity postRecipe(@Valid @RequestBody RecipeDto.Post requestBody,
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity postRecipe(@Valid @RequestPart RecipeDto.Post requestBody,
+                                     @RequestPart List<MultipartFile> files,
                                      @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long memberId = principalDetails.getMemberId();
+        //1. 이미지 관련 exception 처리 필요
 
         List<Step> stepList = recipeMapper.recipeDtoStepsToStepList(requestBody.getSteps());
         Recipe recipe = recipeMapper.recipePostToRecipe(requestBody);
 
-        Recipe savedRecipe = recipeService.createRecipe(recipe, stepList, memberId);
+        Recipe savedRecipe = recipeService.createRecipe(recipe, stepList, memberId, files);
         RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(savedRecipe);
 
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity findRecipe(@PathVariable("id") @Positive Long id) {
-        Recipe recipe = recipeService.findRecipeById(id);
-
-        RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(recipe);
-        return new ResponseEntity(response, HttpStatus.OK);
-    }
-
-    //update 구현
-    @PatchMapping("/{id}")
-    public ResponseEntity updateRecipe(@PathVariable("id") @Positive Long id,
-                                       @Valid @RequestBody RecipeDto.Patch requestBody,
-                                       @AuthenticationPrincipal PrincipalDetails principalDetails){
-        requestBody.setId(id);
-        Long memberId = principalDetails.getMemberId();
-        List<Step> stepList = recipeMapper.recipeDtoStepsToStepList(requestBody.getSteps());
-        Recipe recipe = recipeService.updateRecipe(recipeMapper.recipePatchToRecipe(requestBody), stepList, memberId);
-        RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(recipe);
-        return new ResponseEntity(response, HttpStatus.OK);
-    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteRecipe(@PathVariable("id") @Positive Long id,
@@ -73,24 +55,24 @@ public class RecipeController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @PostMapping(value = "/image", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity postRecipeImage(@Valid @RequestPart RecipeDto.Post requestBody,
-                                     @RequestPart List<MultipartFile> files,
-                                     @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    @PatchMapping("/{id}")
+    public ResponseEntity updateRecipe(@PathVariable("id") @Positive Long id,
+                                       @Valid @RequestPart RecipeDto.Patch requestBody,
+                                       @RequestPart List<MultipartFile> files,
+                                       @AuthenticationPrincipal PrincipalDetails principalDetails){
+        requestBody.setId(id);
         Long memberId = principalDetails.getMemberId();
-
-        //이미지 업로드
-        //이미지 업로드, s3에 저장까지 완료
-        //1. 이미지를 1개밖에 저장할 수 없음 List<MultipartFile> 사용해야 할 듯
-        //2. 이미지 불러오는법?
-        //3. 이미지 관련 exception 처리 필요
-
         List<Step> stepList = recipeMapper.recipeDtoStepsToStepList(requestBody.getSteps());
-        Recipe recipe = recipeMapper.recipePostToRecipe(requestBody);
+        Recipe recipe = recipeService.updateRecipe(recipeMapper.recipePatchToRecipe(requestBody), stepList, memberId, files);
+        RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(recipe);
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
 
-        Recipe savedRecipe = recipeService.createRecipeImage(recipe, stepList, memberId, files);
-        RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(savedRecipe);
+    @GetMapping("/{id}")
+    public ResponseEntity findRecipe(@PathVariable("id") @Positive Long id) {
+        Recipe recipe = recipeService.findRecipeById(id);
 
+        RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(recipe);
         return new ResponseEntity(response, HttpStatus.OK);
     }
 }
