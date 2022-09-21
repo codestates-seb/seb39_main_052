@@ -10,6 +10,7 @@ const GeneralButton = ({
   color,
   hoverBackgroundColor,
   hoverColor,
+  onClick,
 }) => {
   return (
     <Button
@@ -21,6 +22,7 @@ const GeneralButton = ({
       color={color}
       hoverBackgroundColor={hoverBackgroundColor}
       hoverColor={hoverColor}
+      onClick={onClick}
     >
       {" "}
       {children}{" "}

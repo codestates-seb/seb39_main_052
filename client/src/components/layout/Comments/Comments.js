@@ -21,20 +21,20 @@ const Comments = () => {
     }
 
     const handleSubmit = () => {
-        axios({
-            method: `post`,
-            url: `/api/recipes/${dummy.id}/comments`,
-            headers: {
-            },
-            data: comment,
-        })
-        .then((response) => {
-            console.log(response)
-        })
-        .catch((error) => {
-            // 예외 처리
-            console.log(error.response);
-        })
+        // axios({
+        //     method: `post`,
+        //     url: `/api/recipes/${dummy.id}/comments`,
+        //     headers: {
+        //     },
+        //     data: comment,
+        // })
+        // .then((response) => {
+        //     console.log(response)
+        // })
+        // .catch((error) => {
+        //     // 예외 처리
+        //     console.log(error.response);
+        // })
     }
 
     return (
