@@ -93,6 +93,7 @@ public class RecipeDto {
         private LocalDateTime lastModifiedAt;
         private String imagePath;
         private List<Step> steps;
+        private Long memberId;
         private String memberName;
 
         @Builder
@@ -105,6 +106,7 @@ public class RecipeDto {
             this.lastModifiedAt = lastModifiedAt;
             this.imagePath = imagePath;
             this.steps = steps;
+            this.memberId = member.getId();
             this.memberName = member.getName();
         }
     }

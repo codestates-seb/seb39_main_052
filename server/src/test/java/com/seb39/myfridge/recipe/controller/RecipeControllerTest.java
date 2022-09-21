@@ -31,6 +31,7 @@ import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequ
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -91,7 +92,7 @@ class RecipeControllerTest {
         //given
         List<RecipeDto.Step> stepList = new ArrayList<>();
 
-        MockMultipartFile image = new MockMultipartFile("files","추가하고 싶은 이미지","image/png", new FileInputStream("/Users/yongjuvv/Downloads/강아지.jpeg"));
+        MockMultipartFile image = new MockMultipartFile("files","추가하고 싶은 이미지","image/png", new FileInputStream("src/test/resources/image/puppy.jpeg")); //내 로컬 이미지파일 -> 고쳐야 함
 
         RecipeDto.Step step1 = RecipeDto.Step.builder()
                 .sequence(1)
@@ -164,6 +165,7 @@ class RecipeControllerTest {
                                         fieldWithPath("steps.[].sequence").type(JsonFieldType.NUMBER).description("요리 단계 순서"),
                                         fieldWithPath("steps.[].content").type(JsonFieldType.STRING).description("각 단계별 내용"),
                                         fieldWithPath("steps.[].imagePath").type(JsonFieldType.STRING).description("요리 관련 이미지"),
+                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("작성자 식별자"),
                                         fieldWithPath("memberName").type(JsonFieldType.STRING).description("작성자 이름")
                                 )
                         )
@@ -174,7 +176,7 @@ class RecipeControllerTest {
         //given
         List<RecipeDto.Step> stepList = new ArrayList<>();
 
-        MockMultipartFile image = new MockMultipartFile("files","추가하고 싶은 이미지","image/png", new FileInputStream("/Users/yongjuvv/Downloads/강아지.jpeg"));
+        MockMultipartFile image = new MockMultipartFile("files","추가하고 싶은 이미지","image/png", new FileInputStream("src/test/resources/image/puppy.jpeg"));
 
         RecipeDto.Step step1 = RecipeDto.Step.builder()
                 .sequence(1)
@@ -259,6 +261,7 @@ class RecipeControllerTest {
                                         fieldWithPath("steps.[].sequence").type(JsonFieldType.NUMBER).description("요리 단계 순서"),
                                         fieldWithPath("steps.[].content").type(JsonFieldType.STRING).description("각 단계별 내용"),
                                         fieldWithPath("steps.[].imagePath").type(JsonFieldType.STRING).description("요리 관련 이미지"),
+                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("작성자 식별자"),
                                         fieldWithPath("memberName").type(JsonFieldType.STRING).description("작성자 이름")
                                 )
                         )
