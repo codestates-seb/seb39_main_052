@@ -18,6 +18,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -29,8 +32,13 @@ import java.util.Date;
 
 import static com.seb39.myfridge.auth.util.AppAuthNames.REFRESH_TOKEN;
 import static com.seb39.myfridge.auth.util.JwtClaims.ID;
+import static com.seb39.myfridge.util.ApiDocumentUtils.getRequestPreProcessor;
+import static com.seb39.myfridge.util.ApiDocumentUtils.getResponsePreProcessor;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -39,6 +47,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
+@AutoConfigureRestDocs(uriHost = "seb39myfridge.ml", uriScheme = "https" , uriPort = 443)
 public class AuthenticationFailureTest {
 
     @Autowired
@@ -64,12 +73,26 @@ public class AuthenticationFailureTest {
         String requestBody = om.writeValueAsString(loginRequest);
 
         // expected
-        ResultActions result = mockMvc.perform(post("/api/login")
+        ResultActions result = mockMvc.perform(RestDocumentationRequestBuilders.post("/api/login")
                         .accept(APPLICATION_JSON)
                         .contentType(APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.code").value(AppAuthExceptionCode.INVALID_EMAIL_OR_PASSWORD.getCode()));
+
+        result.andDo(document("signup-fail",
+                getRequestPreProcessor(),
+                getResponsePreProcessor(),
+                requestFields(
+                        fieldWithPath("email").type(JsonFieldType.STRING).description("사용자 이메일"),
+                        fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호")
+                ),
+                responseFields(
+                        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("로그인 성공 여부"),
+                        fieldWithPath("code").type(JsonFieldType.NUMBER).description("인증 실패 Error Code"),
+                        fieldWithPath("failureReason").type(JsonFieldType.STRING).description("실패 사유")
+                )
+        ));
     }
 
     @Test
