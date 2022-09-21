@@ -86,7 +86,7 @@ class RecipeControllerTest {
         memberRepository.deleteAll();
     }
 
-    @Test
+    // @Test
     public void 레시피등록_테스트() throws Exception{
         //given
         List<RecipeDto.Step> stepList = new ArrayList<>();
@@ -169,7 +169,7 @@ class RecipeControllerTest {
                         )
                 ));
     }
-    @Test
+    // @Test
     public void 레시피수정_테스트() throws Exception{
         //given
         List<RecipeDto.Step> stepList = new ArrayList<>();
