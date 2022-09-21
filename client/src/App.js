@@ -9,13 +9,14 @@ import NewRecipe from "./pages/NewRecipe/NewRecipe";
 import Home from "./pages/Home/Home";
 import LogIn from "./pages/LogIn/LogIn";
 import OAuth2RedirectHandler from "./components/layout/RegisterForm/OAuth2RedirectHandler";
+import EditRecipe from "./pages/EditRecipe/EditRecipe";
+import RecipeDetail from "./pages/RecipeDetail/RecipeDetail";
 
 function App() {
   return (
     <>
-      {/* Global Styles는 Router 안, 컴포넌트 상단에 위치  */}
-      <GlobalStyle />
       <BrowserRouter>
+        <GlobalStyle />
         <Nav />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -23,6 +24,8 @@ function App() {
           <Route path="/signup" element={<SignUpForm />} />
           <Route path="/recipes/new" element={<NewRecipe />} />
           <Route path="/auth/redirect" element={<OAuth2RedirectHandler />} />
+          <Route path="/recipes/edit" element={<EditRecipe />} />
+          <Route path="/recipes" element={<RecipeDetail />} />
         </Routes>
       </BrowserRouter>
     </>

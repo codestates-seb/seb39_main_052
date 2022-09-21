@@ -1,9 +1,14 @@
 import RecipeEditor from "../../components/layout/RecipeEditor/RecipeEditor";
+import { PageName } from "./NewRecipeStyle";
 
 const NewRecipe = () => {
+
+    const editMode = 'post';
+
     return (
         <>
-            <RecipeEditor />
+            <PageName>새 레시피 작성하기</PageName>
+            <RecipeEditor editMode={editMode} />
         </>
     )
 };

@@ -4,7 +4,7 @@ export const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 48px;
+    padding: 28px 0 0 0;
     width: 100%;
 `
 
@@ -29,7 +29,12 @@ export const Main = styled.div`
 export const ImageWrap = styled.div`
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     margin-top: auto;
+    > *:nth-child(2){
+        margin: 10px 0 0 0;
+    }
 `
 
 export const Input = styled.input`
@@ -52,13 +57,13 @@ export const Input = styled.input`
 export const Portion = styled.div`
     display: flex;
     flex-direction: column; 
-    margin-top: 24px;
+    margin-top: 28px;
 `
 
 export const Time = styled.div`
     display: flex;
     flex-direction: column; 
-    margin-top: 36px;
+    margin-top: 40px;
 `
 
 export const Select = styled.select`
@@ -73,7 +78,7 @@ export const Ingredients = styled.div`
     flex-direction: column;
     align-items: flex-start;
     width: 842px;
-    margin: 16px 0 48px 0;
+    margin: 12px 0 48px 0;
 `
 
 export const Steps = styled.div`
@@ -87,6 +92,7 @@ export const ButtonWrap = styled.div`
     flex-direction: row;
     justify-content: space-between;
     width: 842px;
+    margin: 20px 0 0 0;
 `
 
 export const Button = styled.button`

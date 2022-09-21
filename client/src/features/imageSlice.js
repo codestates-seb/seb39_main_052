@@ -22,8 +22,11 @@ const imageSlice = createSlice({
         deleteImage: (state, action) => {
             state[action.payload.index+1] = null;
         },
+        clearImages: () => {
+            return initialState;
+        },
     },
 });
 
 export default imageSlice;
-export const { addElement, addImage, addMainImage, deleteImage, deleteMainImage } = imageSlice.actions;
+export const { addElement, addImage, addMainImage, deleteImage, deleteMainImage, clearImages } = imageSlice.actions;

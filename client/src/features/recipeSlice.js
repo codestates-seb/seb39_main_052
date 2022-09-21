@@ -2,6 +2,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+    id: null,
     title: "",
     // imagePath: "",
     portion: "1",
@@ -21,11 +22,11 @@ const recipeSlice = createSlice({
     name: 'recipe',
     initialState,
     reducers: {
+      setId: (state, action) => {
+        state.id = action.payload.id;
+      },
       setTitle: (state, action) => {
         state.title = action.payload.title;
-      },
-      setImagePath: (state, action) => {
-        state.imagePath = action.payload.imagePath;
       },
       setPortion: (state, action) => {
         state.portion = action.payload.portion;
@@ -66,6 +67,7 @@ const recipeSlice = createSlice({
 
 export default recipeSlice;
 export const { 
+  setId,
   setTitle,
   setImagePath,
   setPortion,

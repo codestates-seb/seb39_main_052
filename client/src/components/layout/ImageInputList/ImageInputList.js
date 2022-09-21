@@ -11,10 +11,10 @@ const ImageInputList = ({ stepFiles, setStepFiles }) => {
 
     const dispatch = useDispatch();
 
+    // 레시피 순서 데이터
     const steps = useSelector((state) => {
         return state.recipe.steps;
     });
-    // console.log(`steps`, steps)
 
     const handleInputChange = (e, i) => {
         const { name, value } = e.target;
@@ -44,6 +44,7 @@ const ImageInputList = ({ stepFiles, setStepFiles }) => {
                             type='text'
                             maxLength='200'
                             name="content"
+                            value={el.content}
                             placeholder="예) 김치를 잘게 썰어 중불의 팬에 기름을 두르고 5분정도 볶는다"
                             onChange={e => handleInputChange(e, idx)}
                         />

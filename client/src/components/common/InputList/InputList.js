@@ -15,10 +15,10 @@ const Ingredients = ({ titlesArr, placeholders }) => {
 
     const dispatch = useDispatch();
 
+    // 레시피 재료 데이터 
     const ingredients = useSelector((state) => {
         return state.recipe.ingredients;
     });
-    // console.log(`ingr`, ingredients)
 
     const handleInputChange = (e, i) => {
         const { name, value } = e.target;

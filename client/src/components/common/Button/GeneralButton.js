@@ -42,11 +42,27 @@ const Button = styled.button`
   margin-top: 20px;
   font-size: 16px;
 
+  &.large {
+    height: 48px;
+    width: 200px;
+    font-size: 20px;
+  }
+  &.small {
+    margin: 0;
+    height: 40px;
+    width: 56px;
+  }
+  &.gray {
+    background: var(--gray-400);
+  }
   &:hover {
     /* background-color: var(--fridge-700); */
     background-color: ${(props) =>
       props.hoverBackgroundColor || "var(--fridge-700)"};
     color: ${(props) => props.hoverColor};
+    &.gray {
+      background: var(--gray-500);
+    }
   }
 
   &.disabled-btn {
