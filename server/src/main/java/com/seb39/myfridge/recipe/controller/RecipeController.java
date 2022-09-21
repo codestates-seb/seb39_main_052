@@ -29,19 +29,12 @@ public class RecipeController {
     private final RecipeMapper recipeMapper;
 
 
-
-
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity postRecipe(@Valid @RequestPart RecipeDto.Post requestBody,
                                      @RequestPart List<MultipartFile> files,
                                      @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long memberId = principalDetails.getMemberId();
-
-        //이미지 업로드
-        //이미지 업로드, s3에 저장까지 완료
-        //1. 이미지를 1개밖에 저장할 수 없음 List<MultipartFile> 사용해야 할 듯
-        //2. 이미지 불러오는법?
-        //3. 이미지 관련 exception 처리 필요
+        //1. 이미지 관련 exception 처리 필요
 
         List<Step> stepList = recipeMapper.recipeDtoStepsToStepList(requestBody.getSteps());
         Recipe recipe = recipeMapper.recipePostToRecipe(requestBody);

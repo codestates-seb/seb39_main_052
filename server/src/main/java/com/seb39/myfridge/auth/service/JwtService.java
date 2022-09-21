@@ -6,7 +6,7 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seb39.myfridge.auth.enums.AppAuthExceptionCode;
-import com.seb39.myfridge.auth.enums.JwtClaims;
+import com.seb39.myfridge.auth.util.JwtClaims;
 import com.seb39.myfridge.auth.util.AppAuthNames;
 import com.seb39.myfridge.auth.exception.AppAuthenticationException;
 import com.seb39.myfridge.auth.util.CookieUtil;
@@ -36,8 +36,8 @@ public class JwtService {
 
     private ObjectMapper om = new ObjectMapper();
 
-    public String issueAccessToken(Long memberId, String username) {
-        return jwtProvider.createAccessToken(memberId, username);
+    public String issueAccessToken(Long memberId ) {
+        return jwtProvider.createAccessToken(memberId);
     }
 
     public void issueRefreshToken(HttpServletResponse response, String accessToken) {
@@ -55,9 +55,7 @@ public class JwtService {
         verifyTokenPair(prevAccessToken, refreshToken);
 
         Long id = decodeClaim(prevAccessToken, JwtClaims.ID).asLong();
-        String email = decodeClaim(prevAccessToken, JwtClaims.EMAIL).asString();
-
-        String newAccessToken = jwtProvider.createAccessToken(id, email);
+        String newAccessToken = jwtProvider.createAccessToken(id);
         saveToken(refreshToken, newAccessToken);
         response.setHeader(AppAuthNames.ACCESS_TOKEN, newAccessToken);
     }
@@ -92,12 +90,12 @@ public class JwtService {
             throw new AppAuthenticationException(AppAuthExceptionCode.INVALID_ACCESS_TOKEN);
     }
 
-    public String verifyJwtTokenAndGetEmail(String jwtToken) {
+    public Long verifyJwtTokenAndGetId(String jwtToken) {
         return JWT.require(Algorithm.HMAC512(secret))
                 .build()
                 .verify(jwtToken)
-                .getClaim(JwtClaims.EMAIL)
-                .asString();
+                .getClaim(JwtClaims.ID)
+                .asLong();
     }
 
     private void saveToken(String refreshToken, String accessToken) {
@@ -125,6 +123,6 @@ public class JwtService {
 
     private Claim decodeClaim(String token, String claim) {
         return JWT.decode(token)
-                .getClaim(JwtClaims.ID);
+                .getClaim(claim);
     }
 }

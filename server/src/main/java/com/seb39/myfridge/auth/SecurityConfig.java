@@ -34,7 +34,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable();
+        http.csrf()
+                .disable();
         http.headers()
                 .frameOptions()
                 .disable();
@@ -42,10 +43,11 @@ public class SecurityConfig {
                 .disable();
         http.httpBasic()
                 .disable();
-        http.cors().disable();
+        http.cors()
+                .disable();
 
         http.sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.NEVER)
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .apply(new CustomJwtConfigurer())
                 .and()

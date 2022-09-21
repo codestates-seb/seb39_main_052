@@ -22,12 +22,10 @@ public class FileUploadService {
         objectMetadata.setContentLength(file.getSize());
         objectMetadata.setContentType(file.getContentType());
 
-        System.out.println("fileName = " + fileName);
-        //파일이 이미 존재하면 존재하는 파일 삭제
         if (s3Service.isFileExist(fileName)) {
-            System.out.println("파일이 이미 존재합니다!");
             s3Service.deleteFile(fileName);
         }
+
         try (InputStream inputStream = file.getInputStream()) {
             s3Service.uploadFile(inputStream, objectMetadata, fileName);
         } catch (IOException e) {
@@ -36,10 +34,10 @@ public class FileUploadService {
         return s3Service.getFileUrl(fileName);
     }
 
+
     public void deleteImage(String fileName) {
         s3Service.deleteFile(fileName);
     }
-
 
     //기존 확장자명을 유지하고, 유니크한 파일의 이름을 생성
     //s3에 같은 이름의 파일이 들어가지 않도록

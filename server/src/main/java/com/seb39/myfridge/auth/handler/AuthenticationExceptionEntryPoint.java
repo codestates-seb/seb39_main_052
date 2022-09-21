@@ -23,6 +23,7 @@ public class AuthenticationExceptionEntryPoint implements AuthenticationEntryPoi
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         exceptionResolver.resolveException(request, response, null, authException);

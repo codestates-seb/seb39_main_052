@@ -27,7 +27,6 @@ public class AWSS3UploadService implements UploadService{
     public String getFileUrl(String fileName) {
         return amazonS3.getUrl(component.getBucket(), fileName).toString();
     }
-
     @Override
     public void deleteFile(String fileName) {
         String s3FileName = getFileName(fileName);

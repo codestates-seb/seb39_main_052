@@ -13,17 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthTestPageController {
 
     /**
-     * 인증 테스트 페이지를 위한 API
-     */
-    @GetMapping("/")
-    public String index(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model){
-        if(principalDetails != null){
-            model.addAttribute("username",principalDetails.getUsername());
-        }
-        return "index";
-    }
-
-    /**
      * 인증 테스트를 위한 Method
      */
     @GetMapping("/api/authtest")

@@ -12,4 +12,5 @@ public interface UploadService {
     void deleteFile(String fileName);
 
     boolean isFileExist(String fileName);
+
 }
