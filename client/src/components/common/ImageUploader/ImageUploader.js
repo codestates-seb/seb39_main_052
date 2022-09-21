@@ -5,7 +5,7 @@ import { addImage, addMainImage, deleteImage, deleteMainImage } from "../../../f
 import { faSpinner, faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Container, Img, Input, Button, StyledFontAwesomeIcon } from "./ImageUploaderStyle";
 
-const ImageUploader = ({ size, index, stepFiles, setStepFiles, mode }) => {
+const ImageUploader = ({ size, index, mode }) => {
 
     const [imageUrl, setImageUrl] = useState(null);
     const [isLoading, setIsLoading] = useState(false);

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-const useConfirm = (message= "", onConfirm, onCancel) => {
+const useConfirm = (message= "", onConfirm, onCancel, index) => {
     // useEffect(() => {
     //     console.log(`hi`);
     // },[])
@@ -12,7 +12,7 @@ const useConfirm = (message= "", onConfirm, onCancel) => {
     }
     const confirmAction = () => {
         if (window.confirm(message)) {
-            onConfirm();
+            onConfirm(index);
         }
         else {
             onCancel();
