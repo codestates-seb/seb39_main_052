@@ -6,11 +6,16 @@ export const Container = styled.div`
     flex-direction: column;
     /* background-color: var(--primary-200); */
     background-color: var(--gray-200);
-    width: 640px;
+    width: 548px;
     height: 400px;
     margin: 60px 0 0 0;
-    padding: 16px 20px;
+    padding: 20px 20px;
     border-radius: 10px;
+    font-size: 12px;
+    > h2 {
+        margin-left: 6px;
+        margin-bottom: 12px;
+    }
 `
 
 export const InputWrapper = styled.div`
@@ -25,15 +30,13 @@ export const Input = styled.input`
     padding: 1px 8px 0 8px;
     margin: 0 8px 0 0;
     &.large {
-        height: 42px;
-        font-size: 16px;
+        height: 36px;
         border-radius: 8px;
     }
     &.small {
         height: 24px;
         border-radius: 6px;
-        margin: 0 8px 0 26px;
-        font-size: 12px;
+        margin: 0 8px 0 12px;
     }
 `
 

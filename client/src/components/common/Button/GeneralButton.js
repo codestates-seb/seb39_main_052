@@ -55,8 +55,9 @@ const Button = styled.button`
   }
   &.small {
     margin-top: 0;
-    height: 40px;
+    height: 35px;
     width: 56px;
+    font-size: 14px;
   }
   &.xsmall {
     margin-top: 0;
