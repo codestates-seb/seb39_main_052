@@ -29,56 +29,10 @@ public class RecipeController {
     private final RecipeMapper recipeMapper;
 
 
-    @PostMapping()
-    public ResponseEntity postRecipe(@Valid @RequestBody RecipeDto.Post requestBody,
-                                     @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        Long memberId = principalDetails.getMemberId();
 
-        List<Step> stepList = recipeMapper.recipeDtoStepsToStepList(requestBody.getSteps());
-        Recipe recipe = recipeMapper.recipePostToRecipe(requestBody);
 
-        Recipe savedRecipe = recipeService.createRecipe(recipe, stepList, memberId);
-        RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(savedRecipe);
-
-        return new ResponseEntity(response, HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity findRecipe(@PathVariable("id") @Positive Long id) {
-        Recipe recipe = recipeService.findRecipeById(id);
-
-        RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(recipe);
-        return new ResponseEntity(response, HttpStatus.OK);
-    }
-
-    //update 구현
-    @PatchMapping("/{id}")
-    public ResponseEntity updateRecipe(@PathVariable("id") @Positive Long id,
-                                       @Valid @RequestBody RecipeDto.Patch requestBody,
-                                       @AuthenticationPrincipal PrincipalDetails principalDetails){
-        requestBody.setId(id);
-        Long memberId = principalDetails.getMemberId();
-        List<Step> stepList = recipeMapper.recipeDtoStepsToStepList(requestBody.getSteps());
-        Recipe recipe = recipeService.updateRecipe(recipeMapper.recipePatchToRecipe(requestBody), stepList, memberId);
-        RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(recipe);
-        return new ResponseEntity(response, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity deleteRecipe(@PathVariable("id") @Positive Long id,
-                                       @AuthenticationPrincipal PrincipalDetails principalDetails) {
-
-        Long memberId = principalDetails.getMemberId();
-        recipeService.deleteRecipe(id, memberId);
-        return new ResponseEntity(HttpStatus.OK);
-    }
-
-    /**
-     * image 업로드 관련 test 중
-     */
-
-    @PostMapping(value = "/image", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity postRecipeImage(@Valid @RequestPart RecipeDto.Post requestBody,
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity postRecipe(@Valid @RequestPart RecipeDto.Post requestBody,
                                      @RequestPart List<MultipartFile> files,
                                      @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long memberId = principalDetails.getMemberId();
@@ -92,19 +46,40 @@ public class RecipeController {
         List<Step> stepList = recipeMapper.recipeDtoStepsToStepList(requestBody.getSteps());
         Recipe recipe = recipeMapper.recipePostToRecipe(requestBody);
 
-        Recipe savedRecipe = recipeService.createRecipeImage(recipe, stepList, memberId, files);
+        Recipe savedRecipe = recipeService.createRecipe(recipe, stepList, memberId, files);
         RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(savedRecipe);
 
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
 
-    @DeleteMapping("/image/{id}")
-    public ResponseEntity deleteRecipeImage(@PathVariable("id") @Positive Long id,
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteRecipe(@PathVariable("id") @Positive Long id,
                                        @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
         Long memberId = principalDetails.getMemberId();
-        recipeService.deleteRecipeImage(id, memberId);
+        recipeService.deleteRecipe(id, memberId);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity updateRecipe(@PathVariable("id") @Positive Long id,
+                                       @Valid @RequestPart RecipeDto.Patch requestBody,
+                                       @RequestPart List<MultipartFile> files,
+                                       @AuthenticationPrincipal PrincipalDetails principalDetails){
+        requestBody.setId(id);
+        Long memberId = principalDetails.getMemberId();
+        List<Step> stepList = recipeMapper.recipeDtoStepsToStepList(requestBody.getSteps());
+        Recipe recipe = recipeService.updateRecipe(recipeMapper.recipePatchToRecipe(requestBody), stepList, memberId, files);
+        RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(recipe);
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity findRecipe(@PathVariable("id") @Positive Long id) {
+        Recipe recipe = recipeService.findRecipeById(id);
+
+        RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(recipe);
+        return new ResponseEntity(response, HttpStatus.OK);
     }
 }

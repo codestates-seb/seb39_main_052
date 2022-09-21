@@ -83,12 +83,10 @@ include::{snippets}/refresh-access-token/response-fields.adoc[]
  레시피 생성과 관련된 API 입니다.
   - 레시피를 생성할 때는 요청 Header에 'Authorization : {Access Token 값}'을 담아 요청해야 합니다.
   - 요리 재료와 관련된 작업이 마무리되면, 요청 데이터에 재료 관련 데이터도 포함할 예정입니다.
+  - form-data 형식으로 요청을 하고, requestBody에는 Json 데이터를, files에는 이미지를 추가하면 됩니다.
 
-.http-request
-include::{snippets}/recipe-create/http-request.adoc[]
-
-.request-fields
-include::{snippets}/recipe-create/request-fields.adoc[]
+.curl-request
+include::{snippets}/recipe-create/curl-request.adoc[]
 
 .http-response
 include::{snippets}/recipe-create/http-response.adoc[]
@@ -101,16 +99,14 @@ include::{snippets}/recipe-create/response-fields.adoc[]
   - 레시피를 수정할 때는 요청 URI에 수정할 레시피 id값을 전달해야 합니다.
   - 레시피를 수정할 때는 요청 Header에 'Authorization : {Access Token 값}'을 담아 요청해야 합니다.
   - 요리 재료와 관련된 작업이 마무리되면, 요청 데이터에 재료 관련 데이터도 포함할 예정입니다.
+  - form-data 형식으로 요청을 하고, requestBody에는 Json 데이터를, files에는 이미지를 추가하면 됩니다.
   - 작성자가 아니면 수정할 수 없습니다.
-
-.path-parameters
-include::{snippets}/recipe-update/path-parameters.adoc[]
 
 .http-request
 include::{snippets}/recipe-update/http-request.adoc[]
 
-.request-fields
-include::{snippets}/recipe-update/request-fields.adoc[]
+.curl-request
+include::{snippets}/recipe-update/curl-request.adoc[]
 
 .http-response
 include::{snippets}/recipe-update/http-response.adoc[]

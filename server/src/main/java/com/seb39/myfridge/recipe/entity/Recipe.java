@@ -41,12 +41,6 @@ public class Recipe extends BaseTimeEntity {
     //요리 소요 시간 ex) 1시간, 30분
     private String time;
 
-    /*@CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime lastModifiedAt;*/
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     private List<Step> steps = new ArrayList<>();

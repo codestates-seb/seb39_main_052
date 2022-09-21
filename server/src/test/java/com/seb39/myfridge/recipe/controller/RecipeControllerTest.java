@@ -19,12 +19,20 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.mock.web.MockPart;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
+import java.io.FileInputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -83,28 +91,30 @@ class RecipeControllerTest {
         //given
         List<RecipeDto.Step> stepList = new ArrayList<>();
 
+        MockMultipartFile image = new MockMultipartFile("files","추가하고 싶은 이미지","image/png", new FileInputStream("/Users/yongjuvv/Downloads/강아지.jpeg"));
+
         RecipeDto.Step step1 = RecipeDto.Step.builder()
                 .sequence(1)
                 .content("물을 끓인다")
-                .imagePath("imagePath1")
+                .imagePath("https://seb52bucket.s3.ap-northeast-2.amazonaws.com/images/ffc76307-6043-437d-944f-ebc2bd2e0359.jpeg")
                 .build();
         stepList.add(step1);
 
         RecipeDto.Step step2 = RecipeDto.Step.builder()
                 .sequence(2)
                 .content("끓는 물에 스프를 넣는다.")
-                .imagePath("imagePath2")
+                .imagePath("https://seb52bucket.s3.ap-northeast-2.amazonaws.com/images/ffc76307-6043-437d-944f-ebc2bd2e0359.jpeg")
                 .build();
         stepList.add(step2);
 
         RecipeDto.Step step3 = RecipeDto.Step.builder()
                 .sequence(3)
                 .content("면을 넣는다.")
-                .imagePath("imagePath3")
+                .imagePath("https://seb52bucket.s3.ap-northeast-2.amazonaws.com/images/ffc76307-6043-437d-944f-ebc2bd2e0359.jpeg")
                 .build();
         stepList.add(step3);
 
-        RecipeDto.Post requestBody = new RecipeDto.Post("라면 맛있게 끓이는 법","imagePath",1,"5분", stepList);
+        RecipeDto.Post requestBody = new RecipeDto.Post("라면 맛있게 끓이는 법","https://seb52bucket.s3.ap-northeast-2.amazonaws.com/images/ffc76307-6043-437d-944f-ebc2bd2e0359.jpeg",1,"5분", stepList);
 
 
         Member member = memberRepository.findByEmail("test@email.com").get();
@@ -116,38 +126,31 @@ class RecipeControllerTest {
                 "5분",
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                "recipe imagePath",
+                "https://seb52bucket.s3.ap-northeast-2.amazonaws.com/images/ffc76307-6043-437d-944f-ebc2bd2e0359.jpeg",
                 stepList,
                 member
         );
         System.out.println("response.getSteps().size() = " + response.getSteps().size());
 
         given(recipeMapper.recipePostToRecipe(any())).willReturn(new Recipe());
-        given(recipeService.createRecipe(any(), anyList(), anyLong())).willReturn(new Recipe());
+        given(recipeService.createRecipe(any(), anyList(), anyLong(), anyList())).willReturn(new Recipe());
         given(recipeMapper.recipeToRecipeResponse(Mockito.any(Recipe.class))).willReturn(response);
         String requestToJson = objectMapper.writeValueAsString(requestBody);
 
+        MockMultipartFile json = new MockMultipartFile("requestBody","jsonData","application/json", requestToJson.getBytes(StandardCharsets.UTF_8));
+
         //when
-        ResultActions actions = mockMvc.perform(post("/api/recipes")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestToJson));
+        ResultActions actions = mockMvc.perform(multipart("/api/recipes")
+                .file(image)
+                .file(json)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .accept(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8"));
         //then
         actions.andExpect(status().isOk())
                 .andDo(document("recipe-create",
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
-                        requestFields(
-                                List.of(
-                                        fieldWithPath("title").type(JsonFieldType.STRING).description("레시피 제목"),
-                                        fieldWithPath("imagePath").type(JsonFieldType.STRING).description("레시피 대표 이미지"),
-                                        fieldWithPath("portion").type(JsonFieldType.NUMBER).description("해당 레시피가 몇 인분인지"),
-                                        fieldWithPath("time").type(JsonFieldType.STRING).description("요리 소요 시간"),
-                                        fieldWithPath("steps").type(JsonFieldType.ARRAY).description("요리 단계"),
-                                        fieldWithPath("steps.[].sequence").type(JsonFieldType.NUMBER).description("요리 단계 순서"),
-                                        fieldWithPath("steps.[].content").type(JsonFieldType.STRING).description("각 단계별 내용"),
-                                        fieldWithPath("steps.[].imagePath").type(JsonFieldType.STRING).description("요리 관련 이미지")
-                                )
-                        ),
                         responseFields(
                                 List.of(
                                         fieldWithPath("id").type(JsonFieldType.NUMBER).description("레시피 식별자"),
@@ -164,41 +167,44 @@ class RecipeControllerTest {
                                         fieldWithPath("memberName").type(JsonFieldType.STRING).description("작성자 이름")
                                 )
                         )
-                        ));
+                ));
     }
     @Test
     public void 레시피수정_테스트() throws Exception{
         //given
         List<RecipeDto.Step> stepList = new ArrayList<>();
 
+        MockMultipartFile image = new MockMultipartFile("files","추가하고 싶은 이미지","image/png", new FileInputStream("/Users/yongjuvv/Downloads/강아지.jpeg"));
+
         RecipeDto.Step step1 = RecipeDto.Step.builder()
                 .sequence(1)
                 .content("물을 끓인다")
-                .imagePath("imagePath1")
+                .imagePath("https://seb52bucket.s3.ap-northeast-2.amazonaws.com/images/ffc76307-6043-437d-944f-ebc2bd2e0359.jpeg")
                 .build();
         stepList.add(step1);
 
         RecipeDto.Step step2 = RecipeDto.Step.builder()
                 .sequence(2)
                 .content("끓는 물에 스프를 넣는다.")
-                .imagePath("imagePath2")
+                .imagePath("https://seb52bucket.s3.ap-northeast-2.amazonaws.com/images/ffc76307-6043-437d-944f-ebc2bd2e0359.jpeg")
                 .build();
         stepList.add(step2);
 
         RecipeDto.Step step3 = RecipeDto.Step.builder()
                 .sequence(3)
                 .content("면을 넣는다.")
-                .imagePath("imagePath3")
+                .imagePath("https://seb52bucket.s3.ap-northeast-2.amazonaws.com/images/ffc76307-6043-437d-944f-ebc2bd2e0359.jpeg")
                 .build();
         stepList.add(step3);
 
-        RecipeDto.Post requestBody = new RecipeDto.Post("라면 맛있게 끓이는 법","imagePath",1,"5분", stepList);
+        RecipeDto.Post requestBody = new RecipeDto.Post("라면 맛있게 끓이는 법","https://seb52bucket.s3.ap-northeast-2.amazonaws.com/images/ffc76307-6043-437d-944f-ebc2bd2e0359.jpeg",1,"5분", stepList);
         String requestToJson = objectMapper.writeValueAsString(requestBody);
+        MockMultipartFile json = new MockMultipartFile("requestBody","jsonData","application/json", requestToJson.getBytes(StandardCharsets.UTF_8));
 
         RecipeDto.Patch patch = RecipeDto.Patch.builder()
                 .id(1L)
                 .title("라면 백종원처럼 끓이는 법!")
-                .imagePath("recipe image")
+                .imagePath("https://seb52bucket.s3.ap-northeast-2.amazonaws.com/images/ffc76307-6043-437d-944f-ebc2bd2e0359.jpeg")
                 .build();
 
         Member member = memberRepository.findByEmail("test@email.com").get();
@@ -210,39 +216,36 @@ class RecipeControllerTest {
                 "5분",
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                "recipe imagePath",
+                "https://seb52bucket.s3.ap-northeast-2.amazonaws.com/images/ffc76307-6043-437d-944f-ebc2bd2e0359.jpeg",
                 stepList,
                 member
         );
         given(recipeMapper.recipePatchToRecipe(Mockito.any(RecipeDto.Patch.class))).willReturn(new Recipe());
-        given(recipeService.updateRecipe(any(), anyList(), anyLong())).willReturn(new Recipe());
+        given(recipeService.updateRecipe(any(), anyList(), anyLong(),anyList())).willReturn(new Recipe());
         given(recipeMapper.recipeToRecipeResponse(Mockito.any(Recipe.class))).willReturn(response);
+
+        MockMultipartHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.multipart("/api/recipes/{id}", 1L);
+        builder.with(new RequestPostProcessor() {
+            @Override
+            public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {
+                request.setMethod("PATCH");
+                return request;
+            }
+        });
         //when
-        ResultActions actions = mockMvc.perform(patch("/api/recipes/{id}", 1L)
+        ResultActions actions = mockMvc.perform(builder
+                .file(image)
+                .file(json)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
                 .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestToJson));
+                .characterEncoding("UTF-8"));
 
         //then
         actions.andExpect(status().isOk())
                 .andDo(document("recipe-update",
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
-                        pathParameters(
-                                parameterWithName("id").description("수정할 레시피 식별자")
-                        ),
-                        requestFields(
-                                List.of(
-                                        fieldWithPath("title").type(JsonFieldType.STRING).description("수정할 레시피 제목"),
-                                        fieldWithPath("imagePath").type(JsonFieldType.STRING).description("수정할 레시피 대표 이미지"),
-                                        fieldWithPath("portion").type(JsonFieldType.NUMBER).description("해당 레시피가 몇 인분인지"),
-                                        fieldWithPath("time").type(JsonFieldType.STRING).description("수정할 요리 소요 시간"),
-                                        fieldWithPath("steps").type(JsonFieldType.ARRAY).description("수정할 요리 단계"),
-                                        fieldWithPath("steps.[].sequence").type(JsonFieldType.NUMBER).description("요리 단계 순서"),
-                                        fieldWithPath("steps.[].content").type(JsonFieldType.STRING).description("각 단계별 내용"),
-                                        fieldWithPath("steps.[].imagePath").type(JsonFieldType.STRING).description("요리 관련 이미지")
-                                )
-                        ),
                         responseFields(
                                 List.of(
                                         fieldWithPath("id").type(JsonFieldType.NUMBER).description("레시피 식별자"),
@@ -263,7 +266,7 @@ class RecipeControllerTest {
     }
 
     @Test
-    public void 질문삭제_테스트() throws Exception {
+    public void 레시피삭제_테스트() throws Exception {
         //given
         long recipeId = 1L;
         Long memberId = memberRepository.findByEmail("test@email.com").get().getId();

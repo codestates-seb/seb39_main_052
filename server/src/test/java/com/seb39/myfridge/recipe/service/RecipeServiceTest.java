@@ -10,7 +10,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +69,7 @@ class RecipeServiceTest {
         memberService.signUpGeneral(member);
 
         //when
-        Recipe savedRecipe = recipeService.createRecipe(recipe, steps, member.getId());
+        Recipe savedRecipe = recipeService.createRecipe(recipe, steps, member.getId(), new ArrayList<>());
         System.out.println(recipe);
 
         //then
@@ -81,6 +83,7 @@ class RecipeServiceTest {
         Recipe recipe = new Recipe();
         recipe.setTitle("Test title!");
         recipe.setView(0);
+        recipe.setImagePath("imagePath");
         recipe.setCreatedAt(LocalDateTime.now());
         recipe.setLastModifiedAt(LocalDateTime.now());
 
@@ -89,11 +92,13 @@ class RecipeServiceTest {
         Step step = new Step();
         step.setContent("물을 끓인다");
         step.setSequence(1);
+        step.setImagePath("imagePath");
         steps.add(step);
 
         Step step2 = new Step();
         step2.setContent("스프를 넣는다");
         step2.setSequence(2);
+        step2.setImagePath("imagePath");
         steps.add(step2);
 
         Member member = Member.generalBuilder()
@@ -103,11 +108,11 @@ class RecipeServiceTest {
                 .buildGeneralMember();
         memberService.signUpGeneral(member);
 
-        Recipe savedRecipe = recipeService.createRecipe(recipe, steps, member.getId());
+        Recipe savedRecipe = recipeService.createRecipe(recipe, steps, member.getId(), new ArrayList<>());
         //when
         String updateTitle = "Update title!!";
         savedRecipe.setTitle(updateTitle);
-        Recipe updateRecipe = recipeService.updateRecipe(savedRecipe, new ArrayList<>(), member.getId());
+        Recipe updateRecipe = recipeService.updateRecipe(savedRecipe, new ArrayList<>(), member.getId(), new ArrayList<>());
 //        System.out.println(updateRecipe.getTitle());
 
         //then
@@ -122,6 +127,7 @@ class RecipeServiceTest {
         Recipe recipe = new Recipe();
         recipe.setTitle("Test title!");
         recipe.setView(0);
+        recipe.setImagePath("imagePath");
         recipe.setCreatedAt(LocalDateTime.now());
         recipe.setLastModifiedAt(LocalDateTime.now());
 
@@ -132,7 +138,7 @@ class RecipeServiceTest {
                 .buildGeneralMember();
         memberService.signUpGeneral(member);
 
-        Recipe savedRecipe = recipeService.createRecipe(recipe, new ArrayList<>(), member.getId());
+        Recipe savedRecipe = recipeService.createRecipe(recipe, new ArrayList<>(), member.getId(), new ArrayList<>());
         //when
         recipeService.deleteRecipe(savedRecipe.getId(),member.getId());
         //then
