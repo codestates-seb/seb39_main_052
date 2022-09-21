@@ -1,5 +1,6 @@
 package com.seb39.myfridge.recipe.entity;
 
+import com.seb39.myfridge.comment.entity.Comment;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.step.entity.Step;
 import lombok.Getter;
@@ -54,6 +55,8 @@ public class Recipe {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @OneToMany(mappedBy = "recipe")
+    private List<Comment> comments = new ArrayList<>();
 
     /**
      * 1. RecipeIngredients 엔티티와 연동 필요
