@@ -11,6 +11,7 @@ const GeneralButton = ({
   hoverBackgroundColor,
   hoverColor,
   onClick,
+  margin,
 }) => {
   return (
     <Button
@@ -23,6 +24,7 @@ const GeneralButton = ({
       hoverBackgroundColor={hoverBackgroundColor}
       hoverColor={hoverColor}
       onClick={onClick}
+      margin={margin}
     >
       {" "}
       {children}{" "}
@@ -31,6 +33,9 @@ const GeneralButton = ({
 };
 
 const Button = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 10px;
   border: none;
   /* width: 300px; */
@@ -41,18 +46,24 @@ const Button = styled.button`
   height: ${(props) => props.height || "35px"};
   background-color: ${(props) => props.backgroundColor || "var(--fridge-500)"};
   color: ${(props) => props.color || "var(--white)"};
-  margin-top: 20px;
   font-size: 16px;
+  margin: ${(props) => props.margin || "20px 0 0 0"};
 
-  &.large {
+  &.medium {
     height: 48px;
-    width: 200px;
-    font-size: 20px;
+    width: 120px;
   }
   &.small {
-    margin: 0;
+    margin-top: 0;
     height: 40px;
     width: 56px;
+  }
+  &.xsmall {
+    margin-top: 0;
+    height: 20px;
+    width: 28px;
+    font-size: 12px;
+    border-radius: 5px;
   }
   &.gray {
     background: var(--gray-400);

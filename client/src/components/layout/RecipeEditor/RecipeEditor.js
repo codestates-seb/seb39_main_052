@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import ImageUploader from "../../common/ImageUploader/ImageUploader";
@@ -11,6 +11,7 @@ import { setTitle, setPortion, setTime, clearRecipe } from "../../../features/re
 import { clearImages } from "../../../features/imageSlice";
 
 const RecipeEditor = ({ editMode }) => {
+
     const [isTitleEmpty, setIsTitleEmpty] = useState(true);
     const [isMainImgEmpty, setIsMainImgEmpty] = useState(true);
     const [isStepImgEmpty, setIsStepImgEmpty] = useState(true);
@@ -22,10 +23,13 @@ const RecipeEditor = ({ editMode }) => {
     const titlesArr = ["food", "amount"]; //재료 입력에서 각 column의 키값 배열
     const placeholders = ["예) 감자", "예) 100g"];
     const portionOptions = Array.from({length: 10}, (_, i) => i + 1); //인분 선택 dropdown
-    let imgPostApi = ``;
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    // 이제 프롭스로 받을 필요 없어요!
+    const pathName = useLocation();
+    console.log(pathName);
 
     useEffect(() => {
         // mount
@@ -35,19 +39,25 @@ const RecipeEditor = ({ editMode }) => {
           dispatch(clearRecipe());
           dispatch(clearImages());
         }
-      }, [])
+    }, [])
 
-    // 전체 레시피 데이터
+    // 레시피 상세 데이터 (글)
     const recipe = useSelector((state) => {
         return state.recipe;
     });
     // console.log(`recipe`, recipe);
 
-    // 전체 레시피 데이터
+    // 레시피 내 모든 이미지 데이터
     const files = useSelector((state) => {
         return state.images;
     });
     // console.log(files);
+
+    // 레시피 내 모든 이미지 데이터
+    const recipeId = useSelector((state) => {
+        return state.recipe.id;
+    });
+    // console.log(recipeId);
 
     // 재료 유효성 경고 창 뜬 후 재작성 했을 때 유효하다면 경고창 없애기 
     useEffect(() => {
@@ -112,29 +122,55 @@ const RecipeEditor = ({ editMode }) => {
             formData.append('requestBody', new Blob([JSON.stringify(recipe)], {
                 type: "application/json"
             }))
-
-            axios({
-                method: editMode,
-                url: '/api/recipes/image',
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-                data: formData,
-            })
-            .then((response) => {
-                // 응답 처리
-                // navigate(`/recipes/${response.data.id}`);
-                formData.delete('files');
-                formData.delete('requestBody');
-                alert(`성공적으로 게시되었습니다`)
-            })
-            .catch((error) => {
-                // 예외 처리
-                console.log(error.response);
-                formData.delete('files');
-                formData.delete('requestBody');
-            })
-
+            // POST 요청 - 새 레시피 작성하기
+            if (editMode === "post") {
+                axios({
+                    method: editMode,
+                    url: '/api/recipes/image',
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                    data: formData,
+                })
+                .then((response) => {
+                    // 응답 처리
+                    // navigate(`/recipes/${response.data.id}`);
+                    formData.delete('files');
+                    formData.delete('requestBody');
+                    alert(`성공적으로 게시되었습니다`)
+                })
+                .catch((error) => {
+                    // 예외 처리
+                    console.log(error.response);
+                    formData.delete('files');
+                    formData.delete('requestBody');
+                })
+            }
+            // else로 patch 요청
+            // // PATCH 요청 - 레시피 수정하기
+            if (editMode === "patch") {
+                axios({
+                    method: editMode,
+                    url: `/api/recipes/${recipeId}`,
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                    data: formData,
+                })
+                .then((response) => {
+                    // 응답 처리
+                    // navigate(`/recipes/${response.data.id}`);
+                    formData.delete('files');
+                    formData.delete('requestBody');
+                    alert(`성공적으로 수정되었습니다`)
+                })
+                .catch((error) => {
+                    // 예외 처리
+                    console.log(error.response);
+                    formData.delete('files');
+                    formData.delete('requestBody');
+                })
+            }
         };
     }
 
@@ -204,7 +240,7 @@ const RecipeEditor = ({ editMode }) => {
                     </Time>
                 </Main>
                 <ImageWrap>
-                    <ImageUploader imgPostApi={imgPostApi} size={`big`} mode={`main`} />
+                    <ImageUploader size={`big`} mode={`main`} />
                     {isSubmitClicked && <Warning className={isMainImgEmpty? null : "invisible"}>메인 이미지를 입력해주세요</Warning>}
                 </ImageWrap>
             </Header>
@@ -225,15 +261,15 @@ const RecipeEditor = ({ editMode }) => {
             {editMode === "post" && 
                 <ButtonWrap>
                     {/* 작성페이지에서 취소시 메인페이지로 연결 */}
-                    <GeneralButton className="large" onClick={() => navigate("/")} >취소하기</GeneralButton>
-                    <GeneralButton className="large" onClick={handleSaveClick}>게시하기</GeneralButton>
+                    <GeneralButton className="medium gray" onClick={() => navigate("/")} >취소하기</GeneralButton>
+                    <GeneralButton className="medium" onClick={handleSaveClick}>게시하기</GeneralButton>
                 </ButtonWrap>
             }
             {editMode === "patch" &&
                 <ButtonWrap>
                     {/* 수정페이지에서 취소시 레시피 상세 페이지로 연결 예정 */}
-                    <GeneralButton className="large gray" >취소하기</GeneralButton>
-                    <GeneralButton className="large" onClick={handleSaveClick}>수정하기</GeneralButton>
+                    <GeneralButton className="medium gray" >취소하기</GeneralButton>
+                    <GeneralButton className="medium" onClick={handleSaveClick}>수정하기</GeneralButton>
                 </ButtonWrap>
             }
         </ Container>

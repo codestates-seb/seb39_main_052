@@ -43,7 +43,7 @@ const Ingredients = ({ titlesArr, placeholders }) => {
                             return (
                                 <Input
                                     type='text'
-                                    maxLength='20'
+                                    maxLength='12'
                                     key={index}
                                     name={title}
                                     value={el[title]}
