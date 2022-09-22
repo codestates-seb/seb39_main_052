@@ -33,17 +33,23 @@ public class KakaoUserInfo implements OAuth2UserInfo{
     private String username;
     private String providerId;
     private String email;
+    private String profileImagePath;
 
     public KakaoUserInfo(Map<String,Object> attributes) {
+
+        System.out.println("attr " + attributes);
+
         Map<String,Object> account = (Map<String, Object>) attributes.get("kakao_account");
         Map<String,Object> profile = (Map<String, Object>) account.get("profile");
 
         Optional.ofNullable(attributes.get("id"))
                 .ifPresent(id -> this.providerId = id.toString());
-        Optional.ofNullable(profile.get("nickname"))
-                .ifPresent(nickname -> this.username = nickname.toString());
         Optional.ofNullable(account.get("email"))
                 .ifPresent(email -> this.email = email.toString());
+        Optional.ofNullable(profile.get("nickname"))
+                .ifPresent(nickname -> this.username = nickname.toString());
+        Optional.ofNullable(profile.get("thumbnail_image_url"))
+                .ifPresent(url -> this.profileImagePath = url.toString());
     }
 
     @Override
@@ -64,5 +70,10 @@ public class KakaoUserInfo implements OAuth2UserInfo{
     @Override
     public String getProviderId() {
         return providerId;
+    }
+
+    @Override
+    public String getProfileImagePath() {
+        return profileImagePath;
     }
 }

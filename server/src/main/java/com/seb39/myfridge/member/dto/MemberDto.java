@@ -8,6 +8,7 @@ public class MemberDto {
     @Getter
     @Setter
     public static class Response{
+        private Long memberId;
         private String name;
         private String profileImagePath;
     }

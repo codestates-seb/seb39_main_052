@@ -107,6 +107,25 @@ include::{snippets}/refresh-access-token/http-response.adoc[]
 include::{snippets}/refresh-access-token/response-fields.adoc[]
 
 ***
+== 사용자 정보 관련 API
+=== 사용자 정보 조회
+***
+
+ 사용자 정보 조회를 위한 API 입니다.
+
+.http-request
+include::{snippets}/member-read/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/member-read/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/member-read/http-response.adoc[]
+
+.response-fields
+include::{snippets}/member-read/response-fields.adoc[]
+
+
 == 레시피 관련 API
 === 레시피 생성
 ***

@@ -5,19 +5,22 @@ import java.util.Optional;
 
 public class GoogleUserInfo implements OAuth2UserInfo{
 
-    private final String username;
-    private final String email;
-    private final String providerId;
+    private String username;
+    private String email;
+    private String providerId;
+    private String profileImagePath;
 
     public GoogleUserInfo(Map<String,Object> attributes) {
         System.out.println("google attribute " + attributes);
 
-//        Optional.ofNullable(attributes.get("name"))
-//                .ifPresent(name-> this.username = name.toString());
-
-        this.username = attributes.get("name").toString();
-        this.email = attributes.get("email").toString();
-        this.providerId = attributes.get("sub").toString();
+        Optional.ofNullable(attributes.get("name"))
+                .ifPresent(name-> this.username = name.toString());
+        Optional.ofNullable(attributes.get("email"))
+                .ifPresent(email-> this.email = email.toString());
+        Optional.ofNullable(attributes.get("sub"))
+                .ifPresent(sub-> this.providerId = sub.toString());
+        Optional.ofNullable(attributes.get("picture"))
+                .ifPresent(picture-> this.profileImagePath = picture.toString());
     }
 
     @Override
@@ -38,5 +41,10 @@ public class GoogleUserInfo implements OAuth2UserInfo{
     @Override
     public String getProviderId() {
         return providerId;
+    }
+
+    @Override
+    public String getProfileImagePath() {
+        return profileImagePath;
     }
 }
