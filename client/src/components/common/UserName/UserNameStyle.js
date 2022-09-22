@@ -4,9 +4,14 @@ export const Wrapper = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     margin: 0 0 0 0;
     color: var(--fridge-800);
+    font-size: 12px;
+    
+    &.large {
+        font-size: 14px;
+    }
 `
 
 export const Image = styled.img`

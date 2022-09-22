@@ -1,10 +1,11 @@
 import Comments from "../../components/layout/Comments/Comments";
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import RecipeStep from "../../components/layout/RecipeStep/RecipeStep";
-import { Heading, RecipeWrapper, SubHeading } from "./RecipeDetailStyle";
+import { Heading, Ingredients, RecipeWrapper, SubHeading, Extra, Head, HeadLeft, Image, ButtonLike, HeadLeftTop, ButtonLikeWrapper, HeadLeftBottom, Info, PortionAndTime, RecipeId } from "./RecipeDetailStyle";
 import UserName from "../../components/common/UserName/UserName";
+import LikeHeart from "../../components/common/LikeHeart/LikeHeart";
 
 const RecipeDetail = () => {
     const { id } = useParams();
@@ -54,13 +55,40 @@ const RecipeDetail = () => {
 
     return (
         <RecipeWrapper>
-            <Heading>{dummyData.title}</Heading>
-            <UserName image={dummyData.imagePath} name={dummyData.memberName}></UserName>
+            <Extra>
+                <RecipeId>게시글 #{dummyData.id}</RecipeId>
+                <ButtonLike className="dark">목록으로 돌아가기</ButtonLike>
+            </Extra>
+            <Head>
+                <HeadLeft>
+                    <HeadLeftTop>
+                        <Heading>{dummyData.title}</Heading>
+                        <LikeHeart />
+                    </HeadLeftTop>
+                    <HeadLeftBottom>
+                        <Info>
+                            <UserName image={dummyData.imagePath} name={dummyData.memberName} className="large"/>
+                            <PortionAndTime>{dummyData.portion} 인분</PortionAndTime>
+                            <PortionAndTime>{dummyData.time} 분 &nbsp;소요</PortionAndTime>
+                        </Info>
+                        <ButtonLikeWrapper>
+                            <ButtonLike>수정</ButtonLike>
+                            <ButtonLike>삭제</ButtonLike>
+                        </ButtonLikeWrapper>
+                    </HeadLeftBottom>
+                </HeadLeft>
+                <Image src={dummyData.imagePath} alt={'main'}/>
+            </Head>
             <SubHeading>재료(계량)</SubHeading>
+            <Ingredients>
+                <div>쌀밥</div>
+                <div>100g</div>
+            </Ingredients>
             <SubHeading>요리 순서</SubHeading>
             {dummyData.steps.map((step, idx) => {
                 return (
                     <RecipeStep
+                        key={idx}
                         index={step.sequence}
                         image={step.imagePath}
                         content={step.content}
