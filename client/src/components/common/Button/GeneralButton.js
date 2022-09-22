@@ -43,6 +43,7 @@ const Button = styled.button`
   /* background-color: var(--fridge-500); */
   /* color: var(--white); */
   width: ${(props) => props.width || " 300px"};
+  /* width: ${({ width }) => width || "300px"}; //props 이렇게 내려도 똑같음 */
   height: ${(props) => props.height || "35px"};
   background-color: ${(props) => props.backgroundColor || "var(--fridge-500)"};
   color: ${(props) => props.color || "var(--white)"};
