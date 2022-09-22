@@ -35,6 +35,8 @@ public class Member {
 
     private String providerId;
 
+    private String profileImagePath;
+
     private enum MemberStatus{
         ACTIVE,
         INACTIVE
@@ -51,13 +53,14 @@ public class Member {
     }
 
     @Builder(builderMethodName = "oauth2Builder", buildMethodName = "buildOAuth2Member")
-    private static Member createOAuth2Member(String name, String email, String provider, String providerId){
+    private static Member createOAuth2Member(String name, String email, String provider, String providerId, String profileImagePath){
         Member member = new Member();
         member.initDefaultRolesAndStatus();
         member.name = name;
         member.email = email;
         member.provider = provider;
         member.providerId = providerId;
+        member.profileImagePath = profileImagePath;
         return member;
     }
 
@@ -77,4 +80,5 @@ public class Member {
     public void saveEncryptedPassword(String encryptedPassword){
         this.password = encryptedPassword;
     }
+
 }

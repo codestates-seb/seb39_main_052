@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seb39.myfridge.auth.PrincipalDetails;
 import com.seb39.myfridge.auth.dto.AuthResponse;
 import com.seb39.myfridge.auth.dto.LoginRequest;
+import com.seb39.myfridge.auth.dto.LoginResponse;
 import com.seb39.myfridge.auth.enums.AppAuthExceptionCode;
 import com.seb39.myfridge.auth.exception.AppAuthenticationException;
 import com.seb39.myfridge.auth.service.JwtService;
@@ -56,10 +57,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         PrincipalDetails principal = (PrincipalDetails) authResult.getPrincipal();
-        Long id = principal.getMemberId();
-        String accessToken = jwtService.issueAccessToken(id);
+        Long memberId = principal.getMemberId();
+        String accessToken = jwtService.issueAccessToken(memberId);
         response.addHeader(ACCESS_TOKEN,accessToken);
         jwtService.issueRefreshToken(response,accessToken);
-        objectMapper.writeValue(response.getWriter(), AuthResponse.success());
+        objectMapper.writeValue(response.getWriter(), new LoginResponse(memberId));
     }
 }

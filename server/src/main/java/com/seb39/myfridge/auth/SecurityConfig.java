@@ -18,6 +18,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
+import javax.servlet.http.HttpServletResponse;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
@@ -51,11 +53,6 @@ public class SecurityConfig {
                 .and()
                 .apply(new CustomJwtConfigurer())
                 .and()
-                .logout()
-                .logoutUrl("/api/logout")
-                .logoutSuccessUrl("/")
-                .addLogoutHandler(logoutHandler)
-                .and()
                 .authorizeRequests().anyRequest().permitAll()
                 .and()
                 .exceptionHandling()
@@ -66,6 +63,14 @@ public class SecurityConfig {
                 .and()
                 .successHandler(oAuth2SuccessHandler)
                 .failureHandler(new OAuth2FailureHandler());
+
+        http.logout()
+                .permitAll()
+                .logoutUrl("/api/logout")
+                .addLogoutHandler(logoutHandler)
+                .logoutSuccessHandler((request, response, authentication) -> {
+                    response.setStatus(HttpServletResponse.SC_OK);
+                });
 
         return http.build();
     }
