@@ -11,13 +11,14 @@ import LogIn from "./pages/LogIn/LogIn";
 import OAuth2RedirectHandler from "./components/layout/RegisterForm/OAuth2RedirectHandler";
 import EditRecipe from "./pages/EditRecipe/EditRecipe";
 import RecipeDetail from "./pages/RecipeDetail/RecipeDetail";
-
+import Gnb from "./components/common/GNB/Gnb";
 function App() {
   return (
     <>
       <BrowserRouter>
         <GlobalStyle />
         <Nav />
+        <Gnb />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LogIn />} />
