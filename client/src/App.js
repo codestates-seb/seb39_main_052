@@ -12,6 +12,8 @@ import OAuth2RedirectHandler from "./components/layout/RegisterForm/OAuth2Redire
 import EditRecipe from "./pages/EditRecipe/EditRecipe";
 import RecipeDetail from "./pages/RecipeDetail/RecipeDetail";
 import FloatingAction from "./components/layout/FloatingAction/FloatingAction";
+import Gnb from "./components/common/GNB/Gnb";
+import FridgeDigging from "./pages/FridgeDigging/FridgeDigging";
 
 function App() {
 
@@ -20,6 +22,7 @@ function App() {
       <BrowserRouter>
         <GlobalStyle />
         <Nav />
+        <Gnb />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LogIn />} />
@@ -28,6 +31,7 @@ function App() {
           <Route path="/auth/redirect" element={<OAuth2RedirectHandler />} />
           <Route path="/recipes/edit" element={<EditRecipe />} /> 
           <Route path="/recipes/:id" element={<RecipeDetail />} />
+          <Route path="/search" element={<FridgeDigging />} />
         </Routes>
         <FloatingAction />
       </BrowserRouter>
