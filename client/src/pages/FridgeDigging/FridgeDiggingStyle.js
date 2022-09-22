@@ -1,8 +1,7 @@
-const FridgeDigging = () => {
-    return (
-        <>
-        </>
-    )
-};
+import styled from "styled-components";
 
-export default FridgeDigging;
+export const Container = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+`

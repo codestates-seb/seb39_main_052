@@ -10,15 +10,18 @@ export const Wrapper = styled.div`
     font-size: 12px;
     
     &.large {
+        > img {
+            width: 24px;
+            height: 24px;
+        }
         font-size: 14px;
     }
 `
 
 export const Image = styled.img`
-    width: 24px;
-    height: 24px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
-    margin-bottom: 0px;
 `
 
 export const Name = styled.div`
