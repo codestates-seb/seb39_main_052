@@ -17,8 +17,14 @@ const userSlice = createSlice({
       state.userEmail = action.payload.userEmail; //나중에 서버에서 받아오는 id정보가 있다면 이메일 정보는 필요없음
       //로그인 성공하면 이미지링크도 슬라이스에 저장하기 추가
     },
+
+    //로그아웃시 상태 초기화
+    setLoggedOut(state) {
+      state.isLoggedIn = false;
+      state.userId = null;
+    },
   },
 });
 
 export default userSlice;
-export const { setLoginSuccess } = userSlice.actions;
+export const { setLoginSuccess, setLoggedOut } = userSlice.actions;
