@@ -172,7 +172,7 @@ class AuthenticationTest {
                         .accept(APPLICATION_JSON)
                         .header(ACCESS_TOKEN, accessToken)
                         .cookie(refreshTokenCookie))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().isOk());
 
         assertThat(jwtService.hasRefreshToken(refreshToken)).isFalse();
 
