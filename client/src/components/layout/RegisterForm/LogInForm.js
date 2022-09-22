@@ -4,9 +4,12 @@ import { useForm } from "react-hook-form";
 import GeneralButton from "../../common/Button/GeneralButton";
 import { LogInFormContainer } from "./LogInFormStyle";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { setLoginSuccess } from "../../../features/userSlice";
 
 const LogInForm = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch(); //for redux dispatch
   const {
     register,
     handleSubmit,
@@ -15,7 +18,15 @@ const LogInForm = () => {
   //isValid: errors 객체 비어있으면 true
   //isDirty: form 양식 어떤 input이라도 건드렸으면 true?
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  //userSlice 로그인 상태 확인
+  useSelector((state) => {
+    console.log("isLoggedIn이니?", state.user.isLoggedIn); //isLoggedIn이니? false
+  });
+  //userSlice 전체 상태 확인
+  useSelector((state) => {
+    console.log("userSlice 전체상태?", state.user); //{isLoggedIn: false, userId: null, userEmail: null}
+  });
+
   const JWT_EXPIRY_TIME = 30 * 60 * 1000; //액세스 토큰 만료시간 30분을 밀리초로 표현
 
   const onSubmit = (data) => {
@@ -40,6 +51,9 @@ const LogInForm = () => {
         .catch((error) => console.log(error, "silent refresh 에러"));
     };
 
+    //로그인 요청. 액세스 토큰을 요청헤더에 설정
+    //일반 로그인 요청보낼때 response body에 memberID 추가될 예정
+    //memberID있으면 유저 정보(이름, 프사path)를 받아올수있는 API 추가될 예정 -> 그 api에 요청보내서 유저 정보를 받아온걸 슬라이스에 저장해야될듯?
     axios
       .post("/api/login", data)
       .then((response) => {
@@ -50,7 +64,11 @@ const LogInForm = () => {
             "Authorization"
           ] = `Bearer ${ACCESS_TOKEN}`; //요청헤더에 액세스 토큰 설정
           console.log("ACCESS_TOKEN", ACCESS_TOKEN);
-          setIsLoggedIn(true);
+          // setIsLoggedIn(true);
+          //로그인 성공 상태 리덕스 저장소로 보내기
+          // dispatch(setLoginSuccess({ userEmail: data.email }));
+          dispatch(setLoginSuccess({}));
+
           alert("로그인 성공");
           navigate("/");
           //액세스토큰 만료되기 전 로그인 연장
@@ -106,7 +124,7 @@ const LogInForm = () => {
     //   } else {
     //     alert(error.message);
     //   }
-    // });
+    // })
   };
 
   return (

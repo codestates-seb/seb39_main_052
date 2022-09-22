@@ -10,6 +10,10 @@ const GlobalStyle = createGlobalStyle`
         text-decoration: none;
         color: inherit;
     }
+    ul {
+      list-style: none;
+      text-decoration: none;
+    }
     // 아이폰 safari 환경에서 input 요소에 입력이 안되는 경우가 발생할 수도 있다고 하여 일단 불러옴
     input, textarea { 
       -moz-user-select: auto;
