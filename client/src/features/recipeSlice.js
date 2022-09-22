@@ -3,6 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     id: null,
+    memberName: null,
+    memberId: null,
+    createdAt: null,
     title: "",
     // imagePath: "",
     portion: "1",
@@ -14,7 +17,8 @@ const initialState = {
     }],
     steps: [{
       sequence: 1,
-      content: ""
+      content: "",
+      imagePath: "",
     }],
 }
 
@@ -58,6 +62,15 @@ const recipeSlice = createSlice({
       },
       editSteps: (state, action) => {
         state.steps[action.payload.index][action.payload.key] = action.payload.value;
+      },
+      loadRecipe: (state, action) => {
+        state.id = action.payload.recipeId;
+        state.memberName = action.payload.memberName;
+        state.memberId = action.payload.memberId;
+        state.createdAt = action.payload.createdAt;
+        state.title = action.payload.title;
+        state.portion = action.payload.portion;
+        state.time = action.payload.time;
       },
       clearRecipe: () => {
         return initialState;

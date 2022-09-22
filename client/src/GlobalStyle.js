@@ -20,6 +20,8 @@ const GlobalStyle = createGlobalStyle`
       -webkit-user-select: auto;
       -ms-user-select: auto;
       user-select: auto;
+      border: 2px solid var(--fridge-300);
+      background-color: var(--gray-050);
     }
     input:focus {
       outline: none;
@@ -28,7 +30,7 @@ const GlobalStyle = createGlobalStyle`
       cursor: pointer;
       border: none;
       border-radius: 10%;
-      background-color: var(--white);
+      /* background-color: var(--white); */
       :hover {
         /* background-color: var(--mintgreen-300); */
         text-shadow: var(--text-shadow);
@@ -36,11 +38,11 @@ const GlobalStyle = createGlobalStyle`
     }
     h1 {
       margin-top: 0;
-      font-size: 40px;
+      font-size: 20px;
     }
     h2 {
-      font-size: 24px;
-      margin: 0 0 12px 0;
+      font-size: 16px;
+      margin: 0 0 6px 0;
     }
 
     @font-face {

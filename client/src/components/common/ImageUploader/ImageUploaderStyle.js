@@ -6,18 +6,18 @@ export const Container = styled.div`
     position: relative;
     box-shadow: var(--shadow-low);
     &.big {
-        height: 280px;
-        width: 280px;
+        height: 12.5rem;
+        width: 12.5rem;
         border-radius: 10px;
         > *.loading {
-            left: 32%;
-            top: 32%;
-            font-size: 100px;
+            left: 36%;
+            top: 36%;
+            font-size: 56px;
         }
         > *.upload {
             left: 78%;
-            top: 76%;
-            font-size: 60px;
+            top: 78%;
+            font-size: 36px;
             :active {
                 color: var(--mint-600); 
             }
@@ -25,7 +25,7 @@ export const Container = styled.div`
         > *.cancel {
             left: 82%;
             top: 0%;
-            font-size: 60px;
+            font-size: 40px;
             color: var(--white);
         }
     }
@@ -35,33 +35,33 @@ export const Container = styled.div`
         border-radius: 10px;
     } */
     &.small {
-        height: 160px;
-        width: 160px;
+        height: 140px;
+        width: 140px;
         border-radius: 10px;
         > *.loading {
-            left: 32%;
-            top: 32%;
-            font-size: 56px;
+            left: 34%;
+            top: 34%;
+            font-size: 44px;
         }
         > *.upload {
             left: 78%;
             top: 76%;
-            font-size: 36px;
+            font-size: 24px;
             :active {
                 color: var(--mint-600); 
             }
         }
         > *.cancel {
-            left: 82%;
-            top: 0%;
-            font-size: 36px;
+            left: 84%;
+            top: 2%;
+            font-size: 24px;
             color: var(--white);
         }
     }
     &.round {
         border-radius: 50%;
     }
-
+    // 사진 추가 아이콘
     > *:nth-child(3) {
         left: 34%;
         top: 34%;
