@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
@@ -27,6 +29,7 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,13 +70,14 @@ class CommentControllerTest {
 
     @BeforeEach
     void beforeEach() {
-        memberRepository.save(
-                Member.generalBuilder()
-                        .email("test@gmail.com")
-                        .buildGeneralMember()
-        );
+        Member member = Member.generalBuilder()
+                .email("test@gmail.com")
+                .buildGeneralMember();
+        memberRepository.save(member);
 
-        recipeRepository.save(new Recipe());
+        Recipe recipe = new Recipe();
+        recipe.setMember(member);
+        recipeRepository.save(recipe);
     }
 
     @AfterEach
@@ -124,7 +128,8 @@ class CommentControllerTest {
                         fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("작성자 ID"),
                         fieldWithPath("recipeId").type(JsonFieldType.NUMBER).description("댓글이 달린 레시피 ID"),
                         fieldWithPath("commentId").type(JsonFieldType.NUMBER).description("작성된 댓글 ID"),
-                        fieldWithPath("content").type(JsonFieldType.STRING).description("작성된 댓글 내용")
+                        fieldWithPath("content").type(JsonFieldType.STRING).description("작성된 댓글 내용"),
+                        fieldWithPath("createdAt").type(JsonFieldType.STRING).description("작성된 댓글의 생성 일자")
                 )
         ));
     }
@@ -169,7 +174,8 @@ class CommentControllerTest {
                         fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("작성자 ID"),
                         fieldWithPath("recipeId").type(JsonFieldType.NUMBER).description("수정된 댓글이 달린 레시피 ID"),
                         fieldWithPath("commentId").type(JsonFieldType.NUMBER).description("수정된 댓글 ID"),
-                        fieldWithPath("content").type(JsonFieldType.STRING).description("수정된 댓글 내용")
+                        fieldWithPath("content").type(JsonFieldType.STRING).description("수정된 댓글 내용"),
+                        fieldWithPath("createdAt").type(JsonFieldType.STRING).description("수정된 댓글의 생성 일자")
                 )
         ));
     }
@@ -195,6 +201,49 @@ class CommentControllerTest {
                 getResponsePreProcessor(),
                 pathParameters(
                         parameterWithName("commentId").description("삭제할 댓글의 ID")
+                )
+        ));
+    }
+
+    @Test
+    @DisplayName("자신이 작성한 레시피에 달린 댓글을 조회한다.")
+    void getReceivedComments() throws Exception {
+        //given
+        Member recipeWriter = memberRepository.findAll().get(0);
+        Recipe recipe = recipeRepository.findAll().get(0);
+
+        for (int i = 1; i <= 30; i++) {
+            Member commentWriter = Member.generalBuilder()
+                    .name("Comment Writer " + i)
+                    .buildGeneralMember();
+            memberRepository.save(commentWriter);
+            Comment comment = commentService.writeComment("orignal comment", commentWriter.getId(), recipe.getId());
+        }
+
+        //expected
+        ResultActions result = mockMvc.perform(get("/api/comments/received")
+                        .param("page","1")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        // docs
+        result.andDo(document("comments-received",
+                getRequestPreProcessor(),
+                getResponsePreProcessor(),
+                requestParameters(
+                        parameterWithName("page").description("조회할 댓글 리스트의 페이지 번호")
+                ),
+                responseFields(
+                        fieldWithPath("data.[]").type(JsonFieldType.ARRAY).description("댓글 리스트"),
+                        fieldWithPath("data.[].memberId").type(JsonFieldType.NUMBER).description("댓글 작성자 ID"),
+                        fieldWithPath("data.[].recipeId").type(JsonFieldType.NUMBER).description("댓글이 달린 레시피 ID"),
+                        fieldWithPath("data.[].commentId").type(JsonFieldType.NUMBER).description("작성된 댓글 ID"),
+                        fieldWithPath("data.[].content").type(JsonFieldType.STRING).description("댓글 내용"),
+                        fieldWithPath("data.[].createdAt").type(JsonFieldType.STRING).description("댓글 생성 일자"),
+                        fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 페이지"),
+                        fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("현재 사이즈"),
+                        fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("질문 전체 수"),
+                        fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("총 페이지 개수")
                 )
         ));
     }

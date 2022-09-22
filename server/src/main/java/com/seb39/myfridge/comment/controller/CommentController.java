@@ -6,12 +6,17 @@ import com.seb39.myfridge.comment.dto.CommentDto;
 import com.seb39.myfridge.comment.entity.Comment;
 import com.seb39.myfridge.comment.mapper.CommentMapper;
 import com.seb39.myfridge.comment.service.CommentService;
+import com.seb39.myfridge.dto.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.seb39.myfridge.comment.mapper.CommentMapper.*;
 
@@ -20,6 +25,17 @@ import static com.seb39.myfridge.comment.mapper.CommentMapper.*;
 public class CommentController {
 
     private final CommentService commentService;
+
+    @GetMapping("/api/comments/received")
+    @Secured("ROLE_USER")
+    public ResponseEntity<MultiResponseDto<CommentDto.Response>> getReceivedComments(@RequestParam("page") int page, @AuthenticationPrincipal PrincipalDetails principal){
+        Long memberId = principal.getMemberId();
+        Page<Comment> result = commentService.findReceivedComments(page - 1, memberId);
+        List<CommentDto.Response> data = result.getContent().stream()
+                .map(CommentMapper::commentToResponseDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(new MultiResponseDto<>(data,result));
+    }
 
     @PostMapping("/api/recipes/{recipeId}/comments")
     @Secured("ROLE_USER")
