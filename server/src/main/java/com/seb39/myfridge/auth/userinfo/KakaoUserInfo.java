@@ -1,6 +1,7 @@
 package com.seb39.myfridge.auth.userinfo;
 
 import java.util.Map;
+import java.util.Optional;
 
 /**
  *  Kakao OAuth2 attributes
@@ -29,18 +30,20 @@ import java.util.Map;
 
 public class KakaoUserInfo implements OAuth2UserInfo{
 
-    private final String username;
-    private final String email;
-    private final String providerId;
+    private String username;
+    private String providerId;
+    private String email;
 
     public KakaoUserInfo(Map<String,Object> attributes) {
-        this.providerId = attributes.get("id").toString();
+        Map<String,Object> account = (Map<String, Object>) attributes.get("kakao_account");
+        Map<String,Object> profile = (Map<String, Object>) account.get("profile");
 
-        Map<String,Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
-        Map<String,Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
-
-        this.username = profile.get("nickname").toString();
-        this.email = kakaoAccount.get("email").toString();
+        Optional.ofNullable(attributes.get("id"))
+                .ifPresent(id -> this.providerId = id.toString());
+        Optional.ofNullable(profile.get("nickname"))
+                .ifPresent(nickname -> this.username = nickname.toString());
+        Optional.ofNullable(account.get("email"))
+                .ifPresent(email -> this.email = email.toString());
     }
 
     @Override
