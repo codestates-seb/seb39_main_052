@@ -22,59 +22,58 @@ const Comments = () => {
         setComment(e.target.value);
     }
 
-    const confirm = (index) => {console.log("삭제 했습니다"); handleDelete(index)};
+    const confirm = (id) => {console.log("삭제 했습니다"); handleDelete(id)};
     const cancel = () => console.log("취소");
 
-    const handleDelete = (index) => {
-        console.log(index);
-        // axios({
-        //     method: `delete`,
-        //     url: `/api/recipes/${dummy.id}/comments`,
-        //     headers: {
-        //     },
-        //     data: comment,
-        // })
-        // .then((response) => {
-        //     console.log(response)
-        // })
-        // .catch((error) => {
-        //     // 예외 처리
-        //     console.log(error.response);
-        // })
+    // 댓글을 지울 때 (댓글 id 전달 필수)
+    const handleDelete = (id) => {
+        axios({
+            method: `delete`,
+            url: `/api/comments/${id}`,
+        })
+        .then((response) => {
+            console.log(response);
+            alert(`댓글이 삭제되었습니다`);
+        })
+        .catch((error) => {
+            // 예외 처리
+            console.log(error.response);
+        })
     }
  
+    // 댓글을 작성할 때 (레시피 id 전달 필수)
     const handleSubmit = () => {
-        // axios({
-        //     method: `post`,
-        //     url: `/api/recipes/${dummy.id}/comments`,
-        //     headers: {
-        //     },
-        //     data: comment,
-        // })
-        // .then((response) => {
-        //     console.log(response)
-        // })
-        // .catch((error) => {
-        //     // 예외 처리
-        //     console.log(error.response);
-        // })
+        axios({
+            method: `post`,
+            url: `/api/recipes/${dummy.id}/comments`,
+            data: {comment: comment},
+        })
+        .then((response) => {
+            console.log(response)
+            alert(`댓글이 등록되었습니다.`)
+        })
+        .catch((error) => {
+            // 예외 처리
+            console.log(error.response);
+        })
     }
 
-    const handleEdit = () => {
-        // axios({
-        //     method: `patch`,
-        //     url: `/api/recipes/${dummy.id}/comments`,
-        //     headers: {
-        //     },
-        //     data: comment,
-        // })
-        // .then((response) => {
-        //     console.log(response)
-        // })
-        // .catch((error) => {
-        //     // 예외 처리
-        //     console.log(error.response);
-        // })
+
+    // 댓글을 수정할 때 (댓글 id 전달 필수)
+    const handleEdit = (id) => {
+        axios({
+            method: `patch`,
+            url: `/api/comments/${id}`,
+            data: {comment: comment},
+        })
+        .then((response) => {
+            console.log(response)
+            alert(`댓글을 수정하였습니다.`)
+        })
+        .catch((error) => {
+            // 예외 처리
+            console.log(error.response);
+        })
     }
 
     return (
@@ -95,7 +94,7 @@ const Comments = () => {
                 <Comment>{dummy.content}</Comment>
                 <ButtonLikeWrapper>
                     <ButtonLike>수정</ButtonLike>
-                    <ButtonLike onClick={useConfirm("정말 삭제하시겠습니까?", confirm, cancel, 'yo')}>삭제</ButtonLike>
+                    <ButtonLike onClick={useConfirm("정말 삭제하시겠습니까?", confirm, cancel, 13)}>삭제</ButtonLike>
                     {/* <Button onClick={useConfirm("정말 삭제하시겠습니까?", confirm, cancel, 'yo')}>
                         <StyledFontAwesomeIcon icon={faXmark} />
                     </Button> */}
@@ -105,7 +104,7 @@ const Comments = () => {
                 <UserName image={dummy.profile} name={dummy.username} className="bold"></UserName>
                 <Input className="small" type='text' maxLength='28' onChange={handleChange}/>
                 <GeneralButton className={`xsmall gray`}><StyledFontAwesomeIcon icon={faXmark} /></GeneralButton>
-                <GeneralButton className={`xsmall`} margin={"0 0 0 6px"}>
+                <GeneralButton className={`xsmall`} margin={"0 0 0 6px"} onClick={() => handleEdit(13)}>
                     <StyledFontAwesomeIcon icon={faCheck} />
                 </GeneralButton>
             </CommentRow>

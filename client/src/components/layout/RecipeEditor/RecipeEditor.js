@@ -29,7 +29,7 @@ const RecipeEditor = ({ editMode }) => {
 
     // 이제 프롭스로 받을 필요 없어요!
     const pathName = useLocation();
-    console.log(pathName);
+    // console.log(pathName);
 
     useEffect(() => {
         // mount
