@@ -48,7 +48,12 @@ const Button = styled.button`
   color: ${(props) => props.color || "var(--white)"};
   font-size: 16px;
   margin: ${(props) => props.margin || "20px 0 0 0"};
-
+  &.large {
+    margin-top: 0;
+    height: 80px;
+    width: 80px;
+    font-size: 20px;
+  }
   &.medium {
     height: 48px;
     width: 120px;
@@ -65,6 +70,12 @@ const Button = styled.button`
     width: 28px;
     font-size: 12px;
     border-radius: 5px;
+  }
+  &.round {
+    border-radius: 50%;
+  }
+  &.shadow {
+    box-shadow: var(--shadow-low);
   }
   &.gray {
     background: var(--gray-400);

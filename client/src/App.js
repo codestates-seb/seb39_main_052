@@ -11,6 +11,7 @@ import LogIn from "./pages/LogIn/LogIn";
 import OAuth2RedirectHandler from "./components/layout/RegisterForm/OAuth2RedirectHandler";
 import EditRecipe from "./pages/EditRecipe/EditRecipe";
 import RecipeDetail from "./pages/RecipeDetail/RecipeDetail";
+import FloatingAction from "./components/layout/FloatingAction/FloatingAction";
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
           <Route path="/recipes/edit" element={<EditRecipe />} /> 
           <Route path="/recipes/:id" element={<RecipeDetail />} />
         </Routes>
+        <FloatingAction />
       </BrowserRouter>
     </>
   );
