@@ -13,6 +13,7 @@ export const LikeWrapper = styled.div`
 export const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
     color: var(--red-500);
     font-size: 16px;
+    cursor: pointer;
     &:active {
         font-size: 18px;
     }

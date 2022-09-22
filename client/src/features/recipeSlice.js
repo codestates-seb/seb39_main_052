@@ -17,7 +17,8 @@ const initialState = {
     }],
     steps: [{
       sequence: 1,
-      content: ""
+      content: "",
+      imagePath: "",
     }],
 }
 
