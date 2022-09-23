@@ -25,7 +25,7 @@ public class CommentService {
     private final RecipeService recipeService;
     private final CommentRepository commentRepository;
 
-    @Value("${app.pageable.size}")
+    @Value("${app.pageable.size.comment}")
     private int size;
 
     public Page<Comment> findReceivedComments(int page, Long memberId){

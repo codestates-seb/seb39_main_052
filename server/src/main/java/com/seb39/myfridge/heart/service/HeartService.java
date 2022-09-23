@@ -31,7 +31,6 @@ public class HeartService {
         removeHeart(heart);
     }
 
-
     public int findHeartCounts(Long recipeId){
         return heartRepository.countByRecipeId(recipeId);
     }
@@ -55,6 +54,4 @@ public class HeartService {
     private void removeHeart(Heart heart){
         heartRepository.delete(heart);
     }
-
-
 }
