@@ -19,6 +19,7 @@ export const ButtonWrapper = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    // 호버시 레시피 작성하기 글 보이기
     &:not(:hover) {
       > div:first-of-type {
         display: none;
