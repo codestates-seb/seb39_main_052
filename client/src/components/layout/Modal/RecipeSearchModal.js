@@ -9,11 +9,29 @@ import {
   Contents,
 } from "./RecipeSearchModalStyle";
 import GeneralButton from "../../common/Button/GeneralButton";
+import { useEffect } from "react";
+
+import { createPortal } from "react-dom"; //모달창 최상위에서 보여주기 위함. 부모 컴포넌트의 DOM 계층 밖에 있는 DOM 노드로 자식을 렌더링을하는 best way
+
 // 나중에 모달창에 검색어 불러올때 아래 코드로 불러오시면 됩니당
 // const searchTerm = searchParams.get('keyword');
 // 예) axios(`api/search?keyword=${searchTerm}`)
 
 const RecipeSearchModal = ({ handleClose }) => {
+  //모달창 외부 화면 스크롤 막기
+  useEffect(() => {
+    document.body.style.cssText = `
+      position: fixed; 
+      top: -${window.scrollY}px;
+      overflow-y: scroll;
+      width: 100%;`;
+    return () => {
+      const scrollY = document.body.style.top;
+      document.body.style.cssText = "";
+      window.scrollTo(0, parseInt(scrollY || "0", 10) * -1);
+    };
+  }, []);
+
   const dummyData = [
     {
       id: 1,
@@ -61,7 +79,7 @@ const RecipeSearchModal = ({ handleClose }) => {
     },
   ];
 
-  return (
+  return createPortal(
     <Overlay onClick={(e) => e.stopPropagation()}>
       <ModalContainer onClick={(e) => e.stopPropagation()}>
         {" "}
@@ -97,7 +115,8 @@ const RecipeSearchModal = ({ handleClose }) => {
           </GeneralButton>
         </i>
       </ModalContainer>
-    </Overlay>
+    </Overlay>,
+    document.getElementById("modal")
   );
 };
 

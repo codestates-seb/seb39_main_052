@@ -32,5 +32,6 @@ export const Ul = styled.ul`
 `;
 
 export const Li = styled.li`
+  cursor: pointer;
   padding: 0 32px;
 `;
