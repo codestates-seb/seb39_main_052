@@ -1,7 +1,7 @@
 //redux toolkit related
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import { setLoginSuccess, setLoggedOut } from "../../../features/userSlice";
+import { setLoggedIn, setLoggedOut } from "../../../features/userSlice";
 
 const LogOut = () => {
   const dispatch = useDispatch();
