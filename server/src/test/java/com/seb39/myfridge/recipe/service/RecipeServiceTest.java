@@ -69,7 +69,7 @@ class RecipeServiceTest {
         memberService.signUpGeneral(member);
 
         //when
-        Recipe savedRecipe = recipeService.createRecipe(recipe, steps, member.getId(), new ArrayList<>());
+        Recipe savedRecipe = recipeService.createRecipe(recipe, steps, member.getId(), new ArrayList<>(), new ArrayList<>());
         System.out.println(recipe);
 
         //then
@@ -108,11 +108,11 @@ class RecipeServiceTest {
                 .buildGeneralMember();
         memberService.signUpGeneral(member);
 
-        Recipe savedRecipe = recipeService.createRecipe(recipe, steps, member.getId(), new ArrayList<>());
+        Recipe savedRecipe = recipeService.createRecipe(recipe, steps, member.getId(), new ArrayList<>(), new ArrayList<>());
         //when
         String updateTitle = "Update title!!";
         savedRecipe.setTitle(updateTitle);
-        Recipe updateRecipe = recipeService.updateRecipe(savedRecipe, new ArrayList<>(), member.getId(), new ArrayList<>());
+        Recipe updateRecipe = recipeService.updateRecipe(savedRecipe, new ArrayList<>(), member.getId(), new ArrayList<>(), new ArrayList<>());
 //        System.out.println(updateRecipe.getTitle());
 
         //then
@@ -138,7 +138,7 @@ class RecipeServiceTest {
                 .buildGeneralMember();
         memberService.signUpGeneral(member);
 
-        Recipe savedRecipe = recipeService.createRecipe(recipe, new ArrayList<>(), member.getId(), new ArrayList<>());
+        Recipe savedRecipe = recipeService.createRecipe(recipe, new ArrayList<>(), member.getId(), new ArrayList<>(), new ArrayList<>());
         //when
         recipeService.deleteRecipe(savedRecipe.getId(),member.getId());
         //then
