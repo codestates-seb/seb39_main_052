@@ -15,6 +15,6 @@ export const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
     margin: 0 4px 0 0;
     cursor: pointer;
     &:active {
-        font-size: 18px;
+        font-size: 14px;
     }
 `;
