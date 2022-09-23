@@ -252,3 +252,43 @@ include::{snippets}/comments-received/http-response.adoc[]
 
 .response-fields
 include::{snippets}/comments-received/response-fields.adoc[]
+
+== 레시피 하트 관련 API
+=== 레시피 하트 추가
+***
+
+  레시피에 하트를 추가하기 위한 API 입니다.
+  로그인한 사용자만 하트를 추가할 수 있습니다.
+  사용자가 이미 해당 레시피에 하트를 추가했을 경우 Http Status 400으로 응답합니다.
+
+.http-request
+include::{snippets}/heart-create/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/heart-create/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/heart-create/http-response.adoc[]
+
+.response-fields
+include::{snippets}/heart-create/response-fields.adoc[]
+
+=== 레시피 하트 삭제
+
+  레시피에 하트를 삭제하기 위한 API 입니다.
+  로그인한 사용자가 자신이 추가한 하트를 삭제할 수 있습니다.
+  사용자가 해당 레시피에 하트를 추가하지 않은 경우 Http Status 400으로 응답합니다.
+
+***
+
+.http-request
+include::{snippets}/heart-remove/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/heart-remove/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/heart-remove/http-response.adoc[]
+
+.response-fields
+include::{snippets}/heart-remove/response-fields.adoc[]
