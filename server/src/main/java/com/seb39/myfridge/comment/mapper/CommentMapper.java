@@ -10,6 +10,7 @@ public interface CommentMapper {
                 .recipeId(comment.getRecipe().getId())
                 .commentId(comment.getId())
                 .content(comment.getContent())
+                .createdAt(comment.getCreatedAt())
                 .build();
     }
 }

@@ -1,5 +1,6 @@
 package com.seb39.myfridge.comment.entity;
 
+import com.seb39.myfridge.helper.BaseTimeEntity;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.recipe.entity.Recipe;
 import lombok.AccessLevel;
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Comment {
+public class Comment extends BaseTimeEntity {
 
     @Id @GeneratedValue
     @Column(name="comment_id")

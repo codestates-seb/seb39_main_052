@@ -8,6 +8,11 @@ import com.seb39.myfridge.member.service.MemberService;
 import com.seb39.myfridge.recipe.entity.Recipe;
 import com.seb39.myfridge.recipe.service.RecipeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +24,14 @@ public class CommentService {
     private final MemberService memberService;
     private final RecipeService recipeService;
     private final CommentRepository commentRepository;
+
+    @Value("${app.pageable.size}")
+    private int size;
+
+    public Page<Comment> findReceivedComments(int page, Long memberId){
+        Pageable pageable = PageRequest.of(page,size, Sort.by("id").descending());
+        return commentRepository.findAllByRecipeWriterId(memberId, pageable);
+    }
 
     @Transactional
     public Comment writeComment(String content, Long memberId, Long recipeId) {
