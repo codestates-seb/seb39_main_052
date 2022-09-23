@@ -18,6 +18,7 @@ export const SearchInput = styled.input`
 export const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
     color: var(--fridge-800);
     font-size: 16px;
+    cursor: pointer;
     :active {
         font-size: 15px;
     }

@@ -33,7 +33,7 @@ const TagSearchBar = () => {
             alert(`이미 등록한 재료입니다`)
         }
     };
-    console.log(searchTags, `검색했어요`)
+    // console.log(searchTags, `검색했어요`)
 
     const handleDeleteTag = (idx) => {
         let tmp = [...searchTags];
