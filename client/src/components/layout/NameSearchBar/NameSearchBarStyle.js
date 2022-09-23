@@ -1,6 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 
+export const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+`
+
 export const SearchBar = styled.div`
     display: flex;
     align-items: center;
@@ -9,6 +14,7 @@ export const SearchBar = styled.div`
     background-color: var(--gray-050);
     padding: 4px 4px 4px 8px;
     border-radius: 8px;
+    z-index: 999;
 `
 export const SearchInput = styled.input`
     flex-grow: 1;
@@ -36,6 +42,10 @@ export const DropDown = styled.ul`
     border-bottom-right-radius: 8px;
     font-size: 14px;
     background-color: var(--gray-050);
+    position: absolute;
+    top: 27%;
+    z-index: 998;
+    box-shadow: var(--shadow-medium);
     ::-webkit-scrollbar {
         width: 8px;
         background-color: var(--gray-100);
@@ -47,15 +57,18 @@ export const DropDown = styled.ul`
 `
 export const Suggestion = styled.li`
     cursor: pointer;
-    padding: 0 4px 0 8px;
+    padding: 2px 4px 2px 8px;
     list-style: none;
     color: var(--fridge-800);
-    margin: 0 0 4px 0;
+    :not(:last-of-type) {
+        border-bottom: 1px solid var(--fridge-200);
+    }
     :hover {
-        background-color: var(--gray-200)
+        background-color: var(--gray-200);
     }
     :active {
-        background-color: var(--fridge-300)
+        background-color: var(--fridge-200);
     }
+    background-color: ${(props) => props.selected && 'var(--fridge-200)'}
 `
 

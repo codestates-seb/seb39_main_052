@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import RecipeCard from "../../components/layout/RecipeCard/RecipeCard";
-import { Container, Heading, RecipeWrapper } from "./FridgeDiggingStyle";
+import { Container, Heading, Option, RecipeWrapper } from "./FridgeDiggingStyle";
 import NameSearchBar from "../../components/layout/NameSearchBar/NameSearchBar";
 import TagSearchBar from "../../components/layout/TagSearchBar/TagSearchBar";
 import ModalSearchBar from "../../components/layout/ModalSearchBar.js/ModalSearchBar";
@@ -32,9 +32,10 @@ const FridgeDigging = () => {
             <Heading>
                 재료로 레시피 검색하기
             </Heading>
-            <TagSearchBar />
-            <SortingTab sortMode={sortMode} setSortMode={setSortMode}/>
-            <ModalSearchBar />
+                <TagSearchBar />
+            <Option>
+                <SortingTab sortMode={sortMode} setSortMode={setSortMode}/>
+            </Option>
             <RecipeWrapper>
                 <RecipeCard
                     imagePath={dummyData.imagePath}
