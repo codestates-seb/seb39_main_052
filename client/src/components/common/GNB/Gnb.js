@@ -22,17 +22,28 @@ import DropDownMenu from "../../layout/DropDown/DropDownMenu";
 import { useSelector, useDispatch } from "react-redux";
 import { setLoginSuccess, setLoggedOut } from "../../../features/userSlice";
 
+import { useState } from "react";
+import RecipeSearchModal from "../../layout/Modal/RecipeSearchModal";
+
 const Gnb = () => {
-  //로그인 상태 가져와서 변수에 저장
+  // //로그인 상태 가져와서 변수에 저장
   const isLoggedIn = useSelector((state) => {
     return state.user.isLoggedIn;
   });
-  console.log("GNB에서 isLoggedIn이니?", isLoggedIn);
+  // console.log("GNB에서 isLoggedIn이니?", isLoggedIn);
 
   //userSlice 전체 상태 확인
   useSelector((state) => {
     console.log("userSlice 전체상태?", state.user);
   }); //{isLoggedIn: false, userId: null, userEmail: undefined}
+
+  //search bar 모달 상태
+  const [showModal, setShowModal] = useState(false);
+
+  const clickModal = () => {
+    setShowModal(!showModal);
+    console.log("showModal 상태?", showModal);
+  };
 
   return (
     <Header>
@@ -50,7 +61,6 @@ const Gnb = () => {
         </LogoBox>
         <RightBox className="rightbox">
           <Ul>
-            {/* <Li><LogOut></LogOut></Li>   //for LogOut Test */}
             {!isLoggedIn ? (
               <Li>
                 <Link to="/login">로그인</Link>
@@ -61,8 +71,20 @@ const Gnb = () => {
               </Li>
             )}
 
-            <Li>
-              <FontAwesomeIcon icon={faMagnifyingGlass} size="lg" />
+            {/* <Li onClick={() => setShowModal(true)}> */}
+            <Li onClick={clickModal}>
+              <FontAwesomeIcon
+                icon={faMagnifyingGlass}
+                size="lg"
+              ></FontAwesomeIcon>
+              {showModal && (
+                <RecipeSearchModal
+                  // handleClose={() => {
+                  //   setShowModal(false);
+                  // }} //이렇게 상태관리하면 모달 안닫힘
+                  handleClose={clickModal}
+                ></RecipeSearchModal>
+              )}
             </Li>
           </Ul>
         </RightBox>
