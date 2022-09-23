@@ -1,13 +1,18 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import RecipeCard from "../../components/layout/RecipeCard/RecipeCard";
 import { Container, Heading, RecipeWrapper } from "./FridgeDiggingStyle";
 import NameSearchBar from "../../components/layout/NameSearchBar/NameSearchBar";
 import TagSearchBar from "../../components/layout/TagSearchBar/TagSearchBar";
+import ModalSearchBar from "../../components/layout/ModalSearchBar.js/ModalSearchBar";
+import SortingTab from "../../components/common/SortingTab/SortingTab";
 
 const FridgeDigging = () => {
 
-    const [searchResult, setSearchResult] = useState(null);
-    console.log(searchResult);
+    const [sortMode, setSortMode] = useState("like");
+    const [searchParams, setSearchParams] = useSearchParams();
+    // 어떤 컴포넌트에서든 searchParams의 키워드 값을 가져와 관련 http 요청을 보낼 수 있다.
+    const searchTerm = searchParams.get('keyword');
 
     const dummyData = {
         id: 1,
@@ -23,11 +28,13 @@ const FridgeDigging = () => {
             <Heading>
                 요리로 레시피 검색하기
             </Heading>
-            <NameSearchBar setSearchResult={setSearchResult}/>
+            <NameSearchBar />
             <Heading>
                 재료로 레시피 검색하기
             </Heading>
-            <TagSearchBar SearchBar setSearchResult={setSearchResult}/>
+            <TagSearchBar />
+            <SortingTab sortMode={sortMode} setSortMode={setSortMode}/>
+            <ModalSearchBar />
             <RecipeWrapper>
                 <RecipeCard
                     imagePath={dummyData.imagePath}
