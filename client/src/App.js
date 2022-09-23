@@ -16,7 +16,6 @@ import Gnb from "./components/common/GNB/Gnb";
 import FridgeDigging from "./pages/FridgeDigging/FridgeDigging";
 
 function App() {
-
   return (
     <>
       <BrowserRouter>
@@ -29,11 +28,11 @@ function App() {
           <Route path="/signup" element={<SignUpForm />} />
           <Route path="/recipes/new" element={<NewRecipe />} />
           <Route path="/auth/redirect" element={<OAuth2RedirectHandler />} />
-          <Route path="/recipes/edit" element={<EditRecipe />} /> 
+          <Route path="/recipes/edit" element={<EditRecipe />} />
           <Route path="/recipes/:id" element={<RecipeDetail />} />
           <Route path="/search" element={<FridgeDigging />} />
         </Routes>
-        <FloatingAction />
+        {/* <FloatingAction /> */}
       </BrowserRouter>
     </>
   );
