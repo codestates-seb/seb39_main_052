@@ -3,8 +3,8 @@ import styled from "styled-components";
 export const Header = styled.header`
   min-height: 88px;
   width: 100%;
-  /* background-color: var(--primary-400); */
-  background-color: white;
+  background-color: var(--primary-400);
+  /* background-color: white; */
   padding: 16px;
   /* display: flex;
   justify-content: center; */

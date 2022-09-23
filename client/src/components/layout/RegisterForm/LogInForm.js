@@ -5,7 +5,7 @@ import GeneralButton from "../../common/Button/GeneralButton";
 import { LogInFormContainer } from "./LogInFormStyle";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setLoginSuccess } from "../../../features/userSlice";
+import { setLoggedIn, setUserInfo } from "../../../features/userSlice";
 
 const LogInForm = () => {
   const navigate = useNavigate();
@@ -18,18 +18,16 @@ const LogInForm = () => {
   //isValid: errors 객체 비어있으면 true
   //isDirty: form 양식 어떤 input이라도 건드렸으면 true?
 
-  const [memberId, setMemberId] = useState(0); //처음 로그인 요청시에 서버에서 받아오는 아이디는 memberId로 저장
-
-  //userSlice 전체 상태 확인
+  //userSlice 전체 상태 확인 - 콘솔 확인용
   useSelector((state) => {
     console.log("userSlice 전체상태?", state.user); //{isLoggedIn: false, userId: null, userEmail: null}
   });
 
-  //userSlice에서 가져오는 유저아이디
-  const userId = useSelector((state) => {
-    console.log("리덕스 userId?", state.user.userId);
-    return state.user.userId;
-  }); //userSlice저장소에서 유저아이디 가져오기
+  // //userSlice에서 가져오는 유저아이디
+  // const userId = useSelector((state) => {
+  //   console.log("리덕스 userId?", state.user.userId);
+  //   return state.user.userId;
+  // }); //axios 로그인 요청할때 리덕스에 저장하는 유저아이디는(state로 저장하는 상태도 마찬가지) 다음 사용자 정보 조회 get요청에 바로 쓸수 없다. 비동기로 작동해서 그런듯..?
 
   //userSlice 로그인 상태 확인
   const isLoggedIn = useSelector((state) => {
@@ -62,9 +60,6 @@ const LogInForm = () => {
 
     //=======================
     //로그인 요청. 액세스 토큰을 요청헤더에 설정
-    //일반 로그인 요청보낼때 response body에 memberID 추가될 예정
-    //memberID있으면 유저 정보(이름, 프사path)를 받아올수있는 API 추가될 예정 -> 그 api에 요청보내서 유저 정보를 받아온걸 슬라이스에 저장해야될듯?
-
     axios
       .post("/api/login", data)
       .then((response) => {
@@ -75,17 +70,16 @@ const LogInForm = () => {
             "Authorization"
           ] = `Bearer ${ACCESS_TOKEN}`; //요청헤더에 액세스 토큰 설정
           console.log("ACCESS_TOKEN", ACCESS_TOKEN);
-          // setIsLoggedIn(true);
 
           //로그인 성공 상태 리덕스 저장소로 보내기
-          // dispatch(setLoginSuccess({ userEmail: data.email }));
-          // dispatch(setLoginSuccess({}));
+          // dispatch(setLoggedIn({ userEmail: data.email }));
           console.log(response.data); //서버에서 응답바디로 주는것 {memberId: 2}
-          dispatch(setLoginSuccess({ userId: response.data.memberId })); //userSlice에 유저아이디 저장
-          getUserInfo(response.data.memberId); //여기서 한번에 유저정보 받아오는 요청까지 보내면 아직 memberId가 들어오지 않는다.
 
-          //로그인 성공하면 memberId는 우선 상태로 저장
-          setMemberId(response.data.memberId);
+          //userSlice에 로그인 상태 true 저장
+          dispatch(setLoggedIn({})); //{isLoggedIn: true, userId: null, userName: null, userProfileImgPath: null}
+
+          //서버에서 받아오는 memberId를 가지고 사용자 정보조회하는 API로 get요청
+          getUserInfo(response.data.memberId);
 
           alert("로그인 성공");
           navigate("/");
@@ -104,9 +98,7 @@ const LogInForm = () => {
       });
     //=============================
 
-    // getUserInfo();//onSubmit 함수안에있어도 유저정보 못받아옴
-
-    // 기존코드
+    // refresh 토큰없이 액세스 토큰만 받아오는 기존코드
     // accessToken을 로컬스토리지, 쿠키에 저장하지 않고 API 요청하는 콜마다 request 헤더에 담아 보내주는 방법. 요청헤더에 토큰 안담기는 문제 해결!
     // axios
     //   .post("/api/login", data)
@@ -148,34 +140,36 @@ const LogInForm = () => {
     // })
   }; //onSubmit 함수끝
 
-  console.log("memberId", memberId);
-
   //로그인 요청시 서버에서 보내주는 memberId로 사용자 정보를 조회
-  const getUserInfo = (userId) => {
+  const getUserInfo = (userIdFromServer) => {
     console.log("겟유저인포 ");
     axios
-      // .get(`/api/members/${userId}}`)
-      .get("/api/members/" + userId)
+      // .get(`/api/members/${userIdFromServer}}`)
+      .get("/api/members/" + userIdFromServer)
       .then((response) => {
         if (response.status === 200) {
-          console.log(response);
+          // console.log(response); //response.data = {memberId: 2, name: 'test1', profileImagePath: null}
+          //요청시 받아오는 response.data로 리덕스에 유저정보 저장
+          dispatch(
+            setUserInfo({
+              userId: response.data.memberId,
+              userName: response.data.name,
+              userProfileImgPath: response.data.profileImagePath,
+            })
+          );
         }
-      });
-    // .catch((error) => console.log("사용자 정보 조회 fail", error));
+      })
+      .catch((error) => console.log("겟유저인포 fail", error));
   };
 
   //로그인 상태 true일떄만 유저 정보 불러오기 - 안됨
   // useEffect(() => {
   // if (isLoggedIn) {
-  // getUserInfo();
-  // console.log(memberId);
-  // // }
-  // console.log(isLoggedIn);
-  // }, [isLoggedIn]);
-
-  // if (memberId !== 0) {
-  //   setTimeout(getUserInfo(), 2000);
+  //   getUserInfo();
+  //   console.log(memberId);
   // }
+  //   console.log(isLoggedIn);
+  // }, [isLoggedIn]);
 
   return (
     <LogInFormContainer>
