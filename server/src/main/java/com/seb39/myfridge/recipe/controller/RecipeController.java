@@ -2,6 +2,7 @@ package com.seb39.myfridge.recipe.controller;
 
 import com.seb39.myfridge.auth.PrincipalDetails;
 import com.seb39.myfridge.ingredient.entity.RecipeIngredient;
+import com.seb39.myfridge.auth.annotation.AuthMemberId;
 import com.seb39.myfridge.recipe.dto.RecipeDto;
 import com.seb39.myfridge.recipe.entity.Recipe;
 import com.seb39.myfridge.recipe.mapper.RecipeMapper;
@@ -34,8 +35,7 @@ public class RecipeController {
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity postRecipe(@Valid @RequestPart RecipeDto.Post requestBody,
                                      @RequestPart List<MultipartFile> files,
-                                     @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        Long memberId = principalDetails.getMemberId();
+                                     @AuthMemberId Long memberId) {
         //1. 이미지 관련 exception 처리 필요
 
         List<RecipeIngredient> recipeIngredients = recipeMapper.ingredientsDtoToIngredients(requestBody.getIngredients());
@@ -52,9 +52,8 @@ public class RecipeController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteRecipe(@PathVariable("id") @Positive Long id,
-                                       @AuthenticationPrincipal PrincipalDetails principalDetails) {
+                                       @AuthMemberId Long memberId) {
 
-        Long memberId = principalDetails.getMemberId();
         recipeService.deleteRecipe(id, memberId);
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -63,9 +62,8 @@ public class RecipeController {
     public ResponseEntity updateRecipe(@PathVariable("id") @Positive Long id,
                                        @Valid @RequestPart RecipeDto.Patch requestBody,
                                        @RequestPart List<MultipartFile> files,
-                                       @AuthenticationPrincipal PrincipalDetails principalDetails){
+                                       @AuthMemberId Long memberId){
         requestBody.setId(id);
-        Long memberId = principalDetails.getMemberId();
         List<Step> stepList = recipeMapper.recipeDtoStepsToStepList(requestBody.getSteps());
         List<RecipeIngredient> recipeIngredients = recipeMapper.ingredientsDtoToIngredients(requestBody.getIngredients());
         Recipe recipe = recipeService.updateRecipe(recipeMapper.recipePatchToRecipe(requestBody), stepList, memberId, files, recipeIngredients);

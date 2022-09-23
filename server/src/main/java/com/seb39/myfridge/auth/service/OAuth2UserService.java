@@ -33,12 +33,14 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         String username = userInfo.getUsername();
         String email = userInfo.getEmail();
         String providerId = userInfo.getProviderId();
+        String profileImagePath = userInfo.getProfileImagePath();
 
         Member member = Member.oauth2Builder()
                 .name(username)
                 .email(email)
                 .provider(provider)
                 .providerId(providerId)
+                .profileImagePath(profileImagePath)
                 .buildOAuth2Member();
         memberService.signUpOauth2IfNotExists(member);
 

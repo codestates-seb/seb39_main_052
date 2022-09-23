@@ -1,6 +1,7 @@
 package com.seb39.myfridge.auth.userinfo;
 
 import java.util.Map;
+import java.util.Optional;
 
 /**
  *  Kakao OAuth2 attributes
@@ -29,18 +30,26 @@ import java.util.Map;
 
 public class KakaoUserInfo implements OAuth2UserInfo{
 
-    private final String username;
-    private final String email;
-    private final String providerId;
+    private String username;
+    private String providerId;
+    private String email;
+    private String profileImagePath;
 
     public KakaoUserInfo(Map<String,Object> attributes) {
-        this.providerId = attributes.get("id").toString();
 
-        Map<String,Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
-        Map<String,Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
+        System.out.println("attr " + attributes);
 
-        this.username = profile.get("nickname").toString();
-        this.email = kakaoAccount.get("email").toString();
+        Map<String,Object> account = (Map<String, Object>) attributes.get("kakao_account");
+        Map<String,Object> profile = (Map<String, Object>) account.get("profile");
+
+        Optional.ofNullable(attributes.get("id"))
+                .ifPresent(id -> this.providerId = id.toString());
+        Optional.ofNullable(account.get("email"))
+                .ifPresent(email -> this.email = email.toString());
+        Optional.ofNullable(profile.get("nickname"))
+                .ifPresent(nickname -> this.username = nickname.toString());
+        Optional.ofNullable(profile.get("thumbnail_image_url"))
+                .ifPresent(url -> this.profileImagePath = url.toString());
     }
 
     @Override
@@ -61,5 +70,10 @@ public class KakaoUserInfo implements OAuth2UserInfo{
     @Override
     public String getProviderId() {
         return providerId;
+    }
+
+    @Override
+    public String getProfileImagePath() {
+        return profileImagePath;
     }
 }

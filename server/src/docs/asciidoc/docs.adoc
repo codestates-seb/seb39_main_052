@@ -18,6 +18,9 @@ include::{snippets}/login-success/http-request.adoc[]
 .request-fields
 include::{snippets}/login-success/request-fields.adoc[]
 
+==== 응답 (성공)
+***
+
 .http-response
 include::{snippets}/login-success/http-response.adoc[]
 
@@ -27,17 +30,28 @@ include::{snippets}/login-success/response-headers.adoc[]
 .response-fields
 include::{snippets}/login-success/response-fields.adoc[]
 
+==== 응답 (실패)
+***
+.http-response
+include::{snippets}/login-fail/http-response.adoc[]
+
+.response-fields
+include::{snippets}/login-fail/response-fields.adoc[]
+
+
+
 === OAuth2 Login
 ***
-    구글 로그인 주소 : https://seb39myfridge.com/oauth2/authorization/google
-    카카오 로그인 주소 : https://seb39myfridge.com/oauth2/authorization/kakao
+    구글 로그인 주소 : https://seb39myfridge.ml/oauth2/authorization/google
+    카카오 로그인 주소 : https://seb39myfridge.ml/oauth2/authorization/kakao
 
     OAuth2 Login은 일반 Login과 다르게 동작한다.
     위 주소로 요청을 하면 각 OAuth2 제공자의 로그인 페이지로 Redirect 되고,
-    Login을 성공시 {frontEnd 주소}/auth/redirect?access-token={access-token}
+    Login을 성공시 {frontEnd 주소}/auth/redirect?access-token={access-token}&member-id={member-id}
     으로 redirect한다.
 
     Access token은 redirect 주소에 Query Parameter로 전달된다.
+    로그인한 사용자의 id는 redirect 주소에 Query Parameter로 전달된다.
     Refresh token은 일반 로그인과 마찬가지로 HttpOnly cookie로 전달된다.
 
 === 로그아웃
@@ -93,6 +107,25 @@ include::{snippets}/refresh-access-token/http-response.adoc[]
 include::{snippets}/refresh-access-token/response-fields.adoc[]
 
 ***
+== 사용자 정보 관련 API
+=== 사용자 정보 조회
+***
+
+ 사용자 정보 조회를 위한 API 입니다.
+
+.http-request
+include::{snippets}/member-read/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/member-read/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/member-read/http-response.adoc[]
+
+.response-fields
+include::{snippets}/member-read/response-fields.adoc[]
+
+
 == 레시피 관련 API
 === 레시피 생성
 ***
@@ -144,3 +177,78 @@ include::{snippets}/recipe-delete/http-request.adoc[]
 
 .http-response
 include::{snippets}/recipe-delete/http-response.adoc[]
+
+== 댓글 관련 API
+=== 댓글 등록
+***
+
+ 댓글 등록을 위한 API 입니다.
+
+.http-request
+include::{snippets}/comment-create/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/comment-create/path-parameters.adoc[]
+
+.request-fields
+include::{snippets}/comment-create/request-fields.adoc[]
+
+.http-response
+include::{snippets}/comment-create/http-response.adoc[]
+
+.response-fields
+include::{snippets}/comment-create/response-fields.adoc[]
+
+=== 댓글 수정
+***
+
+ 댓글 수정을 위한 API 입니다.
+ 자신이 작성한 댓글만 수정 가능합니다.
+
+.http-request
+include::{snippets}/comment-update/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/comment-update/path-parameters.adoc[]
+
+.request-fields
+include::{snippets}/comment-update/request-fields.adoc[]
+
+.http-response
+include::{snippets}/comment-update/http-response.adoc[]
+
+.response-fields
+include::{snippets}/comment-update/response-fields.adoc[]
+
+=== 댓글 삭제
+***
+
+ 댓글 삭제를 위한 API 입니다.
+ 자신이 작성한 댓글만 삭제 가능합니다.
+
+.http-request
+include::{snippets}/comment-delete/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/comment-delete/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/comment-delete/http-response.adoc[]
+
+=== 받은 댓글 리스트 조회
+
+ 자신이 받은 댓글 리스트를 조회하기 위한 API 입니다.
+ 자신이 작성한 레시피에 달린 댓글을 최신순으로 조회할 수 있습니다.
+ (페이지당 댓글 16개)
+
+.http-request
+include::{snippets}/comments-received/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/comments-received/request-parameters.adoc[]
+
+.http-response
+include::{snippets}/comments-received/http-response.adoc[]
+
+.response-fields
+include::{snippets}/comments-received/response-fields.adoc[]

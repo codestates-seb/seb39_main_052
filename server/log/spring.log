@@ -1,0 +1,164 @@
+2022-09-23 00:13:45.630  INFO 29316 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 3 class path changes (0 additions, 3 deletions, 0 modifications)
+2022-09-23 00:13:45.638  INFO 29316 --- [Thread-139] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2022-09-23 00:13:45.643  WARN 29316 --- [Thread-139] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-43 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@11.0.13/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@11.0.13/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:234)
+ java.base@11.0.13/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2123)
+ java.base@11.0.13/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@11.0.13/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@11.0.13/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1054)
+ java.base@11.0.13/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1114)
+ java.base@11.0.13/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+ java.base@11.0.13/java.lang.Thread.run(Thread.java:834)
+2022-09-23 00:13:45.648  INFO 29316 --- [Thread-139] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-09-23 00:13:45.649  INFO 29316 --- [Thread-139] com.zaxxer.hikari.HikariDataSource       : HikariPool-43 - Shutdown initiated...
+2022-09-23 00:13:45.651  INFO 29316 --- [Thread-139] com.zaxxer.hikari.HikariDataSource       : HikariPool-43 - Shutdown completed.
+2022-09-23 00:13:45.696  INFO 29316 --- [restartedMain] com.seb39.myfridge.MyfridgeApplication   : Starting MyfridgeApplication using Java 11.0.13 on MacBook-Pro.local with PID 29316 (/Users/sj-pc/Documents/git/seb39_main_052/server/out/production/classes started by sj-pc in /Users/sj-pc/Documents/git/seb39_main_052/server)
+2022-09-23 00:13:45.696  INFO 29316 --- [restartedMain] com.seb39.myfridge.MyfridgeApplication   : The following 1 profile is active: "production"
+2022-09-23 00:13:45.898  INFO 29316 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-09-23 00:13:45.921  INFO 29316 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 22 ms. Found 3 JPA repository interfaces.
+2022-09-23 00:13:45.982  INFO 29316 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'credentialsProvider' of type [com.amazonaws.auth.AWSCredentialsProviderChain] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-09-23 00:13:46.046  INFO 29316 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 80 (http)
+2022-09-23 00:13:46.046  INFO 29316 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-09-23 00:13:46.046  INFO 29316 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.65]
+2022-09-23 00:13:46.056  INFO 29316 --- [restartedMain] o.a.c.c.C.[Tomcat-29].[localhost].[/]    : Initializing Spring embedded WebApplicationContext
+2022-09-23 00:13:46.057  INFO 29316 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 359 ms
+2022-09-23 00:13:46.072  INFO 29316 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-44 - Starting...
+2022-09-23 00:13:46.179  INFO 29316 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-44 - Start completed.
+2022-09-23 00:13:46.180  INFO 29316 --- [restartedMain] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:mysql://db-seb39-myfridge.cloapjl2k2kp.ap-northeast-2.rds.amazonaws.com:3306/myfridge?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul'
+2022-09-23 00:13:46.227  INFO 29316 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-09-23 00:13:46.232  INFO 29316 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2022-09-23 00:13:46.419  INFO 29316 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-09-23 00:13:46.420  INFO 29316 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-09-23 00:13:46.571  WARN 29316 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-09-23 00:13:46.791  INFO 29316 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@ce29542, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4a8cee6c, org.springframework.security.web.context.SecurityContextPersistenceFilter@69ef8fd2, org.springframework.security.web.header.HeaderWriterFilter@7d4d2fbc, org.springframework.security.web.authentication.logout.LogoutFilter@efb34c8, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@f930d5a, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@6e34d9a5, com.seb39.myfridge.auth.filter.JwtExceptionHandlingFilter@5de2d3ba, com.seb39.myfridge.auth.filter.JwtAuthenticationFilter@1553d052, com.seb39.myfridge.auth.filter.JwtAuthorizationFilter@d831f3f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7ecc9ace, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6ae86a64, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@20d17f6d, org.springframework.security.web.session.SessionManagementFilter@7a6160fb, org.springframework.security.web.access.ExceptionTranslationFilter@1510549d, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@383fc2f0]
+2022-09-23 00:13:46.989  INFO 29316 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2022-09-23 00:13:47.005  INFO 29316 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 80 (http) with context path ''
+2022-09-23 00:13:47.009  INFO 29316 --- [restartedMain] com.seb39.myfridge.MyfridgeApplication   : Started MyfridgeApplication in 1.351 seconds (JVM running for 26214.251)
+2022-09-23 00:13:47.011  INFO 29316 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2022-09-23 00:13:48.409  INFO 29316 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 3 class path changes (3 additions, 0 deletions, 0 modifications)
+2022-09-23 00:13:48.413  INFO 29316 --- [Thread-146] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2022-09-23 00:13:48.419  WARN 29316 --- [Thread-146] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-44 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@11.0.13/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@11.0.13/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:234)
+ java.base@11.0.13/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2123)
+ java.base@11.0.13/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@11.0.13/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@11.0.13/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1054)
+ java.base@11.0.13/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1114)
+ java.base@11.0.13/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+ java.base@11.0.13/java.lang.Thread.run(Thread.java:834)
+2022-09-23 00:13:48.419  WARN 29316 --- [Thread-146] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-44 connection adder] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@11.0.13/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@11.0.13/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:234)
+ java.base@11.0.13/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2123)
+ java.base@11.0.13/java.util.concurrent.LinkedBlockingQueue.poll(LinkedBlockingQueue.java:458)
+ java.base@11.0.13/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1053)
+ java.base@11.0.13/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1114)
+ java.base@11.0.13/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+ java.base@11.0.13/java.lang.Thread.run(Thread.java:834)
+2022-09-23 00:13:48.425  INFO 29316 --- [Thread-146] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-09-23 00:13:48.426  INFO 29316 --- [Thread-146] com.zaxxer.hikari.HikariDataSource       : HikariPool-44 - Shutdown initiated...
+2022-09-23 00:13:48.428  INFO 29316 --- [Thread-146] com.zaxxer.hikari.HikariDataSource       : HikariPool-44 - Shutdown completed.
+2022-09-23 00:13:48.548  INFO 29316 --- [restartedMain] com.seb39.myfridge.MyfridgeApplication   : Starting MyfridgeApplication using Java 11.0.13 on MacBook-Pro.local with PID 29316 (/Users/sj-pc/Documents/git/seb39_main_052/server/out/production/classes started by sj-pc in /Users/sj-pc/Documents/git/seb39_main_052/server)
+2022-09-23 00:13:48.549  INFO 29316 --- [restartedMain] com.seb39.myfridge.MyfridgeApplication   : The following 1 profile is active: "production"
+2022-09-23 00:13:48.800  INFO 29316 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-09-23 00:13:48.827  INFO 29316 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 27 ms. Found 4 JPA repository interfaces.
+2022-09-23 00:13:48.897  INFO 29316 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'credentialsProvider' of type [com.amazonaws.auth.AWSCredentialsProviderChain] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-09-23 00:13:48.982  INFO 29316 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 80 (http)
+2022-09-23 00:13:48.982  INFO 29316 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-09-23 00:13:48.982  INFO 29316 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.65]
+2022-09-23 00:13:48.993  INFO 29316 --- [restartedMain] o.a.c.c.C.[Tomcat-29].[localhost].[/]    : Initializing Spring embedded WebApplicationContext
+2022-09-23 00:13:48.993  INFO 29316 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 443 ms
+2022-09-23 00:13:49.008  INFO 29316 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-45 - Starting...
+2022-09-23 00:13:49.221  INFO 29316 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-45 - Start completed.
+2022-09-23 00:13:49.222  INFO 29316 --- [restartedMain] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:mysql://db-seb39-myfridge.cloapjl2k2kp.ap-northeast-2.rds.amazonaws.com:3306/myfridge?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul'
+2022-09-23 00:13:49.272  INFO 29316 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-09-23 00:13:49.277  INFO 29316 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2022-09-23 00:13:49.568  INFO 29316 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-09-23 00:13:49.569  INFO 29316 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-09-23 00:13:49.756  WARN 29316 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-09-23 00:13:50.026  INFO 29316 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@587af643, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4d3d47c, org.springframework.security.web.context.SecurityContextPersistenceFilter@177c81cb, org.springframework.security.web.header.HeaderWriterFilter@3f36aeed, org.springframework.security.web.authentication.logout.LogoutFilter@5567a76d, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@6b1f2e0f, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@379fb031, com.seb39.myfridge.auth.filter.JwtExceptionHandlingFilter@162efdbf, com.seb39.myfridge.auth.filter.JwtAuthenticationFilter@5c7ad973, com.seb39.myfridge.auth.filter.JwtAuthorizationFilter@53bdf451, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@735c98ec, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@791711ac, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@49d7ba6e, org.springframework.security.web.session.SessionManagementFilter@faa0095, org.springframework.security.web.access.ExceptionTranslationFilter@37cf707, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@4d922cfc]
+2022-09-23 00:13:50.269  INFO 29316 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2022-09-23 00:13:50.289  INFO 29316 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 80 (http) with context path ''
+2022-09-23 00:13:50.295  INFO 29316 --- [restartedMain] com.seb39.myfridge.MyfridgeApplication   : Started MyfridgeApplication in 1.776 seconds (JVM running for 26217.536)
+2022-09-23 00:13:50.296  INFO 29316 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2022-09-23 00:21:30.493  INFO 29316 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 1 deletion, 0 modifications)
+2022-09-23 00:21:30.497  INFO 29316 --- [Thread-150] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2022-09-23 00:21:30.501  WARN 29316 --- [Thread-150] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-45 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@11.0.13/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@11.0.13/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:234)
+ java.base@11.0.13/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2123)
+ java.base@11.0.13/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@11.0.13/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@11.0.13/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1054)
+ java.base@11.0.13/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1114)
+ java.base@11.0.13/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+ java.base@11.0.13/java.lang.Thread.run(Thread.java:834)
+2022-09-23 00:21:30.505  INFO 29316 --- [Thread-150] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-09-23 00:21:30.506  INFO 29316 --- [Thread-150] com.zaxxer.hikari.HikariDataSource       : HikariPool-45 - Shutdown initiated...
+2022-09-23 00:21:30.508  INFO 29316 --- [Thread-150] com.zaxxer.hikari.HikariDataSource       : HikariPool-45 - Shutdown completed.
+2022-09-23 00:21:30.615  INFO 29316 --- [restartedMain] com.seb39.myfridge.MyfridgeApplication   : Starting MyfridgeApplication using Java 11.0.13 on MacBook-Pro.local with PID 29316 (/Users/sj-pc/Documents/git/seb39_main_052/server/out/production/classes started by sj-pc in /Users/sj-pc/Documents/git/seb39_main_052/server)
+2022-09-23 00:21:30.615  INFO 29316 --- [restartedMain] com.seb39.myfridge.MyfridgeApplication   : The following 1 profile is active: "production"
+2022-09-23 00:21:30.815  INFO 29316 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-09-23 00:21:30.837  INFO 29316 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 22 ms. Found 4 JPA repository interfaces.
+2022-09-23 00:21:30.897  INFO 29316 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'credentialsProvider' of type [com.amazonaws.auth.AWSCredentialsProviderChain] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-09-23 00:21:30.975  INFO 29316 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 80 (http)
+2022-09-23 00:21:30.981  INFO 29316 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-09-23 00:21:30.981  INFO 29316 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.65]
+2022-09-23 00:21:31.009  INFO 29316 --- [restartedMain] o.a.c.c.C.[Tomcat-29].[localhost].[/]    : Initializing Spring embedded WebApplicationContext
+2022-09-23 00:21:31.022  INFO 29316 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 405 ms
+2022-09-23 00:21:31.034  INFO 29316 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-46 - Starting...
+2022-09-23 00:21:31.151  INFO 29316 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-46 - Start completed.
+2022-09-23 00:21:31.152  INFO 29316 --- [restartedMain] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:mysql://db-seb39-myfridge.cloapjl2k2kp.ap-northeast-2.rds.amazonaws.com:3306/myfridge?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul'
+2022-09-23 00:21:31.202  INFO 29316 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-09-23 00:21:31.207  INFO 29316 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2022-09-23 00:21:31.388  INFO 29316 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-09-23 00:21:31.388  INFO 29316 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-09-23 00:21:31.539  WARN 29316 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-09-23 00:21:31.804  INFO 29316 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@5be1458f, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6428857c, org.springframework.security.web.context.SecurityContextPersistenceFilter@7104fe95, org.springframework.security.web.header.HeaderWriterFilter@7570db00, org.springframework.security.web.authentication.logout.LogoutFilter@37be2793, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@639bde8f, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@3648916, com.seb39.myfridge.auth.filter.JwtExceptionHandlingFilter@59fa40d0, com.seb39.myfridge.auth.filter.JwtAuthenticationFilter@7ef14ec0, com.seb39.myfridge.auth.filter.JwtAuthorizationFilter@2f6da1ac, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@439d5ca2, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3046270a, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@f4ed258, org.springframework.security.web.session.SessionManagementFilter@1edcdb9d, org.springframework.security.web.access.ExceptionTranslationFilter@e979780, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@629badb2]
+2022-09-23 00:21:31.989  INFO 29316 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2022-09-23 00:21:32.007  INFO 29316 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 80 (http) with context path ''
+2022-09-23 00:21:32.012  INFO 29316 --- [restartedMain] com.seb39.myfridge.MyfridgeApplication   : Started MyfridgeApplication in 1.425 seconds (JVM running for 26679.248)
+2022-09-23 00:21:32.014  INFO 29316 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2022-09-23 00:22:45.164  INFO 29316 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 1 deletion, 0 modifications)
+2022-09-23 00:22:45.167  INFO 29316 --- [Thread-154] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2022-09-23 00:22:45.171  WARN 29316 --- [Thread-154] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-46 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@11.0.13/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@11.0.13/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:234)
+ java.base@11.0.13/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2123)
+ java.base@11.0.13/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@11.0.13/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@11.0.13/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1054)
+ java.base@11.0.13/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1114)
+ java.base@11.0.13/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+ java.base@11.0.13/java.lang.Thread.run(Thread.java:834)
+2022-09-23 00:22:45.176  INFO 29316 --- [Thread-154] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-09-23 00:22:45.176  INFO 29316 --- [Thread-154] com.zaxxer.hikari.HikariDataSource       : HikariPool-46 - Shutdown initiated...
+2022-09-23 00:22:45.178  INFO 29316 --- [Thread-154] com.zaxxer.hikari.HikariDataSource       : HikariPool-46 - Shutdown completed.
+2022-09-23 00:22:45.293  INFO 29316 --- [restartedMain] com.seb39.myfridge.MyfridgeApplication   : Starting MyfridgeApplication using Java 11.0.13 on MacBook-Pro.local with PID 29316 (/Users/sj-pc/Documents/git/seb39_main_052/server/out/production/classes started by sj-pc in /Users/sj-pc/Documents/git/seb39_main_052/server)
+2022-09-23 00:22:45.293  INFO 29316 --- [restartedMain] com.seb39.myfridge.MyfridgeApplication   : The following 1 profile is active: "production"
+2022-09-23 00:22:45.487  INFO 29316 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-09-23 00:22:45.509  INFO 29316 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 21 ms. Found 4 JPA repository interfaces.
+2022-09-23 00:22:45.572  INFO 29316 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'credentialsProvider' of type [com.amazonaws.auth.AWSCredentialsProviderChain] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-09-23 00:22:45.648  INFO 29316 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 80 (http)
+2022-09-23 00:22:45.649  INFO 29316 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-09-23 00:22:45.649  INFO 29316 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.65]
+2022-09-23 00:22:45.660  INFO 29316 --- [restartedMain] o.a.c.c.C.[Tomcat-29].[localhost].[/]    : Initializing Spring embedded WebApplicationContext
+2022-09-23 00:22:45.679  INFO 29316 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 384 ms
+2022-09-23 00:22:45.698  INFO 29316 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-47 - Starting...
+2022-09-23 00:22:45.820  INFO 29316 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-47 - Start completed.
+2022-09-23 00:22:45.831  INFO 29316 --- [restartedMain] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:mysql://db-seb39-myfridge.cloapjl2k2kp.ap-northeast-2.rds.amazonaws.com:3306/myfridge?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul'
+2022-09-23 00:22:45.879  INFO 29316 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-09-23 00:22:45.899  INFO 29316 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2022-09-23 00:22:46.085  INFO 29316 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-09-23 00:22:46.086  INFO 29316 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-09-23 00:22:46.261  WARN 29316 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-09-23 00:22:46.613  INFO 29316 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@48a4eba6, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@271ed7db, org.springframework.security.web.context.SecurityContextPersistenceFilter@5fcdc2b7, org.springframework.security.web.header.HeaderWriterFilter@5fede522, org.springframework.security.web.authentication.logout.LogoutFilter@2879b7ee, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@76e47316, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@1c6c3fd4, com.seb39.myfridge.auth.filter.JwtExceptionHandlingFilter@72b77ced, com.seb39.myfridge.auth.filter.JwtAuthenticationFilter@f587ff0, com.seb39.myfridge.auth.filter.JwtAuthorizationFilter@604e5c66, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@41fddee6, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7109f70e, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@31bfefbb, org.springframework.security.web.session.SessionManagementFilter@68001e20, org.springframework.security.web.access.ExceptionTranslationFilter@2f263111, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@66113899]
+2022-09-23 00:22:47.323  INFO 29316 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2022-09-23 00:22:47.374  INFO 29316 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 80 (http) with context path ''
+2022-09-23 00:22:47.382  INFO 29316 --- [restartedMain] com.seb39.myfridge.MyfridgeApplication   : Started MyfridgeApplication in 2.124 seconds (JVM running for 26754.617)
+2022-09-23 00:22:47.387  INFO 29316 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2022-09-23 00:40:34.646  INFO 29316 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-09-23 00:40:34.647  INFO 29316 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-47 - Shutdown initiated...
+2022-09-23 00:40:34.649  INFO 29316 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-47 - Shutdown completed.

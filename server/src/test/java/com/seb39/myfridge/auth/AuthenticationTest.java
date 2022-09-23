@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seb39.myfridge.auth.dto.LoginRequest;
 import com.seb39.myfridge.auth.dto.SignUpRequest;
+import com.seb39.myfridge.auth.enums.AppAuthExceptionCode;
 import com.seb39.myfridge.auth.enums.JwtTokenType;
 import com.seb39.myfridge.auth.service.JwtProvider;
 import com.seb39.myfridge.auth.service.JwtService;
@@ -143,9 +144,7 @@ class AuthenticationTest {
                         headerWithName(ACCESS_TOKEN).description("Access Token이 담긴 헤더. (Refresh token은 refresh-token 쿠키에 담아 전송)")
                 ),
                 responseFields(
-                        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
-                        fieldWithPath("code").type(JsonFieldType.NUMBER).description("실패시 실패 사유 Code (성공시 0)"),
-                        fieldWithPath("failureReason").type(JsonFieldType.STRING).description("실패 사유 (성공시 공백)")
+                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("로그인한 사용자의 ID")
                 )
         ));
     }
@@ -173,7 +172,7 @@ class AuthenticationTest {
                         .accept(APPLICATION_JSON)
                         .header(ACCESS_TOKEN, accessToken)
                         .cookie(refreshTokenCookie))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().isOk());
 
         assertThat(jwtService.hasRefreshToken(refreshToken)).isFalse();
 
@@ -185,77 +184,6 @@ class AuthenticationTest {
                         headerWithName(ACCESS_TOKEN).description("Access token. (만료 여부 상관 없음), Refresh Token은 refresh-token Cookie에 담아 전송")
                 )
         ));
-    }
-
-    @Test
-    @DisplayName("존재하지 않는 사용자로 로그인시 401로 응답한다.")
-    void notExistMemberLogin() throws Exception {
-
-        // given
-        LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setEmail("notexist@naver.com");
-        loginRequest.setPassword("abcdefg1234");
-        String requestBody = om.writeValueAsString(loginRequest);
-
-        // expected
-        ResultActions result = mockMvc.perform(post("/api/login")
-                        .accept(APPLICATION_JSON)
-                        .contentType(APPLICATION_JSON)
-                        .content(requestBody))
-                .andExpect(status().isUnauthorized());
-    }
-
-
-    @Test
-    @DisplayName("비밀번호가 다른 경우 401로 응답한다.")
-    void invalidPasswordLogin() throws Exception {
-        // given
-        String email = "abcd@gmail.com";
-        String name = "test01";
-        String password = "password1234";
-        Member member = Member.generalBuilder()
-                .email(email)
-                .name(name)
-                .password(password)
-                .buildGeneralMember();
-        memberService.signUpGeneral(member);
-
-        LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setEmail(email);
-        loginRequest.setPassword(password + "111");
-        String requestBody = om.writeValueAsString(loginRequest);
-
-        // expected
-        ResultActions result = mockMvc.perform(post("/api/login")
-                        .accept(APPLICATION_JSON)
-                        .contentType(APPLICATION_JSON)
-                        .content(requestBody))
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    @DisplayName("USER 권한이 필요한 주소로 요청시 Access Token이 만료된 경우 Http Status 401, Body의 Code를 1로 응답한다.")
-    void expiredAccessToken() throws Exception {
-        // given
-        String email = "abcd@gmail.com";
-        String name = "test01";
-        String password = "password1234";
-        Member member = Member.generalBuilder()
-                .email(email)
-                .name(name)
-                .password(password)
-                .buildGeneralMember();
-        memberService.signUpGeneral(member);
-
-        String expiredToken = createExpiredAccessToken(member.getId(), member.getEmail());
-        System.out.println(expiredToken);
-        // expected
-        ResultActions result = mockMvc.perform(get("/api/authtest")
-                        .accept(APPLICATION_JSON)
-                        .header(AUTHORIZATION, "Bearer " + expiredToken))
-                .andExpect(status().isUnauthorized())
-                .andExpect(jsonPath("$.success").value(false))
-                .andExpect(jsonPath("$.code").value(1));
     }
 
     @Test
@@ -271,7 +199,7 @@ class AuthenticationTest {
                 .password(password)
                 .buildGeneralMember();
         memberService.signUpGeneral(member);
-        String expiredAccessToken = createExpiredAccessToken(member.getId(), member.getEmail());
+        String expiredAccessToken = createExpiredAccessToken(member.getId());
         String refreshToken = jwtProvider.createRefreshToken(expiredAccessToken);
         ReflectionTestUtils.invokeMethod(jwtService,"saveToken",refreshToken,expiredAccessToken);
         Cookie refreshTokenCookie = CookieUtil.createHttpOnlyCookie(REFRESH_TOKEN,refreshToken);
@@ -304,36 +232,6 @@ class AuthenticationTest {
     }
 
     @Test
-    @DisplayName("Refresh token 재발급 요청시 Refresh Token이 만료된 경우 Http Status 401, Body의 Code를 4로 응답한다.")
-    void expiredRefreshToken() throws Exception {
-        // given
-        String email = "abcd@gmail.com";
-        String name = "test01";
-        String password = "password1234";
-        Member member = Member.generalBuilder()
-                .email(email)
-                .name(name)
-                .password(password)
-                .buildGeneralMember();
-        memberService.signUpGeneral(member);
-        String expiredAccessToken = createExpiredAccessToken(member.getId(), member.getEmail());
-        String expiredRefreshToken = createExpiredRefreshToken();
-        ReflectionTestUtils.invokeMethod(jwtService,"saveToken",expiredRefreshToken,expiredAccessToken);
-        Cookie refreshTokenCookie = CookieUtil.createHttpOnlyCookie(REFRESH_TOKEN,expiredRefreshToken);
-
-
-        // expected
-        ResultActions result = mockMvc.perform(post("/api/auth/refresh")
-                        .accept(APPLICATION_JSON)
-                        .header(AUTHORIZATION, "Bearer " +expiredAccessToken)
-                        .cookie(refreshTokenCookie))
-                .andExpect(status().isUnauthorized())
-                .andExpect(jsonPath("$.success").value(false))
-                .andExpect(jsonPath("$.code").value(4));
-    }
-
-
-    @Test
     @DisplayName("구글 로그인 요청시 구글 로그인 페이지로 Redirect")
     void googleOauth2Test() throws Exception {
         // given
@@ -345,18 +243,10 @@ class AuthenticationTest {
                 .andDo(print());
     }
 
-    private String createExpiredAccessToken(Long id, String email) {
+    private String createExpiredAccessToken(Long id) {
         return JWT.create()
                 .withSubject(JwtTokenType.ACCESS.getSubject())
                 .withClaim(ID, id)
-                //.withClaim(EMAIL, email)
-                .withExpiresAt(new Date(System.currentTimeMillis() - 10000))
-                .sign(Algorithm.HMAC512(secret));
-    }
-
-    private String createExpiredRefreshToken() {
-        return JWT.create()
-                .withSubject(JwtTokenType.REFRESH.getSubject())
                 .withExpiresAt(new Date(System.currentTimeMillis() - 10000))
                 .sign(Algorithm.HMAC512(secret));
     }

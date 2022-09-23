@@ -92,7 +92,7 @@ class RecipeControllerTest {
         //given
         List<RecipeDto.Step> stepList = new ArrayList<>();
 
-        MockMultipartFile image = new MockMultipartFile("files","추가하고 싶은 이미지","image/png", new FileInputStream("src/test/resources/image/puppy.jpeg")); //내 로컬 이미지파일 -> 고쳐야 함
+        MockMultipartFile image = new MockMultipartFile("files","추가하고 싶은 이미지","image/png", new FileInputStream("src/test/resources/image/puppy.jpeg"));
 
         RecipeDto.Step step1 = RecipeDto.Step.builder()
                 .sequence(1)
@@ -196,6 +196,7 @@ class RecipeControllerTest {
         List<RecipeDto.Step> stepList = new ArrayList<>();
 
         MockMultipartFile image = new MockMultipartFile("files","추가하고 싶은 이미지","image/png", new FileInputStream("src/test/resources/image/puppy.jpeg"));
+
 
         RecipeDto.Step step1 = RecipeDto.Step.builder()
                 .sequence(1)
