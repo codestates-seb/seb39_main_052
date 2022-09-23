@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
-import { setLoginSuccess } from "../../../features/userSlice";
+import { setLoggedIn, setUserInfo } from "../../../features/userSlice";
 
-//RedirectURI 경로에 도달했을때 보여줄 컴포넌트
+//RedirectURI 경로에 도달했을때 실행되는 컴포넌트
 const OAuth2RedirectHandler = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch(); //for redux dispatch
@@ -15,23 +15,51 @@ const OAuth2RedirectHandler = () => {
   // console.log("OAuth 리다이렉트 핸들러 location", location);
   const ACCESS_TOKEN_FOR_OAUTH = location.searchParams.get("access-token");
   // console.log("ACCESS_TOKEN_FOR_OAUTH", ACCESS_TOKEN_FOR_OAUTH); //eyJ0eXAiOiJKV1QiLC...
+
   //소셜로그인의 경우 query param에 memberId 정보를 추가할 것
+  const SocialUserId = location.searchParams.get("member-id");
+  // console.log("쿼리파라미터로 받아오는 멤버아이디", SocialUserId);
+
+  //query parameter로 받아온 member id로 사용자 정보 get 요청하고 리덕스에 정보 저장
+  const getUserInfo = (userIdFromQueryParam) => {
+    // console.log("겟유저인포 for 소셜로그인");
+    axios
+      .get(`/api/members/${userIdFromQueryParam}`)
+      // .get("/api/members/" + userIdFromQueryParam)
+      .then((response) => {
+        if (response.status === 200) {
+          // console.log(response);
+          //요청시 받아오는 response.data로 리덕스에 유저정보 저장
+          dispatch(
+            setUserInfo({
+              userId: response.data.memberId,
+              userName: response.data.name,
+              userProfileImgPath: response.data.profileImagePath,
+            }) // {isLoggedIn: true, userId: 2, userName: 'hana cho', userProfileImgPath: 'https://lh3.googleusercontent.com/a/ALm5wu0ny_ZcG1WvfhKVvHcv6po0JNV5xR2rb2EMUXJy=s96-c'}
+          );
+        }
+      })
+      .catch((error) => console.log("겟유저인포 fail", error));
+  };
 
   useEffect(() => {
     //if 액세스토큰 있으면
     //navigate되기 이전에 리덕스에 상태 저장
     //없으면 alert 로 에러 띄우고 로그인 페이지에 남아있게 분기
-    if (ACCESS_TOKEN_FOR_OAUTH) {
+    if (ACCESS_TOKEN_FOR_OAUTH && SocialUserId) {
       //로그인 성공 상태 리덕스 저장소로 보내기
-      dispatch(setLoginSuccess({}));
-      //유저id 싣어서 보내기
+      dispatch(setLoggedIn({}));
+      // {isLoggedIn: true, userId: null, userName: null, userProfileImgPath: null}
+
+      //query param으로 받아온 member id로 사용자 정보 요청 & 리덕스에 저장
+      getUserInfo(SocialUserId);
       navigate("/");
     } else {
       console.log("OAuth 액세스 토큰 없음");
       navigate("/login");
     }
     console.log("유즈이펙트");
-  }, [ACCESS_TOKEN_FOR_OAUTH]); //navigate쓸때 useEffect 에서 쓰라고해서
+  }, [ACCESS_TOKEN_FOR_OAUTH, SocialUserId]); //navigate쓸때 useEffect 에서 쓰라고해서
   //액세스토큰값이 있으면 재렌더링
 
   //로컬 스토리지에 저장
@@ -46,14 +74,10 @@ const OAuth2RedirectHandler = () => {
   ] = `Bearer ${ACCESS_TOKEN_FOR_OAUTH}`; //요청헤더에 액세스 토큰 설정
   console.log("요청헤더에 설정하고난후 액세스 토큰", ACCESS_TOKEN_FOR_OAUTH);
 
-  // //로그인 성공 상태 리덕스 저장소로 보내기
-  // dispatch(setLoginSuccess({}));
-  // //유저id 싣어서 보내기
-
   //로그인 상태 확인용
-  useSelector((state) => {
-    console.log("isLoggedIn이니?", state.user.isLoggedIn);
-  });
+  // useSelector((state) => {
+  //   console.log("소셜로그인 isLoggedIn이니?", state.user.isLoggedIn);
+  // });
 
   //   setisSocialLoggedIn(true);
   //   } catch (error) {
