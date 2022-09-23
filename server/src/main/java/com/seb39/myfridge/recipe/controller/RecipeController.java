@@ -1,6 +1,7 @@
 package com.seb39.myfridge.recipe.controller;
 
 import com.seb39.myfridge.auth.PrincipalDetails;
+import com.seb39.myfridge.ingredient.entity.RecipeIngredient;
 import com.seb39.myfridge.recipe.dto.RecipeDto;
 import com.seb39.myfridge.recipe.entity.Recipe;
 import com.seb39.myfridge.recipe.mapper.RecipeMapper;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/recipes")
@@ -36,10 +38,12 @@ public class RecipeController {
         Long memberId = principalDetails.getMemberId();
         //1. 이미지 관련 exception 처리 필요
 
+        List<RecipeIngredient> recipeIngredients = recipeMapper.ingredientsDtoToIngredients(requestBody.getIngredients());
+
         List<Step> stepList = recipeMapper.recipeDtoStepsToStepList(requestBody.getSteps());
         Recipe recipe = recipeMapper.recipePostToRecipe(requestBody);
 
-        Recipe savedRecipe = recipeService.createRecipe(recipe, stepList, memberId, files);
+        Recipe savedRecipe = recipeService.createRecipe(recipe, stepList, memberId, files, recipeIngredients);
         RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(savedRecipe);
 
         return new ResponseEntity(response, HttpStatus.OK);
@@ -61,12 +65,10 @@ public class RecipeController {
                                        @RequestPart List<MultipartFile> files,
                                        @AuthenticationPrincipal PrincipalDetails principalDetails){
         requestBody.setId(id);
-        for (MultipartFile file : files) {
-            System.out.println("file name : " + file.getName());
-        }
         Long memberId = principalDetails.getMemberId();
         List<Step> stepList = recipeMapper.recipeDtoStepsToStepList(requestBody.getSteps());
-        Recipe recipe = recipeService.updateRecipe(recipeMapper.recipePatchToRecipe(requestBody), stepList, memberId, files);
+        List<RecipeIngredient> recipeIngredients = recipeMapper.ingredientsDtoToIngredients(requestBody.getIngredients());
+        Recipe recipe = recipeService.updateRecipe(recipeMapper.recipePatchToRecipe(requestBody), stepList, memberId, files, recipeIngredients);
         RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(recipe);
         return new ResponseEntity(response, HttpStatus.OK);
     }
@@ -78,12 +80,4 @@ public class RecipeController {
         RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(recipe);
         return new ResponseEntity(response, HttpStatus.OK);
     }
-
-    /**
-     * 이미지 수정
-     * 원래 db에 저장되어 있던 imagePath와 달라짐
-     * 만약 3번 step에 해당하는 이미지를 사용자가 수정한다 ?
-     *  메인, 1번, 2번, 4번에는 db에 저장된 것과 같은 imagePath가 요청으로 올 것임
-     *  3번만 다른 imagePath가 저장될것
-     */
 }

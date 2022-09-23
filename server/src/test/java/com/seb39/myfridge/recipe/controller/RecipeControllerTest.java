@@ -115,7 +115,22 @@ class RecipeControllerTest {
                 .build();
         stepList.add(step3);
 
-        RecipeDto.Post requestBody = new RecipeDto.Post("라면 맛있게 끓이는 법","https://seb52bucket.s3.ap-northeast-2.amazonaws.com/images/ffc76307-6043-437d-944f-ebc2bd2e0359.jpeg",1,"5분", stepList);
+        RecipeDto.Ingredient ingredient1 = RecipeDto.Ingredient.builder()
+                .name("고추가루")
+                .quantity("2꼬집")
+                .build();
+
+        RecipeDto.Ingredient ingredient2 = RecipeDto.Ingredient.builder()
+                .name("대파")
+                .quantity("10g")
+                .build();
+
+        List<RecipeDto.Ingredient> ingredients = new ArrayList<>();
+        ingredients.add(ingredient1);
+        ingredients.add(ingredient2);
+
+
+        RecipeDto.Post requestBody = new RecipeDto.Post("라면 맛있게 끓이는 법","https://seb52bucket.s3.ap-northeast-2.amazonaws.com/images/ffc76307-6043-437d-944f-ebc2bd2e0359.jpeg",1,"5분", stepList, ingredients);
 
 
         Member member = memberRepository.findByEmail("test@email.com").get();
@@ -128,13 +143,14 @@ class RecipeControllerTest {
                 LocalDateTime.now(),
                 LocalDateTime.now(),
                 "https://seb52bucket.s3.ap-northeast-2.amazonaws.com/images/ffc76307-6043-437d-944f-ebc2bd2e0359.jpeg",
+                ingredients,
                 stepList,
                 member
         );
         System.out.println("response.getSteps().size() = " + response.getSteps().size());
 
         given(recipeMapper.recipePostToRecipe(any())).willReturn(new Recipe());
-        given(recipeService.createRecipe(any(), anyList(), anyLong(), anyList())).willReturn(new Recipe());
+        given(recipeService.createRecipe(any(), anyList(), anyLong(), anyList(), anyList())).willReturn(new Recipe());
         given(recipeMapper.recipeToRecipeResponse(Mockito.any(Recipe.class))).willReturn(response);
         String requestToJson = objectMapper.writeValueAsString(requestBody);
 
@@ -161,6 +177,9 @@ class RecipeControllerTest {
                                         fieldWithPath("createdAt").type(JsonFieldType.STRING).description("레시피 생성일"),
                                         fieldWithPath("lastModifiedAt").type(JsonFieldType.STRING).description("레시피 수정일"),
                                         fieldWithPath("imagePath").type(JsonFieldType.STRING).description("레시피 대표 이미지"),
+                                        fieldWithPath("ingredients").type(JsonFieldType.ARRAY).description("요리 재료"),
+                                        fieldWithPath("ingredients.[].name").type(JsonFieldType.STRING).description("요리 재료 이름"),
+                                        fieldWithPath("ingredients.[].quantity").type(JsonFieldType.STRING).description("요리 재료 수량"),
                                         fieldWithPath("steps").type(JsonFieldType.ARRAY).description("요리 단계"),
                                         fieldWithPath("steps.[].sequence").type(JsonFieldType.NUMBER).description("요리 단계 순서"),
                                         fieldWithPath("steps.[].content").type(JsonFieldType.STRING).description("각 단계별 내용"),
@@ -199,7 +218,21 @@ class RecipeControllerTest {
                 .build();
         stepList.add(step3);
 
-        RecipeDto.Post requestBody = new RecipeDto.Post("라면 맛있게 끓이는 법","https://seb52bucket.s3.ap-northeast-2.amazonaws.com/images/ffc76307-6043-437d-944f-ebc2bd2e0359.jpeg",1,"5분", stepList);
+        RecipeDto.Ingredient ingredient1 = RecipeDto.Ingredient.builder()
+                .name("고추가루")
+                .quantity("2꼬집")
+                .build();
+
+        RecipeDto.Ingredient ingredient2 = RecipeDto.Ingredient.builder()
+                .name("대파")
+                .quantity("10g")
+                .build();
+
+        List<RecipeDto.Ingredient> ingredients = new ArrayList<>();
+        ingredients.add(ingredient1);
+        ingredients.add(ingredient2);
+
+        RecipeDto.Post requestBody = new RecipeDto.Post("라면 맛있게 끓이는 법","https://seb52bucket.s3.ap-northeast-2.amazonaws.com/images/ffc76307-6043-437d-944f-ebc2bd2e0359.jpeg",1,"5분", stepList,ingredients);
         String requestToJson = objectMapper.writeValueAsString(requestBody);
         MockMultipartFile json = new MockMultipartFile("requestBody","jsonData","application/json", requestToJson.getBytes(StandardCharsets.UTF_8));
 
@@ -219,11 +252,12 @@ class RecipeControllerTest {
                 LocalDateTime.now(),
                 LocalDateTime.now(),
                 "https://seb52bucket.s3.ap-northeast-2.amazonaws.com/images/ffc76307-6043-437d-944f-ebc2bd2e0359.jpeg",
+                ingredients,
                 stepList,
                 member
         );
         given(recipeMapper.recipePatchToRecipe(Mockito.any(RecipeDto.Patch.class))).willReturn(new Recipe());
-        given(recipeService.updateRecipe(any(), anyList(), anyLong(),anyList())).willReturn(new Recipe());
+        given(recipeService.updateRecipe(any(), anyList(), anyLong(),anyList(), anyList())).willReturn(new Recipe());
         given(recipeMapper.recipeToRecipeResponse(Mockito.any(Recipe.class))).willReturn(response);
 
         MockMultipartHttpServletRequestBuilder builder =
@@ -257,6 +291,9 @@ class RecipeControllerTest {
                                         fieldWithPath("createdAt").type(JsonFieldType.STRING).description("레시피 생성일"),
                                         fieldWithPath("lastModifiedAt").type(JsonFieldType.STRING).description("레시피 수정일"),
                                         fieldWithPath("imagePath").type(JsonFieldType.STRING).description("레시피 대표 이미지"),
+                                        fieldWithPath("ingredients").type(JsonFieldType.ARRAY).description("요리 재료"),
+                                        fieldWithPath("ingredients.[].name").type(JsonFieldType.STRING).description("요리 재료 이름"),
+                                        fieldWithPath("ingredients.[].quantity").type(JsonFieldType.STRING).description("요리 재료 수량"),
                                         fieldWithPath("steps").type(JsonFieldType.ARRAY).description("요리 단계"),
                                         fieldWithPath("steps.[].sequence").type(JsonFieldType.NUMBER).description("요리 단계 순서"),
                                         fieldWithPath("steps.[].content").type(JsonFieldType.STRING).description("각 단계별 내용"),

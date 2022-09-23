@@ -1,6 +1,7 @@
 package com.seb39.myfridge.recipe.entity;
 
 import com.seb39.myfridge.helper.BaseTimeEntity;
+import com.seb39.myfridge.ingredient.entity.RecipeIngredient;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.step.entity.Step;
 import lombok.Getter;
@@ -49,8 +50,6 @@ public class Recipe extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-
-    /**
-     * 1. RecipeIngredients 엔티티와 연동 필요
-     */
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+    private List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 }
