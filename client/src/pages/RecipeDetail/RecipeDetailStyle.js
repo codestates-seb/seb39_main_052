@@ -40,7 +40,7 @@ export const HeadLeftTop = styled.div`
 `
 
 export const Heading = styled.h1`
-    margin: 0 0 0 0;
+    margin: 0 0 0 0
 `
 
 export const HeadLeftBottom = styled.div`

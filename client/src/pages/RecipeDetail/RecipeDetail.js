@@ -9,7 +9,7 @@ import LikeHeart from "../../components/common/LikeHeart/LikeHeart";
 
 const RecipeDetail = () => {
     const { id } = useParams();
-    console.log(id);
+    // console.log(id);
 
     const dummyData = {
         id: 1,
@@ -20,6 +20,7 @@ const RecipeDetail = () => {
         imagePath: "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
         portion: "1",
         time: "240",
+        likes: 100,
         ingredients: [{
           sequence: 1,
           food: "",
@@ -43,11 +44,11 @@ const RecipeDetail = () => {
     }
 
     useEffect(()=> {
-        console.log(`hi`)
+        // console.log(`hi`)
         axios
             .get(`/api/recipes/${id}`)
             .then((response) => {
-                console.log(response.status);
+                // console.log(response.status);
                 console.log(response.data);
             })
             .catch((e) => console.log(e.response));
@@ -63,7 +64,7 @@ const RecipeDetail = () => {
                 <HeadLeft>
                     <HeadLeftTop>
                         <Heading>{dummyData.title}</Heading>
-                        <LikeHeart />
+                        <LikeHeart likes={dummyData.likes} />
                     </HeadLeftTop>
                     <HeadLeftBottom>
                         <Info>

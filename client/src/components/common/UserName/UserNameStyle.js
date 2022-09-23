@@ -10,20 +10,29 @@ export const Wrapper = styled.div`
     font-size: 12px;
     
     &.large {
+        > img {
+            width: 24px;
+            height: 24px;
+        }
         font-size: 14px;
+    }
+    // 레시피 카드같은 작은 요소에서는 길이를 넘어가면 ...이 보이게 하기
+    :not(.large) {
+        > div {
+            width: 100px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
     }
 `
 
 export const Image = styled.img`
-    width: 24px;
-    height: 24px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
-    margin-bottom: 0px;
 `
 
 export const Name = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
     margin: 0 0 0 8px;
 `
