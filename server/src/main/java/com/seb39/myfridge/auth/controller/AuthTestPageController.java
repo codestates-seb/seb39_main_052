@@ -1,6 +1,7 @@
 package com.seb39.myfridge.auth.controller;
 
 import com.seb39.myfridge.auth.PrincipalDetails;
+import com.seb39.myfridge.auth.annotation.AuthMemberId;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -18,8 +19,7 @@ public class AuthTestPageController {
     @GetMapping("/api/authtest")
     @ResponseBody
     @Secured("ROLE_USER")
-    public String authTest(@AuthenticationPrincipal PrincipalDetails principal){
-        return principal.getMemberId() + " / " + principal.getUsername();
+    public String authTest(@AuthMemberId Long memberId){
+        return ""+memberId;
     }
-
 }

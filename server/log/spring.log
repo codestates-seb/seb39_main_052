@@ -159,3 +159,6 @@
 2022-09-23 00:22:47.374  INFO 29316 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 80 (http) with context path ''
 2022-09-23 00:22:47.382  INFO 29316 --- [restartedMain] com.seb39.myfridge.MyfridgeApplication   : Started MyfridgeApplication in 2.124 seconds (JVM running for 26754.617)
 2022-09-23 00:22:47.387  INFO 29316 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2022-09-23 00:40:34.646  INFO 29316 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-09-23 00:40:34.647  INFO 29316 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-47 - Shutdown initiated...
+2022-09-23 00:40:34.649  INFO 29316 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-47 - Shutdown completed.
