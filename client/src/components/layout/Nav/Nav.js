@@ -1,10 +1,12 @@
-import { Link } from 'react-router-dom'
-import { NavWrapper } from './NavStyles';
+import { Link } from "react-router-dom";
+import LogOut from "../DropDown/LogOut";
+import { NavWrapper } from "./NavStyles";
 
 const Nav = () => {
     return (
         <NavWrapper>
             <Link to="/">Home</Link>
+            <LogOut></LogOut>
             <Link to="/login">로그인</Link>
             <Link to="/signup">회원가입</Link>
             <Link to="/search">냉장고 파먹기</Link>
