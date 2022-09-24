@@ -42,8 +42,8 @@ const Gnb = () => {
 
   const clickModal = () => {
     setShowModal(!showModal);
-    console.log("showModal 상태?", showModal);
   };
+  // console.log("showModal 상태?", showModal);
 
   return (
     <Header>

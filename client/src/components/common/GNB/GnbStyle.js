@@ -10,6 +10,11 @@ export const Header = styled.header`
   justify-content: center; */
   position: sticky;
   top: 0;
+
+  /* media query 예시. theme.js에서 정의한 theme을 props로 받아서 mobile 사이즈 가져온다 */
+  @media ${({ theme }) => theme.device.mobile} {
+    color: pink;
+  }
 `;
 export const Nav = styled.nav`
   display: flex;
