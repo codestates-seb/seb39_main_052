@@ -17,6 +17,7 @@ export const Order = styled.label`
 export const Input = styled.input`
     margin: 0 10px 0 0;
     border-radius: 5px;
+
     // className에 사이즈 설정하면 input 크기 지정 가능
      &.small {
         height: 40px;
@@ -34,6 +35,18 @@ export const Input = styled.input`
         width: 300px;
         padding:4px 10px 0 10px;
      }
+     &.gray {
+        background: var(--gray-200);
+     }
+     &.red {
+        background: var(--red-100);
+     }
+     &.green {
+        background: var(--green-200);
+     }
+     &.yellow {
+        background: var(--primary-100);
+     }
 `;
 
 export const ButtonWrapper = styled.div`
@@ -42,7 +55,7 @@ export const ButtonWrapper = styled.div`
 `;
 
 export const Button = styled.button`
-    background-color: var(--white);
+    background-color: inherit;
     
 `
 

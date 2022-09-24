@@ -7,6 +7,7 @@ import counterSlice from "./features/counterSlice"; // store에 slice 연결 방
 import recipeSlice from "./features/recipeSlice";
 import imageSlice from "./features/imageSlice";
 import userSlice from "./features/userSlice";
+import fridgeSlice from "./features/fridgeSlice";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     recipe: recipeSlice.reducer,
     images: imageSlice.reducer,
     user: userSlice.reducer,
+    fridge: fridgeSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -20,7 +20,7 @@ const RecipeEditor = ({ editMode }) => {
     const [isStepsEmpty, setIsStepsEmpty] = useState(true);
     const [isSubmitClicked, setIsSubmitClicked] = useState(false);
 
-    const titlesArr = ["food", "amount"]; //재료 입력에서 각 column의 키값 배열
+    const titlesArr = ["name", "amount"]; //재료 입력에서 각 column의 키값 배열
     const placeholders = ["예) 감자", "예) 100g"];
     const portionOptions = Array.from({length: 10}, (_, i) => i + 1); //인분 선택 dropdown
 
@@ -61,7 +61,7 @@ const RecipeEditor = ({ editMode }) => {
 
     // 재료 유효성 경고 창 뜬 후 재작성 했을 때 유효하다면 경고창 없애기 
     useEffect(() => {
-        if (recipe.ingredients[0].food.length > 0) {
+        if (recipe.ingredients[0].name.length > 0) {
             recipe.ingredients[0].amount.length > 0
                 ? setIsIngrEmpty(false)
                 : setIsIngrEmpty(true);
@@ -94,7 +94,7 @@ const RecipeEditor = ({ editMode }) => {
         // 필수 데이터 유효성 검사
         recipe.title.length > 0 ? setIsTitleEmpty(false) : setIsTitleEmpty(true);
         recipe.time.length > 0 ? setIsTimeEmpty(false) : setIsTimeEmpty(true);
-        recipe.ingredients[0].food.length > 0 && recipe.ingredients[0].amount.length > 0 
+        recipe.ingredients[0].name.length > 0 && recipe.ingredients[0].amount.length > 0 
             ? setIsIngrEmpty(false) 
             : setIsIngrEmpty(true);
         recipe.steps[0].content.length > 0 ? setIsStepsEmpty(false) : setIsStepsEmpty(true);

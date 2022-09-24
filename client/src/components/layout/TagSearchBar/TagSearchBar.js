@@ -21,7 +21,7 @@ const TagSearchBar = () => {
     // const dummyData = ["순두부", "감자"]
     const dummyData = ["순두부", "감자", "미역", "간장", "계란", "밥", "돼지고기", "칼국수면", "고구마", "김치", "닭고기", "소고기", "두부"]
 
-    console.log(searchValue);
+    // console.log(searchValue);
     // 드랍다운에서 위치 바뀌면 검색 값 변경 + 스크롤이 드롭다운 내 선택된 요소를 따라가게 하기
     useEffect(() => {
         if (isDropDownOpen) {

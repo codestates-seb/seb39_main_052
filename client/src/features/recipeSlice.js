@@ -1,4 +1,4 @@
-// 작성한/수정할 레시피 정보를 저장하는 slice
+// 작성한/수정할 레시피 상태를 저장하는 slice
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -12,7 +12,7 @@ const initialState = {
     time: "",
     ingredients: [{
       sequence: 1,
-      food: "",
+      name: "",
       amount: ""
     }],
     steps: [{
@@ -41,7 +41,7 @@ const recipeSlice = createSlice({
       addIngrInput: (state, action) => {
         state.ingredients = [...state.ingredients, {
           sequence: action.payload.index+2,
-          food: initialState.ingredients[0].food,
+          name: initialState.ingredients[0].name,
           amount: initialState.ingredients[0].amount
         }];
       },

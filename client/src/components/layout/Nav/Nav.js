@@ -13,6 +13,7 @@ const Nav = () => {
             <Link to="/recipes/new">새 레시피 작성하기</Link>
             <Link to="/recipes/edit">레시피 수정하기</Link>
             <Link to="/recipes/1">레시피 상세보기</Link>
+            <Link to="/myfridge">나의 냉장고</Link>
         </NavWrapper>
     )
 };
