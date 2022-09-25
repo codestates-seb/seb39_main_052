@@ -4,12 +4,18 @@ import { faXmark, faCheck } from "@fortawesome/free-solid-svg-icons";
 import blankImage from "../../../assets/blankImage.webp";
 import UserName from "../../common/UserName/UserName";
 import GeneralButton from "../../common/Button/GeneralButton";
+import Pagination from "../../common/Pagination/Pagination";
 import useConfirm from "../../../hooks/useConfirm";
 import { useState } from "react";
 
 const Comments = () => {
     const [comment, setComment] = useState("");
     const recipeId = 1;
+
+    const [limit, setLimit] = useState(10); // 한 페이지당 댓글 수
+    const [page, setPage] = useState(1);
+    const total = 60 //추후 서버에서 받아올 예정
+    console.log("페이지", page);
 
     const dummy = {
         id: 1,
@@ -108,6 +114,12 @@ const Comments = () => {
                     <StyledFontAwesomeIcon icon={faCheck} />
                 </GeneralButton>
             </CommentRow>
+            <Pagination
+                total={total}
+                limit={limit}
+                page={page}
+                setPage={setPage}
+            />
         </Container>
     )
 };
