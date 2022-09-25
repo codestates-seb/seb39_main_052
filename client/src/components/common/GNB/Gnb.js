@@ -24,7 +24,9 @@ import DropDownMenu from "../../layout/DropDown/DropDownMenu";
 import { useSelector, useDispatch } from "react-redux";
 
 import { useState } from "react";
-import RecipeSearchModal from "../../layout/Modal/RecipeSearchModal";
+import RecipeSearchModal from "../../layout/Modal/RecipeSearchModal"; //모달 컴포넌트 만들기 이전 레시피 서치 모달
+import SearchModal from "../../layout/Modal/SearchModal"; //컴포넌트로 만든 이후의 서치 모달
+import GeneralModal from "../../layout/Modal/GeneralModal";
 
 const Gnb = () => {
   //로그인 상태 가져와서 변수에 저장
@@ -52,7 +54,7 @@ const Gnb = () => {
   const handleToggle = () => {
     setIsToggleOpen(!isToggleOpen);
   };
-  console.log("isToggleOpen상태", isToggleOpen);
+  // console.log("isToggleOpen상태", isToggleOpen);
 
   return (
     <Header>
@@ -91,13 +93,16 @@ const Gnb = () => {
                 icon={faMagnifyingGlass}
                 size="lg"
               ></FontAwesomeIcon>
-              {showModal && (
+              {/* {showModal && (
                 <RecipeSearchModal
                   // handleClose={() => {
                   //   setShowModal(false);
                   // }} //이렇게 상태관리하면 모달 안닫힘
                   handleClose={clickModal}
                 ></RecipeSearchModal>
+              )}  //모달 컴포넌트화 이전 코드*/}
+              {showModal && (
+                <SearchModal handleClose={clickModal}></SearchModal>
               )}
             </Li>
           </Ul>

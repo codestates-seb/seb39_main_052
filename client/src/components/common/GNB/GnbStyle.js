@@ -17,10 +17,15 @@ export const Header = styled.header`
     max-height: 88px;
   }
 `;
+
+//박스 담고있는 전체 박스
 export const Nav = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  @media ${({ theme }) => theme.device.mobile} {
+    max-height: 56px;
+  }
 `;
 
 //냉장고 파먹기, 나의 냉장고 담고있는 박스 . 미디어 쿼리시 navBar아래에 위치
@@ -49,7 +54,7 @@ export const LeftBoxForMobile = styled.div`
     &.menuToggle {
       display: block; /*모바일 화면에서는 메뉴 토글 보여주기*/
       :hover {
-        color: white;
+        color: var(--fridge-500);
       }
     }
   }
