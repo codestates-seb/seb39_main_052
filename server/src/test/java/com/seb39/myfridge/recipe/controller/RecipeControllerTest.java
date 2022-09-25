@@ -1,6 +1,7 @@
 package com.seb39.myfridge.recipe.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.seb39.myfridge.image.entity.Image;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.repository.MemberRepository;
 import com.seb39.myfridge.recipe.dto.RecipeDto;
@@ -92,6 +93,9 @@ class RecipeControllerTest {
         //given
         List<RecipeDto.Step> stepList = new ArrayList<>();
 
+        Image inputImage = new Image();
+        inputImage.setImagePath("src/test/resources/image/puppy.jpeg");
+
         MockMultipartFile image = new MockMultipartFile("files","추가하고 싶은 이미지","image/png", new FileInputStream("src/test/resources/image/puppy.jpeg"));
 
         RecipeDto.Step step1 = RecipeDto.Step.builder()
@@ -130,7 +134,7 @@ class RecipeControllerTest {
         ingredients.add(ingredient2);
 
 
-        RecipeDto.Post requestBody = new RecipeDto.Post("라면 맛있게 끓이는 법","https://seb52bucket.s3.ap-northeast-2.amazonaws.com/images/ffc76307-6043-437d-944f-ebc2bd2e0359.jpeg",1,"5분", stepList, ingredients);
+        RecipeDto.Post requestBody = new RecipeDto.Post("라면 맛있게 끓이는 법",1,"5분", stepList, ingredients,inputImage);
 
 
         Member member = memberRepository.findByEmail("test@email.com").get();
@@ -142,10 +146,10 @@ class RecipeControllerTest {
                 "5분",
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                "https://seb52bucket.s3.ap-northeast-2.amazonaws.com/images/ffc76307-6043-437d-944f-ebc2bd2e0359.jpeg",
                 ingredients,
                 stepList,
-                member
+                member,
+                inputImage
         );
         System.out.println("response.getSteps().size() = " + response.getSteps().size());
 
@@ -196,6 +200,8 @@ class RecipeControllerTest {
         List<RecipeDto.Step> stepList = new ArrayList<>();
 
         MockMultipartFile image = new MockMultipartFile("files","추가하고 싶은 이미지","image/png", new FileInputStream("src/test/resources/image/puppy.jpeg"));
+        Image inputImage = new Image();
+        inputImage.setImagePath("src/test/resources/image/puppy.jpeg");
 
 
         RecipeDto.Step step1 = RecipeDto.Step.builder()
@@ -233,7 +239,7 @@ class RecipeControllerTest {
         ingredients.add(ingredient1);
         ingredients.add(ingredient2);
 
-        RecipeDto.Post requestBody = new RecipeDto.Post("라면 맛있게 끓이는 법","https://seb52bucket.s3.ap-northeast-2.amazonaws.com/images/ffc76307-6043-437d-944f-ebc2bd2e0359.jpeg",1,"5분", stepList,ingredients);
+        RecipeDto.Post requestBody = new RecipeDto.Post("라면 맛있게 끓이는 법",1,"5분", stepList,ingredients,inputImage);
         String requestToJson = objectMapper.writeValueAsString(requestBody);
         MockMultipartFile json = new MockMultipartFile("requestBody","jsonData","application/json", requestToJson.getBytes(StandardCharsets.UTF_8));
 
@@ -252,10 +258,11 @@ class RecipeControllerTest {
                 "5분",
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                "https://seb52bucket.s3.ap-northeast-2.amazonaws.com/images/ffc76307-6043-437d-944f-ebc2bd2e0359.jpeg",
+//                "https://seb52bucket.s3.ap-northeast-2.amazonaws.com/images/ffc76307-6043-437d-944f-ebc2bd2e0359.jpeg",
                 ingredients,
                 stepList,
-                member
+                member,
+                inputImage
         );
         given(recipeMapper.recipePatchToRecipe(Mockito.any(RecipeDto.Patch.class))).willReturn(new Recipe());
         given(recipeService.updateRecipe(any(), anyList(), anyLong(),anyList(), anyList())).willReturn(new Recipe());

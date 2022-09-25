@@ -1,5 +1,6 @@
 package com.seb39.myfridge.recipe.dto;
 
+import com.seb39.myfridge.image.entity.Image;
 import com.seb39.myfridge.ingredient.entity.RecipeIngredient;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.step.entity.Step;
@@ -13,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 public class RecipeDto {
+
+    //Recipe Post, Response Image 정보 들어갈 수 있도록 모두 수정해야 함
 
     @Getter
     public static class Post{
@@ -30,9 +33,9 @@ public class RecipeDto {
         private List<Step> steps;
 
         @Builder
-        public Post(String title, String imagePath, int portion, String time, List<Step> steps, List<Ingredient> ingredients) {
+        public Post(String title, int portion, String time, List<Step> steps, List<Ingredient> ingredients, Image image) {
             this.title = title;
-            this.imagePath = imagePath;
+            this.imagePath = image.getImagePath();
             this.portion = portion;
             this.time = time;
             this.ingredients = ingredients;
@@ -109,6 +112,7 @@ public class RecipeDto {
         private String time;
         private LocalDateTime createdAt;
         private LocalDateTime lastModifiedAt;
+        private List<String> imageInfo;
         private String imagePath;
         private List<Ingredient> ingredients;
         private List<Step> steps;
@@ -116,14 +120,14 @@ public class RecipeDto {
         private String memberName;
 
         @Builder
-        public Response(Long id, String title, int portion, String time, LocalDateTime createdAt, LocalDateTime lastModifiedAt, String imagePath,List<Ingredient> ingredients ,List<Step> steps, Member member) {
+        public Response(Long id, String title, int portion, String time, LocalDateTime createdAt, LocalDateTime lastModifiedAt, List<Ingredient> ingredients , List<Step> steps, Member member, Image image) {
             this.id = id;
             this.title = title;
             this.portion = portion;
             this.time = time;
             this.createdAt = createdAt;
             this.lastModifiedAt = lastModifiedAt;
-            this.imagePath = imagePath;
+            this.imagePath = image.getImagePath();
             this.ingredients = ingredients;
             this.steps = steps;
             this.memberId = member.getId();

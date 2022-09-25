@@ -1,5 +1,6 @@
 package com.seb39.myfridge.step.entity;
 
+import com.seb39.myfridge.image.entity.Image;
 import com.seb39.myfridge.recipe.entity.Recipe;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,7 @@ public class Step {
     @Lob
     private String content;
 
-    private String imagePath;
+//    private String imagePath;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id")
@@ -45,7 +46,12 @@ public class Step {
                 "id=" + id +
                 ", sequence=" + sequence +
                 ", content='" + content + '\'' +
-                ", imagePath='" + imagePath + '\'' +
                 '}';
     }
+
+    /**
+     * image
+     */
+    @OneToOne(mappedBy = "step")
+    private Image image;
 }

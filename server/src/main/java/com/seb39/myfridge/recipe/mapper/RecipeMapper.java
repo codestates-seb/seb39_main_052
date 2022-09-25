@@ -24,7 +24,7 @@ public interface RecipeMapper {
             Step step1 = new Step();
             step1.setContent(step.getContent());
             step1.setSequence(step.getSequence());
-            step1.setImagePath(step.getImagePath());
+//            step1.setImagePath(step.getImagePath());
 
             stepList.add(step1);
         }
@@ -54,7 +54,8 @@ public interface RecipeMapper {
                 .title(recipe.getTitle())
                .portion(recipe.getPortion())
                .time(recipe.getTime())
-                .imagePath(recipe.getImagePath())
+//                .imagePath(recipe.getImagePath())
+               .image(recipe.getImage())
                .ingredients(ingredientsToDto(recipe.getRecipeIngredients()))
                 .steps(stepsToDto(recipe.getSteps()))
                 .member(recipe.getMember())
@@ -68,7 +69,7 @@ public interface RecipeMapper {
     default Recipe recipePostToRecipe(RecipeDto.Post requestBody) {
         Recipe recipe = new Recipe();
         recipe.setTitle(requestBody.getTitle());
-        recipe.setImagePath(requestBody.getImagePath());
+//        recipe.setImagePath(requestBody.getImagePath());
         recipe.setPortion(requestBody.getPortion());
         recipe.setTime(requestBody.getTime());
 
@@ -99,7 +100,7 @@ public interface RecipeMapper {
     default RecipeDto.Step stepToDto(Step step) {
         return RecipeDto.Step.builder()
                 .content(step.getContent())
-                .imagePath(step.getImagePath())
+//                .imagePath(step.getImagePath())
                 .sequence(step.getSequence())
                 .build();
 

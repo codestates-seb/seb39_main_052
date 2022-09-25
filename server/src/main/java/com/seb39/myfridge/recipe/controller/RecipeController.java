@@ -78,4 +78,25 @@ public class RecipeController {
         RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(recipe);
         return new ResponseEntity(response, HttpStatus.OK);
     }
+
+    /**
+     * image
+     */
+
+    @PostMapping(value = "/image", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity postRecipeImage(@Valid @RequestPart RecipeDto.Post requestBody,
+                                     @RequestPart List<MultipartFile> files,
+                                     @AuthMemberId Long memberId) {
+        //1. 이미지 관련 exception 처리 필요
+
+        List<RecipeIngredient> recipeIngredients = recipeMapper.ingredientsDtoToIngredients(requestBody.getIngredients());
+
+        List<Step> stepList = recipeMapper.recipeDtoStepsToStepList(requestBody.getSteps());
+        Recipe recipe = recipeMapper.recipePostToRecipe(requestBody);
+
+        Recipe savedRecipe = recipeService.createRecipeImage(recipe, stepList, memberId, files, recipeIngredients);
+        RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(savedRecipe);
+
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
 }

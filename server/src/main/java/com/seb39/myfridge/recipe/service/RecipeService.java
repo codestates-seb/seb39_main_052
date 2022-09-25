@@ -1,8 +1,8 @@
 package com.seb39.myfridge.recipe.service;
 
+import com.seb39.myfridge.image.entity.Image;
 import com.seb39.myfridge.ingredient.Repository.IngredientRepository;
 import com.seb39.myfridge.ingredient.Repository.RecipeIngredientRepository;
-import com.seb39.myfridge.ingredient.entity.Ingredient;
 import com.seb39.myfridge.ingredient.entity.RecipeIngredient;
 import com.seb39.myfridge.ingredient.service.IngredientService;
 import com.seb39.myfridge.member.entity.Member;
@@ -11,7 +11,7 @@ import com.seb39.myfridge.recipe.entity.Recipe;
 import com.seb39.myfridge.recipe.repository.RecipeRepository;
 import com.seb39.myfridge.step.entity.Step;
 import com.seb39.myfridge.step.repository.StepRepository;
-import com.seb39.myfridge.upload.FileUploadService;
+import com.seb39.myfridge.image.upload.FileUploadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +19,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -37,11 +36,6 @@ public class RecipeService {
     private final IngredientService ingredientService;
 
 
-
-
-    /**
-     * ingredient
-     */
     @Transactional
     public Recipe createRecipe(Recipe recipe, List<Step> steps, Long memberId, List<MultipartFile> files, List<RecipeIngredient> recipeIngredients) {
         Member member = memberService.findById(memberId);
@@ -49,7 +43,7 @@ public class RecipeService {
 
         ingredientService.createIngredient(recipe, recipeIngredients);
 
-        createImage(recipe, files, steps);
+//        createImage(recipe, files, steps);
         System.out.println("recipe.getRecipeIngredients().size() = " + recipe.getRecipeIngredients().size());
         Recipe savedRecipe = recipeRepository.save(recipe);
         steps.forEach(step -> step.addRecipe(recipe));
@@ -72,7 +66,7 @@ public class RecipeService {
 //        deleteImage(findRecipe);
         findRecipe.getSteps().clear();
         //2. 이미지 재업로드
-        createImage(findRecipe, files, steps);
+//        createImage(findRecipe, files, steps);
 
         //update를 하면 기존의 step이 중복으로 들어가는 문제 발생 -> update를 하기 이전에, step을 삭제(더 좋은 방법이 있을까?)
         stepRepository.deleteStepByRecipeId(findRecipe.getId());
@@ -81,18 +75,40 @@ public class RecipeService {
         return updateRecipe;
     }
 
+
     @Transactional
     public void deleteRecipe(long id, long memberId) {
         Recipe findRecipe = findRecipeById(id);
         verifyWriter(findRecipe, memberId);
         //s3 버킷에서 해당 레시피에 관련된 이미지 삭제
-        deleteImage(findRecipe);
+//        deleteImage(findRecipe);
         recipeRepository.delete(findRecipe);
     }
 
 
+    /**
+     * Image
+     */
+    @Transactional
+    public Recipe createRecipeImage(Recipe recipe, List<Step> steps, Long memberId, List<MultipartFile> files, List<RecipeIngredient> recipeIngredients) {
+        Member member = memberService.findById(memberId);
+        recipe.setMember(member);
+
+        ingredientService.createIngredient(recipe, recipeIngredients);
+
+
+        //recipe 이미지 지정
+        fileUploadService.uploadImages(recipe, steps, files);
+
+//        createImage(recipe, files, steps);
+        Recipe savedRecipe = recipeRepository.save(recipe);
+        steps.forEach(step -> step.addRecipe(recipe));
+        return savedRecipe;
+    }
+
+
     //이미지 생성 메서드
-    private void createImage(Recipe findRecipe, List<MultipartFile> files, List<Step> steps) {
+   /* private void createImage(Recipe findRecipe, List<MultipartFile> files, List<Step> steps) {
         if (!CollectionUtils.isEmpty(files)) {
             if (findRecipe.getImagePath() == null) {
                 findRecipe.setImagePath(fileUploadService.uploadImage(files.get(0)));
@@ -117,7 +133,7 @@ public class RecipeService {
                 fileUploadService.deleteImage(step.getImagePath());
             }
         }
-    }
+    }*/
 
     public Recipe findRecipeById(Long recipeId) {
         Optional<Recipe> optionalRecipe = recipeRepository.findById(recipeId);

@@ -1,4 +1,4 @@
-package com.seb39.myfridge.upload;
+package com.seb39.myfridge.image.upload;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
 
