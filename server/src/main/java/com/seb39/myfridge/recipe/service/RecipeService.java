@@ -36,12 +36,6 @@ public class RecipeService {
     private final RecipeIngredientRepository recipeIngredientRepository;
     private final IngredientService ingredientService;
 
-
-
-
-    /**
-     * ingredient
-     */
     @Transactional
     public Recipe createRecipe(Recipe recipe, List<Step> steps, Long memberId, List<MultipartFile> files, List<RecipeIngredient> recipeIngredients) {
         Member member = memberService.findById(memberId);
@@ -50,7 +44,6 @@ public class RecipeService {
         ingredientService.createIngredient(recipe, recipeIngredients);
 
         createImage(recipe, files, steps);
-        System.out.println("recipe.getRecipeIngredients().size() = " + recipe.getRecipeIngredients().size());
         Recipe savedRecipe = recipeRepository.save(recipe);
         steps.forEach(step -> step.addRecipe(recipe));
         return savedRecipe;
