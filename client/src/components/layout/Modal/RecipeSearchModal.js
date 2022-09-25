@@ -80,7 +80,7 @@ const RecipeSearchModal = ({ handleClose }) => {
   ];
 
   return createPortal(
-    <Overlay onClick={(e) => e.stopPropagation()}>
+    <Overlay>
       <ModalContainer onClick={(e) => e.stopPropagation()}>
         {" "}
         {/* stopPropagation 안쓰면 이벤트 버블링으로 엑스버튼말고도 화면 모두 누르면 닫힘 */}
