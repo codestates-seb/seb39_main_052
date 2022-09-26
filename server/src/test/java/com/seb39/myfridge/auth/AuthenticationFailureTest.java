@@ -3,11 +3,12 @@ package com.seb39.myfridge.auth;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.seb39.myfridge.auth.domain.AuthenticationToken;
 import com.seb39.myfridge.auth.dto.LoginRequest;
 import com.seb39.myfridge.auth.enums.AppAuthExceptionCode;
 import com.seb39.myfridge.auth.enums.JwtTokenType;
-import com.seb39.myfridge.auth.service.JwtProvider;
-import com.seb39.myfridge.auth.service.JwtService;
+import com.seb39.myfridge.auth.service.AuthenticationTokenProvider;
+import com.seb39.myfridge.auth.service.AuthenticationTokenService;
 import com.seb39.myfridge.auth.util.CookieUtil;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.service.MemberService;
@@ -18,7 +19,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -55,9 +55,9 @@ public class AuthenticationFailureTest {
     @Autowired
     MemberService memberService;
     @Autowired
-    JwtService jwtService;
+    AuthenticationTokenService authenticationTokenService;
     @Autowired
-    JwtProvider jwtProvider;
+    AuthenticationTokenProvider jwtProvider;
     @Value("${app.auth.jwt.secret}")
     private String secret;
 
@@ -163,7 +163,8 @@ public class AuthenticationFailureTest {
         memberService.signUpGeneral(member);
         String expiredAccessToken = createExpiredAccessToken(member.getId());
         String expiredRefreshToken = createExpiredRefreshToken();
-        ReflectionTestUtils.invokeMethod(jwtService,"saveToken",expiredRefreshToken,expiredAccessToken);
+        AuthenticationToken token = new AuthenticationToken(expiredAccessToken, expiredRefreshToken);
+        ReflectionTestUtils.invokeMethod(authenticationTokenService,"saveToken",token);
         Cookie refreshTokenCookie = CookieUtil.createHttpOnlyCookie(REFRESH_TOKEN,expiredRefreshToken);
 
 

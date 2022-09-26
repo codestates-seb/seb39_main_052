@@ -1,8 +1,10 @@
 package com.seb39.myfridge.auth.controller;
 
+import com.seb39.myfridge.auth.domain.AuthenticationToken;
 import com.seb39.myfridge.auth.dto.AuthResponse;
 import com.seb39.myfridge.auth.dto.SignUpRequest;
-import com.seb39.myfridge.auth.service.JwtService;
+import com.seb39.myfridge.auth.service.AuthenticationTokenService;
+import com.seb39.myfridge.auth.util.AuthenticationTokenUtils;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +22,7 @@ import javax.validation.Valid;
 public class AuthController {
 
     private final MemberService memberService;
-    private final JwtService jwtService;
+    private final AuthenticationTokenService authenticationTokenService;
 
     @PostMapping("/api/signup")
     public ResponseEntity<AuthResponse> signUp(@Valid @RequestBody SignUpRequest signUpRequest){
@@ -31,7 +33,9 @@ public class AuthController {
 
     @PostMapping("/api/auth/refresh")
     public ResponseEntity<AuthResponse> refresh(HttpServletRequest request, HttpServletResponse response){
-        jwtService.refresh(request,response);
+        AuthenticationToken token = AuthenticationTokenUtils.getTokenFromRequest(request);
+        authenticationTokenService.refresh(token);
+        AuthenticationTokenUtils.addTokenInResponse(response,token);
         return ResponseEntity.ok(AuthResponse.success());
     }
 }

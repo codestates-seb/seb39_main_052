@@ -5,7 +5,7 @@ import com.seb39.myfridge.auth.filter.JwtAuthenticationFilter;
 import com.seb39.myfridge.auth.filter.JwtAuthorizationFilter;
 import com.seb39.myfridge.auth.filter.JwtExceptionHandlingFilter;
 import com.seb39.myfridge.auth.handler.*;
-import com.seb39.myfridge.auth.service.JwtService;
+import com.seb39.myfridge.auth.service.AuthenticationTokenService;
 import com.seb39.myfridge.auth.service.OAuth2UserService;
 import com.seb39.myfridge.dto.ErrorResponse;
 import com.seb39.myfridge.member.service.MemberService;
@@ -34,7 +34,7 @@ public class SecurityConfig {
     private final AuthenticationExceptionEntryPoint authenticationExceptionEntryPoint;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
     private final OAuth2UserService oAuth2UserService;
-    private final JwtService jwtService;
+    private final AuthenticationTokenService authenticationTokenService;
     private final JwtLogoutHandler logoutHandler;
     private final ObjectMapper om;
 
@@ -84,11 +84,11 @@ public class SecurityConfig {
         @Override
         public void configure(HttpSecurity builder) throws Exception {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
-            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtService);
+            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, authenticationTokenService);
             jwtAuthenticationFilter.setFilterProcessesUrl("/api/login");
             jwtAuthenticationFilter.setAuthenticationFailureHandler(jwtAuthenticationFailureHandler);
 
-            JwtAuthorizationFilter jwtAuthorizationFilter = new JwtAuthorizationFilter(authenticationManager, memberService, jwtService);
+            JwtAuthorizationFilter jwtAuthorizationFilter = new JwtAuthorizationFilter(authenticationManager, memberService, authenticationTokenService);
             JwtExceptionHandlingFilter jwtExceptionHandlingFilter = new JwtExceptionHandlingFilter(authenticationManager);
             builder
                     .addFilter(jwtAuthenticationFilter)

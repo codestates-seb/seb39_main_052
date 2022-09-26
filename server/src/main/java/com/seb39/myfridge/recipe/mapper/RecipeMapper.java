@@ -23,19 +23,16 @@ public interface RecipeMapper {
             step1.setContent(step.getContent());
             step1.setSequence(step.getSequence());
             step1.setImagePath(step.getImagePath());
-
             stepList.add(step1);
         }
         return stepList;
     }
-
 
     default List<RecipeIngredient> ingredientsDtoToIngredients(List<RecipeDto.Ingredient> ingredients) {
         List<RecipeIngredient> recipeIngredients = new ArrayList<>();
         for (RecipeDto.Ingredient ingredient : ingredients) {
             Ingredient ingredient1 = new Ingredient();
             ingredient1.setName(ingredient.getName());
-
             RecipeIngredient recipeIngredient = new RecipeIngredient();
             recipeIngredient.setQuantity(ingredient.getQuantity());
             recipeIngredient.setIngredient(ingredient1);
@@ -96,15 +93,11 @@ public interface RecipeMapper {
                 .collect(Collectors.toList());
     }
 
-//    RecipeDto.Step stepToDto(Step step);
-
     default RecipeDto.Step stepToDto(Step step) {
         return RecipeDto.Step.builder()
                 .content(step.getContent())
                 .imagePath(step.getImagePath())
                 .sequence(step.getSequence())
                 .build();
-
     }
-
 }

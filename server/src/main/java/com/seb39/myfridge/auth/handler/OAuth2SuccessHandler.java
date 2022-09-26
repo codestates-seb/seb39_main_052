@@ -1,7 +1,8 @@
 package com.seb39.myfridge.auth.handler;
 
 import com.seb39.myfridge.auth.PrincipalDetails;
-import com.seb39.myfridge.auth.service.JwtService;
+import com.seb39.myfridge.auth.domain.AuthenticationToken;
+import com.seb39.myfridge.auth.service.AuthenticationTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -21,7 +22,7 @@ import static com.seb39.myfridge.auth.util.AppAuthNames.*;
 @RequiredArgsConstructor
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private final JwtService jwtService;
+    private final AuthenticationTokenService authenticationTokenService;
 
     @Value("${app.auth.oauth.front-redirect-uri}")
     private String redirectUri;
@@ -30,9 +31,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
         Long memberId = principal.getMemberId();
-        String accessToken = jwtService.issueAccessToken(memberId);
-        jwtService.issueRefreshToken(response,accessToken);
-        getRedirectStrategy().sendRedirect(request,response, createRedirectUri(accessToken,memberId));
+        AuthenticationToken token = authenticationTokenService.issueAuthenticationToken(memberId);
+        getRedirectStrategy().sendRedirect(request,response, createRedirectUri(token.getAccess(),memberId));
     }
 
     private String createRedirectUri(String accessToken, Long memberId){

@@ -1,6 +1,7 @@
 package com.seb39.myfridge.comment.repository;
 
 import com.seb39.myfridge.comment.entity.Comment;
+import com.seb39.myfridge.config.QueryDslConfig;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.repository.MemberRepository;
 import com.seb39.myfridge.recipe.entity.Recipe;
@@ -8,6 +9,7 @@ import com.seb39.myfridge.recipe.repository.RecipeRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -19,6 +21,7 @@ import java.util.List;
 
 @DataJpaTest
 @Transactional
+@Import(QueryDslConfig.class)
 class CommentRepositoryTest {
 
     @Autowired

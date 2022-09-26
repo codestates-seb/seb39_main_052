@@ -1,5 +1,6 @@
 package com.seb39.myfridge.heart.repository;
 
+import com.seb39.myfridge.config.QueryDslConfig;
 import com.seb39.myfridge.heart.entity.Heart;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.repository.MemberRepository;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @Transactional
+@Import(QueryDslConfig.class)
 class HeartRepositoryTest {
     @Autowired
     MemberRepository memberRepository;
