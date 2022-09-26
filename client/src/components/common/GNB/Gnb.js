@@ -40,6 +40,12 @@ const Gnb = () => {
     console.log("userSlice 전체상태?", state.user);
   }); //{isLoggedIn: false, userId: null, userEmail: undefined}
 
+  //로그인한 회원 프로필 사진 redux에서 가져오기
+  const profilePhoto = useSelector((state) => {
+    return state.user.userProfileImgPath;
+  });
+  // console.log("프로필사진 상태?", profilePhoto);
+
   //search bar 모달 상태
   const [showModal, setShowModal] = useState(false);
 
@@ -82,8 +88,8 @@ const Gnb = () => {
                 <Link to="/login">로그인</Link>
               </Li>
             ) : (
-              <Li>
-                <DropDownMenu />
+              <Li className="profile_icon_photo">
+                <DropDownMenu profileIconPhoto={profilePhoto} />
               </Li>
             )}
 

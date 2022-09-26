@@ -73,7 +73,7 @@ export const Img = styled.img`
 
 export const Ul = styled.ul`
   display: flex;
-
+  align-items: center;
   @media ${({ theme }) => theme.device.mobile} {
     &.nav-menu-list {
       justify-content: space-around;
@@ -84,6 +84,12 @@ export const Ul = styled.ul`
 export const Li = styled.li`
   cursor: pointer;
   padding: 0 32px;
+
+  /* &.profile_icon_photo {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+  } //profile icon, photo 감싸고 있는 Li태그에서 이미지 크기 조정하면 안먹음 */
 
   @media ${({ theme }) => theme.device.mobile} {
     &.each-nav-menu-list {

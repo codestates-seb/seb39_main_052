@@ -14,7 +14,7 @@ import {
   Li,
 } from "./DropDownMenuStyle";
 
-const DropDownMenu = () => {
+const DropDownMenu = ({ profileIconPhoto }) => {
   const dropdownRef = useRef(null);
   const [userIsOpen, setUserIsOpen] = useDetectOutsideClick(dropdownRef, false);
   const onClickOpen = () => {
@@ -23,10 +23,14 @@ const DropDownMenu = () => {
   console.log("userIsOpen?", userIsOpen);
 
   return (
-    <DropDownContainer>
+    <DropDownContainer className="dropdown_container">
       <DropDownButton onClick={onClickOpen} ref={dropdownRef}>
-        {/* 유저아이콘 */}
-        <FontAwesomeIcon icon={faUserLarge} size="lg" />
+        {/* GNB에서 받아온 props profileIconPhoto null이면 유저아이콘 보여주고 null이 아니면 프로필 이미지 path 보여주기 */}
+        {profileIconPhoto === null ? (
+          <FontAwesomeIcon icon={faUserLarge} size="lg" />
+        ) : (
+          <img src={profileIconPhoto} />
+        )}
       </DropDownButton>
       <Menu isDropped={userIsOpen}>
         <Ul>
