@@ -30,14 +30,16 @@ public class CommentDto {
     @Setter
     public static class Response{
         private Long memberId;
+        private String memberName;
         private Long recipeId;
         private Long commentId;
         private String content;
         private LocalDateTime createdAt;
 
         @Builder
-        private Response(Long memberId, Long recipeId, Long commentId, String content, LocalDateTime createdAt) {
+        private Response(Long memberId, String memberName, Long recipeId, Long commentId, String content, LocalDateTime createdAt) {
             this.memberId = memberId;
+            this.memberName = memberName;
             this.recipeId = recipeId;
             this.commentId = commentId;
             this.content = content;

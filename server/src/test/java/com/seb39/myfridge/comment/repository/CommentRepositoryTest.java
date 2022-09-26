@@ -5,6 +5,7 @@ import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.repository.MemberRepository;
 import com.seb39.myfridge.recipe.entity.Recipe;
 import com.seb39.myfridge.recipe.repository.RecipeRepository;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
@@ -63,6 +64,35 @@ class CommentRepositoryTest {
         em.clear();
 
         Page<Comment> page = commentRepository.findAllByRecipeWriterId(member1.getId(), PageRequest.of(0, 16, Sort.by("id").descending()));
+        List<Comment> content = page.getContent();
+
+        System.out.println("size = " + content.size());
+        for (Comment comment : content) {
+            System.out.println(comment.getRecipe().getTitle() + " " + comment.getContent());
+        }
+    }
+
+    @Test
+    void findAllByRecipeIdTest() {
+        // given
+        Member member1 = Member.generalBuilder()
+                .name("member1")
+                .buildGeneralMember();
+        memberRepository.save(member1);
+
+        Recipe recipe1 = new Recipe();
+        recipe1.setTitle("Test recipe");
+        recipe1.setMember(member1);
+        recipeRepository.save(recipe1);
+
+        for (int i = 1; i <= 25; i++) {
+            commentRepository.save(Comment.create("comment" + i, member1, recipe1));
+        }
+
+        em.flush();
+        em.clear();
+
+        Page<Comment> page = commentRepository.findAllByRecipeId(recipe1.getId(), PageRequest.of(0, 10, Sort.by("id").descending()));
         List<Comment> content = page.getContent();
 
         System.out.println("size = " + content.size());

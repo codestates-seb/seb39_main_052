@@ -46,7 +46,7 @@ class RecipeRepositoryTest {
     EntityManager em;
 
 
-    // @Test
+    @Test
     void findWithDetailTest() throws Exception {
         // given
         Member member = Member.generalBuilder()
@@ -99,7 +99,7 @@ class RecipeRepositoryTest {
 
         recipeRepository.findWithIngredients(recipe.getId());
         for (RecipeIngredient ri : findRecipe.getRecipeIngredients()) {
-            System.out.println(" ri = " + ri.getQuantity());
+            System.out.println(" ri = " + ri.getIngredient().getName());
         }
     }
 }

@@ -178,6 +178,22 @@ include::{snippets}/recipe-delete/http-request.adoc[]
 .http-response
 include::{snippets}/recipe-delete/http-response.adoc[]
 
+=== 레시지 조회
+***
+ 특정 레시피를 조회하기 위한 API 입니다.
+
+.http-request
+include::{snippets}/recipe-read-detail/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/recipe-read-detail/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/recipe-read-detail/http-response.adoc[]
+
+.response-fields
+include::{snippets}/recipe-read-detail/response-fields.adoc[]
+
 == 댓글 관련 API
 === 댓글 등록
 ***
@@ -236,7 +252,7 @@ include::{snippets}/comment-delete/path-parameters.adoc[]
 include::{snippets}/comment-delete/http-response.adoc[]
 
 === 받은 댓글 리스트 조회
-
+***
  자신이 받은 댓글 리스트를 조회하기 위한 API 입니다.
  자신이 작성한 레시피에 달린 댓글을 최신순으로 조회할 수 있습니다.
  (페이지당 댓글 16개)
@@ -252,6 +268,7 @@ include::{snippets}/comments-received/http-response.adoc[]
 
 .response-fields
 include::{snippets}/comments-received/response-fields.adoc[]
+
 
 == 레시피 하트 관련 API
 === 레시피 하트 추가

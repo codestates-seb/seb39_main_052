@@ -53,11 +53,13 @@ public interface RecipeMapper {
                 .lastModifiedAt(recipe.getLastModifiedAt())
                 .title(recipe.getTitle())
                 .portion(recipe.getPortion())
+                .view(recipe.getView())
                 .time(recipe.getTime())
                 .imagePath(recipe.getImagePath())
                 .ingredients(ingredientsToDto(recipe.getRecipeIngredients()))
                 .steps(stepsToDto(recipe.getSteps()))
                 .member(recipe.getMember())
+                .heartCounts(heartCounts)
                 .build();
     }
 

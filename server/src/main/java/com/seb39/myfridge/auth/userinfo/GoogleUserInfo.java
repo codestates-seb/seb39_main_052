@@ -11,8 +11,6 @@ public class GoogleUserInfo implements OAuth2UserInfo{
     private String profileImagePath;
 
     public GoogleUserInfo(Map<String,Object> attributes) {
-        System.out.println("google attribute " + attributes);
-
         Optional.ofNullable(attributes.get("name"))
                 .ifPresent(name-> this.username = name.toString());
         Optional.ofNullable(attributes.get("email"))

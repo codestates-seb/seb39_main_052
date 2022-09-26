@@ -36,9 +36,6 @@ public class KakaoUserInfo implements OAuth2UserInfo{
     private String profileImagePath;
 
     public KakaoUserInfo(Map<String,Object> attributes) {
-
-        System.out.println("attr " + attributes);
-
         Map<String,Object> account = (Map<String, Object>) attributes.get("kakao_account");
         Map<String,Object> profile = (Map<String, Object>) account.get("profile");
 

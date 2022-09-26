@@ -71,6 +71,7 @@ class CommentControllerTest {
     @BeforeEach
     void beforeEach() {
         Member member = Member.generalBuilder()
+                .name("SJ")
                 .email("test@gmail.com")
                 .buildGeneralMember();
         memberRepository.save(member);
@@ -103,6 +104,7 @@ class CommentControllerTest {
                         .content(requestJson))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.memberId").value(member.getId()))
+                .andExpect(jsonPath("$.memberName").value(member.getName()))
                 .andExpect(jsonPath("$.recipeId").value(recipe.getId()))
                 .andExpect(jsonPath("$.commentId").isNotEmpty())
                 .andExpect(jsonPath("$.content").value(dto.getContent()));
@@ -126,6 +128,7 @@ class CommentControllerTest {
                 ),
                 responseFields(
                         fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("작성자 ID"),
+                        fieldWithPath("memberName").type(JsonFieldType.STRING).description("작성자 이름"),
                         fieldWithPath("recipeId").type(JsonFieldType.NUMBER).description("댓글이 달린 레시피 ID"),
                         fieldWithPath("commentId").type(JsonFieldType.NUMBER).description("작성된 댓글 ID"),
                         fieldWithPath("content").type(JsonFieldType.STRING).description("작성된 댓글 내용"),
@@ -154,6 +157,7 @@ class CommentControllerTest {
                         .content(requestJson))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.memberId").value(member.getId()))
+                .andExpect(jsonPath("$.memberName").value(member.getName()))
                 .andExpect(jsonPath("$.recipeId").value(recipe.getId()))
                 .andExpect(jsonPath("$.commentId").value(comment.getId()))
                 .andExpect(jsonPath("$.content").value(dto.getContent()));
@@ -172,6 +176,7 @@ class CommentControllerTest {
                 ),
                 responseFields(
                         fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("작성자 ID"),
+                        fieldWithPath("memberName").type(JsonFieldType.STRING).description("작성자 이름"),
                         fieldWithPath("recipeId").type(JsonFieldType.NUMBER).description("수정된 댓글이 달린 레시피 ID"),
                         fieldWithPath("commentId").type(JsonFieldType.NUMBER).description("수정된 댓글 ID"),
                         fieldWithPath("content").type(JsonFieldType.STRING).description("수정된 댓글 내용"),
@@ -236,6 +241,54 @@ class CommentControllerTest {
                 responseFields(
                         fieldWithPath("data.[]").type(JsonFieldType.ARRAY).description("댓글 리스트"),
                         fieldWithPath("data.[].memberId").type(JsonFieldType.NUMBER).description("댓글 작성자 ID"),
+                        fieldWithPath("data.[].memberName").type(JsonFieldType.STRING).description("댓글 작성자 이름"),
+                        fieldWithPath("data.[].recipeId").type(JsonFieldType.NUMBER).description("댓글이 달린 레시피 ID"),
+                        fieldWithPath("data.[].commentId").type(JsonFieldType.NUMBER).description("작성된 댓글 ID"),
+                        fieldWithPath("data.[].content").type(JsonFieldType.STRING).description("댓글 내용"),
+                        fieldWithPath("data.[].createdAt").type(JsonFieldType.STRING).description("댓글 생성 일자"),
+                        fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 페이지"),
+                        fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("현재 사이즈"),
+                        fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("질문 전체 수"),
+                        fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("총 페이지 개수")
+                )
+        ));
+    }
+
+    @Test
+    @DisplayName("특정 레시피에 달린 댓글 리스트를 조회한다.")
+    void getCommentsByRecipeId() throws Exception {
+        //given
+        Member recipeWriter = memberRepository.findAll().get(0);
+        Recipe recipe = recipeRepository.findAll().get(0);
+
+        for (int i = 1; i <= 24; i++) {
+            Member commentWriter = Member.generalBuilder()
+                    .name("Comment Writer " + i)
+                    .buildGeneralMember();
+            memberRepository.save(commentWriter);
+            commentService.writeComment("comment " + i, commentWriter.getId(), recipe.getId());
+        }
+
+        //expected
+        ResultActions result = mockMvc.perform(get("/api/recipes/{recipeId}/comments",recipe.getId())
+                        .param("page","1")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        // docs
+        result.andDo(document("comments-received",
+                getRequestPreProcessor(),
+                getResponsePreProcessor(),
+                pathParameters(
+                        parameterWithName("recipeId").description("조회할 댓글 리스트의 레시피 ID")
+                ),
+                requestParameters(
+                        parameterWithName("page").description("조회할 댓글 리스트의 페이지 번호")
+                ),
+                responseFields(
+                        fieldWithPath("data.[]").type(JsonFieldType.ARRAY).description("댓글 리스트"),
+                        fieldWithPath("data.[].memberId").type(JsonFieldType.NUMBER).description("댓글 작성자 ID"),
+                        fieldWithPath("data.[].memberName").type(JsonFieldType.STRING).description("댓글 작성자 이름"),
                         fieldWithPath("data.[].recipeId").type(JsonFieldType.NUMBER).description("댓글이 달린 레시피 ID"),
                         fieldWithPath("data.[].commentId").type(JsonFieldType.NUMBER).description("작성된 댓글 ID"),
                         fieldWithPath("data.[].content").type(JsonFieldType.STRING).description("댓글 내용"),

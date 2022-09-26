@@ -1,6 +1,9 @@
 package com.seb39.myfridge.recipe.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.seb39.myfridge.heart.service.HeartService;
+import com.seb39.myfridge.ingredient.entity.Ingredient;
+import com.seb39.myfridge.ingredient.entity.RecipeIngredient;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.repository.MemberRepository;
 import com.seb39.myfridge.recipe.dto.RecipeDto;
@@ -10,13 +13,17 @@ import com.seb39.myfridge.recipe.service.RecipeService;
 import com.seb39.myfridge.step.entity.Step;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -25,6 +32,7 @@ import org.springframework.mock.web.MockPart;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
@@ -65,6 +73,9 @@ class RecipeControllerTest {
     private RecipeService recipeService;
 
     @MockBean
+    private HeartService heartService;
+
+    @SpyBean
     private RecipeMapper recipeMapper;
 
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -151,9 +162,12 @@ class RecipeControllerTest {
 
         System.out.println("response.getSteps().size() = " + response.getSteps().size());
 
-        given(recipeMapper.recipePostToRecipe(any())).willReturn(new Recipe());
+        willReturn(new Recipe())
+                .given(recipeMapper).recipePostToRecipe(any());
         given(recipeService.createRecipe(any(), anyList(), anyLong(), anyList(), anyList())).willReturn(new Recipe());
-        given(recipeMapper.recipeToRecipeResponse(Mockito.any(Recipe.class))).willReturn(response);
+        willReturn(response)
+                .given(recipeMapper).recipeToRecipeResponse(any());
+
         String requestToJson = objectMapper.writeValueAsString(requestBody);
 
         MockMultipartFile json = new MockMultipartFile("requestBody", "jsonData", "application/json", requestToJson.getBytes(StandardCharsets.UTF_8));
@@ -265,7 +279,9 @@ class RecipeControllerTest {
 
         given(recipeMapper.recipePatchToRecipe(Mockito.any(RecipeDto.Patch.class))).willReturn(new Recipe());
         given(recipeService.updateRecipe(any(), anyList(), anyLong(), anyList(), anyList())).willReturn(new Recipe());
-        given(recipeMapper.recipeToRecipeResponse(Mockito.any(Recipe.class))).willReturn(response);
+
+        willReturn(response)
+                .given(recipeMapper).recipeToRecipeResponse(any());
 
         MockMultipartHttpServletRequestBuilder builder =
                 MockMvcRequestBuilders.multipart("/api/recipes/{id}", 1L);
@@ -328,5 +344,92 @@ class RecipeControllerTest {
                         pathParameters(
                                 parameterWithName("id").description("삭제할 레시피 식별자")
                         )));
+    }
+
+    @Test
+    @DisplayName("레시피 상세 조회 테스트")
+    void getRecipeDetail() throws Exception {
+        // given
+        Member member = memberRepository.findAll().get(0);
+
+        Long recipeId = 23L;
+        int view = 7645;
+        Recipe recipe = new Recipe();
+        recipe.setTitle("Recipe 01");
+        recipe.setView(view);
+        recipe.setMember(member);
+        recipe.setTime("30분");
+        recipe.setPortion(3);
+        recipe.setImagePath("https://seb52bucket.s3./.../main.jpeg");
+        ReflectionTestUtils.setField(recipe, "id", recipeId);
+        ReflectionTestUtils.setField(recipe, "createdAt", LocalDateTime.now());
+        ReflectionTestUtils.setField(recipe, "lastModifiedAt", LocalDateTime.now());
+
+        for (int i = 1; i <= 3; i++) {
+            Step step = new Step();
+            step.setContent("Step " + i);
+            step.setSequence(i);
+            step.addRecipe(recipe);
+            step.setImagePath("https://seb52bucket.s3./.../step.jpeg");
+        }
+
+        Ingredient ingredient1 = new Ingredient();
+        ingredient1.setName("Ingredient 1");
+        Ingredient ingredient2 = new Ingredient();
+        ingredient2.setName("Ingredient 2");
+        List<Ingredient> ingredients = List.of(ingredient1, ingredient2);
+
+        for (int i = 0; i < 2; i++) {
+            RecipeIngredient ri = new RecipeIngredient();
+            ri.setQuantity((i + 1) + "00g");
+            ri.addRecipe(recipe);
+            ri.addIngredient(ingredients.get(i));
+        }
+
+        given(recipeService.findRecipeWithDetails(anyLong()))
+                .willReturn(recipe);
+        int heartCounts = 321;
+        given(heartService.findHeartCounts(anyLong()))
+                .willReturn(heartCounts);
+
+        //expected
+        ResultActions actions = mockMvc.perform(get("/api/recipes/{id}", recipeId)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("id").value(recipeId))
+                .andExpect(jsonPath("heartCounts").value(heartCounts))
+                .andExpect(jsonPath("view").value(view));
+
+
+        //docs
+        actions.andExpect(status().isOk())
+                .andDo(document("recipe-read-detail",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        pathParameters(
+                                parameterWithName("id").description("조회할 레시피의 ID")
+                        ),
+                        responseFields(
+                                List.of(
+                                        fieldWithPath("id").type(JsonFieldType.NUMBER).description("레시피 식별자"),
+                                        fieldWithPath("title").type(JsonFieldType.STRING).description("레시피 제목"),
+                                        fieldWithPath("portion").type(JsonFieldType.NUMBER).description("해당 레시피가 몇 인분인지"),
+                                        fieldWithPath("view").type(JsonFieldType.NUMBER).description("조회수"),
+                                        fieldWithPath("time").type(JsonFieldType.STRING).description("요리 소요 시간"),
+                                        fieldWithPath("createdAt").type(JsonFieldType.STRING).description("레시피 생성일"),
+                                        fieldWithPath("lastModifiedAt").type(JsonFieldType.STRING).description("레시피 수정일"),
+                                        fieldWithPath("imagePath").type(JsonFieldType.STRING).description("레시피 대표 이미지"),
+                                        fieldWithPath("ingredients").type(JsonFieldType.ARRAY).description("요리 재료"),
+                                        fieldWithPath("ingredients.[].name").type(JsonFieldType.STRING).description("요리 재료 이름"),
+                                        fieldWithPath("ingredients.[].quantity").type(JsonFieldType.STRING).description("요리 재료 수량"),
+                                        fieldWithPath("steps").type(JsonFieldType.ARRAY).description("요리 단계"),
+                                        fieldWithPath("steps.[].sequence").type(JsonFieldType.NUMBER).description("요리 단계 순서"),
+                                        fieldWithPath("steps.[].content").type(JsonFieldType.STRING).description("각 단계별 내용"),
+                                        fieldWithPath("steps.[].imagePath").type(JsonFieldType.STRING).description("요리 관련 이미지"),
+                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("작성자 식별자"),
+                                        fieldWithPath("memberName").type(JsonFieldType.STRING).description("작성자 이름"),
+                                        fieldWithPath("heartCounts").type(JsonFieldType.NUMBER).description("받은 하트 개수")
+                                )
+                        )
+                ));
     }
 }
