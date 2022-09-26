@@ -1,5 +1,6 @@
 package com.seb39.myfridge.recipe.repository;
 
+import com.seb39.myfridge.config.QueryDslConfig;
 import com.seb39.myfridge.ingredient.Repository.IngredientRepository;
 import com.seb39.myfridge.ingredient.Repository.RecipeIngredientRepository;
 import com.seb39.myfridge.ingredient.entity.Ingredient;
@@ -9,11 +10,14 @@ import com.seb39.myfridge.member.repository.MemberRepository;
 import com.seb39.myfridge.recipe.entity.Recipe;
 import com.seb39.myfridge.step.entity.Step;
 import com.seb39.myfridge.step.repository.StepRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +27,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+@DataJpaTest
 @Transactional
+@Import(QueryDslConfig.class)
 class RecipeRepositoryTest {
 
     @Autowired
@@ -102,4 +107,31 @@ class RecipeRepositoryTest {
             System.out.println(" ri = " + ri.getIngredient().getName());
         }
     }
+
+    @Test
+    @DisplayName("레시피 제목에 특정 문자열이 포함된 레시피 제목 리스트를 조회한다.")
+    void searchTitles() throws Exception {
+        // given
+        for(int i=0;i<=21;i++){
+            Recipe recipe = new Recipe();
+            if(i%2==0)
+                recipe.setTitle(i + " title "+i);
+            else
+                recipe.setTitle(i + " xxxx "+i);
+            recipeRepository.save(recipe);
+        }
+        recipeRepository.searchTitles("title");
+
+        em.flush();
+        em.clear();
+
+        // when
+        List<String> titles = recipeRepository.searchTitles("title");
+
+        //then
+        Assertions.assertThat(titles)
+                .anyMatch(title -> title.contains("title"));
+    }
+
+
 }

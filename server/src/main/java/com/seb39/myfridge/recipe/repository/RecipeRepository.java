@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface RecipeRepository extends JpaRepository<Recipe, Long> {
+public interface RecipeRepository extends JpaRepository<Recipe, Long> ,RecipeRepositoryCustom{
 
      @Query("select r from Recipe r join fetch r.member join fetch r.steps where r.id = :id")
      Optional<Recipe> findWithMemberAndSteps(@Param("id") Long id);
