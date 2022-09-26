@@ -4,7 +4,6 @@ import RecipeCard from "../../components/layout/RecipeCard/RecipeCard";
 import { Container, Heading, Loader, Option, RecipeWrapper, StyledFontAwesomeIcon } from "./FridgeDiggingStyle";
 import NameSearchBar from "../../components/layout/NameSearchBar/NameSearchBar";
 import TagSearchBar from "../../components/layout/TagSearchBar/TagSearchBar";
-import ModalSearchBar from "../../components/layout/ModalSearchBar.js/ModalSearchBar";
 import SortingTab from "../../components/common/SortingTab/SortingTab";
 import { faEgg, faCarrot, faFish, faPizzaSlice, faBowlRice } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
@@ -87,7 +86,7 @@ const FridgeDigging = () => {
     return (
         <Container>
             <Heading>
-                요리로 레시피 검색하기
+                제목으로 레시피 검색하기
             </Heading>
             <NameSearchBar />
             <Heading>
