@@ -59,12 +59,16 @@ public class RecipeService {
         Optional.ofNullable(recipe.getTime()).ifPresent(findRecipe::setTime);
         Optional.ofNullable(recipe.getPortion()).ifPresent(findRecipe::setPortion);
 
+        findRecipe.getImage().setIsUpdated(recipe.getImage().getIsUpdated());
+
         findRecipe.getRecipeIngredients().clear();
         ingredientService.updateIngredient(findRecipe, recipeIngredients);
 
         //1. 이미지 삭제
 //        deleteImage(findRecipe);
         findRecipe.getSteps().clear();
+        System.out.println("updateImage 이전");
+        updateImage(findRecipe, files, steps);
         //2. 이미지 재업로드
 //        createImage(findRecipe, files, steps);
 
@@ -104,6 +108,24 @@ public class RecipeService {
         Recipe savedRecipe = recipeRepository.save(recipe);
         steps.forEach(step -> step.addRecipe(recipe));
         return savedRecipe;
+    }
+
+    private void updateImage(Recipe findRecipe, List<MultipartFile> files, List<Step> steps) {
+        if (!CollectionUtils.isEmpty(files)) {
+            if (findRecipe.getImage().getIsUpdated().equals("Y")) {
+                int idx = findRecipe.getImage().getIdx();
+                System.out.println("idx = " + idx);
+                fileUploadService.updateImages(findRecipe, steps, files, idx);
+            }else {
+                for (Step step : steps) {
+                    if (step.getImage().getIsUpdated().equals("Y")) {
+                        int idx = step.getImage().getIdx();
+                        System.out.println("idx = " + idx);
+                        fileUploadService.updateImages(findRecipe, steps, files, idx);
+                    }
+                }
+            }
+        }
     }
 
 

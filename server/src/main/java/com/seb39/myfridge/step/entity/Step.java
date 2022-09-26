@@ -52,6 +52,6 @@ public class Step {
     /**
      * image
      */
-    @OneToOne(mappedBy = "step")
+    @OneToOne(mappedBy = "step", cascade = CascadeType.ALL)
     private Image image;
 }

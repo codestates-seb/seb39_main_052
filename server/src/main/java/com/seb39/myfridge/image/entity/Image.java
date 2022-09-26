@@ -4,6 +4,7 @@ import com.seb39.myfridge.recipe.entity.Recipe;
 import com.seb39.myfridge.step.entity.Step;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -26,15 +27,15 @@ public class Image {
 
     private Long size;
 
-    private String isUpdated;
+    private String isUpdated; //업데이트 여부
 
-    private String isDeleted;
+    private String isDeleted; //삭제 여부
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "step_id")
     private Step step;
 

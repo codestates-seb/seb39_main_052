@@ -63,11 +63,58 @@ public class FileUploadService {
                     image.setIsDeleted("N");
                     image.setStep(steps.get(count-1));
                     image.setImagePath(s3Service.getFileUrl(fileName));
-
+                    image.setRecipe(recipe);
                     image.addStepImage(steps.get(count-1));
                     imageRepository.save(image);
                     count++;
 
+                }
+            }
+        }
+    }
+
+    public void updateImages(Recipe recipe, List<Step> steps, List<MultipartFile> files, int idx) {
+        if (!files.isEmpty()) {
+            for (MultipartFile file : files) {
+                String fileName = createFileName(file.getOriginalFilename());
+                ObjectMetadata objectMetadata = new ObjectMetadata();
+                objectMetadata.setContentLength(file.getSize());
+                objectMetadata.setContentType(file.getContentType());
+
+                try (InputStream inputStream = file.getInputStream()) {
+                    s3Service.uploadFile(inputStream, objectMetadata, fileName);
+                } catch (IOException e) {
+                    throw new IllegalArgumentException(String.format("파일 변환 중 에러가 발생하였습니다.(%s)", file.getOriginalFilename()));
+                }
+
+                //레시피 사진 저장
+                if (idx == 0) {
+                    Image image = new Image();
+                    image.setSaveName(fileName);
+                    image.setOriginalName(file.getOriginalFilename());
+                    image.setSize(file.getSize());
+                    image.setIdx(0);
+                    image.setIsUpdated("N");
+                    image.setIsDeleted("N");
+                    image.setRecipe(recipe);
+                    image.setImagePath(s3Service.getFileUrl(fileName));
+                    image.addRecipeImage(recipe);
+
+                    imageRepository.save(image);
+                } else {
+                    //스탭 사진 저장
+
+                    Image image = new Image();
+                    image.setSaveName(fileName);
+                    image.setOriginalName(file.getOriginalFilename());
+                    image.setSize(file.getSize());
+                    image.setIdx(idx);
+                    image.setIsUpdated("N");
+                    image.setIsDeleted("N");
+                    image.setStep(steps.get(idx-1));
+                    image.setImagePath(s3Service.getFileUrl(fileName));
+                    image.addStepImage(steps.get(idx-1));
+                    imageRepository.save(image);
                 }
             }
         }

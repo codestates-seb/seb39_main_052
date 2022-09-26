@@ -63,8 +63,18 @@ public class RecipeController {
                                        @Valid @RequestPart RecipeDto.Patch requestBody,
                                        @RequestPart List<MultipartFile> files,
                                        @AuthMemberId Long memberId){
+        System.out.println("updateRecipe controller 진입");
         requestBody.setId(id);
-        List<Step> stepList = recipeMapper.recipeDtoStepsToStepList(requestBody.getSteps());
+        List<Step> stepList = recipeMapper.recipeDtoStepsToStepListForPatch(requestBody.getSteps());
+        System.out.println("stepList.size" + stepList.size());
+        System.out.println("requestBody = " + requestBody.getImageInfo().getIdx());
+        System.out.println("requestBody = " + requestBody.getImageInfo().getSaveName());
+        System.out.println("requestBody = " + requestBody.getImageInfo().getOriginalName());
+        System.out.println("requestBody.getImageInfo().getIsUpdated() = " + requestBody.getImageInfo().getIsUpdated());
+        for (Step step : stepList) {
+            System.out.println("step.getImage().getIdx() = " + step.getImage().getIdx());
+            System.out.println("step.getImage().getIsUpdated() = " + step.getImage().getIsUpdated());
+        }
         List<RecipeIngredient> recipeIngredients = recipeMapper.ingredientsDtoToIngredients(requestBody.getIngredients());
         Recipe recipe = recipeService.updateRecipe(recipeMapper.recipePatchToRecipe(requestBody), stepList, memberId, files, recipeIngredients);
         RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(recipe);

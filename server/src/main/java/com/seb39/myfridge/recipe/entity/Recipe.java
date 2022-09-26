@@ -62,6 +62,6 @@ public class Recipe extends BaseTimeEntity {
     /**
      * image
      */
-    @OneToOne(mappedBy = "recipe")
+    @OneToOne(mappedBy = "recipe", cascade = CascadeType.ALL)
     private Image image;
 }
