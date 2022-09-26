@@ -8,6 +8,7 @@ public interface CommentMapper {
         return CommentDto.Response.builder()
                 .memberId(comment.getMember().getId())
                 .memberName(comment.getMember().getName())
+                .memberImagePath(comment.getMember().getProfileImagePath())
                 .recipeId(comment.getRecipe().getId())
                 .commentId(comment.getId())
                 .content(comment.getContent())

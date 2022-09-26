@@ -81,4 +81,7 @@ public class Member {
         this.password = encryptedPassword;
     }
 
+    public void changeProfileImagePath(String profileImagePath){
+        this.profileImagePath = profileImagePath;
+    }
 }
