@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import RecipeCard from "../../components/layout/RecipeCard/RecipeCard";
 import { Container, Heading, Loader, Option, RecipeWrapper, StyledFontAwesomeIcon } from "./FridgeDiggingStyle";
 import NameSearchBar from "../../components/layout/NameSearchBar/NameSearchBar";
@@ -11,10 +11,23 @@ import axios from "axios";
 
 const FridgeDigging = () => {
 
+    const location = useLocation();
+    console.log(location.state)
+
+    useEffect(() => {
+        // 상세보기에서 뒤로가기 한게 아닌 이상 검색 상태는 초기화
+        if (!location.state) {
+            console.log(`검색 상태 지우기`);
+        }
+    }, [])
+
+    const navigate = useNavigate();
+    
     const [sortMode, setSortMode] = useState("like");
     const [searchParams, setSearchParams] = useSearchParams();
     // 어떤 컴포넌트에서든 searchParams의 키워드 값을 가져와 관련 http 요청을 보낼 수 있다.
     const searchTerm = searchParams.get('keyword');
+
 
     const dummyArr = Array(16).fill(0);
 

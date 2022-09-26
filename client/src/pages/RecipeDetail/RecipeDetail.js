@@ -1,5 +1,5 @@
 import Comments from "../../components/layout/Comments/Comments";
-import { useParams } from "react-router-dom";
+import { useParams, Link} from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import RecipeStep from "../../components/layout/RecipeStep/RecipeStep";
@@ -8,6 +8,7 @@ import UserName from "../../components/common/UserName/UserName";
 import LikeHeart from "../../components/common/LikeHeart/LikeHeart";
 
 const RecipeDetail = () => {
+
     const { id } = useParams();
     // console.log(id);
 
@@ -58,7 +59,9 @@ const RecipeDetail = () => {
         <RecipeWrapper>
             <Extra>
                 <RecipeId>게시글 #{dummyData.id}</RecipeId>
-                <ButtonLike className="dark">목록으로 돌아가기</ButtonLike>
+                <ButtonLike className="dark" >
+                    <Link to={"/search"} state={{ prevPath: "/recipes"}}>목록으로 돌아가기</Link>
+                </ButtonLike>
             </Extra>
             <Head>
                 <HeadLeft>
