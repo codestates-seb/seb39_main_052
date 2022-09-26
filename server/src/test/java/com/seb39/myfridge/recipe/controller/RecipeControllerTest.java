@@ -15,9 +15,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -28,7 +26,6 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.mock.web.MockPart;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
@@ -39,7 +36,6 @@ import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequ
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -48,9 +44,7 @@ import java.util.List;
 
 import static com.seb39.myfridge.util.ApiDocumentUtils.getRequestPreProcessor;
 import static com.seb39.myfridge.util.ApiDocumentUtils.getResponsePreProcessor;
-import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -146,7 +140,7 @@ class RecipeControllerTest {
 
         Member member = memberRepository.findByEmail("test@email.com").get();
 
-        RecipeDto.Response response = RecipeDto.Response.builder()
+        RecipeDto.ResponseDetail response = RecipeDto.ResponseDetail.builder()
                 .id(1L)
                 .title("라면 맛있게 끓이는 법")
                 .portion(1)
@@ -264,7 +258,7 @@ class RecipeControllerTest {
 
         Member member = memberRepository.findByEmail("test@email.com").get();
 
-        RecipeDto.Response response = RecipeDto.Response.builder()
+        RecipeDto.ResponseDetail response = RecipeDto.ResponseDetail.builder()
                 .id(1L)
                 .title("라면 맛있게 끓이는 법")
                 .portion(1)

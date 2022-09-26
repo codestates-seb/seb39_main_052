@@ -10,9 +10,7 @@ import org.mapstruct.ReportingPolicy;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
@@ -46,8 +44,8 @@ public interface RecipeMapper {
         return recipeIngredients;
     }
 
-    default RecipeDto.Response recipeToRecipeResponse(Recipe recipe, int heartCounts) {
-        return RecipeDto.Response.builder()
+    default RecipeDto.ResponseDetail recipeToRecipeResponse(Recipe recipe, int heartCounts) {
+        return RecipeDto.ResponseDetail.builder()
                 .id(recipe.getId())
                 .createdAt(recipe.getCreatedAt())
                 .lastModifiedAt(recipe.getLastModifiedAt())
@@ -63,7 +61,7 @@ public interface RecipeMapper {
                 .build();
     }
 
-    default RecipeDto.Response recipeToRecipeResponse(Recipe recipe) {
+    default RecipeDto.ResponseDetail recipeToRecipeResponse(Recipe recipe) {
         return recipeToRecipeResponse(recipe,0);
     }
 

@@ -37,7 +37,7 @@ public class Member {
 
     private String profileImagePath;
 
-    private enum MemberStatus{
+    public enum MemberStatus{
         ACTIVE,
         INACTIVE
     }

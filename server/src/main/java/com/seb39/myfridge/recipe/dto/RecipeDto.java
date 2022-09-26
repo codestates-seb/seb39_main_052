@@ -1,8 +1,6 @@
 package com.seb39.myfridge.recipe.dto;
 
-import com.seb39.myfridge.ingredient.entity.RecipeIngredient;
 import com.seb39.myfridge.member.entity.Member;
-import com.seb39.myfridge.step.entity.Step;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +8,6 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 public class RecipeDto {
 
@@ -102,7 +99,7 @@ public class RecipeDto {
 
     @Getter
     @Setter
-    public static class Response{
+    public static class ResponseDetail {
         private Long id;
         private String title;
         private int portion;
@@ -118,7 +115,7 @@ public class RecipeDto {
         private int heartCounts;
 
         @Builder
-        public Response(Long id, String title, int portion, int view, String time, LocalDateTime createdAt, LocalDateTime lastModifiedAt, String imagePath,List<Ingredient> ingredients ,List<Step> steps, Member member, int heartCounts) {
+        public ResponseDetail(Long id, String title, int portion, int view, String time, LocalDateTime createdAt, LocalDateTime lastModifiedAt, String imagePath, List<Ingredient> ingredients , List<Step> steps, Member member, int heartCounts) {
             this.id = id;
             this.title = title;
             this.portion = portion;
@@ -133,5 +130,24 @@ public class RecipeDto {
             this.memberName = member.getName();
             this.heartCounts = heartCounts;
         }
+    }
+
+    @Getter
+    @Setter
+    public static class Search{
+        private String title;
+        private List<String> ingredients;
+    }
+
+    @Getter
+    @Setter
+    public static class Response{
+        private Long id;
+        private String title;
+        private String memberId;
+        private String memberName;
+        private String imagePath;
+        private int heartCounts;
+        private int view;
     }
 }

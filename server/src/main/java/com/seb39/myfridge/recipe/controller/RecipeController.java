@@ -1,6 +1,5 @@
 package com.seb39.myfridge.recipe.controller;
 
-import com.seb39.myfridge.auth.PrincipalDetails;
 import com.seb39.myfridge.heart.service.HeartService;
 import com.seb39.myfridge.ingredient.entity.RecipeIngredient;
 import com.seb39.myfridge.auth.annotation.AuthMemberId;
@@ -9,19 +8,16 @@ import com.seb39.myfridge.recipe.entity.Recipe;
 import com.seb39.myfridge.recipe.mapper.RecipeMapper;
 import com.seb39.myfridge.recipe.service.RecipeService;
 import com.seb39.myfridge.step.entity.Step;
-import com.seb39.myfridge.step.service.StepService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/recipes")
@@ -44,7 +40,7 @@ public class RecipeController {
         Recipe recipe = recipeMapper.recipePostToRecipe(requestBody);
 
         Recipe savedRecipe = recipeService.createRecipe(recipe, stepList, memberId, files, recipeIngredients);
-        RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(savedRecipe);
+        RecipeDto.ResponseDetail response = recipeMapper.recipeToRecipeResponse(savedRecipe);
 
         return new ResponseEntity(response, HttpStatus.OK);
     }
@@ -67,15 +63,15 @@ public class RecipeController {
         List<Step> stepList = recipeMapper.recipeDtoStepsToStepList(requestBody.getSteps());
         List<RecipeIngredient> recipeIngredients = recipeMapper.ingredientsDtoToIngredients(requestBody.getIngredients());
         Recipe recipe = recipeService.updateRecipe(recipeMapper.recipePatchToRecipe(requestBody), stepList, memberId, files, recipeIngredients);
-        RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(recipe);
+        RecipeDto.ResponseDetail response = recipeMapper.recipeToRecipeResponse(recipe);
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RecipeDto.Response> findRecipe(@PathVariable("id") @Positive Long id) {
+    public ResponseEntity<RecipeDto.ResponseDetail> findRecipe(@PathVariable("id") @Positive Long id) {
         Recipe recipe = recipeService.findRecipeWithDetails(id);
         int heartCounts = heartService.findHeartCounts(id);
-        RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(recipe,heartCounts);
+        RecipeDto.ResponseDetail response = recipeMapper.recipeToRecipeResponse(recipe,heartCounts);
         return ResponseEntity.ok(response);
     }
 }
