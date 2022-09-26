@@ -46,22 +46,26 @@ public interface RecipeMapper {
         return recipeIngredients;
     }
 
-    default RecipeDto.Response recipeToRecipeResponse(Recipe recipe) {
-       return RecipeDto.Response.builder()
+    default RecipeDto.Response recipeToRecipeResponse(Recipe recipe, int heartCounts) {
+        return RecipeDto.Response.builder()
                 .id(recipe.getId())
                 .createdAt(recipe.getCreatedAt())
                 .lastModifiedAt(recipe.getLastModifiedAt())
                 .title(recipe.getTitle())
-               .portion(recipe.getPortion())
-               .time(recipe.getTime())
+                .portion(recipe.getPortion())
+                .view(recipe.getView())
+                .time(recipe.getTime())
                 .imagePath(recipe.getImagePath())
-               .ingredients(ingredientsToDto(recipe.getRecipeIngredients()))
+                .ingredients(ingredientsToDto(recipe.getRecipeIngredients()))
                 .steps(stepsToDto(recipe.getSteps()))
                 .member(recipe.getMember())
+                .heartCounts(heartCounts)
                 .build();
     }
 
-//    Recipe recipePostToRecipe(RecipeDto.Post requestBody);
+    default RecipeDto.Response recipeToRecipeResponse(Recipe recipe) {
+        return recipeToRecipeResponse(recipe,0);
+    }
 
     Recipe recipePatchToRecipe(RecipeDto.Patch requestBody);
 

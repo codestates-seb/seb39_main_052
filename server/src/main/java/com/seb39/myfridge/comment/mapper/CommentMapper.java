@@ -7,6 +7,7 @@ public interface CommentMapper {
     static CommentDto.Response commentToResponseDto(Comment comment){
         return CommentDto.Response.builder()
                 .memberId(comment.getMember().getId())
+                .memberName(comment.getMember().getName())
                 .recipeId(comment.getRecipe().getId())
                 .commentId(comment.getId())
                 .content(comment.getContent())

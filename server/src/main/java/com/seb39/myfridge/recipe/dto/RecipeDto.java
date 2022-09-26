@@ -106,6 +106,7 @@ public class RecipeDto {
         private Long id;
         private String title;
         private int portion;
+        private int view;
         private String time;
         private LocalDateTime createdAt;
         private LocalDateTime lastModifiedAt;
@@ -114,12 +115,14 @@ public class RecipeDto {
         private List<Step> steps;
         private Long memberId;
         private String memberName;
+        private int heartCounts;
 
         @Builder
-        public Response(Long id, String title, int portion, String time, LocalDateTime createdAt, LocalDateTime lastModifiedAt, String imagePath,List<Ingredient> ingredients ,List<Step> steps, Member member) {
+        public Response(Long id, String title, int portion, int view, String time, LocalDateTime createdAt, LocalDateTime lastModifiedAt, String imagePath,List<Ingredient> ingredients ,List<Step> steps, Member member, int heartCounts) {
             this.id = id;
             this.title = title;
             this.portion = portion;
+            this.view = view;
             this.time = time;
             this.createdAt = createdAt;
             this.lastModifiedAt = lastModifiedAt;
@@ -128,6 +131,7 @@ public class RecipeDto {
             this.steps = steps;
             this.memberId = member.getId();
             this.memberName = member.getName();
+            this.heartCounts = heartCounts;
         }
     }
 }

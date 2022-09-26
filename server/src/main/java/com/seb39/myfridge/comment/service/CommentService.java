@@ -25,10 +25,15 @@ public class CommentService {
     private final RecipeService recipeService;
     private final CommentRepository commentRepository;
 
-    @Value("${app.pageable.size}")
+    @Value("${app.pageable.size.comment}")
     private int size;
 
-    public Page<Comment> findReceivedComments(int page, Long memberId){
+    public Page<Comment> findByRecipeId(Long recipeId, int page){
+        Pageable pageable = PageRequest.of(page,size, Sort.by("id").descending());
+        return commentRepository.findAllByRecipeId(recipeId, pageable);
+    }
+
+    public Page<Comment> findReceivedComments(Long memberId, int page){
         Pageable pageable = PageRequest.of(page,size, Sort.by("id").descending());
         return commentRepository.findAllByRecipeWriterId(memberId, pageable);
     }

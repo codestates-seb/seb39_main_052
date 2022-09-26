@@ -34,6 +34,7 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleIllegalArgumentException(Exception e){
+        log.error("unknown exception",e);
         return new ErrorResponse(e.getMessage());
     }
 }
