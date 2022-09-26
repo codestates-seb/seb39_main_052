@@ -178,7 +178,7 @@ include::{snippets}/recipe-delete/http-request.adoc[]
 .http-response
 include::{snippets}/recipe-delete/http-response.adoc[]
 
-=== 레시지 조회
+=== 레시피 조회
 ***
  특정 레시피를 조회하기 위한 API 입니다.
 
@@ -250,6 +250,25 @@ include::{snippets}/comment-delete/path-parameters.adoc[]
 
 .http-response
 include::{snippets}/comment-delete/http-response.adoc[]
+
+=== 레시피 댓글 리스트 조회
+***
+ 특정 레시피에 달린 댓글 리스트를 조회하기 위한 API 입니다
+
+.http-request
+include::{snippets}/comments-recipe/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/comments-recipe/path-parameters.adoc[]
+
+.request-parameters
+include::{snippets}/comments-recipe/request-parameters.adoc[]
+
+.http-response
+include::{snippets}/comments-recipe/http-response.adoc[]
+
+.response-fields
+include::{snippets}/comments-recipe/response-fields.adoc[]
 
 === 받은 댓글 리스트 조회
 ***

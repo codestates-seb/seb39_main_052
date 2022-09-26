@@ -276,7 +276,7 @@ class CommentControllerTest {
                 .andExpect(status().isOk());
 
         // docs
-        result.andDo(document("comments-received",
+        result.andDo(document("comments-recipe",
                 getRequestPreProcessor(),
                 getResponsePreProcessor(),
                 pathParameters(
