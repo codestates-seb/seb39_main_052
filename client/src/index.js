@@ -9,12 +9,18 @@ import axios from "axios";
 import { Provider } from "react-redux";
 import store from "./store";
 
+//공통 스타일 관리
+import { ThemeProvider } from "styled-components";
+import theme from "./theme";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
     </Provider>
   </React.StrictMode>
 );

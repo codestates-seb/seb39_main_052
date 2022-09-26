@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect } from "react";
+import RecipeSearchModal from "../../components/layout/Modal/RecipeSearchModal";
 
 const Home = () => {
   //로그인시 요청헤더에 설정한 액세스토큰이 다른 요청시 잘 불러와지는지 테스트

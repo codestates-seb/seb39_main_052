@@ -15,6 +15,10 @@ const GlobalStyle = createGlobalStyle`
       text-decoration: none;
       padding-left: 0; //기본 패딩 0으로 설정
     }
+    li {
+      list-style: none;
+    }
+    
     // 아이폰 safari 환경에서 input 요소에 입력이 안되는 경우가 발생할 수도 있다고 하여 일단 불러옴
     input, textarea { 
       -moz-user-select: auto;
