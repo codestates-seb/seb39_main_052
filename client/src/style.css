@@ -28,7 +28,10 @@
     --mintgreen-400: #e2ece8;
     --mintgreen-500: #cfe0d8;
     --mintgreen-600: #a6b3ad;
+    --red-050: #f6eaea;
+    --red-075: #f4d5da;
     --red-100: #f5bec6;
+    --red-150: #f3b4be;
     --red-200: #ef92a0;
     --red-300: #e9667a;
     --red-400: #FD3049;
@@ -43,6 +46,7 @@
     --blue-500: #1290FE;
     --blue-600: #1B6FDB;
     --blue-700: #1B5EC9;
+    --fridge-100: #f3f9ff; 
     --fridge-200: #dcecfc; 
     --fridge-300: #bdd5ef; 
     --fridge-400: #aac0d7; 

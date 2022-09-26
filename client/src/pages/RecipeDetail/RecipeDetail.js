@@ -9,6 +9,7 @@ import LikeHeart from "../../components/common/LikeHeart/LikeHeart";
 
 const RecipeDetail = () => {
 
+    const [isMyRecipe, setIsMyRecipe] = useState(false);
     const { id } = useParams();
     // console.log(id);
 
@@ -51,6 +52,9 @@ const RecipeDetail = () => {
             .then((response) => {
                 // console.log(response.status);
                 console.log(response.data);
+                // 레시피 작성자 id와 내 id가 동일한 경우
+                // setIsMyRecipe 상태 true로 바꾸기
+                // 아니면 false
             })
             .catch((e) => console.log(e.response));
     }, [id])
@@ -75,10 +79,12 @@ const RecipeDetail = () => {
                             <PortionAndTime>{dummyData.portion} 인분</PortionAndTime>
                             <PortionAndTime>{dummyData.time} 분 &nbsp;소요</PortionAndTime>
                         </Info>
+                        {isMyRecipe &&                         
                         <ButtonLikeWrapper>
                             <ButtonLike>수정</ButtonLike>
                             <ButtonLike>삭제</ButtonLike>
                         </ButtonLikeWrapper>
+                        }
                     </HeadLeftBottom>
                 </HeadLeft>
                 <Image src={dummyData.imagePath} alt={'main'}/>
