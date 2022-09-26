@@ -30,4 +30,7 @@ export const Li = styled.li`
     `}
 `;
 
-export const MenuContent = styled.div``;
+export const MenuContent = styled.div`
+  display: flex;
+  justify-content: center;
+`;
