@@ -25,6 +25,14 @@ const CommentsBox = () => {
       comment: "냠냠 ",
       date: "2022/08/11",
     },
+    {
+      id: 3,
+      memberName: "웰시코기궁둥",
+      memberImage:
+        "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
+      comment: "뽀송뽀송 ",
+      date: "2022/9/1",
+    },
   ];
 
   //Don't forget 리턴!!!
