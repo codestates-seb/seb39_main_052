@@ -14,7 +14,7 @@ const Comments = () => {
 
     const [limit, setLimit] = useState(10); // 한 페이지당 댓글 수
     const [page, setPage] = useState(1);
-    const total = 360 //추후 서버에서 받아올 예정
+    const total = 9 //추후 서버에서 받아올 예정
     console.log("페이지", page);
 
     const dummy = {

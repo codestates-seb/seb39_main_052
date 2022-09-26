@@ -1,5 +1,13 @@
-import styled from "styled-components";
+import styled, {keyframes} from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+const BlinkAnimation = keyframes`
+  0% { background: var(--red-100) }
+  30% { background: var(--red-100) }
+  50% { background: var(--red-075) }
+  70% { background: var(--red-100) }
+  100% { background: var(--red-100) }
+`;
 
 export const Block = styled.div`
     display: flex;
@@ -40,6 +48,7 @@ export const Input = styled.input`
      }
      &.red {
         background: var(--red-100);
+        /* animation: ${BlinkAnimation} 10s linear infinite; */
      }
      &.green {
         background: var(--green-200);

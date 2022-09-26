@@ -60,7 +60,6 @@ const InputList = ({ titlesArr, placeholders }) => {
     };
 
     const classSetter = (el, title) => {
-        console.log(el.time);
         // // 재료 없는 새 input row에서 dDay column을 제외하곤 흰 배경
         // if (el.name === "" && title !== "dDay") return "small";
 

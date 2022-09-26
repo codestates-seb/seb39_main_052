@@ -1,32 +1,44 @@
 // 나의 냉장고 재료 상태를 저장하는 slice
 import { createSlice } from "@reduxjs/toolkit";
 
+// const initialState = {
+//     ingredients: [{
+//         name: "자두",
+//         amount: "1개",
+//         date: "2022-10-10",
+//         dDay: "14",
+//         note: "",
+//     },{
+//         name: "계란",
+//         amount: "30개",
+//         date: "2022-10-02",
+//         dDay: "6",
+//         note: "",
+//     },{
+//         name: "떡",
+//         amount: "1개",
+//         date: "2022-09-24",
+//         dDay: "-2",
+//         note: "",
+//     },{
+//         name: "",
+//         amount: "",
+//         date: "",
+//         dDay: "",
+//         note: "",
+//     },],
+     
+// }
+
 const initialState = {
     ingredients: [{
-        name: "",
-        amount: "",
-        date: "2022/10/10",
-        dDay: 10,
-        note: "",
-    },{
-        name: "",
-        amount: "",
-        date: "2022/10/10",
-        dDay: 7,
-        note: "",
-    },{
-        name: "",
-        amount: "",
-        date: "2022/10/10",
-        dDay: -1,
-        note: "",
-    },{
         name: "",
         amount: "",
         date: "",
         dDay: "",
         note: "",
     },],
+     
 }
 
 const fridgeSlice = createSlice({
@@ -51,6 +63,9 @@ const fridgeSlice = createSlice({
         clearFridge: () => {
             return initialState;
         },
+        setDDay: (state, action) => {
+            state.ingredients[action.payload.index][action.payload.key] = action.payload.value;
+        },
     }
 });
 
@@ -59,5 +74,6 @@ export const {
     addFrigIngrInput,
     deleteFrigIngrInput,
     editFrigIngredients,
-    clearFridge
+    clearFridge,
+    setDDay
 } = fridgeSlice.actions;

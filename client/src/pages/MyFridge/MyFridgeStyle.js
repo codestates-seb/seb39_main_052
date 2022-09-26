@@ -11,10 +11,19 @@ export const Fridge = styled.div`
     flex-direction: column;
     align-items: center;
     width: 880px;
-    padding: 32px 0 28px 24px;
+    padding: 14px 14px 14px 14px;
     border-radius: 16px;
     background-color: var(--fridge-200);
     box-shadow: var(--shadow-medium);
+`
+
+export const InnerContainer = styled.div`
+    padding: 16px 0 14px 12px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--fridge-100);
 `
 
 export const Title = styled.h1`
@@ -25,7 +34,8 @@ export const ColumnHeads = styled.div`
     display: flex;
     width: 100%;
     justify-content: space-around;
-    padding: 0 56px 0 3px;
+    padding: 0 40px 0 0px;
+    margin: 0;
 `
 
 export const Head = styled.div`
@@ -46,8 +56,8 @@ export const Head = styled.div`
 
 export const InputWrapper = styled.div`
     height: 360px;
-    padding: 0 12px 0 0;
-    margin: 8px 0 0 0;
+    padding: 0 2px 0 0;
+    margin: 8px 0 0 4px;
     overflow-y: scroll;
     ::-webkit-scrollbar {
         width: 8px;
@@ -57,4 +67,12 @@ export const InputWrapper = styled.div`
         border-radius: 10px;
         background-color: var(--fridge-500);
     }
+`
+
+export const ButtonWrap = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 480px;
+    margin: 0px 0 0 0;
 `
