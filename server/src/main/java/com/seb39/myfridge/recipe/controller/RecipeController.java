@@ -1,5 +1,6 @@
 package com.seb39.myfridge.recipe.controller;
 
+import com.seb39.myfridge.dto.SingleResponseDto;
 import com.seb39.myfridge.heart.service.HeartService;
 import com.seb39.myfridge.ingredient.entity.RecipeIngredient;
 import com.seb39.myfridge.auth.annotation.AuthMemberId;
@@ -29,9 +30,9 @@ public class RecipeController {
     private final RecipeMapper recipeMapper;
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity postRecipe(@Valid @RequestPart RecipeDto.Post requestBody,
-                                     @RequestPart List<MultipartFile> files,
-                                     @AuthMemberId Long memberId) {
+    public ResponseEntity<RecipeDto.ResponseDetail> postRecipe(@Valid @RequestPart RecipeDto.Post requestBody,
+                                                               @RequestPart List<MultipartFile> files,
+                                                               @AuthMemberId Long memberId) {
         //1. 이미지 관련 exception 처리 필요
 
         List<RecipeIngredient> recipeIngredients = recipeMapper.ingredientsDtoToIngredients(requestBody.getIngredients());
@@ -42,7 +43,7 @@ public class RecipeController {
         Recipe savedRecipe = recipeService.createRecipe(recipe, stepList, memberId, files, recipeIngredients);
         RecipeDto.ResponseDetail response = recipeMapper.recipeToRecipeResponse(savedRecipe);
 
-        return new ResponseEntity(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
@@ -55,16 +56,16 @@ public class RecipeController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity updateRecipe(@PathVariable("id") @Positive Long id,
-                                       @Valid @RequestPart RecipeDto.Patch requestBody,
-                                       @RequestPart List<MultipartFile> files,
-                                       @AuthMemberId Long memberId){
+    public ResponseEntity<RecipeDto.ResponseDetail> updateRecipe(@PathVariable("id") @Positive Long id,
+                                                                 @Valid @RequestPart RecipeDto.Patch requestBody,
+                                                                 @RequestPart List<MultipartFile> files,
+                                                                 @AuthMemberId Long memberId){
         requestBody.setId(id);
         List<Step> stepList = recipeMapper.recipeDtoStepsToStepList(requestBody.getSteps());
         List<RecipeIngredient> recipeIngredients = recipeMapper.ingredientsDtoToIngredients(requestBody.getIngredients());
         Recipe recipe = recipeService.updateRecipe(recipeMapper.recipePatchToRecipe(requestBody), stepList, memberId, files, recipeIngredients);
         RecipeDto.ResponseDetail response = recipeMapper.recipeToRecipeResponse(recipe);
-        return new ResponseEntity(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -73,5 +74,11 @@ public class RecipeController {
         int heartCounts = heartService.findHeartCounts(id);
         RecipeDto.ResponseDetail response = recipeMapper.recipeToRecipeResponse(recipe,heartCounts);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/titles")
+    public ResponseEntity<SingleResponseDto<List<String>>> findTitles(@RequestParam String word){
+        List<String> titles = recipeService.findTitlesByContainsWord(word);
+        return ResponseEntity.ok(new SingleResponseDto<>(titles));
     }
 }

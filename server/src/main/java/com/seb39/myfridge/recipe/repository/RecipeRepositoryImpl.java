@@ -20,7 +20,7 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
                 .select(recipe.title)
                 .from(recipe)
                 .where(
-                        recipe.title.like("%"+title+"%")
+                        recipe.title.upper().like("%"+title.toUpperCase()+"%")
                 )
                 .limit(10)
                 .fetch();

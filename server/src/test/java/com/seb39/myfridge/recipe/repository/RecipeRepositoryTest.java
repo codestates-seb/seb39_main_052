@@ -109,7 +109,7 @@ class RecipeRepositoryTest {
     }
 
     @Test
-    @DisplayName("레시피 제목에 특정 문자열이 포함된 레시피 제목 리스트를 조회한다.")
+    @DisplayName("특정 문자열이 포함된 레시피 제목 리스트 조회. (한글)")
     void searchTitles() throws Exception {
         // given
         for(int i=0;i<=21;i++){
@@ -129,9 +129,53 @@ class RecipeRepositoryTest {
         List<String> titles = recipeRepository.searchTitles("title");
 
         //then
+        Assertions.assertThat(titles.size()).isEqualTo(10);
         Assertions.assertThat(titles)
                 .anyMatch(title -> title.contains("title"));
     }
 
+    @Test
+    @DisplayName("특정 문자열이 포함된 레시피 제목 리스트 조회. (일치하는 레시피 없음)")
+    void searchTitlesNotExist() throws Exception {
+        // given
+        for(int i=0;i<=3;i++){
+            Recipe recipe = new Recipe();
+            recipe.setTitle(i + " title "+i);
+            recipeRepository.save(recipe);
+        }
+        recipeRepository.searchTitles("unknown");
 
+        em.flush();
+        em.clear();
+
+        // when
+        List<String> titles = recipeRepository.searchTitles("unknown");
+
+        //then
+        Assertions.assertThat(titles.size()).isEqualTo(0);
+    }
+
+    @Test
+    @DisplayName("특정 문자열이 포함된 레시피 제목 리스트 조회. (영문 대소문자를 구분하지 않아야 한다)")
+    void searchTitlesIgnoreCase() throws Exception {
+        // given
+        List<String> titles = List.of("Creamy Chicken Penne Pasta",
+                "Cheesy Chicken Alfredo Pasta Bake",
+                "One Pot Garlic Parmesan Pasta",
+                "Penne With Tomato Sauce Pasta");
+        for (String title : titles) {
+            Recipe recipe = new Recipe();
+            recipe.setTitle(title);
+            recipeRepository.save(recipe);
+        }
+
+        em.flush();
+        em.clear();
+
+        // when
+        List<String> result = recipeRepository.searchTitles("pasta");
+
+        //then
+        Assertions.assertThat(result.size()).isEqualTo(4);
+    }
 }

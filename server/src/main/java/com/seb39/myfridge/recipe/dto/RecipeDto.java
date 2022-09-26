@@ -144,10 +144,35 @@ public class RecipeDto {
     public static class Response{
         private Long id;
         private String title;
-        private String memberId;
-        private String memberName;
+        private RecipeDto.Response.Member member;
         private String imagePath;
         private int heartCounts;
         private int view;
+
+        @Builder
+        private Response(Long id, String title, Long memberId, String memberName, String profileImagePath, String imagePath, int heartCounts, int view) {
+
+            RecipeDto.Response.Member member = new Member();
+            member.setId(memberId);
+            member.setName(memberName);
+            member.setProfileImagePath(profileImagePath);
+            this.member = member;
+
+            this.id = id;
+            this.title = title;
+            this.imagePath = imagePath;
+            this.heartCounts = heartCounts;
+            this.view = view;
+        }
+
+        @Getter
+        @Setter
+        static class Member{
+            private Long id;
+            private String name;
+            private String profileImagePath;
+        }
     }
+
+
 }

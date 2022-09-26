@@ -9,6 +9,7 @@ import com.seb39.myfridge.member.repository.MemberRepository;
 import com.seb39.myfridge.recipe.dto.RecipeDto;
 import com.seb39.myfridge.recipe.entity.Recipe;
 import com.seb39.myfridge.recipe.mapper.RecipeMapper;
+import com.seb39.myfridge.recipe.repository.RecipeRepository;
 import com.seb39.myfridge.recipe.service.RecipeService;
 import com.seb39.myfridge.step.entity.Step;
 import org.junit.jupiter.api.AfterEach;
@@ -76,6 +77,9 @@ class RecipeControllerTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private RecipeRepository recipeRepository;
 
     @BeforeEach
     void 회원데이터_준비() {
@@ -422,6 +426,41 @@ class RecipeControllerTest {
                                         fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("작성자 식별자"),
                                         fieldWithPath("memberName").type(JsonFieldType.STRING).description("작성자 이름"),
                                         fieldWithPath("heartCounts").type(JsonFieldType.NUMBER).description("받은 하트 개수")
+                                )
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("특정 단어가 포함된 레시피 제목 검색")
+    void findTitlesTest() throws Exception {
+        // given
+        willReturn(List.of(
+                "Creamy Chicken Penne Pasta",
+                "Cheesy Chicken Alfredo Pasta Bake",
+                "One Pot Garlic Parmesan Pasta",
+                "Penne With Tomato Sauce Pasta"))
+                .given(recipeService).findTitlesByContainsWord("pasta");
+
+        // expected
+        ResultActions actions = mockMvc.perform(get("/api/recipes/titles")
+                        .param("word", "pasta")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding(StandardCharsets.UTF_8))
+                .andExpect(jsonPath("$.data").isArray())
+                .andExpect(jsonPath("$.data.length()").value(4));
+
+        //docs
+        actions.andExpect(status().isOk())
+                .andDo(document("recipe-search-titles",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        requestParameters(
+                                parameterWithName("word").description("찾을 레시피의 제목")
+                        ),
+                        responseFields(
+                                List.of(
+                                        fieldWithPath("data").type(JsonFieldType.ARRAY).description("레시피 제목 리스트")
                                 )
                         )
                 ));
