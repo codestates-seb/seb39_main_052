@@ -1,16 +1,18 @@
 import { useState } from "react";
-import CommentsBox from "../CommentsBox/CommentsBox";
+import CommentsBox from "../MyCommentsBox/CommentsBox";
+import MyProfile from "../MyProfile/MyProfile";
 import { MenuTabContainer, Menu, Li, MenuContent } from "./MenuTabStyle";
 
 const MenuTab = () => {
   const [currentTab, setCurrentTab] = useState(0);
   const menuArr = [
-    { name: "내 프로필", content: "myprofile" },
+    { name: "내 프로필", content: <MyProfile /> },
     { name: "내 레시피", content: "2" },
     { name: "내 좋아요", content: "3" },
     { name: "내 받은 댓글", content: <CommentsBox /> },
   ];
-  console.log(menuArr);
+  // console.log(menuArr);
+
   const selectMenuHandler = (idx) => {
     setCurrentTab(idx);
   };

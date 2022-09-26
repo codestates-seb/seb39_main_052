@@ -13,7 +13,7 @@ import GeneralButton from "../../common/Button/GeneralButton";
 // const searchTerm = searchParams.get('keyword');
 // 예) axios(`api/search?keyword=${searchTerm}`)
 
-const SearchModal = ({ handleClose, width }) => {
+const SearchModal = ({ handleClose }) => {
   const dummyData = [
     {
       id: 1,
