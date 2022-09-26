@@ -5,51 +5,22 @@ import GeneralButton from "../../components/common/Button/GeneralButton";
 import InputList from "../../components/common/InputList/InputList";
 import { clearFridge, setDDay } from "../../features/fridgeSlice";
 import useConfirm from "../../hooks/useConfirm";
-import { Head, ColumnHeads, Container, Title, Fridge, InputWrapper, InnerContainer, ButtonWrap } from "./MyFridgeStyle";
+import { Head, ColumnHeads, Container, Title, Fridge, InputWrapper, InnerContainer, ButtonWrap, SortWrapper, Option } from "./MyFridgeStyle";
 
 const MyFridge = () => {
     const [dateArr, setDateArr] = useState([]);
+    const [sortMode, setSortMode] = useState(['date']);
     const titlesArr = ["name", "amount", "date", "dDay", "note"]; //재료 입력에서 각 column의 키값 배열
     const placeholders = ["예) 계란", "예) 30알", "예) 2100/01/01", "", "기타 정보를 작성하세요"];
     const dispatch = useDispatch();
 
-    // const dDayCalculator = (date) => {
-    //     const setDate = new Date (date);
-    //     const setDateDay = setDate.getDate();
-
-    //     // 현재 날짜를 new 연산자를 사용해서 Date 객체를 생성
-    //     const now = new Date();
-
-    //     const gap = setDateDay- now.getDate();
-    //     console.log(gap);
-
-    //     return gap;
-    // } 
-    
     // const fridgeData = useSelector((state) => {
     //     return state.fridge.ingredients;
     // });
     // console.log(fridgeData);
 
-    // useEffect(() => {
-    //     for (let i = 0; i < fridgeData.length; i++) {
-    //         setDateArr(...dateArr, fridgeData[i].date);
-    //         console.log(`요기여 포문`)
-    //     }  
-    // }, [fridgeData])
-    
-    // console.log(dateArr);
-
-    // useEffect (() => {
-    //     for (let i = 0; i < dateArr.length; i++) {
-    //         let dDay = dDayCalculator(fridgeData[i]);
-    //         dispatch(setDDay({index: 0, key: "dDay", value: dDay}))
-    //         console.log(`dday`, dDay)
-    //     }
-    // }, [dateArr])
-
     // 냉장고 비우기
-    const confirm = (id) => {handleDeleteAll(id)};
+    const confirm = (id) => { handleDeleteAll(id) };
     const cancel = () => console.log("취소");
     const handleDeleteAll = async (id) => {
         // axios({
@@ -68,18 +39,51 @@ const MyFridge = () => {
         dispatch(clearFridge());
         alert("냉장고를 비웠습니다.")
     }
-
+    // 냉장고 취소
     const handleCancel = () => {
         window.location.replace("/myfridge");
     }
-
+    // 냉장고 정리 끝
     const handleSave = () => [
         alert("냉장고를 정리하였습니다!")
     ]
 
+    // 냉장고 재료 정렬
+    const SortingTab = () => {
+        const sortOption = [{
+            mode: "date",
+            button: "유통기한순"
+        }, {
+            mode: "alphabet",
+            button: "가나다순"
+        }]
+
+        const handleClick = (mode) => {
+            setSortMode(mode);
+        }
+
+        return (
+            <SortWrapper>
+                {sortOption.map((option, idx) => {
+                    return (
+                        <Option
+                            key={idx}
+                            onClick={() => { handleClick(option.mode) }}
+                            className={sortMode === option.mode && "selected"}
+                        // className="selected"
+                        >
+                            {option.button}
+                        </Option>
+                    )
+                })}
+            </SortWrapper>
+        )
+    }
+
     return (
         <Container>
             <Title>나의 냉장고</Title>
+            <SortingTab />
             <Fridge>
                 <InnerContainer>
                     <ColumnHeads>

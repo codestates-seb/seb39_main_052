@@ -43,6 +43,9 @@ export const Input = styled.input`
         width: 300px;
         padding:4px 10px 0 10px;
      }
+     &.center {
+        text-align: center;
+     }
      &.gray {
         background: var(--gray-200);
      }

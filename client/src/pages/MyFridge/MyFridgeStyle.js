@@ -5,6 +5,29 @@ export const Container = styled.div`
     flex-direction: column;
     align-items: center;
 `
+export const SortWrapper = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    color: var(--fridge-700);
+    font-size: 13px;
+    margin-bottom: 8px;
+    width: 800px;
+`
+
+export const Option = styled.div`
+    padding: 0 8px;
+    cursor: pointer;
+    // 옵션 사이 줄
+    :not(:last-of-type) {
+        border-right: 1px solid var(--fridge-800);
+    }
+    // 선택된 옵션 볼드 효과 
+    &.selected {
+        font-weight: 700;
+        color: var(--fridge-800);
+    }
+`
 
 export const Fridge = styled.div`
     display: flex;

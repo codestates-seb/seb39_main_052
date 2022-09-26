@@ -18,7 +18,6 @@ const InputList = ({ titlesArr, placeholders }) => {
     const dispatch = useDispatch();
     // 어느 페이지에서 해당 컴포넌트를 불러오는지 확인
     const { pathname } = useLocation()
-    console.log(pathname);
 
     // row 값 (한 열의 데이터 객체를 가지고 있는 배열)
     const data = useSelector((state) => {
@@ -65,19 +64,50 @@ const InputList = ({ titlesArr, placeholders }) => {
 
         // 날짜 값이 없는 경우 dDay column은 gray
         if (title === "dDay" && el.dDay === "") return "small gray";
-
         // dDay가 0일 미만인 경우 red row
-        else if (el.dDay < 0) return "small red";
-
+        else if (el.dDay < 0) {
+            if (title === "dDay") {
+                return "small red center";
+            }
+            else {
+                return "small red";
+            }
+        }
         // dDay가 0일 이상 7일 이하인 경우 yellow row
-        else if (el.dDay !== "" && el.dDay >= 0 && el.dDay <= 7) return "small yellow";
-
+        else if (el.dDay !== "" && el.dDay >= 0 && el.dDay <= 7) {
+            if (title === "dDay") {
+                return "small yellow center";
+            }
+            else {
+                return "small yellow";
+            }
+        }
         // dDay가 7일 이상인 경우 green row
-        else if (el.dDay > 7) return "small green";
-
+        else if (el.dDay > 7) {
+            if (title === "dDay") {
+                return "small green center";
+            }
+            else {
+                return "small green";
+            }
+        }
         // 그 외 경우의 수는 기본 색상
         else return "small";
 
+    }
+
+    const dDayDisplay = (dDay) => {
+        let display;
+        if (dDay === "") {
+            display = "";
+        }
+        else if (dDay >= 0) {
+            display = "D-" + dDay;
+        }
+        else {
+            display = "D+" + Math.abs(dDay);
+        }
+        return display;
     }
 
     return (
@@ -93,7 +123,7 @@ const InputList = ({ titlesArr, placeholders }) => {
                                     maxLength='12'
                                     key={index}
                                     name={title}
-                                    value={el[title]}
+                                    value={title === "dDay" ? dDayDisplay(el[title]) : el[title]}
                                     placeholder={placeholders[index]}
                                     onChange={e => handleInputChange(e, idx)}
                                     readOnly={title === "dDay" ? true : false} // D-Day 값은 입력/수정 안되도록
