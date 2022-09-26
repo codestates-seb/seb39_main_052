@@ -15,6 +15,8 @@ import FloatingAction from "./components/layout/FloatingAction/FloatingAction";
 import Gnb from "./components/common/GNB/Gnb";
 import FridgeDigging from "./pages/FridgeDigging/FridgeDigging";
 import MyFridge from "./pages/MyFridge/MyFridge";
+import MyPage from "./pages/MyPage/MyPage";
+
 
 function App() {
   return (
@@ -33,6 +35,7 @@ function App() {
           <Route path="/recipes/:id" element={<RecipeDetail />} />
           <Route path="/search" element={<FridgeDigging />} />
           <Route path="/myfridge" element={<MyFridge />} />
+          <Route path="/mypage" element={<MyPage />} />
         </Routes>
         {/* <FloatingAction /> */}
       </BrowserRouter>

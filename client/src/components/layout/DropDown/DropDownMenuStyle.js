@@ -18,7 +18,7 @@ export const Menu = styled.div`
   border-radius: 8px;
   top: 40px;
   /* right: 0; */
-  right: -480%;
+  right: -250%;
   width: 120px;
   text-align: center;
   box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
