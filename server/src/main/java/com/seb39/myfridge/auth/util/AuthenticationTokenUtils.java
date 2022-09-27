@@ -22,12 +22,12 @@ public class AuthenticationTokenUtils {
 
     public static void addTokenInResponse(HttpServletResponse response, AuthenticationToken token){
         response.addHeader(ACCESS_TOKEN,token.getAccess());
-        Cookie cookie = CookieUtil.createHttpOnlyCookie(AppAuthNames.REFRESH_TOKEN, token.getRefresh());
+        Cookie cookie = CookieUtils.createHttpOnlyCookie(AppAuthNames.REFRESH_TOKEN, token.getRefresh());
         response.addCookie(cookie);
     }
 
     public static void removeTokenInResponse(HttpServletResponse response) {
-        response.addCookie(CookieUtil.createExpiredCookie(AppAuthNames.REFRESH_TOKEN));
+        response.addCookie(CookieUtils.createExpiredCookie(AppAuthNames.REFRESH_TOKEN));
     }
 
     private static String getAccessToken(HttpServletRequest request) {
@@ -37,7 +37,7 @@ public class AuthenticationTokenUtils {
     }
 
     private static String getRefreshToken(HttpServletRequest request){
-        return CookieUtil.getCookieValue(AppAuthNames.REFRESH_TOKEN, request.getCookies())
+        return CookieUtils.getCookieValue(AppAuthNames.REFRESH_TOKEN, request.getCookies())
                 .orElse(null);
     }
 

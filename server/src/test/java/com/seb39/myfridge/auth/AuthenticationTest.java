@@ -9,7 +9,7 @@ import com.seb39.myfridge.auth.dto.SignUpRequest;
 import com.seb39.myfridge.auth.enums.JwtTokenType;
 import com.seb39.myfridge.auth.service.AuthenticationTokenProvider;
 import com.seb39.myfridge.auth.service.AuthenticationTokenService;
-import com.seb39.myfridge.auth.util.CookieUtil;
+import com.seb39.myfridge.auth.util.CookieUtils;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.service.MemberService;
 import org.hamcrest.Matchers;
@@ -166,7 +166,7 @@ class AuthenticationTest {
         AuthenticationToken token = jwtProvider.createToken(member.getId());
         String accessToken = token.getAccess();
         String refreshToken = token.getRefresh();
-        Cookie refreshTokenCookie = CookieUtil.createHttpOnlyCookie(REFRESH_TOKEN, refreshToken);
+        Cookie refreshTokenCookie = CookieUtils.createHttpOnlyCookie(REFRESH_TOKEN, refreshToken);
 
         // expected
         ResultActions result = mockMvc.perform(get("/api/logout")
@@ -207,7 +207,7 @@ class AuthenticationTest {
         ReflectionTestUtils.setField(token,"access",expiredAccessToken);
 
         ReflectionTestUtils.invokeMethod(tokenService, "saveToken", token);
-        Cookie refreshTokenCookie = CookieUtil.createHttpOnlyCookie(REFRESH_TOKEN, token.getRefresh());
+        Cookie refreshTokenCookie = CookieUtils.createHttpOnlyCookie(REFRESH_TOKEN, token.getRefresh());
 
         // expected
         ResultActions result = mockMvc.perform(post("/api/auth/refresh")

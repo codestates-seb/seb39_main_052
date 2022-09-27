@@ -134,13 +134,6 @@ public class RecipeDto {
 
     @Getter
     @Setter
-    public static class Search{
-        private String title;
-        private List<String> ingredients;
-    }
-
-    @Getter
-    @Setter
     public static class Response{
         private Long id;
         private String title;
@@ -150,7 +143,7 @@ public class RecipeDto {
         private int view;
 
         @Builder
-        private Response(Long id, String title, Long memberId, String memberName, String profileImagePath, String imagePath, int heartCounts, int view) {
+        public Response(Long id, String title, Long memberId, String memberName, String profileImagePath, String imagePath, int heartCounts, int view) {
 
             RecipeDto.Response.Member member = new Member();
             member.setId(memberId);
@@ -171,8 +164,27 @@ public class RecipeDto {
             private Long id;
             private String name;
             private String profileImagePath;
+
+            @Override
+            public String toString() {
+                return "Member{" +
+                        "id=" + id +
+                        ", name='" + name + '\'' +
+                        ", profileImagePath='" + profileImagePath + '\'' +
+                        '}';
+            }
+        }
+
+        @Override
+        public String toString() {
+            return "Response{" +
+                    "id=" + id +
+                    ", title='" + title + '\'' +
+                    ", member=" + member +
+                    ", imagePath='" + imagePath + '\'' +
+                    ", heartCounts=" + heartCounts +
+                    ", view=" + view +
+                    '}';
         }
     }
-
-
 }

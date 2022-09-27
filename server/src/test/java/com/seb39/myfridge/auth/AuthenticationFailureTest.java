@@ -9,7 +9,7 @@ import com.seb39.myfridge.auth.enums.AppAuthExceptionCode;
 import com.seb39.myfridge.auth.enums.JwtTokenType;
 import com.seb39.myfridge.auth.service.AuthenticationTokenProvider;
 import com.seb39.myfridge.auth.service.AuthenticationTokenService;
-import com.seb39.myfridge.auth.util.CookieUtil;
+import com.seb39.myfridge.auth.util.CookieUtils;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
@@ -165,7 +165,7 @@ public class AuthenticationFailureTest {
         String expiredRefreshToken = createExpiredRefreshToken();
         AuthenticationToken token = new AuthenticationToken(expiredAccessToken, expiredRefreshToken);
         ReflectionTestUtils.invokeMethod(authenticationTokenService,"saveToken",token);
-        Cookie refreshTokenCookie = CookieUtil.createHttpOnlyCookie(REFRESH_TOKEN,expiredRefreshToken);
+        Cookie refreshTokenCookie = CookieUtils.createHttpOnlyCookie(REFRESH_TOKEN,expiredRefreshToken);
 
 
         // expected

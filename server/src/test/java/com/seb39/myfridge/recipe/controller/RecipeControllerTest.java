@@ -445,8 +445,7 @@ class RecipeControllerTest {
         // expected
         ResultActions actions = mockMvc.perform(get("/api/recipes/titles")
                         .param("word", "pasta")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .characterEncoding(StandardCharsets.UTF_8))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.data").isArray())
                 .andExpect(jsonPath("$.data.length()").value(4));
 
