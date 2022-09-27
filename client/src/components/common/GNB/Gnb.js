@@ -26,7 +26,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import RecipeSearchModal from "../../layout/Modal/RecipeSearchModal"; //모달 컴포넌트 만들기 이전 레시피 서치 모달
 import SearchModal from "../../layout/Modal/SearchModal"; //컴포넌트로 만든 이후의 서치 모달
-import GeneralModal from "../../layout/Modal/GeneralModal";
 
 const Gnb = () => {
   //로그인 상태 가져와서 변수에 저장

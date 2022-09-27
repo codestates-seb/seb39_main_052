@@ -15,7 +15,7 @@ const CommentsBox = () => {
 
       comment: "완전 맛있겠다 완전 맛있겠다 완전 맛있겠다 완전 맛있겠다",
 
-      date: "2022/09/26",
+      date: "2022.9.26.",
     },
     {
       id: 2,
@@ -23,7 +23,7 @@ const CommentsBox = () => {
       memberImage:
         "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
       comment: "냠냠 ",
-      date: "2022/08/11",
+      date: "2022.8.11",
     },
     {
       id: 3,
@@ -31,7 +31,7 @@ const CommentsBox = () => {
       memberImage:
         "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
       comment: "뽀송뽀송 ",
-      date: "2022/9/1",
+      date: "2022.9.1.",
     },
   ];
 
@@ -39,9 +39,9 @@ const CommentsBox = () => {
   return (
     <CommentsBoxContainer className="CommentsBoxContainer">
       <CommentsCollection className="CommentsCollection">
-        <p>
+        <div>
           {dummyData.map((data, idx) => (
-            <div>
+            <div key={idx}>
               <span>
                 <UserImg src={data.memberImage} />
                 <UserNameTag>{data.memberName}</UserNameTag>
@@ -50,7 +50,7 @@ const CommentsBox = () => {
               <span className="date">{data.date}</span>
             </div>
           ))}
-        </p>
+        </div>
       </CommentsCollection>
       {/* 페이지네이션 들어갈 자리 */}
     </CommentsBoxContainer>
