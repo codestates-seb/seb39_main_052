@@ -33,6 +33,7 @@ public class JwtExceptionHandlingFilter extends BasicAuthenticationFilter {
             AuthResponse responseBody = AuthResponse.failure(e.getExceptionCode());
             objectMapper.writeValue(response.getWriter(),responseBody);
         }catch(Exception e){
+            log.info("catch AppAuthException {}", e);
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             AuthResponse responseBody = AuthResponse.failure(e.getMessage());
             objectMapper.writeValue(response.getWriter(),responseBody);

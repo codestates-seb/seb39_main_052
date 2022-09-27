@@ -2,6 +2,7 @@ package com.seb39.myfridge.recipe.entity;
 
 import com.seb39.myfridge.comment.entity.Comment;
 import com.seb39.myfridge.helper.BaseTimeEntity;
+import com.seb39.myfridge.image.entity.Image;
 import com.seb39.myfridge.ingredient.entity.RecipeIngredient;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.step.entity.Step;
@@ -35,7 +36,7 @@ public class Recipe extends BaseTimeEntity {
     @ColumnDefault("0")
     private int view;
 
-    private String imagePath;
+//    private String imagePath;
 
     //몇 인분
     private int portion;
@@ -57,4 +58,11 @@ public class Recipe extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "recipe")
     private List<Comment> comments = new ArrayList<>();
+
+    /**
+     * image
+     */
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id")
+    private Image image;
 }
