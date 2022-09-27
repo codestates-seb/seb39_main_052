@@ -1,8 +1,8 @@
 package com.seb39.myfridge.recipe.service;
 
+import com.seb39.myfridge.image.upload.FileUploadService;
 import com.seb39.myfridge.ingredient.Repository.IngredientRepository;
 import com.seb39.myfridge.ingredient.Repository.RecipeIngredientRepository;
-import com.seb39.myfridge.ingredient.entity.Ingredient;
 import com.seb39.myfridge.ingredient.entity.RecipeIngredient;
 import com.seb39.myfridge.ingredient.service.IngredientService;
 import com.seb39.myfridge.member.entity.Member;
@@ -11,7 +11,6 @@ import com.seb39.myfridge.recipe.entity.Recipe;
 import com.seb39.myfridge.recipe.repository.RecipeRepository;
 import com.seb39.myfridge.step.entity.Step;
 import com.seb39.myfridge.step.repository.StepRepository;
-import com.seb39.myfridge.upload.FileUploadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +18,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -51,14 +49,17 @@ public class RecipeService {
 
         ingredientService.createIngredient(recipe, recipeIngredients);
 
-        createImage(recipe, files, steps);
+        //recipe 이미지 지정
+        fileUploadService.uploadImages(recipe, steps, files);
+
         Recipe savedRecipe = recipeRepository.save(recipe);
         steps.forEach(step -> step.addRecipe(recipe));
         return savedRecipe;
     }
 
+
     @Transactional
-    public Recipe updateRecipe(Recipe recipe, List<Step> steps, Long memberId, List<MultipartFile> files, List<RecipeIngredient> recipeIngredients ) {
+    public Recipe updateRecipe(Recipe recipe, List<Step> steps, Long memberId, List<MultipartFile> files, List<RecipeIngredient> recipeIngredients) {
         Recipe findRecipe = findRecipeById(recipe.getId());
         verifyWriter(findRecipe, memberId);
 
@@ -66,14 +67,13 @@ public class RecipeService {
         Optional.ofNullable(recipe.getTime()).ifPresent(findRecipe::setTime);
         Optional.ofNullable(recipe.getPortion()).ifPresent(findRecipe::setPortion);
 
+        findRecipe.getImage().setIsUpdated(recipe.getImage().getIsUpdated());
+
         findRecipe.getRecipeIngredients().clear();
         ingredientService.updateIngredient(findRecipe, recipeIngredients);
 
-        //1. 이미지 삭제
-//        deleteImage(findRecipe);
         findRecipe.getSteps().clear();
-        //2. 이미지 재업로드
-        createImage(findRecipe, files, steps);
+        updateImage(findRecipe, files, steps);
 
         //update를 하면 기존의 step이 중복으로 들어가는 문제 발생 -> update를 하기 이전에, step을 삭제(더 좋은 방법이 있을까?)
         stepRepository.deleteStepByRecipeId(findRecipe.getId());
@@ -82,40 +82,32 @@ public class RecipeService {
         return updateRecipe;
     }
 
+
     @Transactional
     public void deleteRecipe(long id, long memberId) {
         Recipe findRecipe = findRecipeById(id);
         verifyWriter(findRecipe, memberId);
         //s3 버킷에서 해당 레시피에 관련된 이미지 삭제
-        deleteImage(findRecipe);
+//        deleteImage(findRecipe);
         recipeRepository.delete(findRecipe);
     }
 
 
-    //이미지 생성 메서드
-    private void createImage(Recipe findRecipe, List<MultipartFile> files, List<Step> steps) {
-        if (!CollectionUtils.isEmpty(files)) {
-            if (findRecipe.getImagePath() == null) {
-                findRecipe.setImagePath(fileUploadService.uploadImage(files.get(0)));
-                files.remove(0);
-            }
-            for (Step step : steps) {
-                if (step.getImagePath() == null) {
-                    step.setImagePath(fileUploadService.uploadImage(files.get(0)));
-                    files.remove(0);
-                }
-            }
-            //첫 번째 레시피 사진은 비어있고, 두 번째 레시피 사진을 넣고싶다면???
-        }
-    }
 
-    //이미지 삭제 메서드
-    private void deleteImage(Recipe findRecipe) {
-        fileUploadService.deleteImage(findRecipe.getImagePath());
-        List<Step> steps = findRecipe.getSteps();
-        for (Step step : steps) {
-            if (step.getImagePath() != null) {
-                fileUploadService.deleteImage(step.getImagePath());
+    private void updateImage(Recipe findRecipe, List<MultipartFile> files, List<Step> steps) {
+        if (!CollectionUtils.isEmpty(files)) {
+            for (MultipartFile file : files) {
+                if (findRecipe.getImage().getIsUpdated().equals("Y")) {
+                    fileUploadService.updateRecipeImages(findRecipe, file);
+                } else {
+                    for (Step step : steps) {
+                        if (step.getImage().getIsUpdated().equals("Y")) {
+                            int idx = step.getImage().getIdx();
+                            fileUploadService.updateStepImages(step, file, idx);
+                            break;
+                        }
+                    }
+                }
             }
         }
     }

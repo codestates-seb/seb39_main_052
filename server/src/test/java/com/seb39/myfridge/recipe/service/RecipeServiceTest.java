@@ -1,5 +1,6 @@
 package com.seb39.myfridge.recipe.service;
 
+import com.seb39.myfridge.image.entity.Image;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.service.MemberService;
 import com.seb39.myfridge.recipe.entity.Recipe;
@@ -81,10 +82,15 @@ class RecipeServiceTest {
     // @Test
     public void 레시피수정_테스트() {
         //given
+        Image image = new Image();
+        image.setIsUpdated("N");
+        image.setIdx(0);
+        image.setImagePath("imagePath");
+
         Recipe recipe = new Recipe();
         recipe.setTitle("Test title!");
         recipe.setView(0);
-        recipe.setImagePath("imagePath");
+        recipe.setImage(image);
         recipe.setCreatedAt(LocalDateTime.now());
         recipe.setLastModifiedAt(LocalDateTime.now());
 
@@ -93,13 +99,13 @@ class RecipeServiceTest {
         Step step = new Step();
         step.setContent("물을 끓인다");
         step.setSequence(1);
-        step.setImagePath("imagePath");
+        step.setImage(image);
         steps.add(step);
 
         Step step2 = new Step();
         step2.setContent("스프를 넣는다");
         step2.setSequence(2);
-        step2.setImagePath("imagePath");
+        step2.setImage(image);
         steps.add(step2);
 
         Member member = Member.generalBuilder()
@@ -125,10 +131,15 @@ class RecipeServiceTest {
     @Test
     public void 레시피삭제_테스트() {
         //given
+        Image image = new Image();
+        image.setIsUpdated("N");
+        image.setIdx(0);
+        image.setImagePath("imagePath");
+
         Recipe recipe = new Recipe();
         recipe.setTitle("Test title!");
         recipe.setView(0);
-        recipe.setImagePath("imagePath");
+        recipe.setImage(image);
         recipe.setCreatedAt(LocalDateTime.now());
         recipe.setLastModifiedAt(LocalDateTime.now());
 

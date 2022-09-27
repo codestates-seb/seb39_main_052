@@ -11,12 +11,14 @@ import java.util.List;
 
 public class RecipeDto {
 
+    //Recipe Post, Response Image 정보 들어갈 수 있도록 모두 수정해야 함
+
     @Getter
-    public static class Post{
+    public static class Post {
+
+
         @NotBlank(message = "레시피 제목은 공백이 아니어야 합니다.")
         private String title;
-
-        private String imagePath;
 
         private int portion;
 
@@ -27,9 +29,8 @@ public class RecipeDto {
         private List<Step> steps;
 
         @Builder
-        public Post(String title, String imagePath, int portion, String time, List<Step> steps, List<Ingredient> ingredients) {
+        public Post(String title, int portion, String time, List<Step> steps, List<Ingredient> ingredients) {
             this.title = title;
-            this.imagePath = imagePath;
             this.portion = portion;
             this.time = time;
             this.ingredients = ingredients;
@@ -38,14 +39,30 @@ public class RecipeDto {
     }
 
     @Getter
-    @Builder
-    public static class Patch{
+    public static class ImageInfo {
+        private int idx;
+
+        private String imagePath;
+
+
+        private String isUpdated;
+
+        @Builder
+        public ImageInfo(int idx, String imagePath, String isUpdated) {
+            this.idx = idx;
+            this.imagePath = imagePath;
+            this.isUpdated = isUpdated;
+        }
+    }
+
+    @Getter
+    public static class Patch {
 
         private Long id;
         @NotBlank(message = "수정할 레시피 제목은 공백이 아니어야 합니다.")
         private String title;
 
-        private String imagePath;
+        private ImageInfo imageInfo;
 
         private int portion;
 
@@ -55,11 +72,11 @@ public class RecipeDto {
 
         private List<Step> steps;
 
-
-        public Patch(Long id, String title, String imagePath, int portion, String time, List<Ingredient> ingredients, List<Step> steps) {
+        @Builder
+        public Patch(Long id, String title, ImageInfo imageInfo, int portion, String time, List<Ingredient> ingredients, List<Step> steps) {
             this.id = id;
             this.title = title;
-            this.imagePath = imagePath;
+            this.imageInfo = imageInfo;
             this.portion = portion;
             this.time = time;
             this.ingredients = ingredients;
@@ -72,21 +89,21 @@ public class RecipeDto {
     }
 
     @Getter
-    public static class Step{
+    public static class Step {
         private int sequence;
         private String content;
-        private String imagePath;
+        private ImageInfo imageInfo;
 
         @Builder
-        public Step(int sequence, String content, String imagePath) {
+        public Step(int sequence, String content, ImageInfo imageInfo) {
             this.sequence = sequence;
             this.content = content;
-            this.imagePath = imagePath;
+            this.imageInfo = imageInfo;
         }
     }
 
     @Getter
-    public static class Ingredient{
+    public static class Ingredient {
         private String name;
         private String quantity;
 
@@ -107,7 +124,7 @@ public class RecipeDto {
         private String time;
         private LocalDateTime createdAt;
         private LocalDateTime lastModifiedAt;
-        private String imagePath;
+        private ImageInfo imageInfo;
         private List<Ingredient> ingredients;
         private List<Step> steps;
         private Long memberId;
@@ -123,7 +140,7 @@ public class RecipeDto {
             this.time = time;
             this.createdAt = createdAt;
             this.lastModifiedAt = lastModifiedAt;
-            this.imagePath = imagePath;
+            this.imageInfo = imageInfo;
             this.ingredients = ingredients;
             this.steps = steps;
             this.memberId = member.getId();

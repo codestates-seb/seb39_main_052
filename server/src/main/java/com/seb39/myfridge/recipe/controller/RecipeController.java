@@ -1,9 +1,12 @@
 package com.seb39.myfridge.recipe.controller;
 
+
 import com.seb39.myfridge.dto.SingleResponseDto;
+import com.seb39.myfridge.auth.PrincipalDetails;
 import com.seb39.myfridge.heart.service.HeartService;
 import com.seb39.myfridge.ingredient.entity.RecipeIngredient;
 import com.seb39.myfridge.auth.annotation.AuthMemberId;
+import com.seb39.myfridge.ingredient.entity.RecipeIngredient;
 import com.seb39.myfridge.recipe.dto.RecipeDto;
 import com.seb39.myfridge.recipe.entity.Recipe;
 import com.seb39.myfridge.recipe.mapper.RecipeMapper;
@@ -46,7 +49,6 @@ public class RecipeController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-
     @DeleteMapping("/{id}")
     public ResponseEntity deleteRecipe(@PathVariable("id") @Positive Long id,
                                        @AuthMemberId Long memberId) {
@@ -59,9 +61,8 @@ public class RecipeController {
     public ResponseEntity<RecipeDto.ResponseDetail> updateRecipe(@PathVariable("id") @Positive Long id,
                                                                  @Valid @RequestPart RecipeDto.Patch requestBody,
                                                                  @RequestPart List<MultipartFile> files,
-                                                                 @AuthMemberId Long memberId){
-        requestBody.setId(id);
-        List<Step> stepList = recipeMapper.recipeDtoStepsToStepList(requestBody.getSteps());
+                                                                 @AuthMemberId Long memberId){        requestBody.setId(id);
+        List<Step> stepList = recipeMapper.recipeDtoStepsToStepListForPatch(requestBody.getSteps());
         List<RecipeIngredient> recipeIngredients = recipeMapper.ingredientsDtoToIngredients(requestBody.getIngredients());
         Recipe recipe = recipeService.updateRecipe(recipeMapper.recipePatchToRecipe(requestBody), stepList, memberId, files, recipeIngredients);
         RecipeDto.ResponseDetail response = recipeMapper.recipeToRecipeResponse(recipe);
@@ -81,4 +82,5 @@ public class RecipeController {
         List<String> titles = recipeService.findTitlesByContainsWord(word);
         return ResponseEntity.ok(new SingleResponseDto<>(titles));
     }
+
 }
