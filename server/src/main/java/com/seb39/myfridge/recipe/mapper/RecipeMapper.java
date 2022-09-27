@@ -35,7 +35,7 @@ public interface RecipeMapper {
             Step step1 = new Step();
             step1.setContent(step.getContent());
             step1.setSequence(step.getSequence());
-            step1.setImagePath(step.getImagePath());
+            step1.setImage(imageDtoToImage(step.getImageInfo()));
             stepList.add(step1);
         }
         return stepList;

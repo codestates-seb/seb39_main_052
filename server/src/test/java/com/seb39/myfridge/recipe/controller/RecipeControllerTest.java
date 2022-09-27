@@ -187,7 +187,7 @@ class RecipeControllerTest {
 
         Member member = memberRepository.findByEmail("test@email.com").get();
 
-        RecipeDto.Response response = new RecipeDto.Response(
+        RecipeDto.ResponseDetail response = new RecipeDto.ResponseDetail(
                 1L,
                 "라면 맛있게 끓이는 법",
                 1,
@@ -355,7 +355,7 @@ class RecipeControllerTest {
 
         Member member = memberRepository.findByEmail("test@email.com").get();
 
-        RecipeDto.Response response = new RecipeDto.Response(
+        RecipeDto.ResponseDetail response = new RecipeDto.ResponseDetail(
                 1L,
                 "라면 맛있게 끓이는 법",
                 1,

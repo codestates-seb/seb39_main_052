@@ -57,7 +57,7 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
                 recipe.member.id,
                 recipe.member.name,
                 recipe.member.profileImagePath,
-                recipe.imagePath,
+                null,
                 ExpressionUtils.as(
                         JPAExpressions.select(heart.count().intValue())
                                 .from(heart)

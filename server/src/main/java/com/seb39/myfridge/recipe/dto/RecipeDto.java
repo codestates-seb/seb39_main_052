@@ -132,7 +132,7 @@ public class RecipeDto {
         private int heartCounts;
 
         @Builder
-        public ResponseDetail(Long id, String title, int portion, int view, String time, LocalDateTime createdAt, LocalDateTime lastModifiedAt, String imagePath, List<Ingredient> ingredients , List<Step> steps, Member member, int heartCounts) {
+        public ResponseDetail(Long id, String title, int portion, int view, String time, LocalDateTime createdAt, LocalDateTime lastModifiedAt, ImageInfo imageInfo, List<Ingredient> ingredients , List<Step> steps, Member member, int heartCounts) {
             this.id = id;
             this.title = title;
             this.portion = portion;
@@ -155,12 +155,12 @@ public class RecipeDto {
         private Long id;
         private String title;
         private RecipeDto.Response.Member member;
-        private String imagePath;
+        private ImageInfo imageInfo;
         private int heartCounts;
         private int view;
 
         @Builder
-        public Response(Long id, String title, Long memberId, String memberName, String profileImagePath, String imagePath, int heartCounts, int view) {
+        public Response(Long id, String title, Long memberId, String memberName, String profileImagePath, ImageInfo imageInfo, int heartCounts, int view) {
 
             RecipeDto.Response.Member member = new Member();
             member.setId(memberId);
@@ -170,7 +170,7 @@ public class RecipeDto {
 
             this.id = id;
             this.title = title;
-            this.imagePath = imagePath;
+            this.imageInfo = imageInfo;
             this.heartCounts = heartCounts;
             this.view = view;
         }
@@ -181,27 +181,6 @@ public class RecipeDto {
             private Long id;
             private String name;
             private String profileImagePath;
-
-            @Override
-            public String toString() {
-                return "Member{" +
-                        "id=" + id +
-                        ", name='" + name + '\'' +
-                        ", profileImagePath='" + profileImagePath + '\'' +
-                        '}';
-            }
-        }
-
-        @Override
-        public String toString() {
-            return "Response{" +
-                    "id=" + id +
-                    ", title='" + title + '\'' +
-                    ", member=" + member +
-                    ", imagePath='" + imagePath + '\'' +
-                    ", heartCounts=" + heartCounts +
-                    ", view=" + view +
-                    '}';
         }
     }
 }

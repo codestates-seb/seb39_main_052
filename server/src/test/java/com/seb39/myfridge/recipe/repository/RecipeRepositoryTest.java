@@ -182,8 +182,8 @@ class RecipeRepositoryTest {
         Assertions.assertThat(result.size()).isEqualTo(4);
     }
 
-    @Test
-    @DisplayName("레시피 리스트 검색 테스트")
+//    @Test
+//    @DisplayName("레시피 리스트 검색 테스트")
     void searchRecipesTest() throws Exception {
         // given
         List<String> titles = List.of("Creamy Chicken Penne Pasta",
