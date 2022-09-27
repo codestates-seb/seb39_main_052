@@ -193,16 +193,16 @@ class RecipeControllerTest {
                 1L,
                 "라면 맛있게 끓이는 법",
                 1,
+                0,
                 "5분",
                 LocalDateTime.now(),
                 LocalDateTime.now(),
+                imageInfo0,
                 ingredients,
                 stepList,
                 member,
-                imageInfo0
+                0
         );
-
-
 
         willReturn(new Recipe())
                 .given(recipeMapper).recipePostToRecipe(any());
@@ -349,6 +349,9 @@ class RecipeControllerTest {
         RecipeDto.Patch patch = RecipeDto.Patch.builder()
                 .id(1L)
                 .title("라면 백종원처럼 끓이는 법!")
+                .portion(1)
+                .time("3분")
+                .steps(stepList)
                 .imageInfo(imageInfo0)
                 .build();
 
@@ -356,18 +359,20 @@ class RecipeControllerTest {
 
         RecipeDto.Response response = new RecipeDto.Response(
                 1L,
-                patch.getTitle(),
+                "라면 맛있게 끓이는 법",
                 1,
+                0,
                 "5분",
                 LocalDateTime.now(),
                 LocalDateTime.now(),
+                imageInfo0,
                 ingredients,
                 stepList,
                 member,
-                imageInfo0
+                0
         );
-
-        given(recipeMapper.recipePatchToRecipe(Mockito.any(RecipeDto.Patch.class))).willReturn(new Recipe());
+        willReturn(new Recipe()).given(recipeMapper).recipePatchToRecipe(Mockito.any(RecipeDto.Patch.class));
+//        given(recipeMapper.recipePatchToRecipe(Mockito.any(RecipeDto.Patch.class))).willReturn(new Recipe());
         given(recipeService.updateRecipe(any(), anyList(), anyLong(), anyList(), anyList())).willReturn(new Recipe());
 
         willReturn(response)
@@ -447,6 +452,47 @@ class RecipeControllerTest {
     void getRecipeDetail() throws Exception {
         // given
         Member member = memberRepository.findAll().get(0);
+        Image inputImage0 = new Image();
+        inputImage0.setImagePath("src/test/resources/image/puppy.jpeg");
+        inputImage0.setIdx(0);
+        inputImage0.setIsUpdated("N");
+        RecipeDto.ImageInfo imageInfo0 = RecipeDto.ImageInfo.builder()
+                .imagePath(inputImage0.getImagePath())
+                .idx(inputImage0.getIdx())
+                .isUpdated(inputImage0.getIsUpdated())
+                .build();
+
+        Image inputImage1 = new Image();
+        inputImage1.setImagePath("src/test/resources/image/puppy.jpeg");
+        inputImage1.setIdx(1);
+        inputImage1.setIsUpdated("N");
+
+        RecipeDto.ImageInfo imageInfo1 = RecipeDto.ImageInfo.builder()
+                .imagePath(inputImage0.getImagePath())
+                .idx(inputImage0.getIdx())
+                .isUpdated(inputImage0.getIsUpdated())
+                .build();
+
+        Image inputImage2 = new Image();
+        inputImage2.setImagePath("src/test/resources/image/puppy.jpeg");
+        inputImage2.setIdx(2);
+        inputImage2.setIsUpdated("N");
+        RecipeDto.ImageInfo imageInfo2 = RecipeDto.ImageInfo.builder()
+                .imagePath(inputImage0.getImagePath())
+                .idx(inputImage0.getIdx())
+                .isUpdated(inputImage0.getIsUpdated())
+                .build();
+
+        Image inputImage3 = new Image();
+        inputImage3.setImagePath("src/test/resources/image/puppy.jpeg");
+        inputImage3.setIdx(3);
+        inputImage3.setIsUpdated("N");
+        RecipeDto.ImageInfo imageInfo3 = RecipeDto.ImageInfo.builder()
+                .imagePath(inputImage0.getImagePath())
+                .idx(inputImage0.getIdx())
+                .isUpdated(inputImage0.getIsUpdated())
+                .build();
+
 
         Long recipeId = 23L;
         int view = 7645;
@@ -456,7 +502,7 @@ class RecipeControllerTest {
         recipe.setMember(member);
         recipe.setTime("30분");
         recipe.setPortion(3);
-        recipe.setImagePath("https://seb52bucket.s3./.../main.jpeg");
+        recipe.setImage(inputImage0);
         ReflectionTestUtils.setField(recipe, "id", recipeId);
         ReflectionTestUtils.setField(recipe, "createdAt", LocalDateTime.now());
         ReflectionTestUtils.setField(recipe, "lastModifiedAt", LocalDateTime.now());
@@ -466,7 +512,7 @@ class RecipeControllerTest {
             step.setContent("Step " + i);
             step.setSequence(i);
             step.addRecipe(recipe);
-            step.setImagePath("https://seb52bucket.s3./.../step.jpeg");
+            step.setImage(inputImage0);
         }
 
         Ingredient ingredient1 = new Ingredient();
@@ -513,14 +559,20 @@ class RecipeControllerTest {
                                         fieldWithPath("time").type(JsonFieldType.STRING).description("요리 소요 시간"),
                                         fieldWithPath("createdAt").type(JsonFieldType.STRING).description("레시피 생성일"),
                                         fieldWithPath("lastModifiedAt").type(JsonFieldType.STRING).description("레시피 수정일"),
-                                        fieldWithPath("imagePath").type(JsonFieldType.STRING).description("레시피 대표 이미지"),
+                                        fieldWithPath("imageInfo").type(JsonFieldType.OBJECT).description("레시피 대표 이미지 정보"),
+                                        fieldWithPath("imageInfo.idx").type(JsonFieldType.NUMBER).description("이미지 인덱스"),
+                                        fieldWithPath("imageInfo.imagePath").type(JsonFieldType.STRING).description("이미지 Path"),
+                                        fieldWithPath("imageInfo.isUpdated").type(JsonFieldType.STRING).description("이미지 수정 여부"),
                                         fieldWithPath("ingredients").type(JsonFieldType.ARRAY).description("요리 재료"),
                                         fieldWithPath("ingredients.[].name").type(JsonFieldType.STRING).description("요리 재료 이름"),
                                         fieldWithPath("ingredients.[].quantity").type(JsonFieldType.STRING).description("요리 재료 수량"),
                                         fieldWithPath("steps").type(JsonFieldType.ARRAY).description("요리 단계"),
                                         fieldWithPath("steps.[].sequence").type(JsonFieldType.NUMBER).description("요리 단계 순서"),
                                         fieldWithPath("steps.[].content").type(JsonFieldType.STRING).description("각 단계별 내용"),
-                                        fieldWithPath("steps.[].imagePath").type(JsonFieldType.STRING).description("요리 관련 이미지"),
+                                        fieldWithPath("steps.[].imageInfo").type(JsonFieldType.OBJECT).description("요리 단계별 이미지 정보"),
+                                        fieldWithPath("steps.[].imageInfo.idx").type(JsonFieldType.NUMBER).description("이미지 인덱스"),
+                                        fieldWithPath("steps.[].imageInfo.imagePath").type(JsonFieldType.STRING).description("이미지 Path"),
+                                        fieldWithPath("steps.[].imageInfo.isUpdated").type(JsonFieldType.STRING).description("이미지 수정 여부"),
                                         fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("작성자 식별자"),
                                         fieldWithPath("memberName").type(JsonFieldType.STRING).description("작성자 이름"),
                                         fieldWithPath("heartCounts").type(JsonFieldType.NUMBER).description("받은 하트 개수")
