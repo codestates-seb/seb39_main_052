@@ -10,7 +10,7 @@ import GeneralButton from "../../common/Button/GeneralButton";
 import { setTitle, setPortion, setTime, clearRecipe } from "../../../features/recipeSlice";
 import { clearImages } from "../../../features/imageSlice";
 
-const RecipeEditor = ({ editMode }) => {
+const RecipeEditor = () => {
 
     const [isTitleEmpty, setIsTitleEmpty] = useState(true);
     const [isMainImgEmpty, setIsMainImgEmpty] = useState(true);
@@ -28,9 +28,9 @@ const RecipeEditor = ({ editMode }) => {
     const navigate = useNavigate();
 
     // 이제 프롭스로 받을 필요 없어요!
-    const pathName = useLocation();
-    // console.log(pathName);
+    const { pathname } = useLocation();
 
+    // 페이지 나가면 작성 데이터 남지 않도록
     useEffect(() => {
         // mount
         
@@ -45,7 +45,7 @@ const RecipeEditor = ({ editMode }) => {
     const recipe = useSelector((state) => {
         return state.recipe;
     });
-    // console.log(`recipe`, recipe);
+    console.log(`recipe`, recipe);
 
     // 레시피 내 모든 이미지 데이터
     const files = useSelector((state) => {
@@ -53,11 +53,17 @@ const RecipeEditor = ({ editMode }) => {
     });
     // console.log(files);
 
-    // 레시피 내 모든 이미지 데이터
+    // 레시피 id값
     const recipeId = useSelector((state) => {
         return state.recipe.id;
     });
     // console.log(recipeId);
+
+    // 레시피 id값
+    const recipeSteps = useSelector((state) => {
+        return state.recipe.steps;
+    });
+    // console.log(recipeSteps);
 
     // 재료 유효성 경고 창 뜬 후 재작성 했을 때 유효하다면 경고창 없애기 
     useEffect(() => {
@@ -100,13 +106,46 @@ const RecipeEditor = ({ editMode }) => {
         recipe.steps[0].content.length > 0 ? setIsStepsEmpty(false) : setIsStepsEmpty(true);
 
         // 메인 이미지 유효성 검사
-        files[0] === null ? setIsMainImgEmpty(true) : setIsMainImgEmpty(false);
-        for (let i = 1; i < files.length; i++) {
-            if (files[i] === null) {
-                setIsStepImgEmpty(true);
-                break;
+        // 새 레시피 작성하기 
+        if (pathname === "/recipes/new") {
+            files[0] === null ? setIsMainImgEmpty(true) : setIsMainImgEmpty(false);
+        }
+        // 레시피 수정하기
+        else {
+            if (files[0] === null && recipe.imageInfo.isUpdated === "Y") {
+                setIsMainImgEmpty(true)
             }
-            setIsStepImgEmpty(false);
+            else {
+                setIsMainImgEmpty(false)
+            }
+        }
+        // 요리순서 이미지 유효성 검사
+        // 새 레시피 작성하기 
+        if (pathname === "/recipes/new") {
+            for (let i = 1; i < files.length; i++) {
+                if (files[i] === null) {
+                    setIsStepImgEmpty(true);
+                    break;
+                }
+                setIsStepImgEmpty(false);
+            }
+        }
+        // 레시피 수정하기
+        else {
+            let counter = 0;
+            for (let i = 1; i < files.length; i++) {
+                if (files[i] !== null) {
+                    counter++
+                }
+            }
+            for (let i = 0; i < recipeSteps.length; i++) {
+                if (recipeSteps[i].imageInfo.isUpdated === "N") {
+                    counter++
+                }
+            }
+            // 수정 시 새로 등록된 파일 수와 수정되지 않은 이미지의 합이 총 요리순서 step의 수보다 작은 경우
+            // "순서별 사진을 업로드해주세요" 메세지가 뜨도록 한다
+            counter < recipeSteps.length ? setIsStepImgEmpty(true) : setIsStepImgEmpty(false);
         }
 
         // 유효성 검사 통과시 서버에 데이터 전달
@@ -123,10 +162,10 @@ const RecipeEditor = ({ editMode }) => {
                 type: "application/json"
             }))
             // POST 요청 - 새 레시피 작성하기
-            if (editMode === "post") {
+            if (pathname === "/recipes/new") {
                 axios({
-                    method: editMode,
-                    url: '/api/recipes/image',
+                    method: "post",
+                    url: '/api/recipes',
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
@@ -134,6 +173,7 @@ const RecipeEditor = ({ editMode }) => {
                 })
                 .then((response) => {
                     // 응답 처리
+                    console.log(response);
                     // navigate(`/recipes/${response.data.id}`);
                     formData.delete('files');
                     formData.delete('requestBody');
@@ -148,9 +188,9 @@ const RecipeEditor = ({ editMode }) => {
             }
             // else로 patch 요청
             // // PATCH 요청 - 레시피 수정하기
-            if (editMode === "patch") {
+            if (pathname === "/recipes/edit") {
                 axios({
-                    method: editMode,
+                    method: "patch",
                     url: `/api/recipes/${recipeId}`,
                     headers: {
                         'Content-Type': 'multipart/form-data',
@@ -209,11 +249,11 @@ const RecipeEditor = ({ editMode }) => {
                         maxLength='24'
                         value={recipe.title}
                         onChange={(e) => {
-                            dispatch(setTitle({title: e.target.value}));
+                            dispatch(setTitle({ title: e.target.value }));
                             e.target.value.length > 0 ? setIsTitleEmpty(false) : setIsTitleEmpty(true);
                         }}
                     />
-                    {isSubmitClicked && <Warning className={isTitleEmpty? null : "invisible"}>제목을 입력해주세요</Warning>}
+                    {isSubmitClicked && <Warning className={isTitleEmpty ? null : "invisible"}>제목을 입력해주세요</Warning>}
                     <Portion>
                         <h2>양</h2>
                         <div>
@@ -224,19 +264,25 @@ const RecipeEditor = ({ editMode }) => {
                     <Time>
                         <h2>소요 시간</h2>
                         <div>
-                            <Input 
-                            className="small"
-                            type='text' 
-                            maxLength='3'
-                            value={recipe.time}
-                            onChange={(e) => {
-                                dispatch(setTime({time: e.target.value}));
-                                e.target.value.length > 0 ? setIsTimeEmpty(false) : setIsTimeEmpty(true);
-                            }}
+                            <Input
+                                className="small"
+                                type='text'
+                                maxLength='3'
+                                value={recipe.time}
+                                onChange={(e) => {
+                                    dispatch(setTime({ time: e.target.value }));
+                                    e.target.value.length > 0 ? setIsTimeEmpty(false) : setIsTimeEmpty(true);
+                                }}
+                                // 숫자만 입력 가능하도록
+                                onKeyDown={(e) => {
+                                    if (!/[0-9]/.test(e.key)) {
+                                        e.preventDefault();
+                                    }
+                                }}
                             />
                             분
                         </div>
-                        {isSubmitClicked && <Warning className={isTimeEmpty? null : "invisible"}>소요시간을 입력해주세요</Warning>}
+                        {isSubmitClicked && <Warning className={isTimeEmpty ? null : "invisible"}>소요시간을 입력해주세요</Warning>}
                     </Time>
                 </Main>
                 <ImageWrap>
@@ -258,14 +304,14 @@ const RecipeEditor = ({ editMode }) => {
                 {isSubmitClicked && <Warning className={isStepsEmpty ? null : "invisible"}>요리 순서를 최소 하나 이상 입력해주세요</Warning>}
                 {isSubmitClicked && <Warning className={isStepImgEmpty? null : "invisible"}>순서별 사진을 업로드해주세요</Warning>}
             </Steps>
-            {editMode === "post" && 
+            {pathname === "/recipes/new" && 
                 <ButtonWrap>
                     {/* 작성페이지에서 취소시 메인페이지로 연결 */}
                     <GeneralButton className="medium gray" onClick={() => navigate("/")} >취소하기</GeneralButton>
                     <GeneralButton className="medium" onClick={handleSaveClick}>게시하기</GeneralButton>
                 </ButtonWrap>
             }
-            {editMode === "patch" &&
+            {pathname === "/recipes/edit" &&
                 <ButtonWrap>
                     {/* 수정페이지에서 취소시 레시피 상세 페이지로 연결 예정 */}
                     <GeneralButton className="medium gray" >취소하기</GeneralButton>

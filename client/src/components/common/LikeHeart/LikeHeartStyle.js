@@ -17,4 +17,7 @@ export const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
     &:active {
         font-size: 14px;
     }
+    &:hover {
+        color: var(--red-400);
+    }
 `;
