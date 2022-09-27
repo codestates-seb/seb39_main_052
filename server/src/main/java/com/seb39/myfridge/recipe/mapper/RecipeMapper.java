@@ -3,6 +3,7 @@ package com.seb39.myfridge.recipe.mapper;
 import com.seb39.myfridge.image.entity.Image;
 import com.seb39.myfridge.ingredient.entity.Ingredient;
 import com.seb39.myfridge.ingredient.entity.RecipeIngredient;
+import com.seb39.myfridge.member.dto.MemberDto;
 import com.seb39.myfridge.recipe.dto.RecipeDto;
 import com.seb39.myfridge.recipe.entity.Recipe;
 import com.seb39.myfridge.step.entity.Step;
@@ -54,8 +55,7 @@ public interface RecipeMapper {
         return recipeIngredients;
     }
 
-
-    default RecipeDto.ResponseDetail recipeToRecipeResponse(Recipe recipe, int heartCounts) {
+    default RecipeDto.ResponseDetail recipeToRecipeResponseDetail(Recipe recipe, int heartCounts) {
         return RecipeDto.ResponseDetail.builder()
                 .id(recipe.getId())
                 .createdAt(recipe.getCreatedAt())
@@ -67,15 +67,14 @@ public interface RecipeMapper {
                 .view(recipe.getView())
                 .ingredients(ingredientsToDto(recipe.getRecipeIngredients()))
                 .steps(stepsToDto(recipe.getSteps()))
-                .member(recipe.getMember())
+                .member(new MemberDto.Response(recipe.getMember()))
                 .heartCounts(heartCounts)
                 .build();
     }
 
-    default RecipeDto.ResponseDetail recipeToRecipeResponse(Recipe recipe) {
-        return recipeToRecipeResponse(recipe,0);
+    default RecipeDto.ResponseDetail recipeToRecipeResponseDetail(Recipe recipe) {
+        return recipeToRecipeResponseDetail(recipe,0);
     }
-
 
     default Recipe recipePatchToRecipe(RecipeDto.Patch requestBody) {
         Recipe recipe = new Recipe();
@@ -87,7 +86,6 @@ public interface RecipeMapper {
         recipe.setImage(imageDtoToImage(requestBody.getImageInfo()));
         return recipe;
     }
-
 
     default Recipe recipePostToRecipe(RecipeDto.Post requestBody) {
         Recipe recipe = new Recipe();
@@ -110,7 +108,6 @@ public interface RecipeMapper {
         }
         return ingredientList;
     }
-
 
     default List<RecipeDto.Step> stepsToDto(List<Step> steps) {
         return steps.stream()

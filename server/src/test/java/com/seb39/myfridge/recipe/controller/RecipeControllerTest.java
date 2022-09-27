@@ -6,6 +6,7 @@ import com.seb39.myfridge.image.entity.Image;
 import com.seb39.myfridge.heart.service.HeartService;
 import com.seb39.myfridge.ingredient.entity.Ingredient;
 import com.seb39.myfridge.ingredient.entity.RecipeIngredient;
+import com.seb39.myfridge.member.dto.MemberDto;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.repository.MemberRepository;
 import com.seb39.myfridge.recipe.dto.RecipeDto;
@@ -144,7 +145,7 @@ class RecipeControllerTest {
                 .isUpdated(inputImage0.getIsUpdated())
                 .build();
 
-        MockMultipartFile image = new MockMultipartFile("files","추가하고 싶은 이미지","image/png", new FileInputStream("src/test/resources/image/puppy.jpeg"));
+        MockMultipartFile image = new MockMultipartFile("files", "추가하고 싶은 이미지", "image/png", new FileInputStream("src/test/resources/image/puppy.jpeg"));
 
         RecipeDto.Step step1 = RecipeDto.Step.builder()
                 .sequence(1)
@@ -182,7 +183,7 @@ class RecipeControllerTest {
         ingredients.add(ingredient2);
 
 
-        RecipeDto.Post requestBody = new RecipeDto.Post("라면 맛있게 끓이는 법",1,"5분", stepList, ingredients);
+        RecipeDto.Post requestBody = new RecipeDto.Post("라면 맛있게 끓이는 법", 1, "5분", stepList, ingredients);
 
 
         Member member = memberRepository.findByEmail("test@email.com").get();
@@ -198,7 +199,7 @@ class RecipeControllerTest {
                 imageInfo0,
                 ingredients,
                 stepList,
-                member,
+                new MemberDto.Response(member),
                 0
         );
 
@@ -206,7 +207,7 @@ class RecipeControllerTest {
                 .given(recipeMapper).recipePostToRecipe(any());
         given(recipeService.createRecipe(any(), anyList(), anyLong(), anyList(), anyList())).willReturn(new Recipe());
         willReturn(response)
-                .given(recipeMapper).recipeToRecipeResponse(any());
+                .given(recipeMapper).recipeToRecipeResponseDetail(any());
 
         String requestToJson = objectMapper.writeValueAsString(requestBody);
 
@@ -247,8 +248,9 @@ class RecipeControllerTest {
                                         fieldWithPath("steps.[].imageInfo.idx").type(JsonFieldType.NUMBER).description("이미지 인덱스"),
                                         fieldWithPath("steps.[].imageInfo.imagePath").type(JsonFieldType.STRING).description("이미지 Path"),
                                         fieldWithPath("steps.[].imageInfo.isUpdated").type(JsonFieldType.STRING).description("이미지 수정 여부"),
-                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("작성자 식별자"),
-                                        fieldWithPath("memberName").type(JsonFieldType.STRING).description("작성자 이름"),
+                                        fieldWithPath("member.id").type(JsonFieldType.NUMBER).description("작성자 식별자"),
+                                        fieldWithPath("member.name").type(JsonFieldType.STRING).description("작성자 이름"),
+                                        fieldWithPath("member.profileImagePath").type(JsonFieldType.STRING).description("작성자 프로필 이미지 경로").optional(),
                                         fieldWithPath("heartCounts").type(JsonFieldType.NUMBER).description("받은 하트 개수")
                                 )
                         )
@@ -339,7 +341,7 @@ class RecipeControllerTest {
         ingredients.add(ingredient1);
         ingredients.add(ingredient2);
 
-        RecipeDto.Post requestBody = new RecipeDto.Post("라면 맛있게 끓이는 법",1,"5분", stepList,ingredients);
+        RecipeDto.Post requestBody = new RecipeDto.Post("라면 맛있게 끓이는 법", 1, "5분", stepList, ingredients);
 
         String requestToJson = objectMapper.writeValueAsString(requestBody);
         MockMultipartFile json = new MockMultipartFile("requestBody", "jsonData", "application/json", requestToJson.getBytes(StandardCharsets.UTF_8));
@@ -366,7 +368,7 @@ class RecipeControllerTest {
                 imageInfo0,
                 ingredients,
                 stepList,
-                member,
+                new MemberDto.Response(member),
                 0
         );
         willReturn(new Recipe()).given(recipeMapper).recipePatchToRecipe(Mockito.any(RecipeDto.Patch.class));
@@ -374,7 +376,7 @@ class RecipeControllerTest {
         given(recipeService.updateRecipe(any(), anyList(), anyLong(), anyList(), anyList())).willReturn(new Recipe());
 
         willReturn(response)
-                .given(recipeMapper).recipeToRecipeResponse(any());
+                .given(recipeMapper).recipeToRecipeResponseDetail(any());
 
         MockMultipartHttpServletRequestBuilder builder =
                 MockMvcRequestBuilders.multipart("/api/recipes/{id}", 1L);
@@ -421,8 +423,9 @@ class RecipeControllerTest {
                                         fieldWithPath("steps.[].imageInfo.idx").type(JsonFieldType.NUMBER).description("이미지 인덱스"),
                                         fieldWithPath("steps.[].imageInfo.imagePath").type(JsonFieldType.STRING).description("이미지 Path"),
                                         fieldWithPath("steps.[].imageInfo.isUpdated").type(JsonFieldType.STRING).description("이미지 수정 여부"),
-                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("작성자 식별자"),
-                                        fieldWithPath("memberName").type(JsonFieldType.STRING).description("작성자 이름"),
+                                        fieldWithPath("member.id").type(JsonFieldType.NUMBER).description("작성자 식별자"),
+                                        fieldWithPath("member.name").type(JsonFieldType.STRING).description("작성자 이름"),
+                                        fieldWithPath("member.profileImagePath").type(JsonFieldType.STRING).description("작성자 프로필 이미지 경로").optional(),
                                         fieldWithPath("heartCounts").type(JsonFieldType.NUMBER).description("받은 하트 개수")
                                 )
                         )
@@ -571,8 +574,9 @@ class RecipeControllerTest {
                                         fieldWithPath("steps.[].imageInfo.idx").type(JsonFieldType.NUMBER).description("이미지 인덱스"),
                                         fieldWithPath("steps.[].imageInfo.imagePath").type(JsonFieldType.STRING).description("이미지 Path"),
                                         fieldWithPath("steps.[].imageInfo.isUpdated").type(JsonFieldType.STRING).description("이미지 수정 여부"),
-                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("작성자 식별자"),
-                                        fieldWithPath("memberName").type(JsonFieldType.STRING).description("작성자 이름"),
+                                        fieldWithPath("member.id").type(JsonFieldType.NUMBER).description("작성자 식별자"),
+                                        fieldWithPath("member.name").type(JsonFieldType.STRING).description("작성자 이름"),
+                                        fieldWithPath("member.profileImagePath").type(JsonFieldType.STRING).description("작성자 프로필 이미지 경로").optional(),
                                         fieldWithPath("heartCounts").type(JsonFieldType.NUMBER).description("받은 하트 개수")
                                 )
                         )

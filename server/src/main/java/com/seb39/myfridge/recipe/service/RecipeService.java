@@ -35,7 +35,7 @@ public class RecipeService {
     private final IngredientService ingredientService;
 
     public Recipe findRecipeWithDetails(Long recipeId){
-        Recipe recipe = recipeRepository.findWithMemberAndSteps(recipeId)
+        Recipe recipe = recipeRepository.findWithDetails(recipeId)
                 .orElseThrow(() -> new IllegalArgumentException("Recipe not exist. id = " + recipeId));
         // recipe.ingredients 영속화를 위한 호출
         recipeRepository.findWithIngredients(recipeId);

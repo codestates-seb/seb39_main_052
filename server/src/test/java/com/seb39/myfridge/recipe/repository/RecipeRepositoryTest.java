@@ -1,6 +1,7 @@
 package com.seb39.myfridge.recipe.repository;
 
 import com.seb39.myfridge.config.QueryDslConfig;
+import com.seb39.myfridge.image.entity.Image;
 import com.seb39.myfridge.ingredient.Repository.IngredientRepository;
 import com.seb39.myfridge.ingredient.Repository.RecipeIngredientRepository;
 import com.seb39.myfridge.ingredient.entity.Ingredient;
@@ -10,25 +11,18 @@ import com.seb39.myfridge.member.repository.MemberRepository;
 import com.seb39.myfridge.recipe.dto.RecipeDto;
 import com.seb39.myfridge.recipe.dto.RecipeSearch;
 import com.seb39.myfridge.recipe.entity.Recipe;
-import com.seb39.myfridge.recipe.service.RecipeService;
 import com.seb39.myfridge.step.entity.Step;
 import com.seb39.myfridge.step.repository.StepRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @Transactional
@@ -68,13 +62,22 @@ class RecipeRepositoryTest {
         ingredient2.setName("ingredient 2");
         ingredientRepository.saveAll(List.of(ingredient1, ingredient2));
 
+        Image image = new Image();
+        image.setImagePath("https://s3.aws..abcdefg.com/dog.jpeg");
+
         Recipe recipe = new Recipe();
+        recipe.setTitle("RECIPE 01");
         recipe.setMember(member);
+        recipe.setImage(image);
         for (int i = 1; i <= 3; i++) {
             Step step = new Step();
             step.setSequence(i);
             step.setContent("Step " + i);
             step.addRecipe(recipe);
+
+            Image stepImage = new Image();
+            stepImage.setImagePath("https://s3.aws..abcdefg.com/step" + i + ".jpeg");
+            step.setImage(stepImage);
         }
 
         RecipeIngredient ri1 = new RecipeIngredient();
@@ -96,13 +99,15 @@ class RecipeRepositoryTest {
         System.out.println("------------------------------------");
 
         // when
-        Recipe findRecipe = recipeRepository.findWithMemberAndSteps(recipe.getId()).get();
+        Recipe findRecipe = recipeRepository.findWithDetails(recipe.getId()).get();
         System.out.println("id = " + findRecipe.getId());
         System.out.println("title = " + findRecipe.getTitle());
         System.out.println("writer = " + findRecipe.getMember().getName());
+        System.out.println("image = " +findRecipe.getImage().getImagePath());
 
         for (Step step : findRecipe.getSteps()) {
             System.out.println("  step = " + step.getContent());
+            System.out.println("  step.imagePath = " + step.getImage().getImagePath());
         }
 
         recipeRepository.findWithIngredients(recipe.getId());

@@ -1,5 +1,6 @@
 package com.seb39.myfridge.recipe.dto;
 
+import com.seb39.myfridge.member.dto.MemberDto;
 import com.seb39.myfridge.member.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,21 +12,13 @@ import java.util.List;
 
 public class RecipeDto {
 
-    //Recipe Post, Response Image 정보 들어갈 수 있도록 모두 수정해야 함
-
     @Getter
     public static class Post {
-
-
         @NotBlank(message = "레시피 제목은 공백이 아니어야 합니다.")
         private String title;
-
         private int portion;
-
         private String time;
-
         private List<Ingredient> ingredients;
-
         private List<Step> steps;
 
         @Builder
@@ -41,10 +34,7 @@ public class RecipeDto {
     @Getter
     public static class ImageInfo {
         private int idx;
-
         private String imagePath;
-
-
         private String isUpdated;
 
         @Builder
@@ -57,19 +47,13 @@ public class RecipeDto {
 
     @Getter
     public static class Patch {
-
         private Long id;
         @NotBlank(message = "수정할 레시피 제목은 공백이 아니어야 합니다.")
         private String title;
-
         private ImageInfo imageInfo;
-
         private int portion;
-
         private String time;
-
         private List<Ingredient> ingredients;
-
         private List<Step> steps;
 
         @Builder
@@ -127,12 +111,11 @@ public class RecipeDto {
         private ImageInfo imageInfo;
         private List<Ingredient> ingredients;
         private List<Step> steps;
-        private Long memberId;
-        private String memberName;
+        private MemberDto.Response member;
         private int heartCounts;
 
         @Builder
-        public ResponseDetail(Long id, String title, int portion, int view, String time, LocalDateTime createdAt, LocalDateTime lastModifiedAt, ImageInfo imageInfo, List<Ingredient> ingredients , List<Step> steps, Member member, int heartCounts) {
+        public ResponseDetail(Long id, String title, int portion, int view, String time, LocalDateTime createdAt, LocalDateTime lastModifiedAt, ImageInfo imageInfo, List<Ingredient> ingredients , List<Step> steps, MemberDto.Response member, int heartCounts) {
             this.id = id;
             this.title = title;
             this.portion = portion;
@@ -143,8 +126,7 @@ public class RecipeDto {
             this.imageInfo = imageInfo;
             this.ingredients = ingredients;
             this.steps = steps;
-            this.memberId = member.getId();
-            this.memberName = member.getName();
+            this.member = member;
             this.heartCounts = heartCounts;
         }
     }
@@ -154,33 +136,19 @@ public class RecipeDto {
     public static class Response{
         private Long id;
         private String title;
-        private RecipeDto.Response.Member member;
+        private MemberDto.Response member;
         private ImageInfo imageInfo;
         private int heartCounts;
         private int view;
 
         @Builder
-        public Response(Long id, String title, Long memberId, String memberName, String profileImagePath, ImageInfo imageInfo, int heartCounts, int view) {
-
-            RecipeDto.Response.Member member = new Member();
-            member.setId(memberId);
-            member.setName(memberName);
-            member.setProfileImagePath(profileImagePath);
+        public Response(Long id, String title, MemberDto.Response member, ImageInfo imageInfo, int heartCounts, int view) {
             this.member = member;
-
             this.id = id;
             this.title = title;
             this.imageInfo = imageInfo;
             this.heartCounts = heartCounts;
             this.view = view;
-        }
-
-        @Getter
-        @Setter
-        static class Member{
-            private Long id;
-            private String name;
-            private String profileImagePath;
         }
     }
 }
