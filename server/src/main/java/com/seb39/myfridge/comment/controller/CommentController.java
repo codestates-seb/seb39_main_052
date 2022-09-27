@@ -27,10 +27,19 @@ public class CommentController {
 
     private final CommentService commentService;
 
+    @GetMapping("/api/recipes/{recipeId}/comments")
+    public ResponseEntity<MultiResponseDto<CommentDto.Response>> getComments(@PathVariable Long recipeId, @RequestParam("page") int page){
+        Page<Comment> result = commentService.findByRecipeId(recipeId,page - 1);
+        List<CommentDto.Response> data = result.getContent().stream()
+                .map(CommentMapper::commentToResponseDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(new MultiResponseDto<>(data,result));
+    }
+
     @GetMapping("/api/comments/received")
     @Secured("ROLE_USER")
     public ResponseEntity<MultiResponseDto<CommentDto.Response>> getReceivedComments(@RequestParam("page") int page, @AuthMemberId Long memberId){
-        Page<Comment> result = commentService.findReceivedComments(page - 1, memberId);
+        Page<Comment> result = commentService.findReceivedComments(memberId,page - 1);
         List<CommentDto.Response> data = result.getContent().stream()
                 .map(CommentMapper::commentToResponseDto)
                 .collect(Collectors.toList());

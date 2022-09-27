@@ -34,6 +34,14 @@ public class RecipeService {
     private final RecipeIngredientRepository recipeIngredientRepository;
     private final IngredientService ingredientService;
 
+    public Recipe findRecipeWithDetails(Long recipeId){
+        Recipe recipe = recipeRepository.findWithMemberAndSteps(recipeId)
+                .orElseThrow(() -> new IllegalArgumentException("Recipe not exist. id = " + recipeId));
+        // recipe.ingredients 영속화를 위한 호출
+        recipeRepository.findWithIngredients(recipeId);
+        return recipe;
+    }
+
     @Transactional
     public Recipe createRecipe(Recipe recipe, List<Step> steps, Long memberId, List<MultipartFile> files, List<RecipeIngredient> recipeIngredients) {
         Member member = memberService.findById(memberId);

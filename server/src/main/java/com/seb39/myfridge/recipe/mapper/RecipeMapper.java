@@ -56,7 +56,8 @@ public interface RecipeMapper {
         return recipeIngredients;
     }
 
-    default RecipeDto.Response recipeToRecipeResponse(Recipe recipe) {
+
+    default RecipeDto.Response recipeToRecipeResponse(Recipe recipe, int heartCounts) {
         return RecipeDto.Response.builder()
                 .id(recipe.getId())
                 .createdAt(recipe.getCreatedAt())
@@ -65,10 +66,17 @@ public interface RecipeMapper {
                 .portion(recipe.getPortion())
                 .time(recipe.getTime())
                 .imageInfo(imageToDto(recipe.getImage()))
+                .view(recipe.getView())
                 .ingredients(ingredientsToDto(recipe.getRecipeIngredients()))
                 .steps(stepsToDto(recipe.getSteps()))
                 .member(recipe.getMember())
+                .heartCounts(heartCounts)
                 .build();
+    }
+
+
+    default RecipeDto.Response recipeToRecipeResponse(Recipe recipe) {
+        return recipeToRecipeResponse(recipe,0);
     }
 
 

@@ -1,5 +1,9 @@
 package com.seb39.myfridge.recipe.controller;
 
+
+import com.seb39.myfridge.auth.PrincipalDetails;
+import com.seb39.myfridge.heart.service.HeartService;
+import com.seb39.myfridge.ingredient.entity.RecipeIngredient;
 import com.seb39.myfridge.auth.annotation.AuthMemberId;
 import com.seb39.myfridge.ingredient.entity.RecipeIngredient;
 import com.seb39.myfridge.recipe.dto.RecipeDto;
@@ -24,8 +28,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RecipeController {
 
-    private final StepService stepService;
     private final RecipeService recipeService;
+    private final HeartService heartService;
     private final RecipeMapper recipeMapper;
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -67,11 +71,11 @@ public class RecipeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity findRecipe(@PathVariable("id") @Positive Long id) {
-        Recipe recipe = recipeService.findRecipeById(id);
-
-        RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(recipe);
-        return new ResponseEntity(response, HttpStatus.OK);
+    public ResponseEntity<RecipeDto.Response> findRecipe(@PathVariable("id") @Positive Long id) {
+        Recipe recipe = recipeService.findRecipeWithDetails(id);
+        int heartCounts = heartService.findHeartCounts(id);
+        RecipeDto.Response response = recipeMapper.recipeToRecipeResponse(recipe,heartCounts);
+        return ResponseEntity.ok(response);
     }
 
 }

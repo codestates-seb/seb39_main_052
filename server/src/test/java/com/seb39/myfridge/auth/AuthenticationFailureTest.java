@@ -138,7 +138,7 @@ public class AuthenticationFailureTest {
         memberService.signUpGeneral(member);
 
         String expiredToken = createExpiredAccessToken(member.getId());
-        System.out.println(expiredToken);
+
         // expected
         ResultActions result = mockMvc.perform(get("/api/authtest")
                         .accept(APPLICATION_JSON)

@@ -1,11 +1,13 @@
 package com.seb39.myfridge.auth;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seb39.myfridge.auth.filter.JwtAuthenticationFilter;
 import com.seb39.myfridge.auth.filter.JwtAuthorizationFilter;
 import com.seb39.myfridge.auth.filter.JwtExceptionHandlingFilter;
 import com.seb39.myfridge.auth.handler.*;
 import com.seb39.myfridge.auth.service.JwtService;
 import com.seb39.myfridge.auth.service.OAuth2UserService;
+import com.seb39.myfridge.dto.ErrorResponse;
 import com.seb39.myfridge.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +19,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.firewall.RequestRejectedHandler;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -33,6 +36,7 @@ public class SecurityConfig {
     private final OAuth2UserService oAuth2UserService;
     private final JwtService jwtService;
     private final JwtLogoutHandler logoutHandler;
+    private final ObjectMapper om;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -91,5 +95,13 @@ public class SecurityConfig {
                     .addFilter(jwtAuthorizationFilter)
                     .addFilterBefore(jwtExceptionHandlingFilter, JwtAuthenticationFilter.class);
         }
+    }
+
+    @Bean
+    public RequestRejectedHandler requestRejectedHandler(){
+        return (request, response, requestRejectedException) -> {
+            om.writeValue(response.getWriter(), new ErrorResponse(requestRejectedException.getMessage()));
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        };
     }
 }

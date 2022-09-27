@@ -8,6 +8,7 @@ import com.seb39.myfridge.recipe.mapper.RecipeMapper;
 import com.seb39.myfridge.recipe.repository.RecipeRepository;
 import com.seb39.myfridge.step.entity.Step;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -155,5 +156,4 @@ class RecipeServiceTest {
         //then
         assertEquals(0, recipeRepository.findAll().size());
     }
-
 }

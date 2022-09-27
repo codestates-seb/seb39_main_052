@@ -12,4 +12,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     countQuery = "select count(c) from Comment c join c.recipe r join r.member m where m.id = :memberId")
     Page<Comment> findAllByRecipeWriterId(@Param("memberId") Long recipeWriterId, Pageable pageable);
 
+    @Query(value = "select c from Comment c join c.recipe where c.recipe.id = :recipeId")
+    Page<Comment> findAllByRecipeId(@Param("recipeId") Long recipeId, Pageable pageable);
+
 }
