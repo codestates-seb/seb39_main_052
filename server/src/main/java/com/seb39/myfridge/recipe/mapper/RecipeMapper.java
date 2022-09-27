@@ -9,11 +9,8 @@ import com.seb39.myfridge.step.entity.Step;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
@@ -25,7 +22,6 @@ public interface RecipeMapper {
             Step step1 = new Step();
             step1.setContent(step.getContent());
             step1.setSequence(step.getSequence());
-//            step1.setImagePath(step.getImagePath());
             step1.setImage(imageDtoToImage(step.getImageInfo()));
 
             stepList.add(step1);
@@ -39,7 +35,6 @@ public interface RecipeMapper {
             Step step1 = new Step();
             step1.setContent(step.getContent());
             step1.setSequence(step.getSequence());
-//            step1.setImagePath(step.getImagePath());
 
             stepList.add(step1);
         }
@@ -69,7 +64,6 @@ public interface RecipeMapper {
                 .title(recipe.getTitle())
                 .portion(recipe.getPortion())
                 .time(recipe.getTime())
-//                .imagePath(recipe.getImagePath())
                 .imageInfo(imageToDto(recipe.getImage()))
                 .ingredients(ingredientsToDto(recipe.getRecipeIngredients()))
                 .steps(stepsToDto(recipe.getSteps()))
@@ -77,17 +71,14 @@ public interface RecipeMapper {
                 .build();
     }
 
-//    Recipe recipePostToRecipe(RecipeDto.Post requestBody);
-
-//    Recipe recipePatchToRecipe(RecipeDto.Patch requestBody);
 
     default Recipe recipePatchToRecipe(RecipeDto.Patch requestBody) {
         Recipe recipe = new Recipe();
-        recipe.setId( requestBody.getId() );
-        recipe.setTitle( requestBody.getTitle() );
-        recipe.setPortion( requestBody.getPortion() );
-        recipe.setTime( requestBody.getTime() );
-        recipe.setSteps( recipeDtoStepsToStepList( requestBody.getSteps() ) );
+        recipe.setId(requestBody.getId());
+        recipe.setTitle(requestBody.getTitle());
+        recipe.setPortion(requestBody.getPortion());
+        recipe.setTime(requestBody.getTime());
+        recipe.setSteps(recipeDtoStepsToStepList(requestBody.getSteps()));
         recipe.setImage(imageDtoToImage(requestBody.getImageInfo()));
         return recipe;
     }
@@ -96,7 +87,6 @@ public interface RecipeMapper {
     default Recipe recipePostToRecipe(RecipeDto.Post requestBody) {
         Recipe recipe = new Recipe();
         recipe.setTitle(requestBody.getTitle());
-//        recipe.setImagePath(requestBody.getImagePath());
         recipe.setPortion(requestBody.getPortion());
         recipe.setTime(requestBody.getTime());
 
@@ -123,12 +113,9 @@ public interface RecipeMapper {
                 .collect(Collectors.toList());
     }
 
-//    RecipeDto.Step stepToDto(Step step);
-
     default RecipeDto.Step stepToDto(Step step) {
         return RecipeDto.Step.builder()
                 .content(step.getContent())
-//                .imagePath(step.getImagePath())
                 .imageInfo(imageToDto(step.getImage()))
                 .sequence(step.getSequence())
                 .build();
@@ -139,9 +126,7 @@ public interface RecipeMapper {
         Image image = new Image();
         image.setImagePath(imageInfo.getImagePath());
         image.setIdx(imageInfo.getIdx());
-        image.setIsDeleted(imageInfo.getIsDeleted());
         image.setIsUpdated(imageInfo.getIsUpdated());
-        image.setSize(imageInfo.getSize());
         return image;
     }
 
@@ -149,11 +134,7 @@ public interface RecipeMapper {
         return RecipeDto.ImageInfo.builder()
                 .idx(image.getIdx())
                 .imagePath(image.getImagePath())
-                .isDeleted(image.getIsDeleted())
                 .isUpdated(image.getIsUpdated())
-                .size(image.getSize())
-                .saveName(image.getSaveName())
-                .originalName(image.getOriginalName())
                 .build();
     }
 

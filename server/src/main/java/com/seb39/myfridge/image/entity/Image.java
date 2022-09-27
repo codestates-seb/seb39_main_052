@@ -19,34 +19,9 @@ public class Image {
 
     private int idx;
 
-    private String originalName;
-
-    private String saveName;
-
     private String imagePath;
 
-    private Long size;
 
     private String isUpdated; //업데이트 여부
 
-    private String isDeleted; //삭제 여부
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "recipe_id")
-    private Recipe recipe;
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "step_id")
-    private Step step;
-
-
-    public void addRecipeImage(Recipe recipe) {
-        recipe.setImage(this);
-        this.setRecipe(recipe);
-    }
-
-    public void addStepImage(Step step) {
-        step.setImage(this);
-        this.setStep(step);
-    }
 }

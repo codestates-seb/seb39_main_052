@@ -21,121 +21,69 @@ public class FileUploadService {
     private final UploadService s3Service;
     private final ImageRepository imageRepository;
 
+    //이미지 여러개 업로드
     public void uploadImages(Recipe recipe, List<Step> steps, List<MultipartFile> files) {
         if (!files.isEmpty()) {
             int count = 0;
             for (MultipartFile file : files) {
-                String fileName = createFileName(file.getOriginalFilename());
-                ObjectMetadata objectMetadata = new ObjectMetadata();
-                objectMetadata.setContentLength(file.getSize());
-                objectMetadata.setContentType(file.getContentType());
-
-                try (InputStream inputStream = file.getInputStream()) {
-                    s3Service.uploadFile(inputStream, objectMetadata, fileName);
-                } catch (IOException e) {
-                    throw new IllegalArgumentException(String.format("파일 변환 중 에러가 발생하였습니다.(%s)", file.getOriginalFilename()));
-                }
-
+                String fileName = setFileName(file);
                 //레시피 사진 저장
                 if (count == 0) {
-                    Image image = new Image();
-                    image.setSaveName(fileName);
-                    image.setOriginalName(file.getOriginalFilename());
-                    image.setSize(file.getSize());
-                    image.setIdx(0);
-                    image.setIsUpdated("N");
-                    image.setIsDeleted("N");
-                    image.setRecipe(recipe);
-                    image.setImagePath(s3Service.getFileUrl(fileName));
-                    image.addRecipeImage(recipe);
-
+                    Image image = createImage(0, fileName);
+                    recipe.setImage(image);
                     imageRepository.save(image);
                     count++;
                 } else {
                     //스탭 사진 저장
-
-                    Image image = new Image();
-                    image.setSaveName(fileName);
-                    image.setOriginalName(file.getOriginalFilename());
-                    image.setSize(file.getSize());
-                    image.setIdx(steps.get(count-1).getSequence());
-                    image.setIsUpdated("N");
-                    image.setIsDeleted("N");
-                    image.setStep(steps.get(count-1));
-                    image.setImagePath(s3Service.getFileUrl(fileName));
-                    image.setRecipe(recipe);
-                    image.addStepImage(steps.get(count-1));
+                    int idx = steps.get(count - 1).getSequence();
+                    Image image = createImage(idx, fileName);
+                    steps.get(count - 1).setImage(image);
                     imageRepository.save(image);
                     count++;
-
                 }
             }
         }
     }
 
-    public void updateImages(Recipe recipe, List<Step> steps, List<MultipartFile> files, int idx) {
-        if (!files.isEmpty()) {
-            for (MultipartFile file : files) {
-                String fileName = createFileName(file.getOriginalFilename());
-                ObjectMetadata objectMetadata = new ObjectMetadata();
-                objectMetadata.setContentLength(file.getSize());
-                objectMetadata.setContentType(file.getContentType());
-
-                try (InputStream inputStream = file.getInputStream()) {
-                    s3Service.uploadFile(inputStream, objectMetadata, fileName);
-                } catch (IOException e) {
-                    throw new IllegalArgumentException(String.format("파일 변환 중 에러가 발생하였습니다.(%s)", file.getOriginalFilename()));
-                }
-
-                //레시피 사진 저장
-                if (idx == 0) {
-                    Image image = new Image();
-                    image.setSaveName(fileName);
-                    image.setOriginalName(file.getOriginalFilename());
-                    image.setSize(file.getSize());
-                    image.setIdx(0);
-                    image.setIsUpdated("N");
-                    image.setIsDeleted("N");
-                    image.setRecipe(recipe);
-                    image.setImagePath(s3Service.getFileUrl(fileName));
-                    image.addRecipeImage(recipe);
-
-                    imageRepository.save(image);
-                } else {
-                    //스탭 사진 저장
-
-                    Image image = new Image();
-                    image.setSaveName(fileName);
-                    image.setOriginalName(file.getOriginalFilename());
-                    image.setSize(file.getSize());
-                    image.setIdx(idx);
-                    image.setIsUpdated("N");
-                    image.setIsDeleted("N");
-                    image.setStep(steps.get(idx-1));
-                    image.setImagePath(s3Service.getFileUrl(fileName));
-                    image.addStepImage(steps.get(idx-1));
-                    imageRepository.save(image);
-                }
-            }
-        }
-    }
-
-
-    public String uploadImage(MultipartFile file) {
+    private String setFileName(MultipartFile file) {
         String fileName = createFileName(file.getOriginalFilename());
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(file.getSize());
         objectMetadata.setContentType(file.getContentType());
-
-//        if (s3Service.isFileExist(fileName)) {
-//            s3Service.deleteFile(fileName);
-//        }
 
         try (InputStream inputStream = file.getInputStream()) {
             s3Service.uploadFile(inputStream, objectMetadata, fileName);
         } catch (IOException e) {
             throw new IllegalArgumentException(String.format("파일 변환 중 에러가 발생하였습니다.(%s)", file.getOriginalFilename()));
         }
+        return fileName;
+    }
+
+    private Image createImage(int idx, String fileName) {
+        Image image = new Image();
+        image.setIdx(idx);
+        image.setIsUpdated("N");
+        image.setImagePath(s3Service.getFileUrl(fileName));
+        return image;
+    }
+
+    public void updateRecipeImages(Recipe recipe, MultipartFile file) {
+        String fileName = setFileName(file);
+        Image image = createImage(0, fileName);
+        recipe.setImage(image);
+        imageRepository.save(image);
+    }
+
+    public void updateStepImages(Step step, MultipartFile file, int idx) {
+        String fileName = setFileName(file);
+        Image image = createImage(idx, fileName);
+        step.setImage(image);
+        imageRepository.save(image);
+    }
+
+
+    public String uploadImage(MultipartFile file) {
+        String fileName = setFileName(file);
         return s3Service.getFileUrl(fileName);
     }
 
@@ -148,7 +96,7 @@ public class FileUploadService {
     //s3에 같은 이름의 파일이 들어가지 않도록
     //s3 images 디렉토리에 저장
     private String createFileName(String originalFileName) {
-        return "test" + "/" + UUID.randomUUID().toString().concat(getFileExtension(originalFileName));
+        return "images" + "/" + UUID.randomUUID().toString().concat(getFileExtension(originalFileName));
     }
 
     //파일의 확장자명을 가져옴
