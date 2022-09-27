@@ -2,11 +2,9 @@ import styled, {keyframes} from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const BlinkAnimation = keyframes`
-  0% { background: var(--red-100) }
-  30% { background: var(--red-100) }
-  50% { background: var(--red-075) }
-  70% { background: var(--red-100) }
-  100% { background: var(--red-100) }
+  0% { background: var(--primary-100) }
+  50% { background: var(--red-100) }
+  100% { background: var(--primary-100) }
 `;
 
 export const Block = styled.div`
@@ -51,14 +49,16 @@ export const Input = styled.input`
      }
      &.red {
         background: var(--red-100);
-        /* animation: ${BlinkAnimation} 10s linear infinite; */
-     }
-     &.green {
-        background: var(--green-200);
-     }
-     &.yellow {
-        background: var(--primary-100);
-     }
+      }
+      &.green {
+         background: var(--green-200);
+      }
+      &.yellow {
+         background: var(--primary-100);
+      }
+      &.blink {
+        animation: ${BlinkAnimation} 2s linear infinite;
+      }
 `;
 
 export const ButtonWrapper = styled.div`

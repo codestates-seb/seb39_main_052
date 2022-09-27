@@ -73,8 +73,17 @@ const InputList = ({ titlesArr, placeholders }) => {
                 return "small red";
             }
         }
+        // dDay가 0일인 경우 yellow row + blink
+        else if (el.dDay !== "" && el.dDay === 0) {
+            if (title === "dDay") {
+                return "small yellow center blink";
+            }
+            else {
+                return "small yellow blink";
+            }
+        }
         // dDay가 0일 이상 7일 이하인 경우 yellow row
-        else if (el.dDay !== "" && el.dDay >= 0 && el.dDay <= 7) {
+        else if (el.dDay !== "" && el.dDay > 0 && el.dDay <= 7) {
             if (title === "dDay") {
                 return "small yellow center";
             }
