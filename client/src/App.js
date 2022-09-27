@@ -1,7 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
+import { Cookies, useCookies } from 'react-cookie';
 import GlobalStyle from "./GlobalStyle";
 import styled from "styled-components";
 import { BrowserRouter, Routes, Route, useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { setLoggedIn, setUserInfo } from "./features/userSlice";
 
 import Nav from "./components/layout/Nav/Nav";
 import SignUpForm from "./components/layout/RegisterForm/SignUpForm";
@@ -16,9 +19,61 @@ import Gnb from "./components/common/GNB/Gnb";
 import FridgeDigging from "./pages/FridgeDigging/FridgeDigging";
 import MyFridge from "./pages/MyFridge/MyFridge";
 import MyPage from "./pages/MyPage/MyPage";
-
+import axios from "axios";
 
 function App() {
+  
+  const [cookies, setCookie] = useCookies(['token', "id"]);
+  const dispatch = useDispatch();
+  const JWT_EXPIRY_TIME = 30 * 60 * 1000;
+  const mountRef = useRef(false); // useEffect 두번 mount 되는걸 방지하기 위해
+
+  // 새로고침시 쿠키에 access-token이 있는 경우 token refresh 요청
+  useEffect(() => {
+    if (cookies.token && !mountRef.current) {
+      axios.defaults.headers.common["Authorization"] = cookies.token;
+      onSilentRefresh();
+    }
+    return () => {mountRef.current = true;}
+  }, []);
+
+  const onSilentRefresh = async() => {
+    await axios({
+      method: "post",
+      url: '/api/auth/refresh',
+    })
+    .then((response) => {
+      console.log(response);
+      const ACCESS_TOKEN = response.headers["access-token"]; // eyJ0eX.. 서버에서 response header에 싣어보내는 업데이트된 토큰값
+      if (response.status === 200) {
+        axios.defaults.headers.common["Authorization"] = `Bearer ${ACCESS_TOKEN}`; // 요청헤더에 액세스 토큰 설정
+        setCookie("token", ACCESS_TOKEN);
+        setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000); // 액세스토큰 만료되기 1분 전 로그인 연장
+        dispatch(setLoggedIn({}));
+        getUserInfo(cookies.id);
+      }
+    })
+      .catch((error) => console.log(error.response))
+  };
+
+  //로그인 요청시 서버에서 보내주는 memberId로 사용자 정보를 조회
+  const getUserInfo = async (userId) => {
+    await axios
+      .get("/api/members/" + userId)
+      .then((response) => {
+        if (response.status === 200) {
+          dispatch(
+            setUserInfo({
+              userId: response.data.id,
+              userName: response.data.name,
+              userProfileImgPath: response.data.profileImagePath,
+            })
+          );
+        }
+      })
+      .catch((error) => console.log(error.response));
+  };
+
   return (
     <>
       <BrowserRouter>

@@ -1,10 +1,13 @@
 //redux toolkit related
 import axios from "axios";
+import { useCookies } from 'react-cookie';
 import { useSelector, useDispatch } from "react-redux";
 import { setLoggedIn, setLoggedOut } from "../../../features/userSlice";
 
 const LogOut = () => {
   const dispatch = useDispatch();
+
+  const [cookies, setCookie, removeCookie] = useCookies(['token', "id"]);
 
   //로그인 상태 가져와서 변수에 저장
   const isLoggedIn = useSelector((state) => {
@@ -25,6 +28,8 @@ const LogOut = () => {
         if (res.status === 200) {
           delete axios.defaults.headers.common["Authorization"]; //헤더에 설정해둔 액세스 토큰 권한부여 제거
           dispatch(setLoggedOut()); //로그아웃 상태로 바꿔주는 함수 호출
+          removeCookie("id");
+          removeCookie("token");
           // console.log("axios then 안에있는 로그아웃 함수 호출 이후 isLoggedIn이니?",isLoggedIn); //왜 바로 콘솔로 찍어보면 로그아웃했는데도 로그인 상태 true로 남아있는지 ..?
           alert("로그아웃 완료");
         }
