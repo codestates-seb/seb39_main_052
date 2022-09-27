@@ -1,106 +1,118 @@
-import Comments from "../../components/layout/Comments/Comments";
-import { useParams, Link} from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
+import { useCookies } from 'react-cookie';
 import axios from "axios";
+import { Heading, Ingredients, RecipeWrapper, SubHeading, Extra, Head, HeadLeft, Image, ButtonLike, HeadLeftTop, ButtonLikeWrapper, HeadLeftBottom, Info, PortionAndTime, RecipeId, LikeViewWrapper, View, Ingredient } from "./RecipeDetailStyle";
 import RecipeStep from "../../components/layout/RecipeStep/RecipeStep";
-import { Heading, Ingredients, RecipeWrapper, SubHeading, Extra, Head, HeadLeft, Image, ButtonLike, HeadLeftTop, ButtonLikeWrapper, HeadLeftBottom, Info, PortionAndTime, RecipeId } from "./RecipeDetailStyle";
+import Comments from "../../components/layout/Comments/Comments";
 import UserName from "../../components/common/UserName/UserName";
 import LikeHeart from "../../components/common/LikeHeart/LikeHeart";
+import { loadRecipe } from "../../features/recipeSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const RecipeDetail = () => {
 
     const [isMyRecipe, setIsMyRecipe] = useState(false);
     const { id } = useParams();
-    // console.log(id);
+    // console.log("id", id);
+    const [cookies] = useCookies(["id"]); // 쿠키에 저장된 내 유저 id값 (type은 string)
+    const dispatch = useDispatch();
 
-    const dummyData = {
-        id: 1,
-        memberName: `아몬드봉봉`,
-        memberId: 1,
-        createdAt: null,
-        title: "김치볶음밥 레시피",
-        imagePath: "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
-        portion: "1",
-        time: "240",
-        likes: 100,
-        ingredients: [{
-          sequence: 1,
-          food: "",
-            amount: ""
-        }],
-        steps: [{
-            sequence: 1,
-            content: "김치를 잘게 썬다",
-            imagePath: "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
-        },
-        {
-            sequence: 2,
-            content: "김치를 기름에 볶는다",
-            imagePath: "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
-        },
-        {
-            sequence: 3,
-            content: "밥을 넣는다",
-            imagePath: "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
-        }],
+    // date 표기 (YYYY-MM-DD) 
+    const dateConverter = (createdAt) => {
+        const date = new Date(+new Date(createdAt) + 3240 * 10000).toISOString().split("T")[0]
+        // const time = new Date().toTimeString().split(" ")[0];
+        return date;
+    }
+    // 상세 레시피 데이터
+    const recipe = useSelector((state) => {
+        return state.recipe;
+    })
+    // console.log(recipe);
+
+    // 레시피 상세 데이터 불러오기
+    const getRecipe = async() => {
+        try {
+            const { data } = await axios.get(`/api/recipes/${id}`);
+            console.log("방금 받아왔어욤", data);
+            dispatch(loadRecipe({
+                recipeId: data.id,
+                memberName: data.member.name,
+                memberId: data.member.id,
+                profileImagePath: data.member.profileImagePath,
+                createdAt: data.createdAt,
+                heartCounts: data.heartCounts,
+                view: data.view,
+                title: data.title,
+                portion: data.portion,
+                time: data.time,
+                mainImage: data.imageInfo.imagePath,
+                ingredients: data.ingredients,
+                steps: data.steps,
+            }))
+            // 해당 레시피가 내 레시피인지 확인 후 상태 변경
+            data.member.id === Number(cookies.id) ? setIsMyRecipe(true) : setIsMyRecipe(false);
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
 
-    useEffect(()=> {
-        // console.log(`hi`)
-        axios
-            .get(`/api/recipes/${id}`)
-            .then((response) => {
-                // console.log(response.status);
-                console.log(response.data);
-                // 레시피 작성자 id와 내 id가 동일한 경우
-                // setIsMyRecipe 상태 true로 바꾸기
-                // 아니면 false
-            })
-            .catch((e) => console.log(e.response));
+    useEffect(() => {
+        getRecipe();
     }, [id])
 
     return (
         <RecipeWrapper>
             <Extra>
-                <RecipeId>게시글 #{dummyData.id}</RecipeId>
+                <RecipeId>등록일 &nbsp;{dateConverter(recipe.createdAt)} &nbsp; 게시글 #{recipe.id}</RecipeId>
                 <ButtonLike className="dark" >
-                    <Link to={"/search"} state={{ prevPath: "/recipes"}}>목록으로 돌아가기</Link>
+                    <Link to={"/search"} state={{ prevPath: "/recipes" }}>목록으로 돌아가기</Link>
                 </ButtonLike>
             </Extra>
             <Head>
                 <HeadLeft>
                     <HeadLeftTop>
-                        <Heading>{dummyData.title}</Heading>
-                        <LikeHeart likes={dummyData.likes} />
+                        <Heading>{recipe.title}</Heading>
+                        <LikeViewWrapper>
+                            <LikeHeart heartCounts={recipe.heartCounts} />
+                            <View>조회수 {recipe.view}</View>
+                        </LikeViewWrapper>
                     </HeadLeftTop>
                     <HeadLeftBottom>
                         <Info>
-                            <UserName image={dummyData.imagePath} name={dummyData.memberName} className="large"/>
-                            <PortionAndTime>{dummyData.portion} 인분</PortionAndTime>
-                            <PortionAndTime>{dummyData.time} 분 &nbsp;소요</PortionAndTime>
+                            <UserName image={recipe.member.profileImagePath} name={recipe.member.name} className="large" />
+                            <PortionAndTime>{recipe.portion} 인분</PortionAndTime>
+                            <PortionAndTime>{recipe.time} 분 &nbsp;소요</PortionAndTime>
                         </Info>
-                        {isMyRecipe &&                         
-                        <ButtonLikeWrapper>
-                            <ButtonLike>수정</ButtonLike>
-                            <ButtonLike>삭제</ButtonLike>
-                        </ButtonLikeWrapper>
+                        {isMyRecipe &&
+                            <ButtonLikeWrapper>
+                                <ButtonLike><Link to="/recipes/edit">수정</Link></ButtonLike>
+                                <ButtonLike>삭제</ButtonLike>
+                            </ButtonLikeWrapper>
                         }
                     </HeadLeftBottom>
                 </HeadLeft>
-                <Image src={dummyData.imagePath} alt={'main'}/>
+                <Image src={recipe.imageInfo.imagePath} alt={'main'} />
             </Head>
             <SubHeading>재료(계량)</SubHeading>
             <Ingredients>
-                <div>쌀밥</div>
-                <div>100g</div>
+                {recipe.ingredients.map((item, idx) => {
+                    return (
+                        <div key={idx}>
+                            <Ingredient>{item.name}</Ingredient>
+                            <Ingredient>{item.amount}</Ingredient>
+                        </div>
+                    )
+                })}
             </Ingredients>
             <SubHeading>요리 순서</SubHeading>
-            {dummyData.steps.map((step, idx) => {
+            {recipe.steps.map((step, idx) => {
                 return (
                     <RecipeStep
                         key={idx}
                         index={step.sequence}
-                        image={step.imagePath}
+                        image={step.imageInfo.imagePath}
                         content={step.content}
                     />
                 )

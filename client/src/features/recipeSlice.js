@@ -3,22 +3,34 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     id: null,
-    memberName: null,
-    memberId: null,
+    member: {
+      id: null,
+      name: "",
+      profileImagePath: null,
+    },
     createdAt: null,
+    heartCounts: null,
+    view: null,
     title: "",
-    // imagePath: "",
     portion: "1",
     time: "",
+    imageInfo: {
+      idx: 0,
+      imagePath: "",
+      isUpdated: "N",
+    },
     ingredients: [{
-      sequence: 1,
       name: "",
       amount: ""
     }],
     steps: [{
       sequence: 1,
       content: "",
-      imagePath: "",
+      imageInfo: {
+        idx: 1,
+        imagePath: "",
+        isUpdated: "N",
+      },
     }],
 }
 
@@ -32,6 +44,17 @@ const recipeSlice = createSlice({
       setTitle: (state, action) => {
         state.title = action.payload.title;
       },
+      setMainImage: (state, action) => {
+        state.imageInfo.imagePath = action.payload.mainImage;
+      },
+      editMainImage: (state, action) => {
+        state.imageInfo.imagePath = action.payload.mainImage;
+        state.imageInfo.isUpdated = "Y";
+      },
+      deleteMainImg: (state, aciton) => {
+        state.imageInfo.imagePath = "";
+        state.imageInfo.isUpdated = "N";
+      },
       setPortion: (state, action) => {
         state.portion = action.payload.portion;
       },
@@ -40,7 +63,6 @@ const recipeSlice = createSlice({
       },
       addIngrInput: (state, action) => {
         state.ingredients = [...state.ingredients, {
-          sequence: action.payload.index+2,
           name: initialState.ingredients[0].name,
           amount: initialState.ingredients[0].amount
         }];
@@ -53,8 +75,9 @@ const recipeSlice = createSlice({
       },
       addStepsInput: (state, action) => {
         state.steps = [...state.steps, {
-          sequence: action.payload.index+2,
-          content: initialState.steps[0].content
+          sequence: action.payload.index+2, //이전 input index (0) 기준 + 1, sequence는 1부터 시작하니 총 + 2
+          content: initialState.steps[0].content,
+          imageInfo: initialState.steps[0].imageInfo,
         }];
       },
       deleteStepsInput: (state, action) => {
@@ -63,14 +86,31 @@ const recipeSlice = createSlice({
       editSteps: (state, action) => {
         state.steps[action.payload.index][action.payload.key] = action.payload.value;
       },
+      setStepImage: (state, action) => {
+        state.steps[action.payload.index].imageInfo.imagePath = action.payload.imagePath;
+      },
+      editStepImage: (state, action) => {
+        state.steps[action.payload.index].imageInfo.imagePath = action.payload.imagePath;
+        state.steps[action.payload.index].imageInfo.isUpdated = "Y";
+      },
+      deleteStepImage: (state, action) => {
+        state.steps[action.payload.index].imageInfo.imagePath = "";
+        state.steps[action.payload.index].imageInfo.isUpdated = "N";
+      },
       loadRecipe: (state, action) => {
         state.id = action.payload.recipeId;
-        state.memberName = action.payload.memberName;
-        state.memberId = action.payload.memberId;
+        state.member.name = action.payload.memberName;
+        state.member.id = action.payload.memberId;
+        state.member.profileImagePath = action.payload.profileImagePath;
         state.createdAt = action.payload.createdAt;
+        state.heartCounts = action.payload.heartCounts;
+        state.view = action.payload.view;
         state.title = action.payload.title;
         state.portion = action.payload.portion;
         state.time = action.payload.time;
+        state.imageInfo.imagePath = action.payload.mainImage;
+        state.ingredients = [...action.payload.ingredients];
+        state.steps = [...action.payload.steps];
       },
       clearRecipe: () => {
         return initialState;
@@ -81,15 +121,23 @@ const recipeSlice = createSlice({
 export default recipeSlice;
 export const { 
   setId,
+  // POST, PATCH
   setTitle,
-  setImagePath,
+  setMainImage,
+  editMainImage,
+  deleteMainImg,
   setPortion,
   setTime,
-  addIngrInput, 
-  deleteIngrInput, 
-  editIngredients, 
+  addIngrInput,
+  deleteIngrInput,
+  editIngredients,
   addStepsInput,
   deleteStepsInput,
-  editSteps, 
+  editSteps,
+  setStepImage,
+  editStepImage,
+  deleteStepImage,
+  // GET
+  loadRecipe, 
   clearRecipe 
 } = recipeSlice.actions;

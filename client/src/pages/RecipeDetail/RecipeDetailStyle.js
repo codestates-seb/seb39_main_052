@@ -37,10 +37,23 @@ export const HeadLeftTop = styled.div`
     flex-direction: row;
     justify-content: space-between;
     margin: 0 0 8px 0;
+    height: 34px;
 `
 
 export const Heading = styled.h1`
-    margin: 0 0 0 0
+    margin: 0 0 0 0;
+`
+
+export const LikeViewWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+`
+
+export const View = styled.div`
+    font-size: 10px;
+    margin-top: 4px;
 `
 
 export const HeadLeftBottom = styled.div`
@@ -93,11 +106,13 @@ export const ButtonLike = styled.div`
     
     &.dark {
         color: var(--gray-800);
+        border-bottom: 1px solid var(--gray-800);
     }
     &:hover {
         color: var(--black);
         /* text-decoration: underline; */
         border-bottom: 1px solid var(--black);
+        background-color: var(--gray-100);
     }
 `
 
@@ -117,8 +132,13 @@ export const Ingredients = styled.div`
     font-size: 12px;
     color: var(--gray-900);
     margin: 0 0 32px 0;
- > div {
-    width: 100px;
-    margin: 0 8px 0 0;
- }
+    /* > * > div {
+        width: 100px;
+        margin: 0 8px 0 0;
+    } */
+`
+
+export const Ingredient = styled.div`
+        width: 100px;
+        margin: 0 8px 0 0;
 `

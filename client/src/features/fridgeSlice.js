@@ -36,8 +36,7 @@ const dDayCalculator = (date) => {
 //         date: "",
 //         dDay: "",
 //         note: "",
-//     },],
-     
+//     },],    
 // }
 
 const initialState = {
