@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSelector } from "react-redux"; //for bringing user data from redux
 import GeneralButton from "../../common/Button/GeneralButton";
 import ProfileChangeModal from "../Modal/ProfileChangeModal";
 import {
@@ -8,15 +9,17 @@ import {
   ProfileName,
 } from "./MyProfileStyle";
 
+import small_logoface from "../../../assets/small_logoface.png";
+
 const MyProfile = () => {
-  const dummyData = [
-    {
-      id: 1,
-      memberName: "들깨러버들깨러버",
-      memberImage:
-        "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
-    },
-  ];
+  const profileData = useSelector((state) => {
+    return {
+      userId: state.user.userId,
+      userName: state.user.userName,
+      userProfileImgPath: state.user.userProfileImgPath,
+    };
+  });
+  //   console.log(profileData); //{id: 4, name: 'test1', profileImg: null}
 
   const [showProfileChangeModal, setShowProfileChangeModal] = useState(false);
   const clickProfileChangeModal = () => {
@@ -26,8 +29,15 @@ const MyProfile = () => {
   return (
     <MyProfileContainer className="MyProfileContainer">
       <ProfileWrapper>
-        <ProfilePhoto src={dummyData[0].memberImage}></ProfilePhoto>
-        <ProfileName>{dummyData[0].memberName}</ProfileName>
+        {profileData.userProfileImgPath === null ? (
+          <ProfilePhoto
+            src={small_logoface}
+            className="small_logoface"
+          ></ProfilePhoto>
+        ) : (
+          <ProfilePhoto src={profileData.userProfileImgPath}></ProfilePhoto>
+        )}
+        <ProfileName>{profileData.userName}</ProfileName>
       </ProfileWrapper>
       <GeneralButton width="250px" onClick={clickProfileChangeModal}>
         프로필 변경하기

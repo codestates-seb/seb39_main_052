@@ -12,14 +12,14 @@ export const CommentsCollection = styled.div`
   font-size: 14px;
 
   //each 댓글 박스
-  & > p > div {
+  & > div > div {
     padding: 8px 0;
     display: flex;
     flex-direction: row;
     border-bottom: solid 1px var(--gray-300);
   }
 
-  & > p > div > span {
+  & > div > div > span {
     padding-right: 16px;
     flex-basis: 30%;
     display: flex;
@@ -31,6 +31,7 @@ export const CommentsCollection = styled.div`
     &.date {
       justify-content: flex-end;
       padding: 0;
+      font-size: 12px;
     }
   }
 `;
