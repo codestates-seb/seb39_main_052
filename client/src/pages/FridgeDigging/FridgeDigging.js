@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import RecipeCard from "../../components/layout/RecipeCard/RecipeCard";
-import { Container, Heading, Loader, Option, RecipeWrapper, StyledFontAwesomeIcon } from "./FridgeDiggingStyle";
+import { Container, Heading, Loader, Option, RecipeWrapper, SearchWrapper, StyledFontAwesomeIcon } from "./FridgeDiggingStyle";
 import NameSearchBar from "../../components/layout/NameSearchBar/NameSearchBar";
 import TagSearchBar from "../../components/layout/TagSearchBar/TagSearchBar";
 import SortingTab from "../../components/common/SortingTab/SortingTab";
@@ -85,16 +85,18 @@ const FridgeDigging = () => {
 
     return (
         <Container>
-            <Heading>
-                제목으로 레시피 검색하기
-            </Heading>
-            <NameSearchBar />
-            <Heading>
-                재료로 레시피 검색하기
-            </Heading>
+            <SearchWrapper>
+                <Heading>
+                    제목으로 레시피 검색하기
+                </Heading>
+                <NameSearchBar />
+                <Heading>
+                    재료로 레시피 검색하기
+                </Heading>
                 <TagSearchBar />
+            </SearchWrapper>
             <Option>
-                <SortingTab sortMode={sortMode} setSortMode={setSortMode}/>
+                <SortingTab sortMode={sortMode} setSortMode={setSortMode} />
             </Option>
             <RecipeWrapper>
                 {dummyArr.map((e, i) => {

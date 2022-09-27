@@ -14,7 +14,7 @@ export const SearchBar = styled.div`
     background-color: var(--gray-050);
     padding: 4px 4px 4px 8px;
     border-radius: 8px;
-    z-index: 999;
+    z-index: 99;
 `
 export const SearchInput = styled.input`
     flex-grow: 1;
@@ -31,11 +31,11 @@ export const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
 `
 export const DropDown = styled.ul`
     width: 320px;
-    max-height: 96px;
+    max-height: 100px;
     overflow-y: scroll;
     /* border: 1px solid red; */
     margin: 0 0 8px 0;
-    padding: 4px 0px 0 0px;
+    padding: 8px 0px 0 0px;
     border: 2px solid var(--fridge-300);
     border-top: none;
     border-bottom-left-radius: 8px;
@@ -43,8 +43,8 @@ export const DropDown = styled.ul`
     font-size: 14px;
     background-color: var(--gray-050);
     position: absolute;
-    top: 24%;
-    z-index: 998;
+    top: 208px;
+    z-index: 98;
     box-shadow: var(--shadow-medium);
     ::-webkit-scrollbar {
         width: 8px;

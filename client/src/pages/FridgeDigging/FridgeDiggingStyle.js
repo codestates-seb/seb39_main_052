@@ -6,9 +6,21 @@ export const Container = styled.div`
     flex-direction: column;
     align-items: center;
 `
+export const SearchWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100vw;
+    background-color: var(--primary-050);
+    /* background-color: var(--white); */
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-low);
+`
 
 export const Heading = styled.h1`
     margin-top: 16px;
+    color: var(--fridge-900);
+    /* color: var(--white); */
 `
 
 export const Option = styled.div`
