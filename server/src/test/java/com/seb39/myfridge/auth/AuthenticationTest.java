@@ -3,13 +3,13 @@ package com.seb39.myfridge.auth;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.seb39.myfridge.auth.domain.AuthenticationToken;
 import com.seb39.myfridge.auth.dto.LoginRequest;
 import com.seb39.myfridge.auth.dto.SignUpRequest;
-import com.seb39.myfridge.auth.enums.AppAuthExceptionCode;
 import com.seb39.myfridge.auth.enums.JwtTokenType;
-import com.seb39.myfridge.auth.service.JwtProvider;
-import com.seb39.myfridge.auth.service.JwtService;
-import com.seb39.myfridge.auth.util.CookieUtil;
+import com.seb39.myfridge.auth.service.AuthenticationTokenProvider;
+import com.seb39.myfridge.auth.service.AuthenticationTokenService;
+import com.seb39.myfridge.auth.util.CookieUtils;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.service.MemberService;
 import org.hamcrest.Matchers;
@@ -24,12 +24,13 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.Cookie;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.seb39.myfridge.auth.util.JwtClaims.*;
 import static com.seb39.myfridge.auth.util.AppAuthNames.*;
@@ -43,12 +44,11 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
-@AutoConfigureRestDocs(uriHost = "seb39myfridge.ml", uriScheme = "https" , uriPort = 443)
+@AutoConfigureRestDocs(uriHost = "seb39myfridge.ml", uriScheme = "https", uriPort = 443)
 class AuthenticationTest {
 
     @Autowired
@@ -56,9 +56,9 @@ class AuthenticationTest {
     @Autowired
     MemberService memberService;
     @Autowired
-    JwtService jwtService;
+    AuthenticationTokenService tokenService;
     @Autowired
-    JwtProvider jwtProvider;
+    AuthenticationTokenProvider jwtProvider;
     @Value("${app.auth.jwt.secret}")
     private String secret;
 
@@ -151,7 +151,7 @@ class AuthenticationTest {
 
     @Test
     @DisplayName("로그아웃시 서버에서 보관중인 Refresh token을 삭제한다")
-    void logout() throws Exception{
+    void logout() throws Exception {
         // given
         String email = "abcd@gmail.com";
         String name = "test01";
@@ -163,25 +163,27 @@ class AuthenticationTest {
                 .buildGeneralMember();
         memberService.signUpGeneral(member);
 
-        String accessToken = jwtProvider.createAccessToken(member.getId());
-        String refreshToken = jwtProvider.createRefreshToken(accessToken);
-        Cookie refreshTokenCookie = CookieUtil.createHttpOnlyCookie(REFRESH_TOKEN, refreshToken);
+        AuthenticationToken token = jwtProvider.createToken(member.getId());
+        String accessToken = token.getAccess();
+        String refreshToken = token.getRefresh();
+        Cookie refreshTokenCookie = CookieUtils.createHttpOnlyCookie(REFRESH_TOKEN, refreshToken);
 
         // expected
         ResultActions result = mockMvc.perform(get("/api/logout")
                         .accept(APPLICATION_JSON)
-                        .header(ACCESS_TOKEN, accessToken)
+                        .header(AUTHORIZATION, "Bearer " + accessToken)
                         .cookie(refreshTokenCookie))
                 .andExpect(status().isOk());
 
-        assertThat(jwtService.hasRefreshToken(refreshToken)).isFalse();
+        Map<String, String> repository = (HashMap<String,String>) ReflectionTestUtils.getField(tokenService,"repository");
+        assertThat(repository.containsKey(refreshToken)).isFalse();
 
         // docs
         result.andDo(document("logout-success",
                 getRequestPreProcessor(),
                 getResponsePreProcessor(),
                 requestHeaders(
-                        headerWithName(ACCESS_TOKEN).description("Access token. (만료 여부 상관 없음), Refresh Token은 refresh-token Cookie에 담아 전송")
+                        headerWithName(AUTHORIZATION).description("Access token. (만료 여부 상관 없음), Refresh Token은 refresh-token Cookie에 담아 전송")
                 )
         ));
     }
@@ -199,10 +201,13 @@ class AuthenticationTest {
                 .password(password)
                 .buildGeneralMember();
         memberService.signUpGeneral(member);
+
+        AuthenticationToken token = jwtProvider.createToken(member.getId());
         String expiredAccessToken = createExpiredAccessToken(member.getId());
-        String refreshToken = jwtProvider.createRefreshToken(expiredAccessToken);
-        ReflectionTestUtils.invokeMethod(jwtService,"saveToken",refreshToken,expiredAccessToken);
-        Cookie refreshTokenCookie = CookieUtil.createHttpOnlyCookie(REFRESH_TOKEN,refreshToken);
+        ReflectionTestUtils.setField(token,"access",expiredAccessToken);
+
+        ReflectionTestUtils.invokeMethod(tokenService, "saveToken", token);
+        Cookie refreshTokenCookie = CookieUtils.createHttpOnlyCookie(REFRESH_TOKEN, token.getRefresh());
 
         // expected
         ResultActions result = mockMvc.perform(post("/api/auth/refresh")
@@ -239,7 +244,7 @@ class AuthenticationTest {
         // when
         mockMvc.perform(get("/oauth2/authorization/google"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(header().string("Location",Matchers.startsWith(redirectUriPrefix)))
+                .andExpect(header().string("Location", Matchers.startsWith(redirectUriPrefix)))
                 .andDo(print());
     }
 

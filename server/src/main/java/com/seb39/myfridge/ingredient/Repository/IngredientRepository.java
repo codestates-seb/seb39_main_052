@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
-public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
+public interface IngredientRepository extends JpaRepository<Ingredient, Long>, IngredientRepositoryCustom {
 
     Optional<Ingredient> findByName(String name);
 

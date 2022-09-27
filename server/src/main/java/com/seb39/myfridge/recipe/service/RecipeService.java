@@ -123,4 +123,9 @@ public class RecipeService {
             throw new IllegalArgumentException("작성자가 아니면 수정/삭제할 수 없습니다!");
         }
     }
+
+    public List<String> findTitlesByContainsWord(String word){
+        List<String> result = recipeRepository.searchTitles(word);
+        return result;
+    }
 }

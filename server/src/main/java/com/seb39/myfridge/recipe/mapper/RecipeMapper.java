@@ -35,19 +35,17 @@ public interface RecipeMapper {
             Step step1 = new Step();
             step1.setContent(step.getContent());
             step1.setSequence(step.getSequence());
-
+            step1.setImagePath(step.getImagePath());
             stepList.add(step1);
         }
         return stepList;
     }
-
 
     default List<RecipeIngredient> ingredientsDtoToIngredients(List<RecipeDto.Ingredient> ingredients) {
         List<RecipeIngredient> recipeIngredients = new ArrayList<>();
         for (RecipeDto.Ingredient ingredient : ingredients) {
             Ingredient ingredient1 = new Ingredient();
             ingredient1.setName(ingredient.getName());
-
             RecipeIngredient recipeIngredient = new RecipeIngredient();
             recipeIngredient.setQuantity(ingredient.getQuantity());
             recipeIngredient.setIngredient(ingredient1);
@@ -57,8 +55,8 @@ public interface RecipeMapper {
     }
 
 
-    default RecipeDto.Response recipeToRecipeResponse(Recipe recipe, int heartCounts) {
-        return RecipeDto.Response.builder()
+    default RecipeDto.ResponseDetail recipeToRecipeResponse(Recipe recipe, int heartCounts) {
+        return RecipeDto.ResponseDetail.builder()
                 .id(recipe.getId())
                 .createdAt(recipe.getCreatedAt())
                 .lastModifiedAt(recipe.getLastModifiedAt())
@@ -74,8 +72,7 @@ public interface RecipeMapper {
                 .build();
     }
 
-
-    default RecipeDto.Response recipeToRecipeResponse(Recipe recipe) {
+    default RecipeDto.ResponseDetail recipeToRecipeResponse(Recipe recipe) {
         return recipeToRecipeResponse(recipe,0);
     }
 
@@ -127,7 +124,6 @@ public interface RecipeMapper {
                 .imageInfo(imageToDto(step.getImage()))
                 .sequence(step.getSequence())
                 .build();
-
     }
 
     default Image imageDtoToImage(RecipeDto.ImageInfo imageInfo) {
@@ -145,5 +141,4 @@ public interface RecipeMapper {
                 .isUpdated(image.getIsUpdated())
                 .build();
     }
-
 }

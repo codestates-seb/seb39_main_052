@@ -29,21 +29,31 @@ public class CommentDto {
     @Getter
     @Setter
     public static class Response{
-        private Long memberId;
-        private String memberName;
+        private CommentDto.Response.Member member;
         private Long recipeId;
         private Long commentId;
         private String content;
         private LocalDateTime createdAt;
 
         @Builder
-        private Response(Long memberId, String memberName, Long recipeId, Long commentId, String content, LocalDateTime createdAt) {
-            this.memberId = memberId;
-            this.memberName = memberName;
+        private Response(Long memberId, String memberName, String memberImagePath, Long recipeId, Long commentId, String content, LocalDateTime createdAt) {
+            CommentDto.Response.Member member = new Member();
+            member.setId(memberId);
+            member.setName(memberName);
+            member.setProfileImagePath(memberImagePath);
+            this.member = member;
             this.recipeId = recipeId;
             this.commentId = commentId;
             this.content = content;
             this.createdAt = createdAt;
+        }
+
+        @Getter
+        @Setter
+        static class Member{
+            private Long id;
+            private String name;
+            private String profileImagePath;
         }
     }
 }

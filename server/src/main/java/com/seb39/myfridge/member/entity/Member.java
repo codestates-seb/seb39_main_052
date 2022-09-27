@@ -37,7 +37,7 @@ public class Member {
 
     private String profileImagePath;
 
-    private enum MemberStatus{
+    public enum MemberStatus{
         ACTIVE,
         INACTIVE
     }
@@ -81,4 +81,7 @@ public class Member {
         this.password = encryptedPassword;
     }
 
+    public void changeProfileImagePath(String profileImagePath){
+        this.profileImagePath = profileImagePath;
+    }
 }

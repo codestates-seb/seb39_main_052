@@ -3,15 +3,15 @@ package com.seb39.myfridge.auth.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seb39.myfridge.auth.PrincipalDetails;
-import com.seb39.myfridge.auth.dto.AuthResponse;
+import com.seb39.myfridge.auth.domain.AuthenticationToken;
 import com.seb39.myfridge.auth.dto.LoginRequest;
 import com.seb39.myfridge.auth.dto.LoginResponse;
 import com.seb39.myfridge.auth.enums.AppAuthExceptionCode;
 import com.seb39.myfridge.auth.exception.AppAuthenticationException;
-import com.seb39.myfridge.auth.service.JwtService;
+import com.seb39.myfridge.auth.service.AuthenticationTokenService;
+import com.seb39.myfridge.auth.util.AuthenticationTokenUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,14 +24,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.seb39.myfridge.auth.util.AppAuthNames.ACCESS_TOKEN;
-
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
-    private final JwtService jwtService;
+    private final AuthenticationTokenService authenticationTokenService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
@@ -58,9 +56,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         PrincipalDetails principal = (PrincipalDetails) authResult.getPrincipal();
         Long memberId = principal.getMemberId();
-        String accessToken = jwtService.issueAccessToken(memberId);
-        response.addHeader(ACCESS_TOKEN,accessToken);
-        jwtService.issueRefreshToken(response,accessToken);
+        AuthenticationToken token = authenticationTokenService.issueAuthenticationToken(memberId);
+        AuthenticationTokenUtils.addTokenInResponse(response,token);
         objectMapper.writeValue(response.getWriter(), new LoginResponse(memberId));
     }
 }

@@ -11,15 +11,14 @@ import com.seb39.myfridge.member.repository.MemberRepository;
 import com.seb39.myfridge.recipe.dto.RecipeDto;
 import com.seb39.myfridge.recipe.entity.Recipe;
 import com.seb39.myfridge.recipe.mapper.RecipeMapper;
+import com.seb39.myfridge.recipe.repository.RecipeRepository;
 import com.seb39.myfridge.recipe.service.RecipeService;
 import com.seb39.myfridge.step.entity.Step;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -30,7 +29,6 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.mock.web.MockPart;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
@@ -41,7 +39,6 @@ import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequ
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -50,9 +47,7 @@ import java.util.List;
 
 import static com.seb39.myfridge.util.ApiDocumentUtils.getRequestPreProcessor;
 import static com.seb39.myfridge.util.ApiDocumentUtils.getResponsePreProcessor;
-import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -65,7 +60,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureMockMvc(addFilters = false)
-@AutoConfigureRestDocs(uriHost = "api.myfridge.com")
+@AutoConfigureRestDocs(uriHost = "api.myfridge.com", uriScheme = "https", uriPort = 443)
 @WithUserDetails(value = "test@email.com", userDetailsServiceBeanName = "principalDetailsService", setupBefore = TestExecutionEvent.TEST_EXECUTION)
 class RecipeControllerTest {
     @Autowired
@@ -84,6 +79,9 @@ class RecipeControllerTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private RecipeRepository recipeRepository;
 
     @BeforeEach
     void 회원데이터_준비() {
@@ -576,6 +574,40 @@ class RecipeControllerTest {
                                         fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("작성자 식별자"),
                                         fieldWithPath("memberName").type(JsonFieldType.STRING).description("작성자 이름"),
                                         fieldWithPath("heartCounts").type(JsonFieldType.NUMBER).description("받은 하트 개수")
+                                )
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("특정 단어가 포함된 레시피 제목 검색")
+    void findTitlesTest() throws Exception {
+        // given
+        willReturn(List.of(
+                "Creamy Chicken Penne Pasta",
+                "Cheesy Chicken Alfredo Pasta Bake",
+                "One Pot Garlic Parmesan Pasta",
+                "Penne With Tomato Sauce Pasta"))
+                .given(recipeService).findTitlesByContainsWord("pasta");
+
+        // expected
+        ResultActions actions = mockMvc.perform(get("/api/recipes/titles")
+                        .param("word", "pasta")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.data").isArray())
+                .andExpect(jsonPath("$.data.length()").value(4));
+
+        //docs
+        actions.andExpect(status().isOk())
+                .andDo(document("recipe-search-titles",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        requestParameters(
+                                parameterWithName("word").description("찾을 레시피의 제목")
+                        ),
+                        responseFields(
+                                List.of(
+                                        fieldWithPath("data").type(JsonFieldType.ARRAY).description("레시피 제목 리스트")
                                 )
                         )
                 ));

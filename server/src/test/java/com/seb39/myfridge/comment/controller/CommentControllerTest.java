@@ -74,6 +74,7 @@ class CommentControllerTest {
                 .name("SJ")
                 .email("test@gmail.com")
                 .buildGeneralMember();
+        member.changeProfileImagePath("https://s3.blahblah/image.jpeg");
         memberRepository.save(member);
 
         Recipe recipe = new Recipe();
@@ -103,8 +104,9 @@ class CommentControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.memberId").value(member.getId()))
-                .andExpect(jsonPath("$.memberName").value(member.getName()))
+                .andExpect(jsonPath("$.member.id").value(member.getId()))
+                .andExpect(jsonPath("$.member.name").value(member.getName()))
+                .andExpect(jsonPath("$.member.profileImagePath").value(member.getProfileImagePath()))
                 .andExpect(jsonPath("$.recipeId").value(recipe.getId()))
                 .andExpect(jsonPath("$.commentId").isNotEmpty())
                 .andExpect(jsonPath("$.content").value(dto.getContent()));
@@ -127,8 +129,9 @@ class CommentControllerTest {
                         fieldWithPath("content").type(JsonFieldType.STRING).description("작성한 댓글 내용")
                 ),
                 responseFields(
-                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("작성자 ID"),
-                        fieldWithPath("memberName").type(JsonFieldType.STRING).description("작성자 이름"),
+                        fieldWithPath("member.id").type(JsonFieldType.NUMBER).description("작성자 ID"),
+                        fieldWithPath("member.name").type(JsonFieldType.STRING).description("작성자 이름"),
+                        fieldWithPath("member.profileImagePath").type(JsonFieldType.STRING).description("작성자 프로필 이미지 경로"),
                         fieldWithPath("recipeId").type(JsonFieldType.NUMBER).description("댓글이 달린 레시피 ID"),
                         fieldWithPath("commentId").type(JsonFieldType.NUMBER).description("작성된 댓글 ID"),
                         fieldWithPath("content").type(JsonFieldType.STRING).description("작성된 댓글 내용"),
@@ -156,8 +159,8 @@ class CommentControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.memberId").value(member.getId()))
-                .andExpect(jsonPath("$.memberName").value(member.getName()))
+                .andExpect(jsonPath("$.member.id").value(member.getId()))
+                .andExpect(jsonPath("$.member.name").value(member.getName()))
                 .andExpect(jsonPath("$.recipeId").value(recipe.getId()))
                 .andExpect(jsonPath("$.commentId").value(comment.getId()))
                 .andExpect(jsonPath("$.content").value(dto.getContent()));
@@ -175,8 +178,9 @@ class CommentControllerTest {
                         fieldWithPath("content").type(JsonFieldType.STRING).description("수정한 댓글 내용")
                 ),
                 responseFields(
-                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("작성자 ID"),
-                        fieldWithPath("memberName").type(JsonFieldType.STRING).description("작성자 이름"),
+                        fieldWithPath("member.id").type(JsonFieldType.NUMBER).description("작성자 ID"),
+                        fieldWithPath("member.name").type(JsonFieldType.STRING).description("작성자 이름"),
+                        fieldWithPath("member.profileImagePath").type(JsonFieldType.STRING).description("작성자 프로필 이미지 경로"),
                         fieldWithPath("recipeId").type(JsonFieldType.NUMBER).description("수정된 댓글이 달린 레시피 ID"),
                         fieldWithPath("commentId").type(JsonFieldType.NUMBER).description("수정된 댓글 ID"),
                         fieldWithPath("content").type(JsonFieldType.STRING).description("수정된 댓글 내용"),
@@ -240,8 +244,9 @@ class CommentControllerTest {
                 ),
                 responseFields(
                         fieldWithPath("data.[]").type(JsonFieldType.ARRAY).description("댓글 리스트"),
-                        fieldWithPath("data.[].memberId").type(JsonFieldType.NUMBER).description("댓글 작성자 ID"),
-                        fieldWithPath("data.[].memberName").type(JsonFieldType.STRING).description("댓글 작성자 이름"),
+                        fieldWithPath("data.[].member.id").type(JsonFieldType.NUMBER).description("댓글 작성자 ID"),
+                        fieldWithPath("data.[].member.name").type(JsonFieldType.STRING).description("댓글 작성자 이름"),
+                        fieldWithPath("data.[].member.profileImagePath").type(JsonFieldType.STRING).description("댓글 작성자 프로필 이미지 경로").optional(),
                         fieldWithPath("data.[].recipeId").type(JsonFieldType.NUMBER).description("댓글이 달린 레시피 ID"),
                         fieldWithPath("data.[].commentId").type(JsonFieldType.NUMBER).description("작성된 댓글 ID"),
                         fieldWithPath("data.[].content").type(JsonFieldType.STRING).description("댓글 내용"),
@@ -287,8 +292,9 @@ class CommentControllerTest {
                 ),
                 responseFields(
                         fieldWithPath("data.[]").type(JsonFieldType.ARRAY).description("댓글 리스트"),
-                        fieldWithPath("data.[].memberId").type(JsonFieldType.NUMBER).description("댓글 작성자 ID"),
-                        fieldWithPath("data.[].memberName").type(JsonFieldType.STRING).description("댓글 작성자 이름"),
+                        fieldWithPath("data.[].member.id").type(JsonFieldType.NUMBER).description("댓글 작성자 ID"),
+                        fieldWithPath("data.[].member.name").type(JsonFieldType.STRING).description("댓글 작성자 이름"),
+                        fieldWithPath("data.[].member.profileImagePath").type(JsonFieldType.STRING).description("댓글 작성자 프로필 이미지 경로").optional(),
                         fieldWithPath("data.[].recipeId").type(JsonFieldType.NUMBER).description("댓글이 달린 레시피 ID"),
                         fieldWithPath("data.[].commentId").type(JsonFieldType.NUMBER).description("작성된 댓글 ID"),
                         fieldWithPath("data.[].content").type(JsonFieldType.STRING).description("댓글 내용"),

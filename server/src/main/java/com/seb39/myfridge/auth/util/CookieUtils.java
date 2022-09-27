@@ -4,7 +4,7 @@ import javax.servlet.http.Cookie;
 import java.util.Arrays;
 import java.util.Optional;
 
-public class CookieUtil {
+public class CookieUtils {
 
     public static Optional<String> getCookieValue(String name, Cookie[] cookies){
         if(cookies == null){

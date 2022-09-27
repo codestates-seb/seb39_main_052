@@ -43,13 +43,13 @@ public class IngredientService {
         }
     }
 
-
     @Transactional
     public void updateIngredient(Recipe recipe, List<RecipeIngredient> recipeIngredients) {
-
         recipeIngredientRepository.deleteRecipeIngredientByRecipeId(recipe.getId());
-
         createIngredient(recipe, recipeIngredients);
+    }
 
+    public List<String> findNamesByContainsWord(String word){
+        return ingredientRepository.searchNames(word);
     }
 }

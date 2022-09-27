@@ -1,15 +1,13 @@
 package com.seb39.myfridge.auth.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.seb39.myfridge.auth.dto.AuthResponse;
-import com.seb39.myfridge.auth.service.JwtService;
+import com.seb39.myfridge.auth.domain.AuthenticationToken;
+import com.seb39.myfridge.auth.service.AuthenticationTokenService;
+import com.seb39.myfridge.auth.util.AuthenticationTokenUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,11 +16,13 @@ import javax.servlet.http.HttpServletResponse;
 @RequiredArgsConstructor
 public class JwtLogoutHandler implements LogoutHandler {
 
-    private final JwtService jwtService;
+    private final AuthenticationTokenService tokenService;
     private final ObjectMapper om;
 
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        jwtService.removeRefreshToken(request,response);
+        AuthenticationToken token = AuthenticationTokenUtils.getTokenFromRequest(request);
+        tokenService.removeToken(token);
+        AuthenticationTokenUtils.removeTokenInResponse(response);
     }
 }

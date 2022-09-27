@@ -116,7 +116,7 @@ public class RecipeDto {
 
     @Getter
     @Setter
-    public static class Response {
+    public static class ResponseDetail {
         private Long id;
         private String title;
         private int portion;
@@ -132,7 +132,7 @@ public class RecipeDto {
         private int heartCounts;
 
         @Builder
-        public Response(Long id, String title, int portion, int view, String time, LocalDateTime createdAt, LocalDateTime lastModifiedAt, ImageInfo imageInfo ,List<Ingredient> ingredients ,List<Step> steps, Member member, int heartCounts) {
+        public ResponseDetail(Long id, String title, int portion, int view, String time, LocalDateTime createdAt, LocalDateTime lastModifiedAt, String imagePath, List<Ingredient> ingredients , List<Step> steps, Member member, int heartCounts) {
             this.id = id;
             this.title = title;
             this.portion = portion;
@@ -146,6 +146,62 @@ public class RecipeDto {
             this.memberId = member.getId();
             this.memberName = member.getName();
             this.heartCounts = heartCounts;
+        }
+    }
+
+    @Getter
+    @Setter
+    public static class Response{
+        private Long id;
+        private String title;
+        private RecipeDto.Response.Member member;
+        private String imagePath;
+        private int heartCounts;
+        private int view;
+
+        @Builder
+        public Response(Long id, String title, Long memberId, String memberName, String profileImagePath, String imagePath, int heartCounts, int view) {
+
+            RecipeDto.Response.Member member = new Member();
+            member.setId(memberId);
+            member.setName(memberName);
+            member.setProfileImagePath(profileImagePath);
+            this.member = member;
+
+            this.id = id;
+            this.title = title;
+            this.imagePath = imagePath;
+            this.heartCounts = heartCounts;
+            this.view = view;
+        }
+
+        @Getter
+        @Setter
+        static class Member{
+            private Long id;
+            private String name;
+            private String profileImagePath;
+
+            @Override
+            public String toString() {
+                return "Member{" +
+                        "id=" + id +
+                        ", name='" + name + '\'' +
+                        ", profileImagePath='" + profileImagePath + '\'' +
+                        '}';
+            }
+        }
+
+        @Override
+        public String toString() {
+            return "Response{" +
+                    "id=" + id +
+                    ", title='" + title + '\'' +
+                    ", member=" + member +
+                    ", imagePath='" + imagePath + '\'' +
+                    ", heartCounts=" + heartCounts +
+                    ", view=" + view +
+                    '}';
         }
     }
 }
