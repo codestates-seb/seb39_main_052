@@ -11,18 +11,11 @@ export const MyProfileContainer = styled.div`
 `;
 export const ProfileWrapper = styled.div`
   padding: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 `;
 export const ProfilePhoto = styled.img`
   width: 100px;
   height: 100px;
   border-radius: 50%;
-
-  &.small_logoface {
-    opacity: 70%;
-  }
 `;
 export const ProfileName = styled.div`
   padding-top: 16px;

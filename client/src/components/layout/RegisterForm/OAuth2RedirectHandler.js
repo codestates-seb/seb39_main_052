@@ -32,7 +32,7 @@ const OAuth2RedirectHandler = () => {
           //요청시 받아오는 response.data로 리덕스에 유저정보 저장
           dispatch(
             setUserInfo({
-              userId: response.data.id,
+              userId: response.data.memberId,
               userName: response.data.name,
               userProfileImgPath: response.data.profileImagePath,
             }) // {isLoggedIn: true, userId: 2, userName: 'hana cho', userProfileImgPath: 'https://lh3.googleusercontent.com/a/ALm5wu0ny_ZcG1WvfhKVvHcv6po0JNV5xR2rb2EMUXJy=s96-c'}

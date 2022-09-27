@@ -147,13 +147,12 @@ const LogInForm = () => {
       // .get(`/api/members/${userIdFromServer}}`)
       .get("/api/members/" + userIdFromServer)
       .then((response) => {
-        // console.log(response);
         if (response.status === 200) {
           // console.log(response); //response.data = {memberId: 2, name: 'test1', profileImagePath: null}
           //요청시 받아오는 response.data로 리덕스에 유저정보 저장
           dispatch(
             setUserInfo({
-              userId: response.data.id,
+              userId: response.data.memberId,
               userName: response.data.name,
               userProfileImgPath: response.data.profileImagePath,
             })
