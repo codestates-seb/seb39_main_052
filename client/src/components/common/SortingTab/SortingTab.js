@@ -24,9 +24,9 @@ const SortingTab = ({ sortMode, setSortMode }) => {
                 return (
                     <Option
                         key={idx}
-                        onClick={()=> {handleClick(option.mode)}}
-                        className={sortMode===option.mode && "selected"}
-                        // className="selected"
+                        onClick={() => { handleClick(option.mode) }}
+                        className={sortMode === option.mode && "selected"}
+                    // className="selected"
                     >
                         {option.button}
                     </Option>

@@ -9,7 +9,7 @@ import { Head, ColumnHeads, Container, Title, Fridge, InputWrapper, InnerContain
 
 const MyFridge = () => {
     const [dateArr, setDateArr] = useState([]);
-    const [sortMode, setSortMode] = useState(['date']);
+    const [sortMode, setSortMode] = useState("date");
     const titlesArr = ["name", "amount", "date", "dDay", "note"]; //재료 입력에서 각 column의 키값 배열
     const placeholders = ["예) 계란", "예) 30알", "예) 2100/01/01", "", "기타 정보를 작성하세요"];
     const dispatch = useDispatch();
@@ -70,7 +70,6 @@ const MyFridge = () => {
                             key={idx}
                             onClick={() => { handleClick(option.mode) }}
                             className={sortMode === option.mode && "selected"}
-                        // className="selected"
                         >
                             {option.button}
                         </Option>
