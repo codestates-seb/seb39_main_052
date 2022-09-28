@@ -17,6 +17,8 @@ export const CommentsCollection = styled.div`
     display: flex;
     flex-direction: row;
     border-bottom: solid 1px var(--gray-300);
+    //박스 높이 넘치면 ... 으로 나타내려고 height 지정 2칸 height 56px 넘어가면 ...으로 나타내기
+    /* height: 56px; */
   }
 
   & > div > div > span {
@@ -25,8 +27,16 @@ export const CommentsCollection = styled.div`
     display: flex;
 
     &.comment {
-      padding: 0;
+      /* margin-bottom: 8px; */
       flex-basis: 50%;
+      //2줄 넘어가면 ellipsis ...으로 보여주기
+      text-overflow: ellipsis;
+      overflow: hidden;
+      // Addition lines for 2 line or multiline ellipsis
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      white-space: normal;
     }
     &.date {
       justify-content: flex-end;
@@ -45,4 +55,14 @@ export const UserImg = styled.img`
 
 export const UserNameTag = styled.div`
   padding-left: 8px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  //2줄 넘어가면 ellipsis ...으로 보여주기
+  text-overflow: ellipsis;
+  overflow: hidden;
+  // Addition lines for 2 line or multiline ellipsis
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  white-space: normal;
 `;
