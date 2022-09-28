@@ -39,6 +39,7 @@ const RecipeEditor = () => {
           if (pathname === "/recipes/new") {
               dispatch(clearRecipe());
               dispatch(clearImages());
+              
           }
         }
     }, [])
@@ -69,10 +70,12 @@ const RecipeEditor = () => {
 
     // 재료 유효성 경고 창 뜬 후 재작성 했을 때 유효하다면 경고창 없애기 
     useEffect(() => {
-        if (recipe.ingredients[0].name.length > 0) {
-            recipe.ingredients[0].quantity.length > 0
-                ? setIsIngrEmpty(false)
-                : setIsIngrEmpty(true);
+        if (isSubmitClicked) {
+            if (recipe.ingredients[0].name.length > 0) {
+                recipe.ingredients[0].quantity.length > 0
+                    ? setIsIngrEmpty(false)
+                    : setIsIngrEmpty(true);
+            }
         }
     }, [recipe.ingredients])
 

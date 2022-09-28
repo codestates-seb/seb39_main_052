@@ -148,7 +148,7 @@ const RecipeDetail = () => {
                     />
                 )
             })}
-            <Comments />
+            <Comments id={id} />
         </RecipeWrapper>
     )
 };

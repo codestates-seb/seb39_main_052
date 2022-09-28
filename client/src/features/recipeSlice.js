@@ -2,15 +2,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    id: null,
+    id: "",
     member: {
-      id: null,
+      id: "",
       name: "",
-      profileImagePath: null,
+      profileImagePath: "",
     },
     createdAt: null,
-    heartCounts: null,
-    view: null,
+    heartCounts: "",
+    view: "",
     title: "",
     portion: "1",
     time: "",
