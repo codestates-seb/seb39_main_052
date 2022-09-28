@@ -6,9 +6,20 @@ export const DropDownContainer = styled.div`
 
 export const DropDownButton = styled.div`
   cursor: pointer;
+  /* width: 20px;
+  height: 20px; */
+  transition: transform 0.5s ease; //여기선 transition을 hover에 바로 줘도 똑같이작동
+
+  & > img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+  }
+
   &:hover {
-    border-radius: 8px;
-    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+    /* border-radius: 50%;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);*/ //프로필사진에 갖다대면 동그란 그림자 생기기 .. but too ugly
+    transform: scale(1.15);
   }
 `;
 

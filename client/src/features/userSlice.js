@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { PURGE } from "redux-persist"; //for store purge
 
 const initialState = {
   isLoggedIn: false,
@@ -30,6 +31,10 @@ const userSlice = createSlice({
       state.userId = null;
       state.userName = null;
       state.userProfileImgPath = null;
+    },
+    //로그아웃시 초기상태로 store purge 작업
+    extraReducers: (builder) => {
+      builder.addCase(PURGE, () => initialState);
     },
   },
 });
