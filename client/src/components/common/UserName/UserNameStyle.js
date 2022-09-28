@@ -19,7 +19,7 @@ export const Wrapper = styled.div`
     // 레시피 카드같은 작은 요소에서는 길이를 넘어가면 ...이 보이게 하기
     :not(.large) {
         > div {
-            width: 100px;
+            width: 72px;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
