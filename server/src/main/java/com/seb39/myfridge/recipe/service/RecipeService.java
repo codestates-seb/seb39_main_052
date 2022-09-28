@@ -1,5 +1,6 @@
 package com.seb39.myfridge.recipe.service;
 
+import com.seb39.myfridge.heart.repository.HeartRepository;
 import com.seb39.myfridge.image.upload.FileUploadService;
 import com.seb39.myfridge.ingredient.Repository.IngredientRepository;
 import com.seb39.myfridge.ingredient.Repository.RecipeIngredientRepository;
@@ -7,11 +8,14 @@ import com.seb39.myfridge.ingredient.entity.RecipeIngredient;
 import com.seb39.myfridge.ingredient.service.IngredientService;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.service.MemberService;
+import com.seb39.myfridge.recipe.dto.RecipeDto;
+import com.seb39.myfridge.recipe.dto.RecipeSearch;
 import com.seb39.myfridge.recipe.entity.Recipe;
 import com.seb39.myfridge.recipe.repository.RecipeRepository;
 import com.seb39.myfridge.step.entity.Step;
 import com.seb39.myfridge.step.repository.StepRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -20,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -33,6 +38,8 @@ public class RecipeService {
     private final IngredientRepository ingredientRepository;
     private final RecipeIngredientRepository recipeIngredientRepository;
     private final IngredientService ingredientService;
+    private final HeartRepository heartRepository;
+
 
     public Recipe findRecipeWithDetails(Long recipeId){
         Recipe recipe = recipeRepository.findWithDetails(recipeId)
@@ -127,5 +134,10 @@ public class RecipeService {
     public List<String> findTitlesByContainsWord(String word){
         List<String> result = recipeRepository.searchTitles(word);
         return result;
+    }
+
+    public Page<RecipeDto.SearchResponse> searchRecipes(RecipeSearch recipeSearch){
+        // 컨트롤러에서 memberId 추가되서 RecipeSearch가 넘어온다.
+        return recipeRepository.searchRecipes(recipeSearch);
     }
 }

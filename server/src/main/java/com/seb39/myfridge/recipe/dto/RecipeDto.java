@@ -141,6 +141,7 @@ public class RecipeDto {
         private int heartCounts;
         private int view;
         private LocalDateTime lastModifiedAt;
+        private boolean heartExist = false;
 
         public SearchResponse() {
         }
