@@ -14,42 +14,43 @@ import { persistReducer } from "redux-persist";
 import thunk from "redux-thunk";
 import storageSession from "redux-persist/lib/storage/session";
 
-//기존코드
-// const store = configureStore({
-//   reducer: {
-//     counter: counterSlice.reducer, // store에 slice 연결 방법 예시
-//     recipe: recipeSlice.reducer,
-//     images: imageSlice.reducer,
-//     user: userSlice.reducer,
-//   },
-//   middleware: (getDefaultMiddleware) =>
-//     getDefaultMiddleware({
-//       serializableCheck: false,
-//     }), //기본적인 미들웨어 thunk, immutableStateInvariant, serializableStateInvariant가 포함 가져오겠다
-// });
-
-// export default store;
-
-//redux persist 이후 코드
-const rootReducer = combineReducers({
-  counter: counterSlice.reducer,
-  recipe: recipeSlice.reducer,
-  images: imageSlice.reducer,
-  user: userSlice.reducer,
-});
-
-const persistConfig = {
-  key: "root",
-  storage: storageSession,
-  whitelist: ["user"],
-};
-
-const persistedReducer = persistReducer(persistConfig, rootReducer);
-
+// 기존코드
 const store = configureStore({
-  reducer: persistedReducer,
-  devTools: process.env.NODE_ENV !== "production",
-  middleware: [thunk],
+  reducer: {
+    counter: counterSlice.reducer, // store에 slice 연결 방법 예시
+    recipe: recipeSlice.reducer,
+    images: imageSlice.reducer,
+    user: userSlice.reducer,
+    fridge: fridgeSlice.reducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }), //기본적인 미들웨어 thunk, immutableStateInvariant, serializableStateInvariant가 포함 가져오겠다
 });
 
 export default store;
+
+// //redux persist 이후 코드
+// const rootReducer = combineReducers({
+//   counter: counterSlice.reducer,
+//   recipe: recipeSlice.reducer,
+//   images: imageSlice.reducer,
+//   user: userSlice.reducer,
+// });
+
+// const persistConfig = {
+//   key: "root",
+//   storage: storageSession,
+//   whitelist: ["user"],
+// };
+
+// const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+// const store = configureStore({
+//   reducer: persistedReducer,
+//   devTools: process.env.NODE_ENV !== "production",
+//   middleware: [thunk],
+// });
+
+// export default store;

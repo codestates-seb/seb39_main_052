@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setLoggedIn, setUserInfo } from "../../../features/userSlice";
 
 const LogInForm = () => {
-  const [cookies, setCookie] = useCookies(['token', "id"]);
+  const [cookies, setCookie, removeCookie] = useCookies(['token', "id"]);
   const navigate = useNavigate();
   const dispatch = useDispatch(); //for redux dispatch
   const {
@@ -33,7 +33,7 @@ const LogInForm = () => {
 
   //userSlice 로그인 상태 확인
   const isLoggedIn = useSelector((state) => {
-    console.log("리덕스 isLoggedIn이니?", state.user.isLoggedIn);
+    // console.log("리덕스 isLoggedIn이니?", state.user.isLoggedIn);
     return state.user.isLoggedIn;
   });
 
@@ -51,12 +51,14 @@ const LogInForm = () => {
             axios.defaults.headers.common[
               "Authorization"
             ] = `Bearer ${ACCESS_TOKEN}`; //요청헤더에 액세스 토큰 설정
-            setCookie("token", ACCESS_TOKEN);
-            console.log("ACCESS_TOKEN", ACCESS_TOKEN);
-            console.log("쿠키토큰", cookies.token);
+            removeCookie("token"); // 이전 토큰을 쿠키에서 지우고
+            setCookie("token", ACCESS_TOKEN); // 새로운 토큰을 쿠키에 설정
+            // console.log("ACCESS_TOKEN", ACCESS_TOKEN);
+            // console.log("쿠키토큰", cookies.token);
             //액세스토큰 만료되기 1분 전 로그인 연장
             setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
-            // setTimeout(onSilentRefresh, 3000); //3초로 실험
+            setTimeout(onSilentRefresh, 3000); //3초로 실험
+            // setTimeout(console.log("나는 리프레시"), 3000); //3초로 실험
           }
         })
         .catch((error) => console.log(error, "silent refresh 에러"));
@@ -73,12 +75,14 @@ const LogInForm = () => {
           axios.defaults.headers.common[
             "Authorization"
           ] = `Bearer ${ACCESS_TOKEN}`; //요청헤더에 액세스 토큰 설정
-          console.log("ACCESS_TOKEN", ACCESS_TOKEN);
-          setCookie("token", ACCESS_TOKEN);
-          setCookie("id", response.data.memberId);
+          // console.log("ACCESS_TOKEN", ACCESS_TOKEN);
+          removeCookie("token"); // 만약 이전 토큰이 있다면 쿠키에서 지우고
+          setCookie("token", ACCESS_TOKEN); // 새로운 토큰을 쿠키에 설정
+          removeCookie("id"); // 만약 이전 id가 있다면 쿠키에서 지우고
+          setCookie("id", response.data.memberId); // 새로운 id를 쿠키에 설정
           //로그인 성공 상태 리덕스 저장소로 보내기
           // dispatch(setLoggedIn({ userEmail: data.email }));
-          console.log(response.data); //서버에서 응답바디로 주는것 {memberId: 2}
+          // console.log(response.data); //서버에서 응답바디로 주는것 {memberId: 2}
 
           //userSlice에 로그인 상태 true 저장
           dispatch(setLoggedIn({})); //{isLoggedIn: true, userId: null, userName: null, userProfileImgPath: null}
@@ -91,6 +95,7 @@ const LogInForm = () => {
           //액세스토큰 만료되기 전 로그인 연장
           setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
           // setTimeout(onSilentRefresh, 3000); //3초로 실험
+          // setTimeout(console.log("나는 로그인"), 3000); //3초로 실험
         }
       })
       .catch((error) => {
@@ -147,7 +152,7 @@ const LogInForm = () => {
 
   //로그인 요청시 서버에서 보내주는 memberId로 사용자 정보를 조회
   const getUserInfo = (userIdFromServer) => {
-    console.log("겟유저인포 ");
+    // console.log("겟유저인포 ");
     axios
       // .get(`/api/members/${userIdFromServer}}`)
       .get("/api/members/" + userIdFromServer)

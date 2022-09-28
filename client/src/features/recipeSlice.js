@@ -21,7 +21,7 @@ const initialState = {
     },
     ingredients: [{
       name: "",
-      amount: ""
+      quantity: ""
     }],
     steps: [{
       sequence: 1,
@@ -64,7 +64,7 @@ const recipeSlice = createSlice({
       addIngrInput: (state, action) => {
         state.ingredients = [...state.ingredients, {
           name: initialState.ingredients[0].name,
-          amount: initialState.ingredients[0].amount
+          quantity: initialState.ingredients[0].quantity
         }];
       },
       deleteIngrInput: (state, action) => {

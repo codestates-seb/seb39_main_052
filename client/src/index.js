@@ -25,11 +25,11 @@ root.render(
   <React.StrictMode>
     <CookiesProvider>
       <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
+        {/* <PersistGate loading={null} persistor={persistor}> */}
           <ThemeProvider theme={theme}>
             <App />
           </ThemeProvider>
-        </PersistGate>
+        {/* </PersistGate> */}
       </Provider>
     </CookiesProvider>
   </React.StrictMode>

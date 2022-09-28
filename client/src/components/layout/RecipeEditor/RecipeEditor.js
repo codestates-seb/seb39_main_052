@@ -20,7 +20,7 @@ const RecipeEditor = () => {
     const [isStepsEmpty, setIsStepsEmpty] = useState(true);
     const [isSubmitClicked, setIsSubmitClicked] = useState(false);
 
-    const titlesArr = ["name", "amount"]; //재료 입력에서 각 column의 키값 배열
+    const titlesArr = ["name", "quantity"]; //재료 입력에서 각 column의 키값 배열
     const placeholders = ["예) 감자", "예) 100g"];
     const portionOptions = Array.from({length: 10}, (_, i) => i + 1); //인분 선택 dropdown
 
@@ -36,8 +36,10 @@ const RecipeEditor = () => {
         
         return() => {
           // unmount
-          dispatch(clearRecipe());
-          dispatch(clearImages());
+          if (pathname === "/recipes/new") {
+              dispatch(clearRecipe());
+              dispatch(clearImages());
+          }
         }
     }, [])
 
@@ -45,7 +47,7 @@ const RecipeEditor = () => {
     const recipe = useSelector((state) => {
         return state.recipe;
     });
-    console.log(`recipe`, recipe);
+    // console.log(`redux 레시피`, recipe);
 
     // 레시피 내 모든 이미지 데이터
     const files = useSelector((state) => {
@@ -68,7 +70,7 @@ const RecipeEditor = () => {
     // 재료 유효성 경고 창 뜬 후 재작성 했을 때 유효하다면 경고창 없애기 
     useEffect(() => {
         if (recipe.ingredients[0].name.length > 0) {
-            recipe.ingredients[0].amount.length > 0
+            recipe.ingredients[0].quantity.length > 0
                 ? setIsIngrEmpty(false)
                 : setIsIngrEmpty(true);
         }
@@ -100,7 +102,7 @@ const RecipeEditor = () => {
         // 필수 데이터 유효성 검사
         recipe.title.length > 0 ? setIsTitleEmpty(false) : setIsTitleEmpty(true);
         recipe.time.length > 0 ? setIsTimeEmpty(false) : setIsTimeEmpty(true);
-        recipe.ingredients[0].name.length > 0 && recipe.ingredients[0].amount.length > 0 
+        recipe.ingredients[0].name.length > 0 && recipe.ingredients[0].quantity.length > 0 
             ? setIsIngrEmpty(false) 
             : setIsIngrEmpty(true);
         recipe.steps[0].content.length > 0 ? setIsStepsEmpty(false) : setIsStepsEmpty(true);
@@ -178,6 +180,7 @@ const RecipeEditor = () => {
                     formData.delete('files');
                     formData.delete('requestBody');
                     alert(`성공적으로 게시되었습니다`)
+                    navigate(`/recipes/${response.data.id}`)
                 })
                 .catch((error) => {
                     // 예외 처리
@@ -203,6 +206,7 @@ const RecipeEditor = () => {
                     formData.delete('files');
                     formData.delete('requestBody');
                     alert(`성공적으로 수정되었습니다`)
+                    navigate(`/recipes/${response.data.id}`)
                 })
                 .catch((error) => {
                     // 예외 처리
@@ -314,7 +318,7 @@ const RecipeEditor = () => {
             {pathname === "/recipes/edit" &&
                 <ButtonWrap>
                     {/* 수정페이지에서 취소시 레시피 상세 페이지로 연결 예정 */}
-                    <GeneralButton className="medium gray" >취소하기</GeneralButton>
+                    <GeneralButton className="medium gray" onClick={() => navigate(-1)}>취소하기</GeneralButton>
                     <GeneralButton className="medium" onClick={handleSaveClick}>수정하기</GeneralButton>
                 </ButtonWrap>
             }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useCookies } from 'react-cookie';
 import axios from "axios";
 import { Heading, Ingredients, RecipeWrapper, SubHeading, Extra, Head, HeadLeft, Image, ButtonLike, HeadLeftTop, ButtonLikeWrapper, HeadLeftBottom, Info, PortionAndTime, RecipeId, LikeViewWrapper, View, Ingredient } from "./RecipeDetailStyle";
@@ -9,14 +9,17 @@ import UserName from "../../components/common/UserName/UserName";
 import LikeHeart from "../../components/common/LikeHeart/LikeHeart";
 import { loadRecipe } from "../../features/recipeSlice";
 import { useDispatch, useSelector } from "react-redux";
+import useConfirm from "../../hooks/useConfirm";
 
 const RecipeDetail = () => {
 
     const [isMyRecipe, setIsMyRecipe] = useState(false);
+    // console.log("내 레시피니?", isMyRecipe);
     const { id } = useParams();
     // console.log("id", id);
     const [cookies] = useCookies(["id"]); // 쿠키에 저장된 내 유저 id값 (type은 string)
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     // date 표기 (YYYY-MM-DD) 
     const dateConverter = (createdAt) => {
@@ -24,17 +27,16 @@ const RecipeDetail = () => {
         // const time = new Date().toTimeString().split(" ")[0];
         return date;
     }
-    // 상세 레시피 데이터
+    // 레시피 상세 데이터 (글)
     const recipe = useSelector((state) => {
         return state.recipe;
-    })
-    // console.log(recipe);
+    });
+    // console.log(`redux 레시피`, recipe);
 
     // 레시피 상세 데이터 불러오기
     const getRecipe = async() => {
         try {
             const { data } = await axios.get(`/api/recipes/${id}`);
-            console.log("방금 받아왔어욤", data);
             dispatch(loadRecipe({
                 recipeId: data.id,
                 memberName: data.member.name,
@@ -62,6 +64,28 @@ const RecipeDetail = () => {
         getRecipe();
     }, [id])
 
+
+    const confirm = (id) => {console.log("삭제 했습니다"); handleDelete(id)};
+    const cancel = () => console.log("취소");
+
+    // 댓글을 지울 때 (댓글 id 전달 필수)
+    const handleDelete = (id) => {
+        axios({
+            method: `delete`,
+            url: `/api/recipes/${id}`,
+        })
+        .then((response) => {
+            console.log(response);
+            alert(`레시피가 삭제되었습니다`);
+            navigate(-1);
+        })
+        .catch((error) => {
+            // 예외 처리
+            console.log(error.response);
+            alert(`레시피를 삭제할 수 없습니다`);
+        })
+    }
+
     return (
         <RecipeWrapper>
             <Extra>
@@ -85,12 +109,19 @@ const RecipeDetail = () => {
                             <PortionAndTime>{recipe.portion} 인분</PortionAndTime>
                             <PortionAndTime>{recipe.time} 분 &nbsp;소요</PortionAndTime>
                         </Info>
-                        {isMyRecipe &&
-                            <ButtonLikeWrapper>
-                                <ButtonLike><Link to="/recipes/edit">수정</Link></ButtonLike>
-                                <ButtonLike>삭제</ButtonLike>
-                            </ButtonLikeWrapper>
-                        }
+
+                        <ButtonLikeWrapper>
+                            <ButtonLike className={!isMyRecipe && "invisible"}>
+                                <Link to="/recipes/edit">수정</Link>
+                            </ButtonLike>
+                            <ButtonLike 
+                                onClick={useConfirm("정말 삭제하시겠습니까?", confirm, cancel, id)}
+                                className={!isMyRecipe && "invisible"}
+                            >
+                                삭제
+                            </ButtonLike>
+                        </ButtonLikeWrapper>
+
                     </HeadLeftBottom>
                 </HeadLeft>
                 <Image src={recipe.imageInfo.imagePath} alt={'main'} />
@@ -101,7 +132,7 @@ const RecipeDetail = () => {
                     return (
                         <div key={idx}>
                             <Ingredient>{item.name}</Ingredient>
-                            <Ingredient>{item.amount}</Ingredient>
+                            <Ingredient>{item.quantity}</Ingredient>
                         </div>
                     )
                 })}

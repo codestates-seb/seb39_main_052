@@ -78,7 +78,7 @@ const FridgeDigging = () => {
         imagePath: "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
         title: "백종원의 들깨칼국수칼국수",
         memberImage: "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
-        memberName: "들깨러버들깨러버버버",
+        memberName: "들깨러버",
         likes: 221,
         views: 1200,
     }

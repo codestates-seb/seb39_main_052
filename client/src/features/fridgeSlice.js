@@ -14,25 +14,25 @@ const dDayCalculator = (date) => {
 // const initialState = {
 //     ingredients: [{
 //         name: "자두",
-//         amount: "1개",
+//         quantity: "1개",
 //         date: "2022-10-10",
 //         dDay: "14",
 //         note: "",
 //     },{
 //         name: "계란",
-//         amount: "30개",
+//         quantity: "30개",
 //         date: "2022-10-02",
 //         dDay: "6",
 //         note: "",
 //     },{
 //         name: "떡",
-//         amount: "1개",
+//         quantity: "1개",
 //         date: "2022-09-24",
 //         dDay: "-2",
 //         note: "",
 //     },{
 //         name: "",
-//         amount: "",
+//         quantity: "",
 //         date: "",
 //         dDay: "",
 //         note: "",
@@ -42,7 +42,7 @@ const dDayCalculator = (date) => {
 const initialState = {
     ingredients: [{
         name: "",
-        amount: "",
+        quantity: "",
         date: "",
         dDay: "",
         note: "",
@@ -57,7 +57,7 @@ const fridgeSlice = createSlice({
         addFrigIngrInput: (state, action) => {
             state.ingredients = [...state.ingredients, {
                 name: initialState.ingredients[0].name,
-                amount: initialState.ingredients[0].amount,
+                quantity: initialState.ingredients[0].quantity,
                 dDay: initialState.ingredients[0].dDay,
                 date: initialState.ingredients[0].date,
                 note: initialState.ingredients[0].note,

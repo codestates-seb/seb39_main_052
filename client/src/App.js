@@ -23,10 +23,11 @@ import axios from "axios";
 
 function App() {
   
-  const [cookies, setCookie] = useCookies(['token', "id"]);
+  const [cookies, setCookie, removeCookie] = useCookies(['token', "id"]);
   const dispatch = useDispatch();
   const JWT_EXPIRY_TIME = 30 * 60 * 1000;
   const mountRef = useRef(false); // useEffect 두번 mount 되는걸 방지하기 위해
+  const { maxAge } = 5;
 
   // 새로고침시 쿠키에 access-token이 있는 경우 token refresh 요청
   useEffect(() => {
@@ -47,7 +48,8 @@ function App() {
       const ACCESS_TOKEN = response.headers["access-token"]; // eyJ0eX.. 서버에서 response header에 싣어보내는 업데이트된 토큰값
       if (response.status === 200) {
         axios.defaults.headers.common["Authorization"] = `Bearer ${ACCESS_TOKEN}`; // 요청헤더에 액세스 토큰 설정
-        setCookie("token", ACCESS_TOKEN);
+        removeCookie("token");
+        setCookie("token", ACCESS_TOKEN, { maxAge });
         setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000); // 액세스토큰 만료되기 1분 전 로그인 연장
         dispatch(setLoggedIn({}));
         getUserInfo(cookies.id);
@@ -69,6 +71,8 @@ function App() {
               userProfileImgPath: response.data.profileImagePath,
             })
           );
+          removeCookie("id"); // 만약 이전 id가 있다면 쿠키에서 지우고
+          setCookie("id", response.data.id); // 새로운 id를 쿠키에 설정
         }
       })
       .catch((error) => console.log(error.response));
