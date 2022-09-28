@@ -1,11 +1,6 @@
 import styled from "styled-components";
 
 export const RecipeFrameContainer = styled.div`
-  //Frame 상위 each RecipeFrame을 담고있는 애한테 적용하기
-  /* width: 80%;
-  background-color: var(--gray-100);
-  border-radius: 10px;
-  padding: 16px; */
   display: flex;
   align-items: center;
   padding: 16px;

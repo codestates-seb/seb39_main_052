@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const CommentsBoxContainer = styled.div`
-  width: 80%;
+  /* width: 90%; */
   background-color: var(--gray-100);
   border-radius: 10px;
   padding: 16px;

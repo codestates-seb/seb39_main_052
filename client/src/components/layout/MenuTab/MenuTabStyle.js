@@ -13,7 +13,7 @@ export const Menu = styled.ul`
   /* padding: 16px; */
   display: flex;
   flex-direction: row;
-  width: 100%;
+  width: 90%;
   justify-content: space-between;
   /* height: 40px; */
 `;
@@ -22,7 +22,7 @@ export const Li = styled.li`
   width: calc(90% / 4); //li 차지공간 90%로하고 상위 컴포넌트에서 간격 띄우려고
   display: flex;
   height: 40px;
-
+  cursor: pointer;
   border-radius: 35px;
   justify-content: center;
   align-items: center;
