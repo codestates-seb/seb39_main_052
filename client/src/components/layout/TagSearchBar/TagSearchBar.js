@@ -2,12 +2,14 @@ import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { faMagnifyingGlass, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Container, DropDown, SearchBar, SearchInput, StyledFaXmark, StyledFontAwesomeIcon, Suggestion, Tag, TagWrapper } from "./TagSearchBarStyle";
+import axios from "axios";
 
 const TagSearchBar = () => {
 
     const [searchParams, setSearchParams] = useSearchParams();
-    const [searchValue, setSearchValue] = useState("");
-    const [searchTags, setSearchTags] = useState([]);
+    const [searchValue, setSearchValue] = useState(""); // 확정된 검색 태그 하나
+    const [searchTags, setSearchTags] = useState([]); // 확정된 검색 태그 전체 배열
+    const [suggestedValue, setSuggestedValue] = useState([]); // 연관 검색어
     const [isDropDownOpen, setIsDropDownOpen] = useState(false);
     const [cursor, setCursor] = useState(-1);
 
@@ -17,15 +19,28 @@ const TagSearchBar = () => {
     const searchBarRef = useRef(); // 서치바+드롭다운 창 밖 클릭을 인식하기 위한 ref
     const suggestionRef = useRef(null); // 스크롤이 드롭다운 내 선택된 요소를 따라가게 하기 위한 ref
 
-    // const dummyData = []
-    // const dummyData = ["순두부", "감자"]
-    const dummyData = ["순두부", "감자", "미역", "간장", "계란", "밥", "돼지고기", "칼국수면", "고구마", "김치", "닭고기", "소고기", "두부"]
+    // const suggestedValue = []
+    // const suggestedValue = ["순두부", "감자"]
+    // const dummyData = ["순두부", "감자", "미역", "간장", "계란", "밥", "돼지고기", "칼국수면", "고구마", "김치", "닭고기", "소고기", "두부"]
 
-    // console.log(searchValue);
+    // 레시피 상세 데이터 불러오기
+    const getDropDownValue = async (keyword) => {
+        if (keyword.length > 0) {
+            try {
+                const { data } = await axios.get(`/api/ingredients/names?word=${keyword}`);
+                setSuggestedValue([...data.data]);
+                data.data.length > 0 ? setIsDropDownOpen(true) : setIsDropDownOpen(false);
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+    }
+
     // 드랍다운에서 위치 바뀌면 검색 값 변경 + 스크롤이 드롭다운 내 선택된 요소를 따라가게 하기
     useEffect(() => {
         if (isDropDownOpen) {
-            setSearchValue(dummyData[cursor]);
+            setSearchValue(suggestedValue[cursor]);
             if (cursor > -1) {
                 suggestionRef.current.scrollIntoView({
                     behavior: 'smooth',
@@ -57,21 +72,24 @@ const TagSearchBar = () => {
 
     // 태그 입력시 연관 태그 보여주는 함수
     const handleInput = (e) => {
-        setSearchValue(e.target.value);
+        setCursor(-1); // 새 검색어 입력시 커서 위치 초기화
         // "입력값에 대한 연관 검색어가 있으면" 으로 변경 예정
-        if (dummyData.length > 0) {
-            setIsDropDownOpen(true);
+        if (e.target.value.length <= 0) {
+            setIsDropDownOpen(false);
+            setSuggestedValue([]);
         }
+        setSearchValue(e.target.value);
+        getDropDownValue(e.target.value);
     };
 
     // 엔터키 또는 방향키에 따라 드롭다운 내 이동
     const handleKey = (e) => {
-
+        // if (!e.isComposing) { //한글 입력 후 드롭다운 내릴 때 처음만 커서 두번 움직임
         if (isDropDownOpen) {
             if (e.key === 'ArrowDown') {
-                // 아래 dummyData를 추후 연관검색어로 변경 예정
+                // 아래 suggestedValue를 추후 연관검색어로 변경 예정
                 isDropDownOpen &&
-                    setCursor((prev) => (prev < dummyData.length - 1 ? prev + 1 : prev));
+                    setCursor((prev) => (prev < suggestedValue.length - 1 ? prev + 1 : prev));
             }
             if (e.key === 'ArrowUp') {
                 isDropDownOpen &&
@@ -80,19 +98,27 @@ const TagSearchBar = () => {
             if (e.key === 'Escape') {
                 setCursor(-1);
                 setIsDropDownOpen(false);
+                setSuggestedValue([]);
             }
             if (e.key === 'Enter' && cursor > -1) {
                 handleSearch();
+                setSuggestedValue([]);
             }
+            // if (e.key === 'Backspace') {
+            //     e.preventDefault();
+            //     console.log("백스페이스 눌렀어?")
+            // }
         }
         else {
             if (e.key === 'Enter') {
                 handleSearch();
+                setSuggestedValue([]);
             }
             if (e.key === 'ArrowDown') {
                 setIsDropDownOpen(true);
             }
         }
+
     }
 
     // 엔터/서치 아이콘 클릭 시 하단에 태그 결과 레시피 카드를 보여주는 함수
@@ -136,7 +162,7 @@ const TagSearchBar = () => {
     // 외부 클릭 후 다시 Input창 클릭시 연관 검색어가 있으면 드롭다운을 다시 보여주는 함수
     const handleClickInside = () => {
         // "입력값에 대한 연관 검색어가 있으면" 으로 변경 예정
-        if (dummyData.length > 0) {
+        if (suggestedValue.length > 0) {
             setIsDropDownOpen(true);
         }
     }
@@ -157,7 +183,7 @@ const TagSearchBar = () => {
             </SearchBar>
             {isDropDownOpen &&
                 <DropDown>
-                    {dummyData.map((el, idx) => {
+                    {suggestedValue.map((el, idx) => {
                         return (
                             <Suggestion
                                 key={idx}
