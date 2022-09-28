@@ -3,7 +3,7 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartLine} from "@fortawesome/free-regular-svg-icons";
 import { LikeWrapper, StyledFontAwesomeIcon } from "./LikeHeartStyle";
 
-const LikeHeart = ({ likes }) => {
+const LikeHeart = ({ heartCounts }) => {
 
     const [isClicked, setIsClicked] = useState(false);
 
@@ -15,7 +15,7 @@ const LikeHeart = ({ likes }) => {
             }
             {/* ()괄호 */}
 
-            &#40;{likes}&#41;
+            &#40;{heartCounts}&#41;
         </LikeWrapper>
     )
 };

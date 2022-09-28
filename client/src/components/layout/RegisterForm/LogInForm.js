@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Cookies, useCookies } from 'react-cookie';
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import GeneralButton from "../../common/Button/GeneralButton";
@@ -8,6 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setLoggedIn, setUserInfo } from "../../../features/userSlice";
 
 const LogInForm = () => {
+  const [cookies, setCookie] = useCookies(['token', "id"]);
   const navigate = useNavigate();
   const dispatch = useDispatch(); //for redux dispatch
   const {
@@ -49,7 +51,9 @@ const LogInForm = () => {
             axios.defaults.headers.common[
               "Authorization"
             ] = `Bearer ${ACCESS_TOKEN}`; //요청헤더에 액세스 토큰 설정
+            setCookie("token", ACCESS_TOKEN);
             console.log("ACCESS_TOKEN", ACCESS_TOKEN);
+            console.log("쿠키토큰", cookies.token);
             //액세스토큰 만료되기 1분 전 로그인 연장
             setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
             // setTimeout(onSilentRefresh, 3000); //3초로 실험
@@ -70,7 +74,8 @@ const LogInForm = () => {
             "Authorization"
           ] = `Bearer ${ACCESS_TOKEN}`; //요청헤더에 액세스 토큰 설정
           console.log("ACCESS_TOKEN", ACCESS_TOKEN);
-
+          setCookie("token", ACCESS_TOKEN);
+          setCookie("id", response.data.memberId);
           //로그인 성공 상태 리덕스 저장소로 보내기
           // dispatch(setLoggedIn({ userEmail: data.email }));
           console.log(response.data); //서버에서 응답바디로 주는것 {memberId: 2}

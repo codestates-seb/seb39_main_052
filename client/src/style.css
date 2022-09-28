@@ -1,5 +1,6 @@
 :root {
     --primary-050: #fffcf5;
+    --primary-075: #fef9ef;
     --primary-100: #fff7e2;
     --primary-200: #fff2cf;
     --primary-300: #ffedbc;
@@ -19,6 +20,7 @@
     --green-700: #32B986;
     --green-800: #24966B;
     --green-900: #136B4A;
+    --mint-100: #f0f7f7;
     --mint-200: #eff7f7;
     --mint-300: #e3f5f5;
     --mint-400: #d0efef;
@@ -28,7 +30,10 @@
     --mintgreen-400: #e2ece8;
     --mintgreen-500: #cfe0d8;
     --mintgreen-600: #a6b3ad;
+    --red-050: #f6eaea;
+    --red-075: #f4d5da;
     --red-100: #f5bec6;
+    --red-150: #f3b4be;
     --red-200: #ef92a0;
     --red-300: #e9667a;
     --red-400: #FD3049;
@@ -43,6 +48,7 @@
     --blue-500: #1290FE;
     --blue-600: #1B6FDB;
     --blue-700: #1B5EC9;
+    --fridge-100: #f3f9ff; 
     --fridge-200: #dcecfc; 
     --fridge-300: #bdd5ef; 
     --fridge-400: #aac0d7; 
@@ -50,6 +56,7 @@
     --fridge-600: #90a3c8;
     --fridge-700: #8091b2;
     --fridge-800: #4f5d79;
+    --fridge-900: #323d54;
     --gray-050: #fcfbfb;
     --gray-100: #f4f4f4;
     --gray-200: #dfdfdf;

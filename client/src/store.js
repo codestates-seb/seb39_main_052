@@ -7,6 +7,7 @@ import counterSlice from "./features/counterSlice"; // store에 slice 연결 방
 import recipeSlice from "./features/recipeSlice";
 import imageSlice from "./features/imageSlice";
 import userSlice from "./features/userSlice";
+import fridgeSlice from "./features/fridgeSlice";
 
 //for redux persist
 import { persistReducer } from "redux-persist";
