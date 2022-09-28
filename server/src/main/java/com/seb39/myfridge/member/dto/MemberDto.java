@@ -13,6 +13,9 @@ public class MemberDto {
         private String name;
         private String profileImagePath;
 
+        public Response() {
+        }
+
         public Response(Member member) {
             this.id = member.getId();
             this.name = member.getName();

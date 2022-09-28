@@ -1,7 +1,7 @@
 package com.seb39.myfridge.recipe.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
 import com.seb39.myfridge.member.dto.MemberDto;
-import com.seb39.myfridge.member.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -133,22 +133,44 @@ public class RecipeDto {
 
     @Getter
     @Setter
-    public static class Response{
+    public static class SearchResponse {
         private Long id;
         private String title;
         private MemberDto.Response member;
-        private ImageInfo imageInfo;
+        private String imagePath;
         private int heartCounts;
         private int view;
+        private LocalDateTime lastModifiedAt;
 
-        @Builder
-        public Response(Long id, String title, MemberDto.Response member, ImageInfo imageInfo, int heartCounts, int view) {
-            this.member = member;
+        public SearchResponse() {
+        }
+
+        @QueryProjection
+        public SearchResponse(Long id, String title, Long memberId, String memberName, String memberProfileImagePath, String imagePath, int heartCounts, int view, LocalDateTime lastModifiedAt) {
+            MemberDto.Response member = new MemberDto.Response();
+            member.setId(memberId);
+            member.setName(memberName);
+            member.setProfileImagePath(memberProfileImagePath);
+
             this.id = id;
             this.title = title;
-            this.imageInfo = imageInfo;
+            this.member = member;
+            this.imagePath = imagePath;
             this.heartCounts = heartCounts;
             this.view = view;
+            this.lastModifiedAt = lastModifiedAt;
+        }
+
+        @Override
+        public String toString() {
+            return "Response{" +
+                    "id=" + id +
+                    ", title='" + title + '\'' +
+                    ", member=" + member.getName() +
+                    ", imagePath='" + imagePath + '\'' +
+                    ", heartCounts=" + heartCounts +
+                    ", view=" + view +
+                    '}';
         }
     }
 }

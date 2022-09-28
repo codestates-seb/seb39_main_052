@@ -1,6 +1,7 @@
 package com.seb39.myfridge.recipe.entity;
 
 import com.seb39.myfridge.comment.entity.Comment;
+import com.seb39.myfridge.heart.entity.Heart;
 import com.seb39.myfridge.helper.BaseTimeEntity;
 import com.seb39.myfridge.image.entity.Image;
 import com.seb39.myfridge.ingredient.entity.RecipeIngredient;
@@ -52,12 +53,14 @@ public class Recipe extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     private List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 
     @OneToMany(mappedBy = "recipe")
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "recipe")
+    private List<Heart> hearts = new ArrayList<>();
 
     /**
      * image
