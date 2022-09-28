@@ -1,5 +1,4 @@
 import axios from "axios";
-import { Cookies, useCookies } from 'react-cookie';
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import GeneralButton from "../../common/Button/GeneralButton";
@@ -9,7 +8,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { setLoggedIn, setUserInfo } from "../../../features/userSlice";
 
 const LogInForm = () => {
-  const [cookies, setCookie] = useCookies(['token', "id"]);
   const navigate = useNavigate();
   const dispatch = useDispatch(); //for redux dispatch
   const {
@@ -51,9 +49,15 @@ const LogInForm = () => {
             axios.defaults.headers.common[
               "Authorization"
             ] = `Bearer ${ACCESS_TOKEN}`; //요청헤더에 액세스 토큰 설정
-            setCookie("token", ACCESS_TOKEN);
             console.log("ACCESS_TOKEN", ACCESS_TOKEN);
-            console.log("쿠키토큰", cookies.token);
+            //  //====cookie로 할때======
+            //           setCookie("token", ACCESS_TOKEN);
+            //           console.log("쿠키토큰", cookies.token);
+            //  //====cookie로 할때======
+
+            //refesh로 새로받아온 액세스 토큰 리덕스에도 저장하기
+            dispatch(setLoggedIn({ userToken: ACCESS_TOKEN }));
+
             //액세스토큰 만료되기 1분 전 로그인 연장
             setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
             // setTimeout(onSilentRefresh, 3000); //3초로 실험
@@ -74,14 +78,20 @@ const LogInForm = () => {
             "Authorization"
           ] = `Bearer ${ACCESS_TOKEN}`; //요청헤더에 액세스 토큰 설정
           console.log("ACCESS_TOKEN", ACCESS_TOKEN);
-          setCookie("token", ACCESS_TOKEN);
-          setCookie("id", response.data.memberId);
+          //    //====cookie로 할때======
+          // setCookie("token", ACCESS_TOKEN);
+          // setCookie("id", response.data.memberId);
+          //    //====cookie로 할때======
+
           //로그인 성공 상태 리덕스 저장소로 보내기
           // dispatch(setLoggedIn({ userEmail: data.email }));
           console.log(response.data); //서버에서 응답바디로 주는것 {memberId: 2}
 
           //userSlice에 로그인 상태 true 저장
           dispatch(setLoggedIn({})); //{isLoggedIn: true, userId: null, userName: null, userProfileImgPath: null}
+
+          //액세스 토큰 리덕스에도 저장하기
+          dispatch(setLoggedIn({ userToken: ACCESS_TOKEN }));
 
           //서버에서 받아오는 memberId를 가지고 사용자 정보조회하는 API로 get요청
           getUserInfo(response.data.memberId);

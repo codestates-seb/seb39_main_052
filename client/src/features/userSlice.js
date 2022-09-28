@@ -3,6 +3,7 @@ import { PURGE } from "redux-persist"; //for store purge
 
 const initialState = {
   isLoggedIn: false,
+  userToken: null, //액세스 토큰
   userId: null,
   userName: null,
   userProfileImgPath: null,
@@ -15,6 +16,8 @@ const userSlice = createSlice({
     //로그인 성공시
     setLoggedIn(state, action) {
       state.isLoggedIn = true;
+      //새로고침시에도 안날라가게 액세스 토큰 저장
+      state.userToken = action.payload.userToken;
     },
 
     //유저정보 저장
@@ -31,6 +34,7 @@ const userSlice = createSlice({
       state.userId = null;
       state.userName = null;
       state.userProfileImgPath = null;
+      state.userToken = null; //액세스 토큰 저장된 정보도 초기화
     },
     //로그아웃시 초기상태로 store purge 작업
     extraReducers: (builder) => {
