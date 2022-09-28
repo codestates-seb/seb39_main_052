@@ -35,6 +35,7 @@ public interface RecipeMapper {
             Step step1 = new Step();
             step1.setContent(step.getContent());
             step1.setSequence(step.getSequence());
+            System.out.println(step.getImageInfo().getImagePath());
             step1.setImage(imageDtoToImage(step.getImageInfo()));
             stepList.add(step1);
         }
@@ -94,7 +95,6 @@ public interface RecipeMapper {
         recipe.setTitle(requestBody.getTitle());
         recipe.setPortion(requestBody.getPortion());
         recipe.setTime(requestBody.getTime());
-
         return recipe;
     }
 

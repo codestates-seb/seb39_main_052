@@ -1,9 +1,7 @@
 package com.seb39.myfridge.recipe.dto;
 
 import com.seb39.myfridge.member.entity.Member;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
@@ -14,9 +12,8 @@ public class RecipeDto {
     //Recipe Post, Response Image 정보 들어갈 수 있도록 모두 수정해야 함
 
     @Getter
+    @NoArgsConstructor
     public static class Post {
-
-
         @NotBlank(message = "레시피 제목은 공백이 아니어야 합니다.")
         private String title;
 
@@ -39,12 +36,10 @@ public class RecipeDto {
     }
 
     @Getter
+    @NoArgsConstructor
     public static class ImageInfo {
         private int idx;
-
         private String imagePath;
-
-
         private String isUpdated;
 
         @Builder
@@ -56,6 +51,7 @@ public class RecipeDto {
     }
 
     @Getter
+    @NoArgsConstructor
     public static class Patch {
 
         private Long id;
@@ -89,7 +85,9 @@ public class RecipeDto {
     }
 
     @Getter
+    @NoArgsConstructor
     public static class Step {
+
         private int sequence;
         private String content;
         private ImageInfo imageInfo;
@@ -100,10 +98,13 @@ public class RecipeDto {
             this.content = content;
             this.imageInfo = imageInfo;
         }
+
     }
 
     @Getter
+    @NoArgsConstructor
     public static class Ingredient {
+
         private String name;
         private String quantity;
 
