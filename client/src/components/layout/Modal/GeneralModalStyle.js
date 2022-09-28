@@ -9,6 +9,7 @@ export const Overlay = styled.div`
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
+  z-index: 10000; //모달창은 모든 윈도우 레이어에서 가장 상위에 위치로 제일 큰 숫자
   /* display: flex;
   flex-direction: column;
   align-items: center; */

@@ -26,7 +26,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import RecipeSearchModal from "../../layout/Modal/RecipeSearchModal"; //모달 컴포넌트 만들기 이전 레시피 서치 모달
 import SearchModal from "../../layout/Modal/SearchModal"; //컴포넌트로 만든 이후의 서치 모달
-import GeneralModal from "../../layout/Modal/GeneralModal";
 
 const Gnb = () => {
   //로그인 상태 가져와서 변수에 저장
@@ -39,6 +38,12 @@ const Gnb = () => {
   useSelector((state) => {
     console.log("userSlice 전체상태?", state.user);
   }); //{isLoggedIn: false, userId: null, userEmail: undefined}
+
+  //로그인한 회원 프로필 사진 redux에서 가져오기
+  const profilePhoto = useSelector((state) => {
+    return state.user.userProfileImgPath;
+  });
+  // console.log("프로필사진 상태?", profilePhoto);
 
   //search bar 모달 상태
   const [showModal, setShowModal] = useState(false);
@@ -82,8 +87,8 @@ const Gnb = () => {
                 <Link to="/login">로그인</Link>
               </Li>
             ) : (
-              <Li>
-                <DropDownMenu />
+              <Li className="profile_icon_photo">
+                <DropDownMenu profileIconPhoto={profilePhoto} />
               </Li>
             )}
 

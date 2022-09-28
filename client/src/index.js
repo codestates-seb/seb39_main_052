@@ -6,13 +6,18 @@ import reportWebVitals from "./reportWebVitals";
 import axios from "axios";
 import { CookiesProvider } from 'react-cookie';
 
+//공통 스타일 관리
+import { ThemeProvider } from "styled-components";
+import theme from "./theme";
+
 // redux toolkit 관련
 import { Provider } from "react-redux";
 import store from "./store";
 
-//공통 스타일 관리
-import { ThemeProvider } from "styled-components";
-import theme from "./theme";
+//redux persist 관련
+import { PersistGate } from "redux-persist/integration/react";
+import { persistStore } from "redux-persist";
+export let persistor = persistStore(store);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -20,9 +25,11 @@ root.render(
   <React.StrictMode>
     <CookiesProvider>
       <Provider store={store}>
-        <ThemeProvider theme={theme}>
-          <App />
-        </ThemeProvider>
+        <PersistGate loading={null} persistor={persistor}>
+          <ThemeProvider theme={theme}>
+            <App />
+          </ThemeProvider>
+        </PersistGate>
       </Provider>
     </CookiesProvider>
   </React.StrictMode>
