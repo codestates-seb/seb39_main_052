@@ -1,11 +1,11 @@
 import MenuTab from "../../components/layout/MenuTab/MenuTab";
+import { MyPageContainer } from "./MyPageStyle";
 
 const MyPage = () => {
   return (
-    <div>
-      마이페이지
+    <MyPageContainer>
       <MenuTab></MenuTab>
-    </div>
+    </MyPageContainer>
   );
 };
 export default MyPage;

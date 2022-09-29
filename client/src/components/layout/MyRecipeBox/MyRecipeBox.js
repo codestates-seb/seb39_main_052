@@ -8,6 +8,7 @@ import {
   faHeart,
   faCommentDots,
 } from "@fortawesome/free-solid-svg-icons";
+import Pagination from "../../common/Pagination/Pagination";
 
 const MyRecipeBox = () => {
   const dummyData = [
@@ -15,7 +16,8 @@ const MyRecipeBox = () => {
       id: 1,
       imagePath:
         "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
-      title: "백종원의 들깨칼국수칼국수",
+      title:
+        "백종원의 들깨칼국수칼국수 여기서도 길게쓰면 ellipsis 적용되는건지 확인",
       memberImage:
         "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
       memberName: "들깨러버들깨러버버버",
@@ -71,6 +73,7 @@ const MyRecipeBox = () => {
           </SpanWrapper>
         </RecipeFrame>
       ))}
+      <Pagination total="10" limit="4"></Pagination>
     </RecipeFrameOuterContainer>
   );
 };
