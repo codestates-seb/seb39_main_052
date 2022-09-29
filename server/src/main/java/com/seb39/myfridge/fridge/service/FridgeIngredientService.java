@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -44,7 +46,9 @@ public class FridgeIngredientService {
     //냉장고 식별자로 fridgeIngredient 찾기
     //해당 냉장고에 어떤 재료가 있는지 확인
     public List<FridgeIngredient> findFridgeIngredient(Long fridgeId) {
-        return fridgeIngredientRepository.findFridgeIngredientsByFridgeId(fridgeId);
+        List<FridgeIngredient> fridgeIngredients = fridgeIngredientRepository.findFridgeIngredientsByFridgeId(fridgeId);
+        fridgeIngredients = fridgeIngredients.stream().sorted(Comparator.comparing(FridgeIngredient::getExpiration)).collect(Collectors.toList());
+        return fridgeIngredients;
     }
 
     @Transactional
@@ -52,7 +56,4 @@ public class FridgeIngredientService {
         fridgeIngredientRepository.deleteAllByFridgeId(fridgeId);
     }
 
-    public List<FridgeIngredient> findFridgeIngredientOrderByExpiration(Long fridgeId) {
-        return fridgeIngredientRepository.findFridgeIngredientByFridgeIdOrderByExpirationAsc(fridgeId);
-    }
 }

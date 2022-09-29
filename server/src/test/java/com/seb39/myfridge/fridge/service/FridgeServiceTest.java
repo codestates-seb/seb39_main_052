@@ -42,7 +42,7 @@ class FridgeServiceTest {
     public void 냉장고생성_테스트_일반회원() {
         //given
         Member member = Member.generalBuilder()
-                .email("test1@naver.com")
+                .email("test10@naver.com")
                 .name("testB")
                 .password("1234")
                 .buildGeneralMember();

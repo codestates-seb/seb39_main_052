@@ -12,7 +12,4 @@ public interface FridgeIngredientRepository extends JpaRepository<FridgeIngredie
     List<FridgeIngredient> findFridgeIngredientsByFridgeId(Long id);
 
     void deleteAllByFridgeId(Long id);
-
-    List<FridgeIngredient> findFridgeIngredientByFridgeIdOrderByExpirationAsc(Long id);
-
 }

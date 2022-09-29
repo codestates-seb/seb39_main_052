@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring")
 public interface RecipeMapper {
 
     default List<Step> recipeDtoStepsToStepListForPatch(List<RecipeDto.Step> steps) {

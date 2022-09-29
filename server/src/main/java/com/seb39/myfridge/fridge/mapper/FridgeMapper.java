@@ -9,7 +9,7 @@ import org.mapstruct.ReportingPolicy;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring")
 public interface FridgeMapper {
 
     default List<FridgeDto.IngredientInfoResponse> fridgeIngredientsToFridgeIngredientsDto(List<FridgeIngredient> ingredients) {

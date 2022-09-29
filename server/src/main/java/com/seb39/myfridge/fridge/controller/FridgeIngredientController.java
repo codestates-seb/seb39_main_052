@@ -46,7 +46,7 @@ public class FridgeIngredientController {
     @GetMapping
     public ResponseEntity getFridgeIngredient(@AuthMemberId Long memberId) {
         Fridge fridge = fridgeService.findFridge(memberId);
-        List<FridgeIngredient> fridgeIngredient = fridgeIngredientService.findFridgeIngredientOrderByExpiration(fridge.getId());
+        List<FridgeIngredient> fridgeIngredient = fridgeIngredientService.findFridgeIngredient(fridge.getId());
         FridgeDto.Response response = fridgeMapper.fridgeIngredientsToResponse(fridgeIngredient);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
