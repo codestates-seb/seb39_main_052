@@ -30,7 +30,10 @@ const NameSearchBar = () => {
         if (keyword.length > 0) {
             try {
                 const { data } = await axios.get(`/api/recipes/titles?word=${keyword}`);
-                setSuggestedValue([...data.data]);
+                let tmp = [...data.data]; // 정렬을 위한 tmp 배열 선언
+                tmp.sort((a,b) => a.length - b.length); // 문자열 길이 오름차순 정렬
+                setSuggestedValue([...tmp]);
+                // 연관 검색어가 있다면 드랍다운을 열고 없다면 닫기
                 data.data.length > 0 ? setIsDropDownOpen(true) : setIsDropDownOpen(false);
             }
             catch (error) {
@@ -134,6 +137,7 @@ const NameSearchBar = () => {
             setIsDropDownOpen(false);
             setCursor(-1);
             setSearchValue("");
+            setSuggestedValue([]);
         }
     }
 

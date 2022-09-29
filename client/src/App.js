@@ -31,7 +31,7 @@ function App() {
   useEffect(() => {
     if (isLoggedIn && userToken) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${userToken}`; //요청헤더에 액세스 토큰 설정
-      console.log("리덕스 userToken으로 헤더에 설정", userToken);
+      // console.log("리덕스 userToken으로 헤더에 설정", userToken);
     }
   }, []);
 
