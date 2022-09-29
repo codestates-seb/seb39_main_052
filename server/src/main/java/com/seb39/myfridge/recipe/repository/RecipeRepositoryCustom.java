@@ -11,5 +11,5 @@ public interface RecipeRepositoryCustom {
 
     List<String> searchTitles(String title);
 
-    Page<RecipeDto.SearchResponse> searchRecipes(RecipeSearch recipeSearch);
+    Page<RecipeSearch.Response> searchRecipes(RecipeSearch.Request request);
 }

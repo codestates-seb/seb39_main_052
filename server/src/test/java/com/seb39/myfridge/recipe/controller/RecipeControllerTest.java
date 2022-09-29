@@ -627,19 +627,19 @@ class RecipeControllerTest {
     @DisplayName("제목과 태그로 레시피 리스트 검색")
     void searchRecipesTest() throws Exception {
         //given
-        RecipeSearch recipeSearch = new RecipeSearch();
-        recipeSearch.setTitle("김치");
-        recipeSearch.setPage(1);
-        recipeSearch.setIngredients(List.of("김치", "간장"));
-        recipeSearch.setSortType(RecipeSearch.SortType.VIEW);
-        String requestJson = objectMapper.writeValueAsString(recipeSearch);
+        RecipeSearch.Request request = new RecipeSearch.Request();
+        request.setTitle("김치");
+        request.setPage(1);
+        request.setIngredients(List.of("김치", "간장"));
+        request.setSortType(RecipeSearch.SortType.VIEW);
+        String requestJson = objectMapper.writeValueAsString(request);
 
-        List<RecipeDto.SearchResponse> content = new ArrayList<>();
+        List<RecipeSearch.Response> content = new ArrayList<>();
         for (int i = 1; i <= 16; i++) {
-            RecipeDto.SearchResponse dto = new RecipeDto.SearchResponse((long) i, "김치찌개 " + i, (long) i, "member" + i, "https://s3.aws.abcd/member" + i + ".jpeg", "https://s3.aws.abcd/recipe" + i + ".jpeg", 10, 17 - i, LocalDateTime.now());
+            RecipeSearch.Response dto = new RecipeSearch.Response((long) i, "김치찌개 " + i, (long) i, "member" + i, "https://s3.aws.abcd/member" + i + ".jpeg", "https://s3.aws.abcd/recipe" + i + ".jpeg", 10, 17 - i, LocalDateTime.now());
             content.add(dto);
         }
-        Page<RecipeDto.SearchResponse> page = PageableExecutionUtils.getPage(content, PageRequest.of(0, 16), () -> 40);
+        Page<RecipeSearch.Response> page = PageableExecutionUtils.getPage(content, PageRequest.of(0, 16), () -> 40);
         willReturn(page).given(recipeService).searchRecipes(any());
 
         List<Heart> hearts = new ArrayList<>();

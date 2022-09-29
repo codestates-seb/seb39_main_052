@@ -131,47 +131,6 @@ public class RecipeDto {
         }
     }
 
-    @Getter
-    @Setter
-    public static class SearchResponse {
-        private Long id;
-        private String title;
-        private MemberDto.Response member;
-        private String imagePath;
-        private int heartCounts;
-        private int view;
-        private LocalDateTime lastModifiedAt;
-        private boolean heartExist = false;
 
-        public SearchResponse() {
-        }
 
-        @QueryProjection
-        public SearchResponse(Long id, String title, Long memberId, String memberName, String memberProfileImagePath, String imagePath, int heartCounts, int view, LocalDateTime lastModifiedAt) {
-            MemberDto.Response member = new MemberDto.Response();
-            member.setId(memberId);
-            member.setName(memberName);
-            member.setProfileImagePath(memberProfileImagePath);
-
-            this.id = id;
-            this.title = title;
-            this.member = member;
-            this.imagePath = imagePath;
-            this.heartCounts = heartCounts;
-            this.view = view;
-            this.lastModifiedAt = lastModifiedAt;
-        }
-
-        @Override
-        public String toString() {
-            return "Response{" +
-                    "id=" + id +
-                    ", title='" + title + '\'' +
-                    ", member=" + member.getName() +
-                    ", imagePath='" + imagePath + '\'' +
-                    ", heartCounts=" + heartCounts +
-                    ", view=" + view +
-                    '}';
-        }
-    }
 }

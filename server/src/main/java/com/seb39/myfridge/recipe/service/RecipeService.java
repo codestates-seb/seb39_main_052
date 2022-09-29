@@ -136,8 +136,8 @@ public class RecipeService {
         return result;
     }
 
-    public Page<RecipeDto.SearchResponse> searchRecipes(RecipeSearch recipeSearch){
+    public Page<RecipeSearch.Response> searchRecipes(RecipeSearch.Request request){
         // 컨트롤러에서 memberId 추가되서 RecipeSearch가 넘어온다.
-        return recipeRepository.searchRecipes(recipeSearch);
+        return recipeRepository.searchRecipes(request);
     }
 }
