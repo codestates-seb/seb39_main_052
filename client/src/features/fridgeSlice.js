@@ -11,34 +11,6 @@ const dDayCalculator = (date) => {
     return (gapDay);
 } 
 
-// const initialState = {
-//     ingredients: [{
-//         name: "자두",
-//         quantity: "1개",
-//         date: "2022-10-10",
-//         dDay: "14",
-//         note: "",
-//     },{
-//         name: "계란",
-//         quantity: "30개",
-//         date: "2022-10-02",
-//         dDay: "6",
-//         note: "",
-//     },{
-//         name: "떡",
-//         quantity: "1개",
-//         date: "2022-09-24",
-//         dDay: "-2",
-//         note: "",
-//     },{
-//         name: "",
-//         quantity: "",
-//         date: "",
-//         dDay: "",
-//         note: "",
-//     },],    
-// }
-
 const initialState = {
     ingredients: [{
         name: "",
