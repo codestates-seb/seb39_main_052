@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { Cookies, useCookies } from 'react-cookie';
+import { useCookies } from 'react-cookie';
 import GlobalStyle from "./GlobalStyle";
 import styled from "styled-components";
 import { BrowserRouter, Routes, Route, useParams } from "react-router-dom";

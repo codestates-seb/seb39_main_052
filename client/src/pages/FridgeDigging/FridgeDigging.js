@@ -16,7 +16,7 @@ const FridgeDigging = () => {
     useEffect(() => {
         // 상세보기에서 뒤로가기 한게 아닌 이상 검색 상태는 초기화
         if (!location.state) {
-            console.log(`검색 상태 지우기`);
+            // console.log(`검색 상태 지우기`);
         }
     }, [])
 

@@ -9,7 +9,7 @@ const NameSearchBar = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [searchValue, setSearchValue] = useState("");
     const [suggestedValue, setSuggestedValue] = useState([]);
-    console.log("연관검색어: ", suggestedValue);
+    // console.log("연관검색어: ", suggestedValue);
     const [isDropDownOpen, setIsDropDownOpen] = useState(false);
     const [cursor, setCursor] = useState(-1);
 

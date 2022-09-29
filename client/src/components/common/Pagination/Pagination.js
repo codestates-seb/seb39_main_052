@@ -3,7 +3,6 @@ import { Wrapper, Pages, Button } from "./PaginationStyle";
 
 const Pagination = ({ page, setPage, totalPages}) => {
 
-    console.log("현재페이지", page);
     // 전체 페이지 수만큼 값이 담긴 배열 (ex: [1,2,3,4,5,...])
     const totalArr = useMemo(() => {
         return  Array.from({length: totalPages}, (_, i) => i + 1);
@@ -17,7 +16,6 @@ const Pagination = ({ page, setPage, totalPages}) => {
 
 
     useEffect(() => {
-        console.log("나는야 페이지네이션")
         if (page > totalPages) {
             setPage(1);
         }

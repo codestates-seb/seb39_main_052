@@ -5,7 +5,7 @@ import axios from "axios";
 import ImageUploader from "../../common/ImageUploader/ImageUploader";
 import InputList from "../../common/InputList/InputList";
 import ImageInputList from "../ImageInputList/ImageInputList";
-import { Container, Header, Warning, Main, ImageWrap, Input, Select, Ingredients, Steps, Portion, Time, Button, ButtonWrap } from "./RecipeEditorStyle";
+import { Container, Header, Warning, Main, ImageWrap, Input, Select, Ingredients, Steps, Portion, Time, ButtonWrap } from "./RecipeEditorStyle";
 import GeneralButton from "../../common/Button/GeneralButton";
 import { setTitle, setPortion, setTime, clearRecipe } from "../../../features/recipeSlice";
 import { clearImages } from "../../../features/imageSlice";
@@ -45,8 +45,10 @@ const RecipeEditor = () => {
     }, [])
 
     // 레시피 상세 데이터 (글)
-    const recipe = useSelector((state) => {
-        return state.recipe;
+    // 구조 분해 할당
+    // 나머지는 .찍어서 쓰기
+    const { recipe } = useSelector((state) => {
+        return state;
     });
     // console.log(`redux 레시피`, recipe);
 
@@ -62,7 +64,13 @@ const RecipeEditor = () => {
     });
     // console.log(recipeId);
 
+
     // 레시피 id값
+    // const { id, steps } = useSelector((state) => {
+    //     return state.recipe;
+    // });
+
+    // 레시피 순서
     const recipeSteps = useSelector((state) => {
         return state.recipe.steps;
     });
@@ -235,7 +243,7 @@ const RecipeEditor = () => {
                         <option
                             key={option}
                             value={option}
-                            defaultValue={defaultValue === option}
+                            // defaultValue={defaultValue === option}
                         >
                             {option}
                         </option>
@@ -264,7 +272,7 @@ const RecipeEditor = () => {
                     <Portion>
                         <h2>양</h2>
                         <div>
-                            <SelectBox defaultValue={1} />
+                            <SelectBox  />
                             인분
                         </div>
                     </Portion>
@@ -273,19 +281,19 @@ const RecipeEditor = () => {
                         <div>
                             <Input
                                 className="small"
-                                type='text'
+                                type='number'
                                 maxLength='3'
                                 value={recipe.time}
                                 onChange={(e) => {
                                     dispatch(setTime({ time: e.target.value }));
                                     e.target.value.length > 0 ? setIsTimeEmpty(false) : setIsTimeEmpty(true);
                                 }}
-                                // 숫자만 입력 가능하도록
-                                onKeyDown={(e) => {
-                                    if (!/[0-9]/.test(e.key)) {
-                                        e.preventDefault();
-                                    }
-                                }}
+                                // // 숫자만 입력 가능하도록
+                                // onKeyDown={(e) => {
+                                //     if (!/[0-9]/.test(e.key)) {
+                                //         e.preventDefault();
+                                //     }
+                                // }}
                             />
                             분
                         </div>
