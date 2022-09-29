@@ -31,6 +31,7 @@ export const Nav = styled.nav`
 
 //냉장고 파먹기, 나의 냉장고 담고있는 박스 . 미디어 쿼리시 navBar아래에 위치
 export const LeftBox = styled.div`
+  width: 320px;
   @media ${({ theme }) => theme.device.mobile} {
     display: ${(props) => (props.isToggleOpen ? "block" : "none")};
     width: 100%;
@@ -62,17 +63,21 @@ export const LeftBoxForMobile = styled.div`
 `;
 
 export const LogoBox = styled.div`
-  display: flex;
+  /* display: flex; */
 `;
-export const RightBox = styled.div``;
+export const RightBox = styled.div`
+  width: 320px;
+`;
 export const Img = styled.img`
   width: 118px;
   height: 68px;
-  align-items: flex-end;
+  display: flex;
+  /* align-items: flex-end; */
 `;
 
 export const Ul = styled.ul`
   display: flex;
+  justify-content: flex-end;
   align-items: center;
   @media ${({ theme }) => theme.device.mobile} {
     &.nav-menu-list {
