@@ -17,7 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,7 +38,6 @@ class HeartRepositoryTest {
 
     @Autowired
     EntityManager em;
-
 
     @Test
     @DisplayName("heart가 있을 때 existsByMemberIdAndRecipeId가 true를 반환한다.")
@@ -98,8 +99,8 @@ class HeartRepositoryTest {
         recipeRepository.save(recipe);
 
         int heartCount = 17;
-        for(int i=0;i<heartCount;i++){
-            heartRepository.save(new Heart(null,recipe));
+        for (int i = 0; i < heartCount; i++) {
+            heartRepository.save(new Heart(null, recipe));
         }
 
         // when
@@ -131,5 +132,42 @@ class HeartRepositoryTest {
 
         // then
         assertThat(optionalHeart.isPresent()).isTrue();
+    }
+
+    @Test
+    @DisplayName("findByRecipeIds test")
+    void findByMemberAndrecipeIdsTest() throws Exception {
+        // given
+        for(int i=1;i<=2;i++){
+            Member member = Member.generalBuilder()
+                    .name("member" + i)
+                    .buildGeneralMember();
+            memberRepository.save(member);
+        }
+
+        List<Member> members = memberRepository.findAll();
+        for (int i = 1; i <= 10; i++) {
+            Recipe recipe = new Recipe();
+            Member member = members.get(i%2);
+            recipe.setTitle("Test recipe" + i);
+            recipe.setMember(member);
+            recipeRepository.save(recipe);
+            Heart heart = new Heart(member, recipe);
+            heartRepository.save(heart);
+        }
+        List<Long> recipeIds = recipeRepository.findAll().stream()
+                .map(r -> r.getId())
+                .collect(Collectors.toList());
+
+        em.flush();
+        em.clear();
+
+        // when
+        List<Heart> hearts = heartRepository.findByMemberIdAndRecipeIds(members.get(0).getId(), recipeIds);
+
+        // then
+        for (Heart heart : hearts) {
+            System.out.println("member, recipe : " + heart.getMember().getId()+ "  " + heart.getRecipe().getId());
+        }
     }
 }

@@ -64,7 +64,7 @@ class MemberControllerTest {
         ResultActions result = mockMvc.perform(get("/api/members/{memberId}", member.getId())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.memberId").value(member.getId()))
+                .andExpect(jsonPath("$.id").value(member.getId()))
                 .andExpect(jsonPath("$.name").value(member.getName()))
                 .andExpect(jsonPath("$.profileImagePath").value(member.getProfileImagePath()));
 
@@ -76,7 +76,7 @@ class MemberControllerTest {
                         parameterWithName("memberId").description("조회할 사용자의 ID")
                 ),
                 responseFields(
-                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("조회된 작성자 ID"),
+                        fieldWithPath("id").type(JsonFieldType.NUMBER).description("조회된 작성자 ID"),
                         fieldWithPath("name").type(JsonFieldType.STRING).description("조회된 사용자의 이름"),
                         fieldWithPath("profileImagePath").type(JsonFieldType.STRING).description("조회된 사용자의 프로필 이미지 경로")
                 )
