@@ -234,8 +234,7 @@ class RecipeRepositoryTest {
 
         // when
         RecipeSearch recipeSearch = new RecipeSearch();
-        // recipeSearch.setIngredients(List.of("ingredient 1", "ingredient 3"));
-        recipeSearch.setIngredients(List.of("ingredient 1"));
+        recipeSearch.setIngredients(List.of("ingredient 1", "ingredient 3"));
         Page<RecipeDto.SearchResponse> page = recipeRepository.searchRecipes(recipeSearch);
         List<RecipeDto.SearchResponse> content = page.getContent();
         // then

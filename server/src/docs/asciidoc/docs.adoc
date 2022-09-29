@@ -290,6 +290,26 @@ include::{snippets}/comments-received/http-response.adoc[]
 include::{snippets}/comments-received/response-fields.adoc[]
 
 == 검색 관련 API
+=== 레시피 검색
+***
+
+ 제목과 재료가 포함된 레시피 리스트를 검색하는 API 입니다.
+ 한 페이지당 16개의 레시피를 검색 할 수 있습니다.
+
+.http-request
+include::{snippets}/recipe-search-list/http-request.adoc[]
+
+.request-fields
+include::{snippets}/recipe-search-list/request-fields.adoc[]
+
+.http-response
+include::{snippets}/recipe-search-list/http-response.adoc[]
+
+.response-fields
+include::{snippets}/recipe-search-list/response-fields.adoc[]
+
+
+
 === 레시피 이름 검색
 ***
 

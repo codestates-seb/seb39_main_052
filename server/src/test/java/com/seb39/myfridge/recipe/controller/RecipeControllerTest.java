@@ -2,6 +2,7 @@ package com.seb39.myfridge.recipe.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.seb39.myfridge.heart.entity.Heart;
 import com.seb39.myfridge.image.entity.Image;
 import com.seb39.myfridge.heart.service.HeartService;
 import com.seb39.myfridge.ingredient.entity.Ingredient;
@@ -10,6 +11,7 @@ import com.seb39.myfridge.member.dto.MemberDto;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.repository.MemberRepository;
 import com.seb39.myfridge.recipe.dto.RecipeDto;
+import com.seb39.myfridge.recipe.dto.RecipeSearch;
 import com.seb39.myfridge.recipe.entity.Recipe;
 import com.seb39.myfridge.recipe.mapper.RecipeMapper;
 import com.seb39.myfridge.recipe.repository.RecipeRepository;
@@ -26,7 +28,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
@@ -39,6 +44,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
@@ -615,5 +621,73 @@ class RecipeControllerTest {
                                 )
                         )
                 ));
+    }
+
+    @Test
+    @DisplayName("제목과 태그로 레시피 리스트 검색")
+    void searchRecipesTest() throws Exception {
+        //given
+        RecipeSearch recipeSearch = new RecipeSearch();
+        recipeSearch.setTitle("김치");
+        recipeSearch.setPage(1);
+        recipeSearch.setIngredients(List.of("김치", "간장"));
+        recipeSearch.setSortType(RecipeSearch.SortType.VIEW);
+        String requestJson = objectMapper.writeValueAsString(recipeSearch);
+
+        List<RecipeDto.SearchResponse> content = new ArrayList<>();
+        for (int i = 1; i <= 16; i++) {
+            RecipeDto.SearchResponse dto = new RecipeDto.SearchResponse((long) i, "김치찌개 " + i, (long) i, "member" + i, "https://s3.aws.abcd/member" + i + ".jpeg", "https://s3.aws.abcd/recipe" + i + ".jpeg", 10, 17 - i, LocalDateTime.now());
+            content.add(dto);
+        }
+        Page<RecipeDto.SearchResponse> page = PageableExecutionUtils.getPage(content, PageRequest.of(0, 16), () -> 40);
+        willReturn(page).given(recipeService).searchRecipes(any());
+
+        List<Heart> hearts = new ArrayList<>();
+        Member member = memberRepository.findAll().get(0);
+        for (int i = 1; i <= 16; i += 2) {
+            Recipe recipe = new Recipe();
+            ReflectionTestUtils.setField(recipe, "id", (long) i);
+            hearts.add(new Heart(member, recipe));
+        }
+        willReturn(hearts).given(heartService).findHearts(any(), any());
+
+        // expected
+        ResultActions actions = mockMvc.perform(post("/api/recipes/search")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(jsonPath("$.data").isArray())
+                .andDo(MockMvcResultHandlers.print());
+
+        //then
+        actions.andDo(document("recipe-search-list",
+                getRequestPreProcessor(),
+                getResponsePreProcessor(),
+                requestFields(
+                        fieldWithPath("title").type(JsonFieldType.STRING).description("검색할 레시피 제목"),
+                        fieldWithPath("ingredients").type(JsonFieldType.ARRAY).description("검색할 재료 이름 리스트"),
+                        fieldWithPath("page").type(JsonFieldType.NUMBER).description("검색할 페이지 번호"),
+                        fieldWithPath("sortType").type(JsonFieldType.STRING).description("검색결과 정렬 기준. (VIEW 조회수,RECENT 최신순 ,HEART 하트 많은 순)")
+                ),
+                responseFields(
+                        fieldWithPath("data.[]").type(JsonFieldType.ARRAY).description("댓글 리스트"),
+                        fieldWithPath("data.[].id").type(JsonFieldType.NUMBER).description("검색된 레시피의 ID"),
+                        fieldWithPath("data.[].title").type(JsonFieldType.STRING).description("검색된 레시피의 제목"),
+                        fieldWithPath("data.[].member.id").type(JsonFieldType.NUMBER).description("댓글 작성자 ID"),
+                        fieldWithPath("data.[].member.name").type(JsonFieldType.STRING).description("댓글 작성자 이름"),
+                        fieldWithPath("data.[].member.profileImagePath").type(JsonFieldType.STRING).description("댓글 작성자 프로필 이미지 경로").optional(),
+                        fieldWithPath("data.[].imagePath").type(JsonFieldType.STRING).description("레시피의 대표 이미지 경로"),
+                        fieldWithPath("data.[].heartCounts").type(JsonFieldType.NUMBER).description("레시피의 하트 수"),
+                        fieldWithPath("data.[].view").type(JsonFieldType.NUMBER).description("조회수"),
+                        fieldWithPath("data.[].lastModifiedAt").type(JsonFieldType.STRING).description("레시피 마지막 수정 일자"),
+                        fieldWithPath("data.[].heartExist").type(JsonFieldType.BOOLEAN).description("나의 해당 레시피 하트 여부 (미로그인시 false)"),
+                        fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 페이지"),
+                        fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("현재 사이즈"),
+                        fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("질문 전체 수"),
+                        fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("총 페이지 개수")
+                )
+        ));
+
+
     }
 }
