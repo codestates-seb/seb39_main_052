@@ -1,6 +1,6 @@
 // 주어진 제목 배열에 대한 다수의 값을 입력할 수 있는 Input 컴포넌트 (열 추가, 삭제 가능)
 // 레시피 재료, 냉장고 재료 등에 쓰일 수 있다.
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from 'react-router-dom'
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
@@ -14,6 +14,8 @@ import { Block, Order, Input, ButtonWrapper, Button, StyledFontAwesomeIcon } fro
 const InputList = ({ titlesArr, placeholders }) => {
 
     const [showOrder, setShowOrder] = useState(false); //input 앞에 순서 숫자 필요하면 true로 변경
+    
+    const lastValueRef = useRef(null); // 추가되는 input 박스가 화면 안에 위치할 수 있도록 ref 설정
 
     const dispatch = useDispatch();
     // 어느 페이지에서 해당 컴포넌트를 불러오는지 확인
@@ -57,6 +59,12 @@ const InputList = ({ titlesArr, placeholders }) => {
                 alert(`30개 이하로만 등록할 수 있습니다`);
             }
         }
+        // 나의 냉장고 스크롤는 조정되지 않음
+        lastValueRef.current.scrollIntoView({
+            behavior: 'smooth',
+            // block: 'center',
+            // inline: 'nearest',
+        });
     };
 
     const handleRemoveClick = (i) => {
@@ -131,7 +139,7 @@ const InputList = ({ titlesArr, placeholders }) => {
         <>
             {data.map((el, idx) => {
                 return (
-                    <Block key={idx} id="row">
+                    <Block key={idx} id="row" ref={idx === data.length -1 ? lastValueRef : null}>
                         {showOrder && <Order htmlFor="row">{idx+1}</Order>}
                         {titlesArr.map((title, index) => {
                             return (
