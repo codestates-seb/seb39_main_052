@@ -3,6 +3,7 @@ package com.seb39.myfridge.member.service;
 
 import com.seb39.myfridge.auth.enums.AppAuthExceptionCode;
 import com.seb39.myfridge.auth.exception.AppAuthenticationException;
+import com.seb39.myfridge.fridge.service.FridgeService;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,8 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+
+    private final FridgeService fridgeService;
 
     public Member findById(Long id) {
         return memberRepository.findById(id)
@@ -45,6 +48,8 @@ public class MemberService {
         String encryptedPassword = passwordEncoder.encode(member.getPassword());
         member.saveEncryptedPassword(encryptedPassword);
         memberRepository.save(member);
+        //회원가입시 냉장고 생성
+        fridgeService.createFridge(member);
     }
 
     private void verifyBeforeSignUpGeneral(Member member){
@@ -59,6 +64,8 @@ public class MemberService {
         if(existOAuth2Member(provider,providerId))
             return;
         memberRepository.save(member);
+        //회원가입시 냉장고 생성
+        fridgeService.createFridge(member);
     }
 
     public boolean existOAuth2Member(String provider, String providerId){

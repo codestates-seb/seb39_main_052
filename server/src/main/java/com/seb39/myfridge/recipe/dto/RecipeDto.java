@@ -1,10 +1,10 @@
 package com.seb39.myfridge.recipe.dto;
 
+
+import lombok.*;
 import com.querydsl.core.annotations.QueryProjection;
 import com.seb39.myfridge.member.dto.MemberDto;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
@@ -13,6 +13,7 @@ import java.util.List;
 public class RecipeDto {
 
     @Getter
+    @NoArgsConstructor
     public static class Post {
         @NotBlank(message = "레시피 제목은 공백이 아니어야 합니다.")
         private String title;
@@ -32,6 +33,7 @@ public class RecipeDto {
     }
 
     @Getter
+    @NoArgsConstructor
     public static class ImageInfo {
         private int idx;
         private String imagePath;
@@ -46,6 +48,7 @@ public class RecipeDto {
     }
 
     @Getter
+    @NoArgsConstructor
     public static class Patch {
         private Long id;
         @NotBlank(message = "수정할 레시피 제목은 공백이 아니어야 합니다.")
@@ -73,7 +76,9 @@ public class RecipeDto {
     }
 
     @Getter
+    @NoArgsConstructor
     public static class Step {
+
         private int sequence;
         private String content;
         private ImageInfo imageInfo;
@@ -84,10 +89,13 @@ public class RecipeDto {
             this.content = content;
             this.imageInfo = imageInfo;
         }
+
     }
 
     @Getter
+    @NoArgsConstructor
     public static class Ingredient {
+
         private String name;
         private String quantity;
 

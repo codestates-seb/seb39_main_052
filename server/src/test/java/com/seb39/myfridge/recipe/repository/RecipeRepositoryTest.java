@@ -269,7 +269,6 @@ class RecipeRepositoryTest {
         RecipeSearch.Request request = new RecipeSearch.Request();
         request.setTitle("recipe");
         request.setSort(RecipeSort.RECENT);
-
         Page<RecipeSearch.Response> page = recipeRepository.searchRecipes(request);
         List<RecipeSearch.Response> content = page.getContent();
 
@@ -308,8 +307,8 @@ class RecipeRepositoryTest {
         // when
         RecipeSearch.Request request = new RecipeSearch.Request();
         request.setTitle("recipe");
-        request.setSort(RecipeSort.HEART);
 
+        request.setSort(RecipeSort.HEART);
         Page<RecipeSearch.Response> page = recipeRepository.searchRecipes(request);
         List<RecipeSearch.Response> content = page.getContent();
 

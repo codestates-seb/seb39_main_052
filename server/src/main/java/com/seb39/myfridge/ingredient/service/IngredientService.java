@@ -43,10 +43,27 @@ public class IngredientService {
         }
     }
 
+    public Ingredient createIngredient(String name) {
+        Ingredient ingredient = new Ingredient();
+        ingredient.setName(name);
+        return ingredientRepository.save(ingredient);
+    }
+
     @Transactional
     public void updateIngredient(Recipe recipe, List<RecipeIngredient> recipeIngredients) {
         recipeIngredientRepository.deleteRecipeIngredientByRecipeId(recipe.getId());
         createIngredient(recipe, recipeIngredients);
+    }
+
+    public Boolean isIngredientExist(String name) {
+        if (ingredientRepository.findByName(name).isPresent()) {
+            return true;
+        }
+        return false;
+    }
+
+    public Ingredient findIngredient(String name) {
+        return ingredientRepository.findByName(name).orElseThrow(() -> new IllegalArgumentException("해당 재료를 찾을 수 없습니다."));
     }
 
     public List<String> findNamesByContainsWord(String word){

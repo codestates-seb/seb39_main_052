@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.querydsl.core.annotations.QueryProjection;
 import com.seb39.myfridge.member.dto.MemberDto;
 import com.seb39.myfridge.recipe.enums.RecipeSort;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,6 +24,7 @@ public class RecipeSearch {
         private List<String> ingredients = new ArrayList<>();
         private int page = 1;
         private RecipeSort sort = RecipeSort.RECENT;
+
     }
 
     @Getter
@@ -46,7 +48,6 @@ public class RecipeSearch {
             member.setId(memberId);
             member.setName(memberName);
             member.setProfileImagePath(profileImagePath);
-
             this.id = id;
             this.title = title;
             this.member = member;
@@ -55,5 +56,4 @@ public class RecipeSearch {
             this.view = view;
             this.lastModifiedAt = lastModifiedAt;
         }
-    }
 }

@@ -53,6 +53,7 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
         String title = request.getTitle();
         List<String> ingredientNames = request.getIngredients();
         int page = request.getPage();
+
         long offset = (long) (page - 1) * searchSize;
 
         List<RecipeSearch.Response> content = queryFactory

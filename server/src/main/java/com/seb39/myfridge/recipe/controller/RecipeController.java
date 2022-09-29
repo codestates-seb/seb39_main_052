@@ -106,6 +106,7 @@ public class RecipeController {
                     .collect(Collectors.toSet());
 
             for (RecipeSearch.Response dto : content) {
+
                 if (hasHeartRecipeIds.contains(dto.getId()))
                     dto.setHeartExist(true);
             }
