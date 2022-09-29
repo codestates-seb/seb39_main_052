@@ -1,6 +1,11 @@
 package com.seb39.myfridge.fridge.service;
 
+import com.seb39.myfridge.fridge.dto.FridgeDto;
 import com.seb39.myfridge.fridge.entity.Fridge;
+import com.seb39.myfridge.fridge.entity.FridgeIngredient;
+import com.seb39.myfridge.fridge.mapper.FridgeMapper;
+import com.seb39.myfridge.ingredient.Repository.IngredientRepository;
+import com.seb39.myfridge.ingredient.entity.Ingredient;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.service.MemberService;
 import org.junit.jupiter.api.Assertions;
@@ -8,11 +13,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class FridgeServiceTest {
-
 
     @Autowired
     private FridgeService fridgeService;
@@ -20,19 +28,28 @@ class FridgeServiceTest {
     @Autowired
     private MemberService memberService;
 
+    @Autowired
+    private FridgeIngredientService fridgeIngredientService;
+
+    @Autowired
+    private IngredientRepository ingredientRepository;
+
+    @Autowired
+    private FridgeMapper fridgeMapper;
+
 
     @Test
     public void 냉장고생성_테스트_일반회원() {
         //given
         Member member = Member.generalBuilder()
-                .email("test@naver.com")
-                .name("testA")
+                .email("test1@naver.com")
+                .name("testB")
                 .password("1234")
                 .buildGeneralMember();
 
         memberService.signUpGeneral(member);
         //when
-        Fridge fridge = fridgeService.createFridge(member);
+        Fridge fridge = fridgeService.findFridge(member.getId());
         //then
         assertEquals(fridge.getMember().getEmail(), member.getEmail());
         assertEquals(fridge.getMember().getId(), member.getId());
@@ -52,7 +69,7 @@ class FridgeServiceTest {
 
         memberService.signUpOauth2IfNotExists(auth2Member);
         //when
-        Fridge fridge = fridgeService.createFridge(auth2Member);
+        Fridge fridge = fridgeService.findFridge(auth2Member.getId());
         //then
         assertEquals(fridge.getMember().getId(), auth2Member.getId());
         assertEquals(fridge.getMember().getEmail(), auth2Member.getEmail());
@@ -60,4 +77,7 @@ class FridgeServiceTest {
         assertEquals(fridge.getMember().getProvider(), auth2Member.getProvider());
         assertEquals(fridge.getMember().getProfileImagePath(), auth2Member.getProfileImagePath());
     }
+
+
+
 }

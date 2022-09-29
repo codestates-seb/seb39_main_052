@@ -20,4 +20,10 @@ public class FridgeService {
         fridge.setMember(member);
         return fridgeRepository.save(fridge);
     }
+
+    public Fridge findFridge(Long memberId) {
+
+        return fridgeRepository.findFridgeByMemberId(memberId);
+    }
+
 }
