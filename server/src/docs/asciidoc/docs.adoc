@@ -386,3 +386,24 @@ include::{snippets}/heart-remove/http-response.adoc[]
 
 .response-fields
 include::{snippets}/heart-remove/response-fields.adoc[]
+
+== 냉장고 관련 API
+
+ 나의 냉장고 관련 API입니다.
+ 로그인한 사용자만 자신의 냉장고로 접근할 수 있습니다.
+ Get 요청을 할 때, 요청 Header에 Access Token 값을 넣어야 합니다.
+ Get 요청을 하면, 재료의 유통기한을 기준으로 정렬하여 response 합니다.
+
+=== 냉장고에 재료 추가
+.http-request
+include::{snippets}/fridgeIngredients-create/http-request.adoc[]
+
+.request-fields
+include::{snippets}/fridgeIngredients-create/request-fields.adoc[]
+
+.http-response
+include::{snippets}/fridgeIngredients-create/http-response.adoc[]
+
+.response-fields
+include::{snippets}/fridgeIngredients-create/response-fields.adoc[]
+

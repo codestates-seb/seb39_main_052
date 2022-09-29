@@ -7,6 +7,7 @@ import com.seb39.myfridge.auth.userinfo.GoogleUserInfo;
 import com.seb39.myfridge.auth.userinfo.KakaoUserInfo;
 import com.seb39.myfridge.auth.userinfo.OAuth2UserInfo;
 import com.seb39.myfridge.auth.userinfo.UserInfoFactory;
+import com.seb39.myfridge.fridge.service.FridgeService;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 public class OAuth2UserService extends DefaultOAuth2UserService {
 
     private final MemberService memberService;
+
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
