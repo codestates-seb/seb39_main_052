@@ -1,11 +1,6 @@
 import styled from "styled-components";
 
 export const RecipeFrameContainer = styled.div`
-  //Frame 상위 each RecipeFrame을 담고있는 애한테 적용하기
-  /* width: 80%;
-  background-color: var(--gray-100);
-  border-radius: 10px;
-  padding: 16px; */
   display: flex;
   align-items: center;
   padding: 16px;
@@ -23,14 +18,28 @@ export const Description = styled.div`
   padding: 0 16px;
 `;
 
-export const Title = styled.div``;
+export const Title = styled.div`
+  /* padding: 4px 0; */
+  margin: 4px 0;
+  color: var(--gray-900);
+  //2줄 넘어가면 ellipsis 로 보여주기
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  /* white-space: normal; */
+`;
 export const Spec = styled.div`
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
+  font-size: 12px; //자식요소 하위에 더 div, span 있어서 여기서 폰트사이즈 설정시 안먹는 요소가 몇개있음
+  padding: 4px 0;
 `;
 
 export const Date = styled.div`
   font-size: 12px;
+  padding: 4px 0;
 `;
 export const Icon = styled.div`
   flex-basis: 10%;
