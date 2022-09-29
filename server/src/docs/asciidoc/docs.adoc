@@ -180,6 +180,7 @@ include::{snippets}/recipe-delete/http-request.adoc[]
 include::{snippets}/recipe-delete/http-response.adoc[]
 
 === 레시피 조회
+==== 레시피 상세 조회
 ***
  특정 레시피를 조회하기 위한 API 입니다.
 
@@ -194,6 +195,42 @@ include::{snippets}/recipe-read-detail/http-response.adoc[]
 
 .response-fields
 include::{snippets}/recipe-read-detail/response-fields.adoc[]
+
+==== 내가 작성한 레시피 리스트 조회
+***
+
+ 마이페이지에서 내가 작성한 레시피의 리스트를 조회하기 위한 API입니다.
+
+.http-request
+include::{snippets}/recipe-mine/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/recipe-mine/request-parameters.adoc[]
+
+.http-response
+include::{snippets}/recipe-mine/http-response.adoc[]
+
+.response-fields
+include::{snippets}/recipe-mine/response-fields.adoc[]
+
+==== 나의 선호 레시피 리스트 조회
+***
+
+ 마이페이지에서 내가 하트를 누른 레시피의 리스트를 하트를 누른 날짜를 기준으로
+ 최신순으로 조회하기 위한 API입니다.
+
+.http-request
+include::{snippets}/recipe-favorite/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/recipe-favorite/request-parameters.adoc[]
+
+.http-response
+include::{snippets}/recipe-favorite/http-response.adoc[]
+
+.response-fields
+include::{snippets}/recipe-favorite/response-fields.adoc[]
+
 
 == 댓글 관련 API
 === 댓글 등록

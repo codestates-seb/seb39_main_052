@@ -684,7 +684,7 @@ class RecipeControllerTest {
                         fieldWithPath("data.[].heartExist").type(JsonFieldType.BOOLEAN).description("나의 해당 레시피 하트 여부 (미로그인시 false)"),
                         fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 페이지"),
                         fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("현재 사이즈"),
-                        fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("질문 전체 수"),
+                        fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("레시피 전체 수"),
                         fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("총 페이지 개수")
                 )
         ));
@@ -735,7 +735,7 @@ class RecipeControllerTest {
                         fieldWithPath("data.[].lastModifiedAt").type(JsonFieldType.STRING).description("레시피 마지막 수정 일자"),
                         fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 페이지"),
                         fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("현재 사이즈"),
-                        fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("질문 전체 수"),
+                        fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("레시피 전체 수"),
                         fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("총 페이지 개수")
                 )
         ));
@@ -782,7 +782,7 @@ class RecipeControllerTest {
                         fieldWithPath("data.[].lastModifiedAt").type(JsonFieldType.STRING).description("레시피 마지막 수정 일자"),
                         fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 페이지"),
                         fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("현재 사이즈"),
-                        fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("질문 전체 수"),
+                        fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("레시피 전체 수"),
                         fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("총 페이지 개수")
                 )
         ));

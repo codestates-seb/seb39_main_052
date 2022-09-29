@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -116,6 +117,7 @@ public class RecipeController {
     }
 
     @GetMapping("/my")
+    @Secured("ROLE_USER")
     public ResponseEntity<MultiResponseDto<MyRecipeDto.Mine>> getMyRecipes(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "RECENT") RecipeSort sort, @AuthMemberId Long memberId) {
         Page<MyRecipeDto.Mine> result = recipeService.findMyRecipes(memberId, page, sort);
         List<MyRecipeDto.Mine> content = result.getContent();
@@ -123,6 +125,7 @@ public class RecipeController {
     }
 
     @GetMapping("/favorite")
+    @Secured("ROLE_USER")
     public ResponseEntity<MultiResponseDto<MyRecipeDto.Favorite>> getFavoriteRecipes(@RequestParam(defaultValue = "1") int page, @AuthMemberId Long memberId) {
         Page<MyRecipeDto.Favorite> result = recipeService.findFavoriteRecipes(memberId, page);
         List<MyRecipeDto.Favorite> content = result.getContent();

@@ -253,7 +253,7 @@ class CommentControllerTest {
                         fieldWithPath("data.[].createdAt").type(JsonFieldType.STRING).description("댓글 생성 일자"),
                         fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 페이지"),
                         fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("현재 사이즈"),
-                        fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("질문 전체 수"),
+                        fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("레시피 전체 수"),
                         fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("총 페이지 개수")
                 )
         ));
@@ -301,7 +301,7 @@ class CommentControllerTest {
                         fieldWithPath("data.[].createdAt").type(JsonFieldType.STRING).description("댓글 생성 일자"),
                         fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 페이지"),
                         fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("현재 사이즈"),
-                        fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("질문 전체 수"),
+                        fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("레시피 전체 수"),
                         fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("총 페이지 개수")
                 )
         ));

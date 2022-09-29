@@ -56,4 +56,5 @@ public class RecipeSearch {
             this.view = view;
             this.lastModifiedAt = lastModifiedAt;
         }
+    }
 }
