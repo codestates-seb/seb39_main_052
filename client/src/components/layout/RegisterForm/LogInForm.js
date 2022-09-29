@@ -19,9 +19,9 @@ const LogInForm = () => {
   //isDirty: form 양식 어떤 input이라도 건드렸으면 true?
 
   //userSlice 전체 상태 확인 - 콘솔 확인용
-  useSelector((state) => {
-    console.log("userSlice 전체상태?", state.user); //{isLoggedIn: false, userId: null, userEmail: null}
-  });
+  // useSelector((state) => {
+  //   console.log("userSlice 전체상태?", state.user); //{isLoggedIn: false, userId: null, userEmail: null}
+  // });
 
   // //userSlice에서 가져오는 유저아이디
   // const userId = useSelector((state) => {
