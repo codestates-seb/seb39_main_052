@@ -13,6 +13,7 @@ export const CommentsCollection = styled.div`
 
   //each 댓글 박스
   & > div > div {
+    min-width: 464px; //적용하면.. 흠 크기는 고정되는데.. 반응형은 안됨
     padding: 8px 0;
     display: flex;
     justify-content: center;

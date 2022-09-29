@@ -8,7 +8,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { setLoggedIn, setUserInfo } from "../../../features/userSlice";
 
 const LogInForm = () => {
-
   const navigate = useNavigate();
   const dispatch = useDispatch(); //for redux dispatch
   const {
@@ -20,9 +19,9 @@ const LogInForm = () => {
   //isDirty: form 양식 어떤 input이라도 건드렸으면 true?
 
   //userSlice 전체 상태 확인 - 콘솔 확인용
-  useSelector((state) => {
-    console.log("userSlice 전체상태?", state.user); //{isLoggedIn: false, userId: null, userEmail: null}
-  });
+  // useSelector((state) => {
+  //   console.log("userSlice 전체상태?", state.user); //{isLoggedIn: false, userId: null, userEmail: null}
+  // });
 
   // //userSlice에서 가져오는 유저아이디
   // const userId = useSelector((state) => {
@@ -51,14 +50,13 @@ const LogInForm = () => {
               "Authorization"
             ] = `Bearer ${ACCESS_TOKEN}`; //요청헤더에 액세스 토큰 설정
 
-            console.log("ACCESS_TOKEN", ACCESS_TOKEN);
+            console.log("ACCESS_TOKEN 재발급", ACCESS_TOKEN);
 
             //refesh로 새로받아온 액세스 토큰 리덕스에도 저장하기
             dispatch(setLoggedIn({ userToken: ACCESS_TOKEN }));
             //액세스토큰 만료되기 1분 전 로그인 연장
             setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
-            setTimeout(onSilentRefresh, 3000); //3초로 실험
-            // setTimeout(console.log("나는 리프레시"), 3000); //3초로 실험
+            // setTimeout(onSilentRefresh, 3000); //3초로 실험
           }
         })
         .catch((error) => console.log(error, "silent refresh 에러"));
@@ -94,7 +92,6 @@ const LogInForm = () => {
           //액세스토큰 만료되기 전 로그인 연장
           setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
           // setTimeout(onSilentRefresh, 3000); //3초로 실험
-          // setTimeout(console.log("나는 로그인"), 3000); //3초로 실험
         }
       })
       .catch((error) => {

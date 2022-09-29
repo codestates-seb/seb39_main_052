@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useEffect, useState } from "react";
 import Pagination from "../../common/Pagination/Pagination";
 import UserName from "../../common/UserName/UserName";
 import {
@@ -9,125 +10,70 @@ import {
 } from "./CommentsBoxStyle";
 
 const CommentsBox = () => {
-  const dummyData = [
-    {
-      id: 1,
-      memberName: "들깨러버들깨러버",
-      memberImage:
-        "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
+  const [commentsList, setCommentsList] = useState([]); //서버에서 받아오는 댓글 리스트 저장
 
-      comment: "완전 맛있겠다 완전 맛있겠다 완전 맛있겠다 완전 맛있겠다",
+  const [page, setPage] = useState(1); // 페이지네이션으로 바뀔 현 페이지 위치
+  const [total, setTotal] = useState(0); //전체 댓글 수
+  const [totalPages, setTotalPages] = useState(0); //전체 댓글 페이지 수
 
-      date: "2022.9.26.",
-    },
-    {
-      id: 2,
-      memberName: "멋쟁이토마토르먹으면",
-      memberImage:
-        "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
-      comment:
-        "냠냠 멋쟁이토마토르먹으면 쩝쩝박사가 혼내주러옵니다 곶감하나만 주면 안잡아먹지",
-      date: "2022.8.11",
-    },
-    {
-      id: 3,
-      memberName: "웰시코기궁둥궁둥궁둥궁",
-      memberImage:
-        "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
-      comment: "뽀송뽀송 ",
-      date: "2022.9.1.",
-    },
-    {
-      id: 10,
-      memberName: "웰시코기궁둥궁둥궁둥궁",
-      memberImage:
-        "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
-      comment: "뽀송뽀송 ",
-      date: "2022.9.1.",
-    },
-    {
-      id: 4,
-      memberName: "웰시코기궁둥궁둥궁둥궁",
-      memberImage:
-        "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
-      comment: "뽀송뽀송 ",
-      date: "2022.9.1.",
-    },
-    {
-      id: 5,
-      memberName: "웰시코기궁둥궁둥궁둥궁",
-      memberImage:
-        "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
-      comment: "뽀송뽀송 ",
-      date: "2022.9.1.",
-    },
-    {
-      id: 6,
-      memberName: "웰시코기궁둥궁둥궁둥궁",
-      memberImage:
-        "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
-      comment: "뽀송뽀송 ",
-      date: "2022.9.1.",
-    },
-    {
-      id: 7,
-      memberName: "웰시코기궁둥궁둥궁둥궁",
-      memberImage:
-        "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
-      comment: "뽀송뽀송 ",
-      date: "2022.9.1.",
-    },
-    {
-      id: 8,
-      memberName: "웰시코기궁둥궁둥궁둥궁",
-      memberImage:
-        "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
-      comment: "뽀송뽀송 ",
-      date: "2022.9.1.",
-    },
-    {
-      id: 9,
-      memberName: "웰시코기궁둥궁둥궁둥궁",
-      memberImage:
-        "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
-      comment: "뽀송뽀송 ",
-      date: "2022.9.1.",
-    },
-  ];
+  useEffect(() => {
+    getCommentsList();
+  }, [page]); //page넣어줘야 page바뀔때마다 리스트 띄워줌
+
+  // date 표기 (YYYY-MM-DD)
+  const dateConverter = (createdAt) => {
+    const date = new Date(+new Date(createdAt) + 3240 * 10000)
+      .toISOString()
+      .split("T")[0];
+    return date;
+  };
 
   //서버에서 받은 댓글 리스트 조회 통신 받아오기
-  // const getCommentsList = async () => {
-  //   try{
-  //       await axios.get(`/api/comments/received?page=${})`)
-  //   }
-  //   catch (err) {
-  //     alert(err)
-  //   }
-  // }
+  const getCommentsList = async () => {
+    try {
+      const { data } = await axios.get(`/api/comments/received?page=${page}`);
+      console.log(data); //data: Array(4), pageInfo: {…}}
+      setTotal(data.pageInfo.totalElements);
+      setTotalPages(data.pageInfo.totalPages);
+      //axios promise객체 찍어보면 {data: {…}, status: 200, statusText: 'OK', headers: {…}, config: {…}, …} 나옴. response body에 해당되는 data만 구조분해할당
+      setCommentsList([...data.data]); //[{…}, {…}, {…}, {…}]
+    } catch (err) {
+      alert(err);
+    }
+  };
+  // console.log("서버에서받아온 댓글리스트", commentsList);
 
   //Don't forget 리턴!!!
   return (
     <CommentsBoxContainer className="CommentsBoxContainer">
       <CommentsCollection className="CommentsCollection">
         <div>
-          {dummyData.map((data, idx) => (
+          {commentsList.map((eachComment, idx) => (
             <div key={idx}>
               <span>
-                <UserImg src={data.memberImage} />
-                <UserNameTag>{data.memberName}</UserNameTag>
+                <UserImg src={eachComment.member.profileImagePath} />
+                <UserNameTag>{eachComment.member.name}</UserNameTag>
                 {/* <UserName
-                  image={data.memberImage}
-                  name={data.memberName}
+                  image={eachComment.member.profileImagePath}
+                  name={eachComment.member.name}
                 ></UserName> */}
               </span>
-              <span className="comment">{data.comment}</span>
-              <span className="date">{data.date}</span>
+              <span className="comment">{eachComment.content}</span>
+              <span className="date">
+                {dateConverter(eachComment.createdAt)}
+              </span>
             </div>
           ))}
         </div>
       </CommentsCollection>
       {/* 페이지네이션 들어갈 자리 */}
-      <Pagination total="10" limit="10"></Pagination>
+      {total > 10 && (
+        <Pagination
+          page={page}
+          setPage={setPage}
+          totalPages={totalPages}
+        ></Pagination>
+      )}
     </CommentsBoxContainer>
   );
 };
