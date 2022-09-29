@@ -110,13 +110,18 @@ const NameSearchBar = () => {
 
     // 엔터/서치 아이콘 클릭 시 하단에 키워드 결과 레시피 카드를 보여주는 함수
     const handleSearch = (el) => {
+        // 마우스로 드롭다운 요소 클릭 시 바로 검색 키워드 추가
         if (typeof el === "string") {
             setSearchParams({ "keyword": el });
 
         }
         // 엔터 또는 돋보기 아이콘으로 검색했을 때
-        else {
+        else if (searchValue.length > 0){
             setSearchParams({ "keyword": searchValue });
+        }
+        // 빈 검색어에 엔터
+        else {
+            alert(`검색어를 입력해주세요`)
         }
         setIsDropDownOpen(false);
         setCursor(-1);

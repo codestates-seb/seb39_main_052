@@ -89,7 +89,8 @@ const Comments = ({ id }) => {
                     <StyledFontAwesomeIcon icon={faCheck} />
                 </GeneralButton>
             </CommentRow> */}
-            {total > 10 &&
+            {/* limit보다 적은 수의 댓글이 있으면 페이지네이션 렌더링 필요 없음 */}
+            {total > limit &&
                 <Pagination
                     // total={total}
                     // limit={limit}
