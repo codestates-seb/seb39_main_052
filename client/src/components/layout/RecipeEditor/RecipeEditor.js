@@ -34,14 +34,14 @@ const RecipeEditor = () => {
     // 페이지 나가면 작성 데이터 남지 않도록
     useEffect(() => {
         // mount
-        
-        return() => {
-          // unmount
-          if (pathname === "/recipes/new") {
-              dispatch(clearRecipe());
-              dispatch(clearImages());
-              
-          }
+
+        return () => {
+            // unmount
+            if (pathname === "/recipes/new") {
+                dispatch(clearRecipe());
+                dispatch(clearImages());
+
+            }
         }
     }, [])
 
@@ -94,7 +94,7 @@ const RecipeEditor = () => {
             recipe.steps[0].content.length > 0 ? setIsStepsEmpty(false) : setIsStepsEmpty(true);
         }
     }, [recipe.steps])
-    
+
     // 이미지 관련 경고 창 뜬 후 재업로드 했을 때 유효하다면 경고창 없애기 
     useEffect(() => {
         files[0] === null ? setIsMainImgEmpty(true) : setIsMainImgEmpty(false);
@@ -107,6 +107,64 @@ const RecipeEditor = () => {
             setIsStepImgEmpty(false);
         }
     }, [files])
+
+    useEffect(() => {
+        checkValidation();
+    }, [isSubmitClicked])
+
+    const checkValidation = () => {
+
+        // 필수 데이터 유효성 검사
+        recipe.title.length > 0 ? setIsTitleEmpty(false) : setIsTitleEmpty(true);
+        recipe.time.length > 0 ? setIsTimeEmpty(false) : setIsTimeEmpty(true);
+        recipe.ingredients[0].name.length > 0 && recipe.ingredients[0].quantity.length > 0
+            ? setIsIngrEmpty(false)
+            : setIsIngrEmpty(true);
+        recipe.steps[0].content.length > 0 ? setIsStepsEmpty(false) : setIsStepsEmpty(true);
+
+        // 메인 이미지 유효성 검사
+        // 새 레시피 작성하기 
+        if (pathname === "/recipes/new") {
+            files[0] === null ? setIsMainImgEmpty(true) : setIsMainImgEmpty(false);
+        }
+        // 레시피 수정하기
+        else {
+            if (files[0] === null && recipe.imageInfo.isUpdated === "Y") {
+                setIsMainImgEmpty(true)
+            }
+            else {
+                setIsMainImgEmpty(false)
+            }
+        }
+        // 요리순서 이미지 유효성 검사
+        // 새 레시피 작성하기 
+        if (pathname === "/recipes/new") {
+            for (let i = 1; i < files.length; i++) {
+                if (files[i] === null) {
+                    setIsStepImgEmpty(true);
+                    break;
+                }
+                setIsStepImgEmpty(false);
+            }
+        }
+        // 레시피 수정하기
+        else {
+            let counter = 0;
+            for (let i = 1; i < files.length; i++) {
+                if (files[i] !== null) {
+                    counter++
+                }
+            }
+            for (let i = 0; i < recipeSteps.length; i++) {
+                if (recipeSteps[i].imageInfo.isUpdated === "N") {
+                    counter++
+                }
+            }
+            // 수정 시 새로 등록된 파일 수와 수정되지 않은 이미지의 합이 총 요리순서 step의 수보다 작은 경우
+            // "순서별 사진을 업로드해주세요" 메세지가 뜨도록 한다
+            counter < recipeSteps.length ? setIsStepImgEmpty(true) : setIsStepImgEmpty(false);
+        }
+    }    
 
     const handleSaveClick = () => {
         setIsSubmitClicked(true);
@@ -289,7 +347,7 @@ const RecipeEditor = () => {
                                 onChange={(e) => {
                                     // type이 num으로 바뀌며 maxLength가 적용되지 않아 직접 limit을 줘야한다
                                     const limit = 3;
-                                    // 음수 값은 입력할 수 없다
+                                    // 음수 값은 입력할 수 없다, 숫자가 0으로 시작할 수도 없다
                                     if (e.target.value >= 0 && e.target.value[0] !== "0") {
                                         dispatch(setTime({ time: e.target.value.slice(0, limit) }));
                                         e.target.value.length > 0 ? setIsTimeEmpty(false) : setIsTimeEmpty(true);
