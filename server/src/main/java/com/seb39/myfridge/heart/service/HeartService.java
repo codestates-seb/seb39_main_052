@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -33,6 +35,10 @@ public class HeartService {
 
     public int findHeartCounts(Long recipeId){
         return heartRepository.countByRecipeId(recipeId);
+    }
+
+    public List<Heart> findHearts(Long memberId, List<Long> recipeIds){
+        return heartRepository.findByMemberIdAndRecipeIds(memberId,recipeIds);
     }
 
     private Heart findHeart(Long memberId, Long recipeId){

@@ -1,18 +1,20 @@
 package com.seb39.myfridge.recipe.controller;
 
 
+import com.seb39.myfridge.dto.MultiResponseDto;
 import com.seb39.myfridge.dto.SingleResponseDto;
-import com.seb39.myfridge.auth.PrincipalDetails;
+import com.seb39.myfridge.heart.entity.Heart;
 import com.seb39.myfridge.heart.service.HeartService;
 import com.seb39.myfridge.ingredient.entity.RecipeIngredient;
 import com.seb39.myfridge.auth.annotation.AuthMemberId;
-import com.seb39.myfridge.ingredient.entity.RecipeIngredient;
 import com.seb39.myfridge.recipe.dto.RecipeDto;
+import com.seb39.myfridge.recipe.dto.RecipeSearch;
 import com.seb39.myfridge.recipe.entity.Recipe;
 import com.seb39.myfridge.recipe.mapper.RecipeMapper;
 import com.seb39.myfridge.recipe.service.RecipeService;
 import com.seb39.myfridge.step.entity.Step;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/recipes")
@@ -44,7 +49,7 @@ public class RecipeController {
         Recipe recipe = recipeMapper.recipePostToRecipe(requestBody);
 
         Recipe savedRecipe = recipeService.createRecipe(recipe, stepList, memberId, files, recipeIngredients);
-        RecipeDto.ResponseDetail response = recipeMapper.recipeToRecipeResponse(savedRecipe);
+        RecipeDto.ResponseDetail response = recipeMapper.recipeToRecipeResponseDetail(savedRecipe);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -61,11 +66,12 @@ public class RecipeController {
     public ResponseEntity<RecipeDto.ResponseDetail> updateRecipe(@PathVariable("id") @Positive Long id,
                                                                  @Valid @RequestPart RecipeDto.Patch requestBody,
                                                                  @RequestPart List<MultipartFile> files,
-                                                                 @AuthMemberId Long memberId){        requestBody.setId(id);
+                                                                 @AuthMemberId Long memberId) {
+        requestBody.setId(id);
         List<Step> stepList = recipeMapper.recipeDtoStepsToStepListForPatch(requestBody.getSteps());
         List<RecipeIngredient> recipeIngredients = recipeMapper.ingredientsDtoToIngredients(requestBody.getIngredients());
         Recipe recipe = recipeService.updateRecipe(recipeMapper.recipePatchToRecipe(requestBody), stepList, memberId, files, recipeIngredients);
-        RecipeDto.ResponseDetail response = recipeMapper.recipeToRecipeResponse(recipe);
+        RecipeDto.ResponseDetail response = recipeMapper.recipeToRecipeResponseDetail(recipe);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -73,14 +79,36 @@ public class RecipeController {
     public ResponseEntity<RecipeDto.ResponseDetail> findRecipe(@PathVariable("id") @Positive Long id) {
         Recipe recipe = recipeService.findRecipeWithDetails(id);
         int heartCounts = heartService.findHeartCounts(id);
-        RecipeDto.ResponseDetail response = recipeMapper.recipeToRecipeResponse(recipe,heartCounts);
+        RecipeDto.ResponseDetail response = recipeMapper.recipeToRecipeResponseDetail(recipe, heartCounts);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/titles")
-    public ResponseEntity<SingleResponseDto<List<String>>> findTitles(@RequestParam String word){
+    public ResponseEntity<SingleResponseDto<List<String>>> findTitles(@RequestParam String word) {
         List<String> titles = recipeService.findTitlesByContainsWord(word);
         return ResponseEntity.ok(new SingleResponseDto<>(titles));
     }
 
+    @PostMapping("/search")
+    public ResponseEntity<MultiResponseDto<RecipeDto.SearchResponse>> searchRecipes(@RequestBody RecipeSearch recipeSearch, @AuthMemberId Long memberId) {
+        Page<RecipeDto.SearchResponse> page = recipeService.searchRecipes(recipeSearch);
+        List<RecipeDto.SearchResponse> content = page.getContent();
+
+        if (memberId != null) {
+            List<Long> recipeIds = content.stream()
+                    .map(dto -> dto.getId())
+                    .collect(Collectors.toList());
+
+            Set<Long> hasHeartRecipeIds = heartService.findHearts(memberId, recipeIds).stream()
+                    .map(heart -> heart.getRecipe().getId())
+                    .collect(Collectors.toSet());
+
+            for (RecipeDto.SearchResponse dto : content) {
+                if(hasHeartRecipeIds.contains(dto.getId()))
+                    dto.setHeartExist(true);
+            }
+        }
+
+        return ResponseEntity.ok(new MultiResponseDto<>(content, page));
+    }
 }
