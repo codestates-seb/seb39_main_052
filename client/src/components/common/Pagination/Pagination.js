@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { Wrapper, Pages, Button } from "./PaginationStyle";
 
-const Pagination = ({ page, setPage, totalPages}) => {
+const Pagination = ({ page, setPage, totalPages }) => {
 
     // 전체 페이지 수만큼 값이 담긴 배열 (ex: [1,2,3,4,5,...])
     const totalArr = useMemo(() => {

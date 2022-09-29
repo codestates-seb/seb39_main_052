@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import CommentRow from "../CommentRow/CommentRow";
 
 const Comments = ({ id }) => {
-    const [comment, setComment] = useState("");
+    const [comment, setComment] = useState(""); // input에 내가 작성하는 댓글
     const [commentList, setCommentList] = useState([]);
     const [isUpdated, setIsUpdated] = useState(false); 
 
