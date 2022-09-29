@@ -1,5 +1,6 @@
 package com.seb39.myfridge.heart.entity;
 
+import com.seb39.myfridge.helper.BaseTimeEntity;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.recipe.entity.Recipe;
 import lombok.AccessLevel;
@@ -12,9 +13,10 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Heart {
-    @Id @GeneratedValue
-    @Column(name="heart_id")
+public class Heart extends BaseTimeEntity {
+    @Id
+    @GeneratedValue
+    @Column(name = "heart_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
