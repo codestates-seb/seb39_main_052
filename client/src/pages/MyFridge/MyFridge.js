@@ -48,7 +48,7 @@ const MyFridge = () => {
         alert("냉장고를 정리하였습니다!")
     ]
 
-    // 냉장고 재료 정렬
+    // 냉장고 재료 정렬 컴포넌트
     const SortingTab = () => {
         const sortOption = [{
             mode: "date",

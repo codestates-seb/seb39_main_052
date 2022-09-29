@@ -22,8 +22,13 @@ const ImageInputList = ({ stepFiles, setStepFiles }) => {
     };
 
     const handleAddClick = (i) => {
-        dispatch(addStepsInput({ index: i }));
-        dispatch(addElement());
+        if (steps.length < 15) {
+            dispatch(addStepsInput({ index: i }));
+            dispatch(addElement());
+        }
+        else {
+            alert(`요리 순서는 15개 이하로 등록 가능합니다`);
+        }
     };
 
     const handleRemoveClick = (i) => {

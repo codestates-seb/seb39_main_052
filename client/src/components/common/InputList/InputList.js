@@ -42,10 +42,20 @@ const InputList = ({ titlesArr, placeholders }) => {
 
     const handleAddClick = (i) => {
         if (pathname === "/recipes/new" || pathname === "/recipes/edit") {
-            dispatch(addIngrInput({ index: i }));
+            if (data.length < 20) {
+                dispatch(addIngrInput({ index: i }));
+            }
+            else {
+                alert(`20개 이하로만 등록할 수 있습니다`);
+            }
         }
         if (pathname === "/myfridge") {
-            dispatch(addFrigIngrInput({ index: i }));
+            if (data.length < 30) {
+                dispatch(addFrigIngrInput({ index: i }));
+            }
+            else {
+                alert(`30개 이하로만 등록할 수 있습니다`);
+            }
         }
     };
 
@@ -59,8 +69,6 @@ const InputList = ({ titlesArr, placeholders }) => {
     };
 
     const classSetter = (el, title) => {
-        // // 재료 없는 새 input row에서 dDay column을 제외하곤 흰 배경
-        // if (el.name === "" && title !== "dDay") return "small";
 
         // 날짜 값이 없는 경우 dDay column은 gray
         if (title === "dDay" && el.dDay === "") return "small gray";
