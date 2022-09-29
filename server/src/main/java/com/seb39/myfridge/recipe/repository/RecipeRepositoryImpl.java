@@ -9,7 +9,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.seb39.myfridge.recipe.dto.QRecipeDto_SearchResponse;
+import com.seb39.myfridge.recipe.dto.QRecipeSearch_Response;
 import com.seb39.myfridge.recipe.dto.RecipeDto;
 import com.seb39.myfridge.recipe.dto.RecipeSearch;
 import com.seb39.myfridge.recipe.entity.Recipe;
@@ -45,16 +45,16 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
     }
 
     @Override
-    public Page<RecipeDto.SearchResponse> searchRecipes(RecipeSearch recipeSearch) {
+    public Page<RecipeSearch.Response> searchRecipes(RecipeSearch.Request request) {
 
-        String title = recipeSearch.getTitle();
-        List<String> ingredientNames = recipeSearch.getIngredients();
-        int page = recipeSearch.getPage();
+        String title = request.getTitle();
+        List<String> ingredientNames = request.getIngredients();
+        int page = request.getPage();
         long offset = (long) (page - 1) * size;
 
-        List<RecipeDto.SearchResponse> content = queryFactory
+        List<RecipeSearch.Response> content = queryFactory
                 .select(
-                        new QRecipeDto_SearchResponse(
+                        new QRecipeSearch_Response(
                                 recipe.id,
                                 recipe.title,
                                 recipe.member.id,
@@ -77,17 +77,17 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
                 )
                 .groupBy(recipe.id)
                 .having(hasAllIngredientsByNames(ingredientNames))
-                .orderBy(recipeSearchOrderBy(recipeSearch.getSortType()))
+                .orderBy(recipeSearchOrderBy(request.getSortType()))
                 .offset(offset)
                 .limit(size)
                 .fetch();
 
-        return PageableExecutionUtils.getPage(content, PageRequest.of(page - 1, size), () -> searchRecipesCount(recipeSearch));
+        return PageableExecutionUtils.getPage(content, PageRequest.of(page - 1, size), () -> searchRecipesCount(request));
     }
 
-    private int searchRecipesCount(RecipeSearch recipeSearch) {
-        String title = recipeSearch.getTitle();
-        List<String> ingredientNames = recipeSearch.getIngredients();
+    private int searchRecipesCount(RecipeSearch.Request request) {
+        String title = request.getTitle();
+        List<String> ingredientNames = request.getIngredients();
 
         return queryFactory
                 .select(recipe.count())

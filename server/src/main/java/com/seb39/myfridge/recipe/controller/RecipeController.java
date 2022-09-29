@@ -90,9 +90,9 @@ public class RecipeController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<MultiResponseDto<RecipeDto.SearchResponse>> searchRecipes(@RequestBody RecipeSearch recipeSearch, @AuthMemberId Long memberId) {
-        Page<RecipeDto.SearchResponse> page = recipeService.searchRecipes(recipeSearch);
-        List<RecipeDto.SearchResponse> content = page.getContent();
+    public ResponseEntity<MultiResponseDto<RecipeSearch.Response>> searchRecipes(@RequestBody RecipeSearch.Request request, @AuthMemberId Long memberId) {
+        Page<RecipeSearch.Response> page = recipeService.searchRecipes(request);
+        List<RecipeSearch.Response> content = page.getContent();
 
         if (memberId != null) {
             List<Long> recipeIds = content.stream()
@@ -103,7 +103,7 @@ public class RecipeController {
                     .map(heart -> heart.getRecipe().getId())
                     .collect(Collectors.toSet());
 
-            for (RecipeDto.SearchResponse dto : content) {
+            for (RecipeSearch.Response dto : content) {
                 if(hasHeartRecipeIds.contains(dto.getId()))
                     dto.setHeartExist(true);
             }

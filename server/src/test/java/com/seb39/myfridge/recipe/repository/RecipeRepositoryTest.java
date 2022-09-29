@@ -211,16 +211,16 @@ class RecipeRepositoryTest {
         em.clear();
 
         // when
-        RecipeSearch recipeSearch = new RecipeSearch();
-        recipeSearch.setTitle("4");
-        recipeSearch.setSortType(RecipeSearch.SortType.RECENT);
+        RecipeSearch.Request request = new RecipeSearch.Request();
+        request.setTitle("4");
+        request.setSortType(RecipeSearch.SortType.RECENT);
 
-        Page<RecipeDto.SearchResponse> page = recipeRepository.searchRecipes(recipeSearch);
-        List<RecipeDto.SearchResponse> content = page.getContent();
+        Page<RecipeSearch.Response> page = recipeRepository.searchRecipes(request);
+        List<RecipeSearch.Response> content = page.getContent();
 
         // then
         content.forEach(dto -> {
-            assertThat(dto.getTitle()).contains(recipeSearch.getTitle());
+            assertThat(dto.getTitle()).contains(request.getTitle());
         });
     }
 
@@ -233,10 +233,10 @@ class RecipeRepositoryTest {
         em.clear();
 
         // when
-        RecipeSearch recipeSearch = new RecipeSearch();
-        recipeSearch.setIngredients(List.of("ingredient 1", "ingredient 3"));
-        Page<RecipeDto.SearchResponse> page = recipeRepository.searchRecipes(recipeSearch);
-        List<RecipeDto.SearchResponse> content = page.getContent();
+        RecipeSearch.Request request = new RecipeSearch.Request();
+        request.setIngredients(List.of("ingredient 1", "ingredient 3"));
+        Page<RecipeSearch.Response> page = recipeRepository.searchRecipes(request);
+        List<RecipeSearch.Response> content = page.getContent();
         // then
         content.stream()
                 .map(dto -> dto.getId())
@@ -245,7 +245,7 @@ class RecipeRepositoryTest {
                     List<String> names = recipe.getRecipeIngredients().stream()
                             .map(ri -> ri.getIngredient().getName())
                             .collect(Collectors.toList());
-                    assertThat(names).contains(recipeSearch.getIngredients().toArray(String[]::new));
+                    assertThat(names).contains(request.getIngredients().toArray(String[]::new));
                 });
     }
 
@@ -258,12 +258,12 @@ class RecipeRepositoryTest {
         em.clear();
 
         // when
-        RecipeSearch recipeSearch = new RecipeSearch();
-        recipeSearch.setTitle("recipe");
-        recipeSearch.setSortType(RecipeSearch.SortType.RECENT);
+        RecipeSearch.Request request = new RecipeSearch.Request();
+        request.setTitle("recipe");
+        request.setSortType(RecipeSearch.SortType.RECENT);
 
-        Page<RecipeDto.SearchResponse> page = recipeRepository.searchRecipes(recipeSearch);
-        List<RecipeDto.SearchResponse> content = page.getContent();
+        Page<RecipeSearch.Response> page = recipeRepository.searchRecipes(request);
+        List<RecipeSearch.Response> content = page.getContent();
 
         // then
         assertThat(content).isSortedAccordingTo((o1, o2) -> -o1.getLastModifiedAt().compareTo(o2.getLastModifiedAt()));
@@ -278,12 +278,12 @@ class RecipeRepositoryTest {
         em.clear();
 
         // when
-        RecipeSearch recipeSearch = new RecipeSearch();
-        recipeSearch.setTitle("recipe");
-        recipeSearch.setSortType(RecipeSearch.SortType.VIEW);
+        RecipeSearch.Request request = new RecipeSearch.Request();
+        request.setTitle("recipe");
+        request.setSortType(RecipeSearch.SortType.VIEW);
 
-        Page<RecipeDto.SearchResponse> page = recipeRepository.searchRecipes(recipeSearch);
-        List<RecipeDto.SearchResponse> content = page.getContent();
+        Page<RecipeSearch.Response> page = recipeRepository.searchRecipes(request);
+        List<RecipeSearch.Response> content = page.getContent();
 
         // then
         assertThat(content).isSortedAccordingTo((o1, o2) -> o2.getView() - o1.getView());
@@ -298,12 +298,12 @@ class RecipeRepositoryTest {
         em.clear();
 
         // when
-        RecipeSearch recipeSearch = new RecipeSearch();
-        recipeSearch.setTitle("recipe");
-        recipeSearch.setSortType(RecipeSearch.SortType.HEART);
+        RecipeSearch.Request request = new RecipeSearch.Request();
+        request.setTitle("recipe");
+        request.setSortType(RecipeSearch.SortType.HEART);
 
-        Page<RecipeDto.SearchResponse> page = recipeRepository.searchRecipes(recipeSearch);
-        List<RecipeDto.SearchResponse> content = page.getContent();
+        Page<RecipeSearch.Response> page = recipeRepository.searchRecipes(request);
+        List<RecipeSearch.Response> content = page.getContent();
 
         // then
         assertThat(content).isSortedAccordingTo((o1, o2) -> o2.getHeartCounts() - o1.getHeartCounts());
@@ -318,13 +318,13 @@ class RecipeRepositoryTest {
         em.clear();
 
         // when
-        RecipeSearch recipeSearch = new RecipeSearch();
-        recipeSearch.setTitle("recipe");
-        recipeSearch.setPage(2);
-        recipeSearch.setSortType(RecipeSearch.SortType.RECENT);
+        RecipeSearch.Request request = new RecipeSearch.Request();
+        request.setTitle("recipe");
+        request.setPage(2);
+        request.setSortType(RecipeSearch.SortType.RECENT);
 
-        Page<RecipeDto.SearchResponse> page = recipeRepository.searchRecipes(recipeSearch);
-        List<RecipeDto.SearchResponse> content = page.getContent();
+        Page<RecipeSearch.Response> page = recipeRepository.searchRecipes(request);
+        List<RecipeSearch.Response> content = page.getContent();
 
         // then
         assertThat(page.getNumber()+1).isEqualTo(2);
