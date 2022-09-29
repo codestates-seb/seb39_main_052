@@ -9,8 +9,6 @@ import { setLoggedIn, setUserInfo } from "../../../features/userSlice";
 
 const LogInForm = () => {
 
-  // const [cookies, setCookie, removeCookie] = useCookies(['token', "id"]);
-
   const navigate = useNavigate();
   const dispatch = useDispatch(); //for redux dispatch
   const {
@@ -53,15 +51,7 @@ const LogInForm = () => {
               "Authorization"
             ] = `Bearer ${ACCESS_TOKEN}`; //요청헤더에 액세스 토큰 설정
 
-            // removeCookie("token"); // 이전 토큰을 쿠키에서 지우고
-            // setCookie("token", ACCESS_TOKEN); // 새로운 토큰을 쿠키에 설정
-            // // console.log("ACCESS_TOKEN", ACCESS_TOKEN);
-            // // console.log("쿠키토큰", cookies.token);
             console.log("ACCESS_TOKEN", ACCESS_TOKEN);
-            //  //====cookie로 할때======
-            //           setCookie("token", ACCESS_TOKEN);
-            //           console.log("쿠키토큰", cookies.token);
-            //  //====cookie로 할때======
 
             //refesh로 새로받아온 액세스 토큰 리덕스에도 저장하기
             dispatch(setLoggedIn({ userToken: ACCESS_TOKEN }));
@@ -85,16 +75,7 @@ const LogInForm = () => {
           axios.defaults.headers.common[
             "Authorization"
           ] = `Bearer ${ACCESS_TOKEN}`; //요청헤더에 액세스 토큰 설정
-          // // console.log("ACCESS_TOKEN", ACCESS_TOKEN);
-          // removeCookie("token"); // 만약 이전 토큰이 있다면 쿠키에서 지우고
-          // setCookie("token", ACCESS_TOKEN); // 새로운 토큰을 쿠키에 설정
-          // removeCookie("id"); // 만약 이전 id가 있다면 쿠키에서 지우고
-          // setCookie("id", response.data.memberId); // 새로운 id를 쿠키에 설정
           console.log("ACCESS_TOKEN", ACCESS_TOKEN);
-          //    //====cookie로 할때======
-          // setCookie("token", ACCESS_TOKEN);
-          // setCookie("id", response.data.memberId);
-          //    //====cookie로 할때======
           //로그인 성공 상태 리덕스 저장소로 보내기
           // dispatch(setLoggedIn({ userEmail: data.email }));
           // console.log(response.data); //서버에서 응답바디로 주는것 {memberId: 2}

@@ -10,12 +10,10 @@ const Comments = ({ id }) => {
     const [commentList, setCommentList] = useState([]);
     const [isUpdated, setIsUpdated] = useState(false); 
 
-
     const [limit, setLimit] = useState(10); // 한 페이지당 댓글 수
     const [page, setPage] = useState(1); // 페이지네이션으로 바뀔 현 페이지 위치
     const [total, setTotal] = useState(0); // 서버에서 받아올 전체 댓글 수
     const [totalPages, setTotalPages] = useState(0); // 서버에서 받아올 전체 댓글 수
-
 
     // 첫 화면 로딩 시, 댓글 업데이트시, 페이지 업데이트시 레시피 id에 따른 댓글 리스트 불러오기
     useEffect(() => {

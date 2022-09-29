@@ -1,16 +1,20 @@
 import { useState } from "react"
+import { useSelector } from "react-redux";
 import { CommentWrapper, Input, Comment, ButtonLikeWrapper, ButtonLike, StyledFontAwesomeIcon } from "./CommentRowStyle";
 import UserName from "../../common/UserName/UserName";
 import GeneralButton from "../../common/Button/GeneralButton";
 import useConfirm from "../../../hooks/useConfirm";
 import { faXmark, faCheck } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import { useCookies } from 'react-cookie';
 
 const CommentRow = ({ comment, setIsUpdated }) => {
     const [isEditable, setIsEditable] = useState(false);
     const [editedComment, setEditedComment] = useState("");
-    const [cookies, setCookie, removeCookie] = useCookies(['token', "id"]);
+
+    // 로그인 시 리덕스에 저장한 내 아이디
+    const myId = useSelector((state) => {
+        return state.user.userId;
+    })
 
     const confirm = (id) => {console.log("삭제 했습니다"); handleDelete(id)};
     const cancel = () => console.log("취소");
@@ -95,7 +99,7 @@ const CommentRow = ({ comment, setIsUpdated }) => {
                         className="bold"
                     />
                     <Comment>{comment.content}</Comment>
-                    <EditAndDelete isMine={comment.member.id === Number(cookies.id)}/>
+                    <EditAndDelete isMine={comment.member.id === myId}/>
                 </CommentWrapper>
                 :
                 <CommentWrapper>

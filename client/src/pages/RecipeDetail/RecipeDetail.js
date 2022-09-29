@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { useCookies } from 'react-cookie';
 import axios from "axios";
 import { Heading, Ingredients, RecipeWrapper, SubHeading, Extra, Head, HeadLeft, Image, ButtonLike, HeadLeftTop, ButtonLikeWrapper, HeadLeftBottom, Info, PortionAndTime, RecipeId, LikeViewWrapper, View, Ingredient } from "./RecipeDetailStyle";
 import RecipeStep from "../../components/layout/RecipeStep/RecipeStep";
@@ -17,9 +16,13 @@ const RecipeDetail = () => {
     // console.log("내 레시피니?", isMyRecipe);
     const { id } = useParams();
     // console.log("id", id);
-    const [cookies] = useCookies(["id"]); // 쿠키에 저장된 내 유저 id값 (type은 string)
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    // 로그인 시 리덕스에 저장한 내 아이디
+    const myId = useSelector((state) => {
+        return state.user.userId;
+    })
 
     // date 표기 (YYYY-MM-DD) 
     const dateConverter = (createdAt) => {
@@ -53,7 +56,7 @@ const RecipeDetail = () => {
                 steps: data.steps,
             }))
             // 해당 레시피가 내 레시피인지 확인 후 상태 변경
-            data.member.id === Number(cookies.id) ? setIsMyRecipe(true) : setIsMyRecipe(false);
+            data.member.id === myId ? setIsMyRecipe(true) : setIsMyRecipe(false);
         }
         catch (error) {
             console.log(error);

@@ -4,7 +4,6 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import axios from "axios";
-import { CookiesProvider } from 'react-cookie';
 
 //공통 스타일 관리
 import { ThemeProvider } from "styled-components";
@@ -23,7 +22,6 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <React.StrictMode>
-    <CookiesProvider>
       <Provider store={store}>
         {/* <PersistGate loading={null} persistor={persistor}> */}
           <ThemeProvider theme={theme}>
@@ -31,7 +29,6 @@ root.render(
           </ThemeProvider>
         {/* </PersistGate> */}
       </Provider>
-    </CookiesProvider>
   </React.StrictMode>
 );
 
