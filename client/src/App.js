@@ -65,6 +65,8 @@ function App() {
       //새로고침 이후에는 이전에 가지고있는 토큰만 세션스토리지에 저장되어있고 토큰 재발급이 안되는듯..? 토큰 재발급 요청 보내기
       setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
       // setTimeout(onSilentRefresh, 3000); //3초로 실험
+
+      // console.log("리덕스 userToken으로 헤더에 설정", userToken);
     }
   }, []);
 

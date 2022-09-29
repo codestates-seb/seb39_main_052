@@ -30,7 +30,10 @@ const NameSearchBar = () => {
         if (keyword.length > 0) {
             try {
                 const { data } = await axios.get(`/api/recipes/titles?word=${keyword}`);
-                setSuggestedValue([...data.data]);
+                let tmp = [...data.data]; // 정렬을 위한 tmp 배열 선언
+                tmp.sort((a,b) => a.length - b.length); // 문자열 길이 오름차순 정렬
+                setSuggestedValue([...tmp]);
+                // 연관 검색어가 있다면 드랍다운을 열고 없다면 닫기
                 data.data.length > 0 ? setIsDropDownOpen(true) : setIsDropDownOpen(false);
             }
             catch (error) {
@@ -110,13 +113,18 @@ const NameSearchBar = () => {
 
     // 엔터/서치 아이콘 클릭 시 하단에 키워드 결과 레시피 카드를 보여주는 함수
     const handleSearch = (el) => {
+        // 마우스로 드롭다운 요소 클릭 시 바로 검색 키워드 추가
         if (typeof el === "string") {
             setSearchParams({ "keyword": el });
 
         }
         // 엔터 또는 돋보기 아이콘으로 검색했을 때
-        else {
+        else if (searchValue.length > 0){
             setSearchParams({ "keyword": searchValue });
+        }
+        // 빈 검색어에 엔터
+        else {
+            alert(`검색어를 입력해주세요`)
         }
         setIsDropDownOpen(false);
         setCursor(-1);
@@ -129,6 +137,7 @@ const NameSearchBar = () => {
             setIsDropDownOpen(false);
             setCursor(-1);
             setSearchValue("");
+            setSuggestedValue([]);
         }
     }
 

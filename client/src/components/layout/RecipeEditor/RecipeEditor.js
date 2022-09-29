@@ -12,6 +12,7 @@ import { clearImages } from "../../../features/imageSlice";
 
 const RecipeEditor = () => {
 
+    const [timeNum, setTimeNum] = useState(''); // 소요시간 상태
     const [isTitleEmpty, setIsTitleEmpty] = useState(true);
     const [isMainImgEmpty, setIsMainImgEmpty] = useState(true);
     const [isStepImgEmpty, setIsStepImgEmpty] = useState(true);
@@ -27,7 +28,7 @@ const RecipeEditor = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    // 이제 프롭스로 받을 필요 없어요!
+    // 해당 컴포넌트를 사용하는 페이지가 새 레시피 작성하기인지 레시피 수정하기인지 구분
     const { pathname } = useLocation();
 
     // 페이지 나가면 작성 데이터 남지 않도록
@@ -257,10 +258,10 @@ const RecipeEditor = () => {
         <Container>
             <Header>
                 <Main>
-                    <Input 
-                        placeholder="제목을 입력해주세요" 
-                        className="large" 
-                        type='text' 
+                    <Input
+                        placeholder="제목을 입력해주세요"
+                        className="large"
+                        type='text'
                         maxLength='24'
                         value={recipe.title}
                         onChange={(e) => {
@@ -272,7 +273,7 @@ const RecipeEditor = () => {
                     <Portion>
                         <h2>양</h2>
                         <div>
-                            <SelectBox  />
+                            <SelectBox />
                             인분
                         </div>
                     </Portion>
@@ -280,20 +281,20 @@ const RecipeEditor = () => {
                         <h2>소요 시간</h2>
                         <div>
                             <Input
-                                className="small"
+                                className="small noSideBar"
                                 type='number'
-                                maxLength='3'
+                                maxLength={3}
                                 value={recipe.time}
+                                step={1}
                                 onChange={(e) => {
-                                    dispatch(setTime({ time: e.target.value }));
-                                    e.target.value.length > 0 ? setIsTimeEmpty(false) : setIsTimeEmpty(true);
+                                    // type이 num으로 바뀌며 maxLength가 적용되지 않아 직접 limit을 줘야한다
+                                    const limit = 3;
+                                    // 음수 값은 입력할 수 없다
+                                    if (e.target.value >= 0 && e.target.value[0] !== "0") {
+                                        dispatch(setTime({ time: e.target.value.slice(0, limit) }));
+                                        e.target.value.length > 0 ? setIsTimeEmpty(false) : setIsTimeEmpty(true);
+                                    }
                                 }}
-                                // // 숫자만 입력 가능하도록
-                                // onKeyDown={(e) => {
-                                //     if (!/[0-9]/.test(e.key)) {
-                                //         e.preventDefault();
-                                //     }
-                                // }}
                             />
                             분
                         </div>

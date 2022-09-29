@@ -28,7 +28,10 @@ const TagSearchBar = () => {
         if (keyword.length > 0) {
             try {
                 const { data } = await axios.get(`/api/ingredients/names?word=${keyword}`);
-                setSuggestedValue([...data.data]);
+                let tmp = [...data.data]; // 정렬을 위한 tmp 배열 선언
+                tmp.sort((a,b) => a.length - b.length); // 문자열 길이 오름차순 정렬
+                setSuggestedValue([...tmp]);
+                // 연관 검색어가 있다면 드랍다운을 열고 없다면 닫기
                 data.data.length > 0 ? setIsDropDownOpen(true) : setIsDropDownOpen(false);
             }
             catch (error) {
@@ -67,13 +70,14 @@ const TagSearchBar = () => {
             setIsDropDownOpen(false);
             setCursor(-1);
             setSearchValue("");
+            setSuggestedValue([]);
         }
     }
 
     // 태그 입력시 연관 태그 보여주는 함수
     const handleInput = (e) => {
         setCursor(-1); // 새 검색어 입력시 커서 위치 초기화
-        // "입력값에 대한 연관 검색어가 있으면" 으로 변경 예정
+        // 입력 값이 없을 땐 드랍다운 닫기
         if (e.target.value.length <= 0) {
             setIsDropDownOpen(false);
             setSuggestedValue([]);
@@ -136,8 +140,8 @@ const TagSearchBar = () => {
             setCursor(-1);
             setSearchValue("");
         }
-        // 엔터 또는 돋보기 아이콘으로 검색했을 때
-        else {
+        // 엔터 또는 돋보기 아이콘으로 검색했을 때 (빈 값은 인식하지 않기)
+        else if (searchValue.length > 0){
             // 중복 태그 방지
             if (!searchTags.includes(searchValue)) {
                 // 마우스로 드롭다운 요소 클릭 시 바로 검색 태그에 추가
@@ -149,6 +153,10 @@ const TagSearchBar = () => {
             setIsDropDownOpen(false);
             setCursor(-1);
             setSearchValue("");
+        }
+        // 빈 검색어에 엔터
+        else {
+            alert(`검색어를 입력해주세요`)
         }
     };
     // console.log(searchTags, `검색했어요`)

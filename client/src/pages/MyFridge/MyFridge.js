@@ -8,16 +8,16 @@ import useConfirm from "../../hooks/useConfirm";
 import { Head, ColumnHeads, Container, Title, Fridge, InputWrapper, InnerContainer, ButtonWrap, SortWrapper, Option } from "./MyFridgeStyle";
 
 const MyFridge = () => {
-    const [dateArr, setDateArr] = useState([]);
+    const [isEmpty, setIsEmpty] = useState(true); 
     const [sortMode, setSortMode] = useState("date");
     const titlesArr = ["name", "quantity", "date", "dDay", "note"]; //재료 입력에서 각 column의 키값 배열
     const placeholders = ["예) 계란", "예) 30알", "예) 2100/01/01", "", "기타 정보를 작성하세요"];
     const dispatch = useDispatch();
 
-    // const fridgeData = useSelector((state) => {
-    //     return state.fridge.ingredients;
-    // });
-    // console.log(fridgeData);
+    // 냉장고 재료
+    const fridgeData = useSelector((state) => {
+        return state.fridge.ingredients;
+    });
 
     // 냉장고 비우기
     const confirm = (id) => { handleDeleteAll(id) };
@@ -44,11 +44,21 @@ const MyFridge = () => {
         window.location.replace("/myfridge");
     }
     // 냉장고 정리 끝
-    const handleSave = () => [
-        alert("냉장고를 정리하였습니다!")
-    ]
+    const handleSave = () => {
+        let count = 0; // 모든 재료 이름 값이 있는지 확인하기 위한 카운트
+        for (let i = 0; i < fridgeData.length; i++) {
+            if (fridgeData[i].name.length <= 0) {
+                alert(`재료 이름은 빈칸이 될 수 없습니다.`);
+                break;
+            }
+            count++
+        }
+        if (count === fridgeData.length) {
+            alert("냉장고를 정리하였습니다!")
+        }
+    }
 
-    // 냉장고 재료 정렬
+    // 냉장고 재료 정렬 컴포넌트
     const SortingTab = () => {
         const sortOption = [{
             mode: "date",

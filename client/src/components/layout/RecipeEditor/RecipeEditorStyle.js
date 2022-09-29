@@ -56,6 +56,14 @@ export const Input = styled.input`
         border-radius: 5px;
         font-size: 11px;
     }
+    &.noSideBar {
+        /* Chrome, Safari, Edge, Opera */
+        ::-webkit-outer-spin-button,
+        ::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    }
 `
 
 export const Portion = styled.div`

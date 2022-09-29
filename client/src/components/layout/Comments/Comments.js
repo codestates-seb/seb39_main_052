@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import CommentRow from "../CommentRow/CommentRow";
 
 const Comments = ({ id }) => {
-    const [comment, setComment] = useState("");
+    const [comment, setComment] = useState(""); // input에 내가 작성하는 댓글
     const [commentList, setCommentList] = useState([]);
     const [isUpdated, setIsUpdated] = useState(false); 
 
@@ -89,7 +89,8 @@ const Comments = ({ id }) => {
                     <StyledFontAwesomeIcon icon={faCheck} />
                 </GeneralButton>
             </CommentRow> */}
-            {total > 10 &&
+            {/* limit보다 적은 수의 댓글이 있으면 페이지네이션 렌더링 필요 없음 */}
+            {total > limit &&
                 <Pagination
                     // total={total}
                     // limit={limit}
