@@ -32,12 +32,6 @@ const LogOut = () => {
         if (res.status === 200) {
           delete axios.defaults.headers.common["Authorization"]; //헤더에 설정해둔 액세스 토큰 권한부여 제거
           dispatch(setLoggedOut()); //로그아웃 상태로 바꿔주는 함수 호출
-          // //====cookie로 할때======
-          // removeCookie("id");
-          // removeCookie("token");
-          // //=====cookie로 할때======
-          // console.log("axios then 안에있는 로그아웃 함수 호출 이후 isLoggedIn이니?",isLoggedIn); //왜 바로 콘솔로 찍어보면 로그아웃했는데도 로그인 상태 true로 남아있는지 ..?
-          // async () => purge();
           purge(); //persistor 세션스토리지에 저장되어있는 로그인 상태 데이터 날려버리기
           alert("로그아웃 완료");
         }

@@ -23,7 +23,7 @@ const DropDownMenu = ({ profileIconPhoto }) => {
   const onClickOpen = () => {
     setUserIsOpen(!userIsOpen);
   };
-  console.log("userIsOpen?", userIsOpen);
+  // console.log("userIsOpen?", userIsOpen);
 
   return (
     <DropDownContainer className="dropdown_container">

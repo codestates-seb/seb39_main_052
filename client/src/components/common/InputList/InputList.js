@@ -9,7 +9,7 @@ import { editFrigIngredients, addFrigIngrInput, deleteFrigIngrInput } from "../.
 import { Block, Order, Input, ButtonWrapper, Button, StyledFontAwesomeIcon } from "./InputListStyle";
 
 // props로 input의 제목이 될 요소들을 배열의 형태로 받아온다. 
-// 예) titlesArr = ["food", "amount", "expirationDate"] 
+// 예) titlesArr = ["food", "quantity", "expirationDate"] 
 // 예) placeholders = ["예) 감자", "예) 100g", "예) 2022/10/10"]
 const InputList = ({ titlesArr, placeholders }) => {
 

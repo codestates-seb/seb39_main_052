@@ -35,9 +35,9 @@ const Gnb = () => {
   // console.log("GNB에서 isLoggedIn이니?", isLoggedIn);
 
   //userSlice 전체 상태 확인
-  useSelector((state) => {
-    console.log("userSlice 전체상태?", state.user);
-  }); //{isLoggedIn: false, userId: null, userEmail: undefined}
+  // useSelector((state) => {
+  //   console.log("userSlice 전체상태?", state.user);
+  // }); //{isLoggedIn: false, userId: null, userEmail: undefined}
 
   //로그인한 회원 프로필 사진 redux에서 가져오기
   const profilePhoto = useSelector((state) => {

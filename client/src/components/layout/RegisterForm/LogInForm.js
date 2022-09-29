@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setLoggedIn, setUserInfo } from "../../../features/userSlice";
 
 const LogInForm = () => {
+
   const navigate = useNavigate();
   const dispatch = useDispatch(); //for redux dispatch
   const {
@@ -31,7 +32,7 @@ const LogInForm = () => {
 
   //userSlice 로그인 상태 확인
   const isLoggedIn = useSelector((state) => {
-    console.log("리덕스 isLoggedIn이니?", state.user.isLoggedIn);
+    // console.log("리덕스 isLoggedIn이니?", state.user.isLoggedIn);
     return state.user.isLoggedIn;
   });
 
@@ -49,18 +50,15 @@ const LogInForm = () => {
             axios.defaults.headers.common[
               "Authorization"
             ] = `Bearer ${ACCESS_TOKEN}`; //요청헤더에 액세스 토큰 설정
+
             console.log("ACCESS_TOKEN", ACCESS_TOKEN);
-            //  //====cookie로 할때======
-            //           setCookie("token", ACCESS_TOKEN);
-            //           console.log("쿠키토큰", cookies.token);
-            //  //====cookie로 할때======
 
             //refesh로 새로받아온 액세스 토큰 리덕스에도 저장하기
             dispatch(setLoggedIn({ userToken: ACCESS_TOKEN }));
-
             //액세스토큰 만료되기 1분 전 로그인 연장
             setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
-            // setTimeout(onSilentRefresh, 3000); //3초로 실험
+            setTimeout(onSilentRefresh, 3000); //3초로 실험
+            // setTimeout(console.log("나는 리프레시"), 3000); //3초로 실험
           }
         })
         .catch((error) => console.log(error, "silent refresh 에러"));
@@ -78,14 +76,9 @@ const LogInForm = () => {
             "Authorization"
           ] = `Bearer ${ACCESS_TOKEN}`; //요청헤더에 액세스 토큰 설정
           console.log("ACCESS_TOKEN", ACCESS_TOKEN);
-          //    //====cookie로 할때======
-          // setCookie("token", ACCESS_TOKEN);
-          // setCookie("id", response.data.memberId);
-          //    //====cookie로 할때======
-
           //로그인 성공 상태 리덕스 저장소로 보내기
           // dispatch(setLoggedIn({ userEmail: data.email }));
-          console.log(response.data); //서버에서 응답바디로 주는것 {memberId: 2}
+          // console.log(response.data); //서버에서 응답바디로 주는것 {memberId: 2}
 
           //userSlice에 로그인 상태 true 저장
           dispatch(setLoggedIn({})); //{isLoggedIn: true, userId: null, userName: null, userProfileImgPath: null}
@@ -101,6 +94,7 @@ const LogInForm = () => {
           //액세스토큰 만료되기 전 로그인 연장
           setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
           // setTimeout(onSilentRefresh, 3000); //3초로 실험
+          // setTimeout(console.log("나는 로그인"), 3000); //3초로 실험
         }
       })
       .catch((error) => {
@@ -157,7 +151,7 @@ const LogInForm = () => {
 
   //로그인 요청시 서버에서 보내주는 memberId로 사용자 정보를 조회
   const getUserInfo = (userIdFromServer) => {
-    console.log("겟유저인포 ");
+    // console.log("겟유저인포 ");
     axios
       // .get(`/api/members/${userIdFromServer}}`)
       .get("/api/members/" + userIdFromServer)

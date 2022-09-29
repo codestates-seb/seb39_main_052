@@ -2,15 +2,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    id: null,
+    id: "",
     member: {
-      id: null,
+      id: "",
       name: "",
-      profileImagePath: null,
+      profileImagePath: "",
     },
     createdAt: null,
-    heartCounts: null,
-    view: null,
+    heartCounts: "",
+    view: "",
     title: "",
     portion: "1",
     time: "",
@@ -21,7 +21,7 @@ const initialState = {
     },
     ingredients: [{
       name: "",
-      amount: ""
+      quantity: ""
     }],
     steps: [{
       sequence: 1,
@@ -64,7 +64,7 @@ const recipeSlice = createSlice({
       addIngrInput: (state, action) => {
         state.ingredients = [...state.ingredients, {
           name: initialState.ingredients[0].name,
-          amount: initialState.ingredients[0].amount
+          quantity: initialState.ingredients[0].quantity
         }];
       },
       deleteIngrInput: (state, action) => {

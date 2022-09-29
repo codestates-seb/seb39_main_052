@@ -5,7 +5,7 @@ export const Wrapper = styled.nav`
     justify-content: center;
     align-items: center;
     gap: 5px;
-    margin: 16px;
+    margin: 8px;
 `
 export const Pages = styled.nav`
 `

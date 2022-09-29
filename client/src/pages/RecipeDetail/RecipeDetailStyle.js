@@ -103,7 +103,6 @@ export const ButtonLike = styled.div`
     margin: 0 0px 8px 0px;
     color: var(--gray-600);
     cursor: pointer;
-    
     &.dark {
         color: var(--gray-800);
         border-bottom: 1px solid var(--gray-800);
@@ -113,6 +112,9 @@ export const ButtonLike = styled.div`
         /* text-decoration: underline; */
         border-bottom: 1px solid var(--black);
         background-color: var(--gray-100);
+    }
+    &.invisible {
+        display: none;
     }
 `
 
@@ -132,10 +134,11 @@ export const Ingredients = styled.div`
     font-size: 12px;
     color: var(--gray-900);
     margin: 0 0 32px 0;
-    /* > * > div {
-        width: 100px;
-        margin: 0 8px 0 0;
-    } */
+    flex-direction: column;
+    > div {
+        display: flex;
+        margin: 4px 0;
+    }
 `
 
 export const Ingredient = styled.div`

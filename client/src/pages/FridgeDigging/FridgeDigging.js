@@ -16,7 +16,7 @@ const FridgeDigging = () => {
     useEffect(() => {
         // 상세보기에서 뒤로가기 한게 아닌 이상 검색 상태는 초기화
         if (!location.state) {
-            console.log(`검색 상태 지우기`);
+            // console.log(`검색 상태 지우기`);
         }
     }, [])
 
@@ -78,7 +78,7 @@ const FridgeDigging = () => {
         imagePath: "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
         title: "백종원의 들깨칼국수칼국수",
         memberImage: "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
-        memberName: "들깨러버들깨러버버버",
+        memberName: "들깨러버",
         likes: 221,
         views: 1200,
     }

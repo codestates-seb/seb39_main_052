@@ -14,13 +14,14 @@ import { persistReducer } from "redux-persist";
 import thunk from "redux-thunk";
 import storageSession from "redux-persist/lib/storage/session";
 
-//기존코드
+// // 기존코드
 // const store = configureStore({
 //   reducer: {
 //     counter: counterSlice.reducer, // store에 slice 연결 방법 예시
 //     recipe: recipeSlice.reducer,
 //     images: imageSlice.reducer,
 //     user: userSlice.reducer,
+//     fridge: fridgeSlice.reducer,
 //   },
 //   middleware: (getDefaultMiddleware) =>
 //     getDefaultMiddleware({
@@ -30,12 +31,13 @@ import storageSession from "redux-persist/lib/storage/session";
 
 // export default store;
 
-//redux persist 이후 코드
+// //redux persist 이후 코드
 const rootReducer = combineReducers({
   counter: counterSlice.reducer,
   recipe: recipeSlice.reducer,
   images: imageSlice.reducer,
   user: userSlice.reducer,
+  fridge: fridgeSlice.reducer,
 });
 
 const persistConfig = {

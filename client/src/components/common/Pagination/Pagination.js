@@ -1,15 +1,12 @@
 import { useState, useEffect, useMemo } from "react";
 import { Wrapper, Pages, Button } from "./PaginationStyle";
 
-const Pagination = ({ total, limit, page, setPage }) => {
-    // 전체 페이지 수
-    const totalPages = useMemo(() => {
-        return  Math.ceil(total / limit);
-      }, []);
+const Pagination = ({ page, setPage, totalPages}) => {
+
     // 전체 페이지 수만큼 값이 담긴 배열 (ex: [1,2,3,4,5,...])
     const totalArr = useMemo(() => {
         return  Array.from({length: totalPages}, (_, i) => i + 1);
-    }, [])
+    }, [totalPages])
 
     const [showingArr, setShowingArr] = useState(totalArr.slice(0, 10)); // 보여지는 버튼 배열
     const [isStartEllipsisOn, setIsStartEllipsisOn] = useState(false); // 버튼 앞 ...
@@ -19,6 +16,9 @@ const Pagination = ({ total, limit, page, setPage }) => {
 
 
     useEffect(() => {
+        if (page > totalPages) {
+            setPage(1);
+        }
         // 페이지네이션의 첫 버튼이 1이 아닌 경우 앞에 ... 표시
         if (start !== 0) {
             setIsStartEllipsisOn(true);
