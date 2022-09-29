@@ -8,9 +8,11 @@ import com.seb39.myfridge.ingredient.entity.RecipeIngredient;
 import com.seb39.myfridge.ingredient.service.IngredientService;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.service.MemberService;
+import com.seb39.myfridge.recipe.dto.MyRecipeDto;
 import com.seb39.myfridge.recipe.dto.RecipeDto;
 import com.seb39.myfridge.recipe.dto.RecipeSearch;
 import com.seb39.myfridge.recipe.entity.Recipe;
+import com.seb39.myfridge.recipe.enums.RecipeSort;
 import com.seb39.myfridge.recipe.repository.RecipeRepository;
 import com.seb39.myfridge.step.entity.Step;
 import com.seb39.myfridge.step.repository.StepRepository;
@@ -41,7 +43,7 @@ public class RecipeService {
     private final HeartRepository heartRepository;
 
 
-    public Recipe findRecipeWithDetails(Long recipeId){
+    public Recipe findRecipeWithDetails(Long recipeId) {
         Recipe recipe = recipeRepository.findWithDetails(recipeId)
                 .orElseThrow(() -> new IllegalArgumentException("Recipe not exist. id = " + recipeId));
         // recipe.ingredients 영속화를 위한 호출
@@ -100,7 +102,6 @@ public class RecipeService {
     }
 
 
-
     private void updateImage(Recipe findRecipe, List<MultipartFile> files, List<Step> steps) {
         if (!CollectionUtils.isEmpty(files)) {
             for (MultipartFile file : files) {
@@ -131,13 +132,20 @@ public class RecipeService {
         }
     }
 
-    public List<String> findTitlesByContainsWord(String word){
+    public List<String> findTitlesByContainsWord(String word) {
         List<String> result = recipeRepository.searchTitles(word);
         return result;
     }
 
-    public Page<RecipeSearch.Response> searchRecipes(RecipeSearch.Request request){
-        // 컨트롤러에서 memberId 추가되서 RecipeSearch가 넘어온다.
+    public Page<RecipeSearch.Response> searchRecipes(RecipeSearch.Request request) {
         return recipeRepository.searchRecipes(request);
+    }
+
+    public Page<MyRecipeDto.Mine> findMyRecipes(Long memberId, int page, RecipeSort sort) {
+        return recipeRepository.findMyRecipes(memberId, page, sort);
+    }
+
+    public Page<MyRecipeDto.Favorite> findFavoriteRecipes(Long memberId, int page) {
+        return recipeRepository.findFavoriteRecipes(memberId, page);
     }
 }

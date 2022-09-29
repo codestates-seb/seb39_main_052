@@ -3,6 +3,7 @@ package com.seb39.myfridge.recipe.dto;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.querydsl.core.annotations.QueryProjection;
 import com.seb39.myfridge.member.dto.MemberDto;
+import com.seb39.myfridge.recipe.enums.RecipeSort;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,7 +22,7 @@ public class RecipeSearch {
         private String title = "";
         private List<String> ingredients = new ArrayList<>();
         private int page = 1;
-        private SortType sortType = SortType.RECENT;
+        private RecipeSort sort = RecipeSort.RECENT;
     }
 
     @Getter
@@ -40,11 +41,11 @@ public class RecipeSearch {
         }
 
         @QueryProjection
-        public Response(Long id, String title, Long memberId, String memberName, String memberProfileImagePath, String imagePath, int heartCounts, int view, LocalDateTime lastModifiedAt) {
+        public Response(Long id, String title, Long memberId, String memberName, String profileImagePath, String imagePath, int heartCounts, int view, LocalDateTime lastModifiedAt) {
             MemberDto.Response member = new MemberDto.Response();
             member.setId(memberId);
             member.setName(memberName);
-            member.setProfileImagePath(memberProfileImagePath);
+            member.setProfileImagePath(profileImagePath);
 
             this.id = id;
             this.title = title;
@@ -54,11 +55,5 @@ public class RecipeSearch {
             this.view = view;
             this.lastModifiedAt = lastModifiedAt;
         }
-    }
-
-    public enum SortType{
-        VIEW,
-        RECENT,
-        HEART;
     }
 }

@@ -7,9 +7,11 @@ import com.seb39.myfridge.heart.entity.Heart;
 import com.seb39.myfridge.heart.service.HeartService;
 import com.seb39.myfridge.ingredient.entity.RecipeIngredient;
 import com.seb39.myfridge.auth.annotation.AuthMemberId;
+import com.seb39.myfridge.recipe.dto.MyRecipeDto;
 import com.seb39.myfridge.recipe.dto.RecipeDto;
 import com.seb39.myfridge.recipe.dto.RecipeSearch;
 import com.seb39.myfridge.recipe.entity.Recipe;
+import com.seb39.myfridge.recipe.enums.RecipeSort;
 import com.seb39.myfridge.recipe.mapper.RecipeMapper;
 import com.seb39.myfridge.recipe.service.RecipeService;
 import com.seb39.myfridge.step.entity.Step;
@@ -104,11 +106,25 @@ public class RecipeController {
                     .collect(Collectors.toSet());
 
             for (RecipeSearch.Response dto : content) {
-                if(hasHeartRecipeIds.contains(dto.getId()))
+                if (hasHeartRecipeIds.contains(dto.getId()))
                     dto.setHeartExist(true);
             }
         }
 
         return ResponseEntity.ok(new MultiResponseDto<>(content, page));
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<MultiResponseDto<MyRecipeDto.Mine>> getMyRecipes(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "RECENT") RecipeSort sort, @AuthMemberId Long memberId) {
+        Page<MyRecipeDto.Mine> result = recipeService.findMyRecipes(memberId, page, sort);
+        List<MyRecipeDto.Mine> content = result.getContent();
+        return ResponseEntity.ok(new MultiResponseDto<>(content, result));
+    }
+
+    @GetMapping("/favorite")
+    public ResponseEntity<MultiResponseDto<MyRecipeDto.Favorite>> getFavoriteRecipes(@RequestParam(defaultValue = "1") int page, @AuthMemberId Long memberId) {
+        Page<MyRecipeDto.Favorite> result = recipeService.findFavoriteRecipes(memberId, page);
+        List<MyRecipeDto.Favorite> content = result.getContent();
+        return ResponseEntity.ok(new MultiResponseDto<>(content, result));
     }
 }

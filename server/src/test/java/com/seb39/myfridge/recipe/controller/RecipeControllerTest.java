@@ -10,9 +10,11 @@ import com.seb39.myfridge.ingredient.entity.RecipeIngredient;
 import com.seb39.myfridge.member.dto.MemberDto;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.repository.MemberRepository;
+import com.seb39.myfridge.recipe.dto.MyRecipeDto;
 import com.seb39.myfridge.recipe.dto.RecipeDto;
 import com.seb39.myfridge.recipe.dto.RecipeSearch;
 import com.seb39.myfridge.recipe.entity.Recipe;
+import com.seb39.myfridge.recipe.enums.RecipeSort;
 import com.seb39.myfridge.recipe.mapper.RecipeMapper;
 import com.seb39.myfridge.recipe.repository.RecipeRepository;
 import com.seb39.myfridge.recipe.service.RecipeService;
@@ -631,7 +633,7 @@ class RecipeControllerTest {
         request.setTitle("김치");
         request.setPage(1);
         request.setIngredients(List.of("김치", "간장"));
-        request.setSortType(RecipeSearch.SortType.VIEW);
+        request.setSort(RecipeSort.VIEW);
         String requestJson = objectMapper.writeValueAsString(request);
 
         List<RecipeSearch.Response> content = new ArrayList<>();
@@ -656,8 +658,7 @@ class RecipeControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
-                .andExpect(jsonPath("$.data").isArray())
-                .andDo(MockMvcResultHandlers.print());
+                .andExpect(jsonPath("$.data").isArray());
 
         //then
         actions.andDo(document("recipe-search-list",
@@ -667,15 +668,15 @@ class RecipeControllerTest {
                         fieldWithPath("title").type(JsonFieldType.STRING).description("검색할 레시피 제목"),
                         fieldWithPath("ingredients").type(JsonFieldType.ARRAY).description("검색할 재료 이름 리스트"),
                         fieldWithPath("page").type(JsonFieldType.NUMBER).description("검색할 페이지 번호"),
-                        fieldWithPath("sortType").type(JsonFieldType.STRING).description("검색결과 정렬 기준. (VIEW 조회수,RECENT 최신순 ,HEART 하트 많은 순)")
+                        fieldWithPath("sort").type(JsonFieldType.STRING).description("검색결과 정렬 기준. (VIEW 조회수, RECENT 최신순, HEART 하트 많은 순)")
                 ),
                 responseFields(
-                        fieldWithPath("data.[]").type(JsonFieldType.ARRAY).description("댓글 리스트"),
+                        fieldWithPath("data.[]").type(JsonFieldType.ARRAY).description("레시피 리스트"),
                         fieldWithPath("data.[].id").type(JsonFieldType.NUMBER).description("검색된 레시피의 ID"),
                         fieldWithPath("data.[].title").type(JsonFieldType.STRING).description("검색된 레시피의 제목"),
-                        fieldWithPath("data.[].member.id").type(JsonFieldType.NUMBER).description("댓글 작성자 ID"),
-                        fieldWithPath("data.[].member.name").type(JsonFieldType.STRING).description("댓글 작성자 이름"),
-                        fieldWithPath("data.[].member.profileImagePath").type(JsonFieldType.STRING).description("댓글 작성자 프로필 이미지 경로").optional(),
+                        fieldWithPath("data.[].member.id").type(JsonFieldType.NUMBER).description("레시피 작성자 ID"),
+                        fieldWithPath("data.[].member.name").type(JsonFieldType.STRING).description("레시피 작성자 이름"),
+                        fieldWithPath("data.[].member.profileImagePath").type(JsonFieldType.STRING).description("레시피 작성자 프로필 이미지 경로").optional(),
                         fieldWithPath("data.[].imagePath").type(JsonFieldType.STRING).description("레시피의 대표 이미지 경로"),
                         fieldWithPath("data.[].heartCounts").type(JsonFieldType.NUMBER).description("레시피의 하트 수"),
                         fieldWithPath("data.[].view").type(JsonFieldType.NUMBER).description("조회수"),
@@ -687,7 +688,103 @@ class RecipeControllerTest {
                         fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("총 페이지 개수")
                 )
         ));
+    }
 
+    @Test
+    @DisplayName("내가 작성한 레시피 리스트 검색")
+    void getMyRecipesTest() throws Exception {
+        //given
+        int page = 1;
+        int size = 4;
+        String sort = "RECENT";
+        Long memberId = memberRepository.findAll().get(0).getId();
 
+        List<MyRecipeDto.Mine> content = new ArrayList<>();
+        for (int i = 1; i <= size; i++) {
+            MyRecipeDto.Mine dto = new MyRecipeDto.Mine((long) i, "볶음밥 " + i, "https://s3.aws.abcdefg/recipe" + i + ".jpeg", 1234, 10 - i, 5 - i, LocalDateTime.now());
+            content.add(dto);
+        }
+        Page<MyRecipeDto.Mine> result = PageableExecutionUtils.getPage(content, PageRequest.of(0, size), () -> 33);
+        willReturn(result).given(recipeService).findMyRecipes(memberId, page, Enum.valueOf(RecipeSort.class, sort));
+
+        // expected
+        ResultActions actions = mockMvc.perform(get("/api/recipes/my")
+                        .param("page", Integer.toString(page))
+                        .param("sort", sort)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.data").isArray())
+                .andDo(MockMvcResultHandlers.print());
+
+        //then
+        actions.andDo(document("recipe-mine",
+                getRequestPreProcessor(),
+                getResponsePreProcessor(),
+                requestParameters(
+                        parameterWithName("page").description("요청 페이지 번호"),
+                        parameterWithName("sort").description("정렬 기준. (VIEW 조회수, RECENT 최신순, HEART 하트 많은 순)")
+                ),
+                responseFields(
+                        fieldWithPath("data.[]").type(JsonFieldType.ARRAY).description("레시피 리스트"),
+                        fieldWithPath("data.[].id").type(JsonFieldType.NUMBER).description("검색된 레시피의 ID"),
+                        fieldWithPath("data.[].title").type(JsonFieldType.STRING).description("검색된 레시피의 제목"),
+                        fieldWithPath("data.[].imagePath").type(JsonFieldType.STRING).description("레시피의 대표 이미지 경로"),
+                        fieldWithPath("data.[].view").type(JsonFieldType.NUMBER).description("조회수"),
+                        fieldWithPath("data.[].heartCounts").type(JsonFieldType.NUMBER).description("레시피의 하트 수"),
+                        fieldWithPath("data.[].heartExist").type(JsonFieldType.BOOLEAN).description("나의 해당 레시피 하트 여부 (미로그인시 false)"),
+                        fieldWithPath("data.[].commentCounts").type(JsonFieldType.NUMBER).description("레시피 댓글 갯수"),
+                        fieldWithPath("data.[].lastModifiedAt").type(JsonFieldType.STRING).description("레시피 마지막 수정 일자"),
+                        fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 페이지"),
+                        fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("현재 사이즈"),
+                        fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("질문 전체 수"),
+                        fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("총 페이지 개수")
+                )
+        ));
+    }
+
+    @Test
+    @DisplayName("내가 하트를 추가한 레시피 리스트를 하트를 추가한 날짜 내림차순 검색")
+    void getFavoriteRecipesTest() throws Exception {
+        //given
+        int page = 1;
+        int size = 4;
+        Long memberId = memberRepository.findAll().get(0).getId();
+
+        List<MyRecipeDto.Favorite> content = new ArrayList<>();
+        for (int i = 1; i <= size; i++) {
+            MyRecipeDto.Favorite dto = new MyRecipeDto.Favorite((long) i, "Tomato pasta " + i, "https://s3.aws.abcdefg/recipe" + i + ".jpeg", (long) i*10, "Member"+i, "https://s3.aws.abcdefg/member" + i + ".jpeg", LocalDateTime.now());
+            content.add(dto);
+        }
+        Page<MyRecipeDto.Favorite> result = PageableExecutionUtils.getPage(content, PageRequest.of(0, size), () -> 33);
+        willReturn(result).given(recipeService).findFavoriteRecipes(memberId, page);
+
+        // expected
+        ResultActions actions = mockMvc.perform(get("/api/recipes/favorite")
+                        .param("page", Integer.toString(page))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.data").isArray())
+                .andDo(MockMvcResultHandlers.print());
+
+        //then
+        actions.andDo(document("recipe-favorite",
+                getRequestPreProcessor(),
+                getResponsePreProcessor(),
+                requestParameters(
+                        parameterWithName("page").description("요청 페이지 번호")
+                ),
+                responseFields(
+                        fieldWithPath("data.[]").type(JsonFieldType.ARRAY).description("레시피 리스트"),
+                        fieldWithPath("data.[].id").type(JsonFieldType.NUMBER).description("검색된 레시피의 ID"),
+                        fieldWithPath("data.[].title").type(JsonFieldType.STRING).description("검색된 레시피의 제목"),
+                        fieldWithPath("data.[].imagePath").type(JsonFieldType.STRING).description("레시피의 대표 이미지 경로"),
+                        fieldWithPath("data.[].member.id").type(JsonFieldType.NUMBER).description("레시피 작성자 ID"),
+                        fieldWithPath("data.[].member.name").type(JsonFieldType.STRING).description("레시피 작성자 이름"),
+                        fieldWithPath("data.[].member.profileImagePath").type(JsonFieldType.STRING).description("레시피 작성자 프로필 이미지 경로").optional(),
+                        fieldWithPath("data.[].lastModifiedAt").type(JsonFieldType.STRING).description("레시피 마지막 수정 일자"),
+                        fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 페이지"),
+                        fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("현재 사이즈"),
+                        fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("질문 전체 수"),
+                        fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("총 페이지 개수")
+                )
+        ));
     }
 }

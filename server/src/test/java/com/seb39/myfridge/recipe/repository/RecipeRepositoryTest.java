@@ -1,6 +1,8 @@
 package com.seb39.myfridge.recipe.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.seb39.myfridge.comment.entity.Comment;
+import com.seb39.myfridge.comment.repository.CommentRepository;
 import com.seb39.myfridge.config.QueryDslConfig;
 import com.seb39.myfridge.heart.entity.Heart;
 import com.seb39.myfridge.heart.repository.HeartRepository;
@@ -9,11 +11,14 @@ import com.seb39.myfridge.ingredient.Repository.IngredientRepository;
 import com.seb39.myfridge.ingredient.Repository.RecipeIngredientRepository;
 import com.seb39.myfridge.ingredient.entity.Ingredient;
 import com.seb39.myfridge.ingredient.entity.RecipeIngredient;
+import com.seb39.myfridge.member.dto.MemberDto;
 import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.repository.MemberRepository;
+import com.seb39.myfridge.recipe.dto.MyRecipeDto;
 import com.seb39.myfridge.recipe.dto.RecipeDto;
 import com.seb39.myfridge.recipe.dto.RecipeSearch;
 import com.seb39.myfridge.recipe.entity.Recipe;
+import com.seb39.myfridge.recipe.enums.RecipeSort;
 import com.seb39.myfridge.step.entity.Step;
 import com.seb39.myfridge.step.repository.StepRepository;
 import org.assertj.core.api.Assertions;
@@ -56,6 +61,9 @@ class RecipeRepositoryTest {
 
     @Autowired
     HeartRepository heartRepository;
+
+    @Autowired
+    CommentRepository commentRepository;
 
     @Autowired
     EntityManager em;
@@ -213,7 +221,7 @@ class RecipeRepositoryTest {
         // when
         RecipeSearch.Request request = new RecipeSearch.Request();
         request.setTitle("4");
-        request.setSortType(RecipeSearch.SortType.RECENT);
+        request.setSort(RecipeSort.RECENT);
 
         Page<RecipeSearch.Response> page = recipeRepository.searchRecipes(request);
         List<RecipeSearch.Response> content = page.getContent();
@@ -260,7 +268,7 @@ class RecipeRepositoryTest {
         // when
         RecipeSearch.Request request = new RecipeSearch.Request();
         request.setTitle("recipe");
-        request.setSortType(RecipeSearch.SortType.RECENT);
+        request.setSort(RecipeSort.RECENT);
 
         Page<RecipeSearch.Response> page = recipeRepository.searchRecipes(request);
         List<RecipeSearch.Response> content = page.getContent();
@@ -280,7 +288,7 @@ class RecipeRepositoryTest {
         // when
         RecipeSearch.Request request = new RecipeSearch.Request();
         request.setTitle("recipe");
-        request.setSortType(RecipeSearch.SortType.VIEW);
+        request.setSort(RecipeSort.VIEW);
 
         Page<RecipeSearch.Response> page = recipeRepository.searchRecipes(request);
         List<RecipeSearch.Response> content = page.getContent();
@@ -300,7 +308,7 @@ class RecipeRepositoryTest {
         // when
         RecipeSearch.Request request = new RecipeSearch.Request();
         request.setTitle("recipe");
-        request.setSortType(RecipeSearch.SortType.HEART);
+        request.setSort(RecipeSort.HEART);
 
         Page<RecipeSearch.Response> page = recipeRepository.searchRecipes(request);
         List<RecipeSearch.Response> content = page.getContent();
@@ -321,23 +329,65 @@ class RecipeRepositoryTest {
         RecipeSearch.Request request = new RecipeSearch.Request();
         request.setTitle("recipe");
         request.setPage(2);
-        request.setSortType(RecipeSearch.SortType.RECENT);
+        request.setSort(RecipeSort.RECENT);
 
         Page<RecipeSearch.Response> page = recipeRepository.searchRecipes(request);
         List<RecipeSearch.Response> content = page.getContent();
 
         // then
-        assertThat(page.getNumber()+1).isEqualTo(2);
+        assertThat(page.getNumber() + 1).isEqualTo(2);
         assertThat(page.getSize()).isEqualTo(16);
         assertThat(page.getTotalElements()).isEqualTo(40);
         assertThat(page.getTotalPages()).isEqualTo(3);
     }
 
-    void initSampleRecipes() {
+    @Test
+    @DisplayName("내가 작성한 레시피 리스트 조회")
+    void findMyRecipesTest() throws Exception {
+        // given
+        initSampleRecipes();
+        em.flush();
+        em.clear();
+        Member member = memberRepository.findAll().get(0);
+
+        // when
+        Page<MyRecipeDto.Mine> page = recipeRepository.findMyRecipes(member.getId(), 1, RecipeSort.VIEW);
+        List<MyRecipeDto.Mine> content = page.getContent();
+
+        // then
+        assertThat(content.size()).isEqualTo(4);
+        content.forEach(dto -> {
+                    Recipe recipe = recipeRepository.findById(dto.getId()).get();
+                    assertThat(recipe.getMember()).isEqualTo(member);
+                });
+    }
+
+    @Test
+    @DisplayName("내가 하트 추가한 레시피 조회")
+    void findMyFavoriteRecipesTest() throws Exception {
+        // given
+        initSampleRecipes();
+        em.flush();
+        em.clear();
+        Member member = memberRepository.findAll().get(0);
+
+        // when
+        Page<MyRecipeDto.Favorite> page = recipeRepository.findFavoriteRecipes(member.getId(), 1);
+        List<MyRecipeDto.Favorite> content = page.getContent();
+
+        // then
+        for (MyRecipeDto.Favorite dto : content) {
+            System.out.println(dto);
+        }
+
+        assertThat(content.size()).isEqualTo(4);
+    }
+
+    private void initSampleRecipes() {
         for (int i = 1; i <= 5; i++) {
             Member member = Member.oauth2Builder()
                     .name("member" + i)
-                    .profileImagePath("https://s3.aws.abcd/image.jpeg")
+                    .profileImagePath("https://s3.aws.abcd/member" + i + ".jpeg")
                     .buildOAuth2Member();
             memberRepository.save(member);
         }
@@ -369,9 +419,15 @@ class RecipeRepositoryTest {
             recipe.setView(view);
             recipeRepository.save(recipe);
 
-            int heartCount = (int) (Math.random() * 10);
+            int heartCount = (int) (Math.random() * 4) + 1;
             for (int j = 0; j < heartCount; j++) {
-                heartRepository.save(new Heart(members.get(i % 5), recipe));
+                heartRepository.save(new Heart(members.get(j % 5), recipe));
+            }
+
+            int commentCount = (int) (Math.random() * 3);
+            for (int j = 0; j < commentCount; j++) {
+                Comment comment = Comment.create("comment", members.get(i % 5), recipe);
+                commentRepository.save(comment);
             }
         }
     }

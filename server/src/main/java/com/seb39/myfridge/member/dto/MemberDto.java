@@ -21,5 +21,14 @@ public class MemberDto {
             this.name = member.getName();
             this.profileImagePath = member.getProfileImagePath();
         }
+
+        @Override
+        public String toString() {
+            return "Response{" +
+                    "id=" + id +
+                    ", name='" + name + '\'' +
+                    ", profileImagePath='" + profileImagePath + '\'' +
+                    '}';
+        }
     }
 }
