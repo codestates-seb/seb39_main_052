@@ -8,6 +8,7 @@ import {
   faHeart,
   faCommentDots,
 } from "@fortawesome/free-solid-svg-icons";
+import Pagination from "../../common/Pagination/Pagination";
 
 const MyRecipeBox = () => {
   const dummyData = [
@@ -72,6 +73,7 @@ const MyRecipeBox = () => {
           </SpanWrapper>
         </RecipeFrame>
       ))}
+      <Pagination total="10" limit="4"></Pagination>
     </RecipeFrameOuterContainer>
   );
 };

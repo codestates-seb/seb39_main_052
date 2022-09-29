@@ -1,3 +1,4 @@
+import Pagination from "../../common/Pagination/Pagination";
 import UserName from "../../common/UserName/UserName";
 import {
   CommentsBoxContainer,
@@ -115,6 +116,7 @@ const CommentsBox = () => {
         </div>
       </CommentsCollection>
       {/* 페이지네이션 들어갈 자리 */}
+      <Pagination total="10" limit="10"></Pagination>
     </CommentsBoxContainer>
   );
 };

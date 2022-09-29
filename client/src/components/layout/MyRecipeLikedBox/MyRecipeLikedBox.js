@@ -6,6 +6,7 @@ import {
 } from "../MyRecipeBox/MyRecipeBoxStyle";
 import RecipeFrame from "../RecipeFrame/RecipeFrame";
 import UserName from "../../common/UserName/UserName";
+import Pagination from "../../common/Pagination/Pagination";
 
 const MyRecipeLikedBox = () => {
   const dummyData = [
@@ -63,6 +64,20 @@ const MyRecipeLikedBox = () => {
       memberImage:
         "https://www.tocanvas.net/wp-content/uploads/2022/02/food-aesthetic.jpeg",
     },
+    {
+      id: 5,
+      imagePath:
+        "https://i.pinimg.com/564x/d5/e0/ac/d5e0ac981b650a5731cd268bdbb42397.jpg",
+      title:
+        "집에서 로투스 크림라떼 만들기 집에서 로투스 크림라떼 만들기 집에서 로투스 크림라떼 만들기",
+      memberName: "홈카페대마왕",
+      likes: 40,
+      views: 50,
+      numComments: 50,
+      date: "2022.9.26.",
+      memberImage:
+        "https://www.tocanvas.net/wp-content/uploads/2022/02/food-aesthetic.jpeg",
+    },
   ];
 
   return (
@@ -81,6 +96,7 @@ const MyRecipeLikedBox = () => {
           <UserName image={data.memberImage} name={data.memberName}></UserName>
         </RecipeFrame>
       ))}
+      <Pagination total="10" limit="4"></Pagination>
     </RecipeFrameOuterContainer>
   );
 };
