@@ -83,6 +83,9 @@ export const Img = styled.img`
     height: 100%;
     width: 100%;
     border-radius: inherit;
+    &.dragover {
+        border: 2px solid var(--fridge-300);
+    }
 `
 
 export const Input = styled.input`
