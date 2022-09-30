@@ -44,11 +44,11 @@ const InputList = ({ titlesArr, placeholders }) => {
 
     const handleAddClick = (i) => {
         if (pathname === "/recipes/new" || pathname === "/recipes/edit") {
-            if (data.length < 20) {
+            if (data.length < 15) {
                 dispatch(addIngrInput({ index: i }));
             }
             else {
-                alert(`20개 이하로만 등록할 수 있습니다`);
+                alert(`15개 이하로만 등록할 수 있습니다`);
             }
         }
         if (pathname === "/myfridge") {

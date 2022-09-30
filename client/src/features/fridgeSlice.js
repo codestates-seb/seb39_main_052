@@ -19,7 +19,6 @@ const initialState = {
         dDay: "",
         note: "",
     },],
-     
 }
 
 const fridgeSlice = createSlice({

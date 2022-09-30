@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import blankImage from "../../../assets/blankImage.webp";
+import blankImage from "../../../assets/blankImage.png";
 import { addImage, addMainImage, deleteImage, deleteMainImage } from "../../../features/imageSlice";
 import { setMainImage, setStepImage, editMainImage, editStepImage, deleteMainImg, deleteStepImage } from "../../../features/recipeSlice";
 import { faSpinner, faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -11,6 +11,7 @@ const ImageUploader = ({ size, index, mode }) => {
 
     const [imageUrl, setImageUrl] = useState(null); //미리보기용
     const [isLoading, setIsLoading] = useState(false);
+    const [isDragOver, setIsDragOver] = useState(false);
 
     const { pathname } = useLocation();
     const dispatch = useDispatch();
@@ -28,12 +29,52 @@ const ImageUploader = ({ size, index, mode }) => {
     }); 
     // console.log("steps", steps);
 
-    const imageHandler = (e) => {
-        e.preventDefault();
-        setIsLoading(true);
+    // const imageHandler = (e) => {
+    //     // e.preventDefault();
+    //     setIsLoading(true);
 
-        if (e.target.files[0]) {
-            const uploadFile = e.target.files[0]
+    //     if (e.target.files[0]) {
+    //         const uploadFile = e.target.files[0]
+
+    //         // 레시피 작성하기
+    //         if (pathname === "/recipes/new") {
+    //             // 메인 사진을 추가하는 경우
+    //             if (mode === `main`) {
+    //                 dispatch(addMainImage({ image: uploadFile }));
+    //                 dispatch(setMainImage({ mainImage: URL.createObjectURL(uploadFile)}));
+    //             }
+    //             // 요리 순서 사진을 추가하는 경우
+    //             if (mode === `steps`) {
+    //                 dispatch(addImage({ index: index, image: uploadFile }));
+    //                 dispatch(setStepImage({ index: index, imagePath: URL.createObjectURL(uploadFile)}))
+    //             }
+    //         }
+    //         // 레시피 수정하기
+    //         else {
+    //             if (mode === `main`) {
+    //                 dispatch(addMainImage({ image: uploadFile }));
+    //                 dispatch(editMainImage({ mainImage: URL.createObjectURL(uploadFile)}));
+    //             }
+    //             // 요리 순서 사진을 추가하는 경우
+    //             if (mode === `steps`) {
+    //                 dispatch(addImage({ index: index, image: uploadFile }));
+    //                 dispatch(editStepImage({ index: index, imagePath: URL.createObjectURL(uploadFile)}))
+    //             }
+    //         }
+
+    //     }
+    //     else {
+    //         setIsLoading(false);
+    //     }
+    // };
+
+    const imageHandler = (fileList) => {
+        // e.preventDefault();
+        setIsLoading(true);
+        setIsDragOver(false);
+
+        if (fileList[0]) {
+            const uploadFile = fileList[0]
 
             // 레시피 작성하기
             if (pathname === "/recipes/new") {
@@ -87,16 +128,43 @@ const ImageUploader = ({ size, index, mode }) => {
         }
     }
 
+    // 클릭으로 이미지 파일 추가
+    const onClickFiles = (e) => {
+        console.log(e.target.files);
+        e.preventDefault()
+        imageHandler(e.target.files);
+    };
+
+    // drop으로 이미지 파일 추가
+    const onDropFiles = (e) => {
+        console.log(e.dataTransfer.files);
+        e.preventDefault()
+        imageHandler(e.dataTransfer.files);
+    };
+
+    // 없으면 drop 작동안함
+    const dragOver = (e) => {
+        e.preventDefault()
+        setIsDragOver(true);
+    };
+
+
     return (
         <Container className={size}>
             {mode === `main`
                 ? <Img
                     src={mainImageUrl ? mainImageUrl : blankImage}
+                    onDrop={onDropFiles}
+                    onDragOver={dragOver} 
                     onLoad={() => setIsLoading(false)}
+                    className={isDragOver && "dragover"}
                 />
                 : <Img
                     src={steps[index].imageInfo.imagePath ? steps[index].imageInfo.imagePath : blankImage}
+                    onDrop={onDropFiles}
+                    onDragOver={dragOver} 
                     onLoad={() => setIsLoading(false)}
+                    className={isDragOver && "dragover"}
                 />
             }
             {isLoading && <StyledFontAwesomeIcon icon={faSpinner} className="loading" spin />}
@@ -105,7 +173,7 @@ const ImageUploader = ({ size, index, mode }) => {
                 accept="image/*"
                 name="file"
                 ref={imgRef}
-                onChange={imageHandler}
+                onChange={onClickFiles}
             />
             {mode === "main"
                 ? (mainImageUrl && !isLoading

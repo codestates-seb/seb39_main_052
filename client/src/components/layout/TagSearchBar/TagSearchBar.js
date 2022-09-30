@@ -13,8 +13,7 @@ const TagSearchBar = () => {
     const [isDropDownOpen, setIsDropDownOpen] = useState(false);
     const [cursor, setCursor] = useState(-1);
 
-    // 어떤 컴포넌트에서든 searchParams의 키워드 값을 가져와 관련 http 요청을 보낼 수 있다.
-    const searchTerm = searchParams.get('tag');
+    console.log("태그 추천 검색어", suggestedValue);
 
     const searchBarRef = useRef(); // 서치바+드롭다운 창 밖 클릭을 인식하기 위한 ref
     const suggestionRef = useRef(null); // 스크롤이 드롭다운 내 선택된 요소를 따라가게 하기 위한 ref
@@ -23,7 +22,7 @@ const TagSearchBar = () => {
     // const suggestedValue = ["순두부", "감자"]
     // const dummyData = ["순두부", "감자", "미역", "간장", "계란", "밥", "돼지고기", "칼국수면", "고구마", "김치", "닭고기", "소고기", "두부"]
 
-    // 레시피 상세 데이터 불러오기
+    // 관련 검색어 불러오기
     const getDropDownValue = async (keyword) => {
         if (keyword.length > 0) {
             try {
@@ -86,8 +85,8 @@ const TagSearchBar = () => {
         getDropDownValue(e.target.value);
     };
 
-    // 엔터키 또는 방향키에 따라 드롭다운 내 이동
-    const handleKey = (e) => {
+    // 방향키에 따라 드롭다운 내 이동
+    const handleKeyUp = (e) => {
         // if (!e.isComposing) { //한글 입력 후 드롭다운 내릴 때 처음만 커서 두번 움직임
         if (isDropDownOpen) {
             if (e.key === 'ArrowDown') {
@@ -104,25 +103,21 @@ const TagSearchBar = () => {
                 setIsDropDownOpen(false);
                 setSuggestedValue([]);
             }
-            if (e.key === 'Enter' && cursor > -1) {
-                handleSearch();
-                setSuggestedValue([]);
-            }
-            // if (e.key === 'Backspace') {
-            //     e.preventDefault();
-            //     console.log("백스페이스 눌렀어?")
-            // }
         }
         else {
-            if (e.key === 'Enter') {
-                handleSearch();
-                setSuggestedValue([]);
-            }
             if (e.key === 'ArrowDown') {
                 setIsDropDownOpen(true);
             }
         }
+    }
 
+    // 엔터키에 대한 핸들러 (엔터 두번 눌러지는걸 방지하기 위해 onKeyUp과 분리)
+    const handleKeyPress = (e) => {
+        // if (!e.isComposing) { //한글 입력 후 드롭다운 내릴 때 처음만 커서 두번 움직임
+        if (e.key === 'Enter') {
+            handleSearch();
+            setSuggestedValue([]);
+        }
     }
 
     // 엔터/서치 아이콘 클릭 시 하단에 태그 결과 레시피 카드를 보여주는 함수
@@ -131,6 +126,8 @@ const TagSearchBar = () => {
         if (typeof el === "string") {
             // 중복 태그 방지
             if (!searchTags.includes(el)) {
+                searchParams.set("tags", [...searchTags, el])
+                setSearchParams(searchParams);
                 setSearchTags([...searchTags, el]);
             }
             else {
@@ -145,6 +142,8 @@ const TagSearchBar = () => {
             // 중복 태그 방지
             if (!searchTags.includes(searchValue)) {
                 // 마우스로 드롭다운 요소 클릭 시 바로 검색 태그에 추가
+                searchParams.set("tags", [...searchTags, searchValue])
+                setSearchParams(searchParams);
                 setSearchTags([...searchTags, searchValue]);
             }
             else {
@@ -164,6 +163,8 @@ const TagSearchBar = () => {
     const handleDeleteTag = (idx) => {
         let tmp = [...searchTags];
         tmp.splice(idx, 1);
+        searchParams.set("tags", tmp);
+        setSearchParams(searchParams);
         setSearchTags(tmp);
     }
 
@@ -181,7 +182,8 @@ const TagSearchBar = () => {
                 <SearchInput
                     value={searchValue || ""} //uncontrolled input 관련 에러 해결 방법
                     onChange={handleInput}
-                    onKeyUp={handleKey}
+                    onKeyUp={handleKeyUp}
+                    onKeyPress={handleKeyPress}
                     onClick={handleClickInside}
                 />
                 <StyledFontAwesomeIcon

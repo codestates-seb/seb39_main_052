@@ -24,12 +24,12 @@ const ImageInputList = ({ stepFiles, setStepFiles }) => {
     };
 
     const handleAddClick = (i) => {
-        if (steps.length < 15) {
+        if (steps.length < 10) {
             dispatch(addStepsInput({ index: i }));
             dispatch(addElement());
         }
         else {
-            alert(`요리 순서는 15개 이하로 등록 가능합니다`);
+            alert(`요리 순서는 10개 이하로 등록 가능합니다`);
         }
         // 마지막 추가된 input이 화면 안으로 들어오도록
         lastValueRef.current.scrollIntoView({

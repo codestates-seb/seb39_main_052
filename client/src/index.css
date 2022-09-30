@@ -8,6 +8,26 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+@font-face {
+  font-family: 'GmarketSansMedium';
+  src: url('./assets/fonts/gmarketSansTTFMedium.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'GmarketSansLight';
+  src: url('./assets/fonts/gmarketSansTTFBold.ttf');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'GmarketSansBold';
+  src: url('./assets/fonts/gmarketSansTTFLight.ttf');
+  font-weight: light;
+  font-style: normal;
 }
