@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserLarge } from "@fortawesome/free-solid-svg-icons";
 //기본 냉장고 얼굴 이미지 가져오기
 import small_logoface from "../../../assets/small_logoface.png";
-
+import { Link } from "react-router-dom";
 //Style파일에서 css 가져오기
 import {
   DropDownContainer,
@@ -16,6 +16,7 @@ import {
   Ul,
   Li,
 } from "./DropDownMenuStyle";
+import { useState } from "react";
 
 const DropDownMenu = ({ profileIconPhoto }) => {
   const dropdownRef = useRef(null);
@@ -24,6 +25,10 @@ const DropDownMenu = ({ profileIconPhoto }) => {
     setUserIsOpen(!userIsOpen);
   };
   // console.log("userIsOpen?", userIsOpen);
+
+  //내프로필이면 메뉴탭 0번째
+  //마이페이지이면 메뉴탭 1번째
+  const [currentTab, setCurrentTab] = useState(0);
 
   return (
     <DropDownContainer className="dropdown_container">
@@ -38,8 +43,12 @@ const DropDownMenu = ({ profileIconPhoto }) => {
       </DropDownButton>
       <Menu isDropped={userIsOpen}>
         <Ul>
-          <Li>내 프로필</Li>
-          <Li>마이페이지</Li>
+          <Li>
+            <Link to="/mypage">내 프로필</Link>
+          </Li>
+          <Li>
+            <Link to="/mypage">마이페이지</Link>
+          </Li>
           <Li>
             <LogOut />
           </Li>

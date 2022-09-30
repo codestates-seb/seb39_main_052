@@ -52,6 +52,7 @@ export const MenuTitle = styled.div`
 
 export const MenuContent = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   margin: 32px;
   font-size: 14px;
