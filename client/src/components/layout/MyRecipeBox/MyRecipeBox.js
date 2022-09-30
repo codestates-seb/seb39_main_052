@@ -9,72 +9,144 @@ import {
   faCommentDots,
 } from "@fortawesome/free-solid-svg-icons";
 import Pagination from "../../common/Pagination/Pagination";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import SortingTab from "../../common/SortingTab/SortingTab";
+
+import { useDispatch, useSelector } from "react-redux";
+import { loadRecipe } from "../../../features/recipeSlice";
 
 const MyRecipeBox = () => {
-  const dummyData = [
-    {
-      id: 1,
-      imagePath:
-        "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
-      title:
-        "백종원의 들깨칼국수칼국수 여기서도 길게쓰면 ellipsis 적용되는건지 확인",
-      memberImage:
-        "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
-      memberName: "들깨러버들깨러버버버",
-      likes: 221,
-      views: 1200,
-      numComments: 3,
-      date: "2022.9.27.",
-    },
-    {
-      id: 2,
-      imagePath:
-        "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
-      title: "웰시코기코기코기콜기",
-      memberImage:
-        "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
-      memberName: "웰시코기궁둥",
-      likes: 10,
-      views: 120,
-      numComments: 10,
-      date: "2022.9.26.",
-    },
-  ];
+  const [myRecipeList, setMyRecipeList] = useState([]);
+  const [page, setPage] = useState(1); // 페이지네이션으로 바뀔 현재 페이지 위치
+  const [total, setTotal] = useState(0); //전체 게시글 수
+  const [totalPages, setTotalPages] = useState(0); //전체 페이지 수
+  const [isUpdated, setIsUpdated] = useState(false); //레시피 삭제,수정시 업뎃여부로 화면에 재렌더링 하려고
+
+  // const [sortMode, setSortMode] = useState("RECENT"); //정렬탭
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // date 표기 (YYYY-MM-DD)
+  const dateConverter = (createdAt) => {
+    const date = new Date(+new Date(createdAt) + 3240 * 10000)
+      .toISOString()
+      .split("T")[0];
+    return date;
+  };
+  // console.log("sort모드?", sortMode);
+
+  //최신순 내 레시피 목록 조회하기
+  const getMyRecipeList = async () => {
+    try {
+      const { data } = await axios.get(
+        `/api/recipes/my?page=${page}&sort=RECENT`
+      );
+      console.log(data);
+      // console.log("sort모드?", sortMode);
+      setTotal(data.pageInfo.totalElements);
+      setTotalPages(data.pageInfo.totalPages);
+      setMyRecipeList([...data.data]);
+    } catch (err) {
+      alert(err);
+    }
+  };
+
+  //페이지 바뀔때, 레시피 수정삭제로 업데이트시 화면에 내 레시피 목록 재 렌더링
+  useEffect(() => {
+    getMyRecipeList();
+    setIsUpdated(false); //명시적으로 넣어주어야 RecipeFrame 컴포넌트에서 처음 삭제하고 setIsUpdated 상태 true가 된 이후에 기본 상태 false로 돌아간다.
+  }, [page, isUpdated]);
+
+  //레시피 상세페이지로 navigate 시키기
+  const clickRecipeDetail = (recipeId) => {
+    navigate(`/recipes/${recipeId}`);
+  };
+
+  //레시피 수정페이지로 보내기 이전에 해당 레시피 상세 데이터 불러오고 리덕스에 저장해놓기
+  const getRecipe = async (recipeId) => {
+    try {
+      const { data } = await axios.get(`/api/recipes/${recipeId}`);
+      dispatch(
+        loadRecipe({
+          recipeId: data.id,
+          memberName: data.member.name,
+          memberId: data.member.id,
+          profileImagePath: data.member.profileImagePath,
+          createdAt: data.createdAt,
+          heartCounts: data.heartCounts,
+          view: data.view,
+          title: data.title,
+          portion: data.portion,
+          time: data.time,
+          mainImage: data.imageInfo.imagePath,
+          ingredients: data.ingredients,
+          steps: data.steps,
+        })
+      );
+    } catch (err) {
+      console.log("레시피 상세데이터 불러오기 실패", err);
+    }
+  };
+
+  //내 레시피 수정페이지로 navigate 시키기
+  const clickRecipeEdit = (recipeId) => {
+    getRecipe(recipeId); //먼저 상세 데이터 불러오고 리덕스에 저장
+    navigate(`/recipes/edit`);
+  };
 
   return (
-    <RecipeFrameOuterContainer>
-      {dummyData.map((data) => (
-        <RecipeFrame
-          key={data.id}
-          imagePath={data.imagePath}
-          title={data.title}
-          date={data.date}
-          icon1={<FontAwesomeIcon icon={faPencil}></FontAwesomeIcon>}
-          icon2={<FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon>}
-        >
-          {/* children props 로 자식 컴포넌트로 전달되는 요소들 */}
-          <SpanWrapper>
-            <span>
-              <FontAwesomeIcon icon={faEye}></FontAwesomeIcon>
-            </span>
-            <span>{data.views}</span>
-          </SpanWrapper>
-          <SpanWrapper>
-            <span>
-              <FontAwesomeIcon icon={faHeart}></FontAwesomeIcon>
-            </span>
-            <span>{data.likes}</span>
-          </SpanWrapper>
-          <SpanWrapper>
-            <span>
-              <FontAwesomeIcon icon={faCommentDots}></FontAwesomeIcon>
-            </span>
-            <span>{data.numComments}</span>
-          </SpanWrapper>
-        </RecipeFrame>
-      ))}
-      <Pagination total="10" limit="4"></Pagination>
-    </RecipeFrameOuterContainer>
+    <>
+      {/* <SortingTab sortMode={sortMode} setSortMode={setSortMode} /> */}
+      <RecipeFrameOuterContainer>
+        {myRecipeList.map((data) => (
+          <RecipeFrame
+            onClickRecipeDetail={() => {
+              clickRecipeDetail(data.id);
+            }}
+            onClickIconEdit={() => clickRecipeEdit(data.id)}
+            // onClickIconDelete={
+            //   () => handleRecipeDelete(data.id)
+            //   // useConfirm("정말 삭제할까요?", confirm, cancel) //리액트훅은 콜백 안에서 쓰일 수 없다 에러
+            // }
+            key={data.id}
+            recipeIdProp={data.id}
+            setIsUpdated={setIsUpdated}
+            imagePath={data.imagePath}
+            title={data.title}
+            date={dateConverter(data.lastModifiedAt)}
+            icon1={<FontAwesomeIcon icon={faPencil}></FontAwesomeIcon>}
+            icon2={<FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon>}
+          >
+            {/* children props 로 자식 컴포넌트로 전달되는 요소들 */}
+            <SpanWrapper>
+              <span>
+                <FontAwesomeIcon icon={faEye}></FontAwesomeIcon>
+              </span>
+              <span>{data.view}</span>
+            </SpanWrapper>
+            <SpanWrapper>
+              <span>
+                <FontAwesomeIcon icon={faHeart}></FontAwesomeIcon>
+              </span>
+              <span>{data.heartCounts}</span>
+            </SpanWrapper>
+            <SpanWrapper>
+              <span>
+                <FontAwesomeIcon icon={faCommentDots}></FontAwesomeIcon>
+              </span>
+              <span>{data.commentCounts}</span>
+            </SpanWrapper>
+          </RecipeFrame>
+        ))}
+        <Pagination
+          page={page}
+          setPage={setPage}
+          totalPages={totalPages}
+        ></Pagination>
+      </RecipeFrameOuterContainer>
+    </>
   );
 };
 
