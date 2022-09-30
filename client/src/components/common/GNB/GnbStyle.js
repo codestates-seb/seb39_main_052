@@ -72,6 +72,7 @@ export const Img = styled.img`
   width: 118px;
   height: 68px;
   display: flex;
+  margin-left: 16px; //logo가운데로 오게하려고
   /* align-items: flex-end; */
 `;
 
