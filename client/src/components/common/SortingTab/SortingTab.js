@@ -4,13 +4,13 @@ import { Option, SortWrapper } from "./SortingTabStyle"
 const SortingTab = ({ sortMode, setSortMode }) => {
 
     const sortOption = [{
-        mode: "like",
+        mode: "HEART",
         button: "인기순"
     }, {
-        mode: "view",
+        mode: "VIEW",
         button: "조회순"
     }, {
-        mode: "recent",
+        mode: "RECENT",
         button: "최신순"
     }]
 

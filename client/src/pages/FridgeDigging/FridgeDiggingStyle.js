@@ -23,19 +23,43 @@ export const Heading = styled.h1`
     /* color: var(--white); */
 `
 
+export const Alert = styled.div`
+    width: 736px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 0 0 0;
+    color: var(--fridge-900);
+    &.invisible {
+        display: none;
+    }
+`
+
 export const Option = styled.div`
     width: 736px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
     margin: 0 0 16px 0;
+    &.invisible {
+        display: none;
+    }
+`
+export const ResultNum = styled.div`
+    padding: 0 0 0 8px;
+    font-size: 14px;
+    color: var(--primary-900);
 `
 
 export const RecipeWrapper = styled.div`
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    width: 760px;
+    justify-content: flex-start;
+    width: 754px;
     flex-wrap: wrap;
+    &.invisible {
+        display: none;
+    }
 `
 
 export const Loader = styled.div`
