@@ -8,7 +8,7 @@ import RecipeFrame from "../RecipeFrame/RecipeFrame";
 import UserName from "../../common/UserName/UserName";
 import Pagination from "../../common/Pagination/Pagination";
 
-const MyRecipeLikedBox = () => {
+const MyRecipeLikedBox = ({ timeSince }) => {
   const dummyData = [
     {
       id: 1,
@@ -20,7 +20,7 @@ const MyRecipeLikedBox = () => {
       likes: 221,
       views: 1200,
       numComments: 3,
-      date: "2022.9.27.",
+      lastModifiedAt: "2022-09-29T18:54:46.996434",
       memberImage:
         "https://www.tocanvas.net/wp-content/uploads/2022/02/food-aesthetic.jpeg",
     },
@@ -33,7 +33,7 @@ const MyRecipeLikedBox = () => {
       likes: 10,
       views: 120,
       numComments: 10,
-      date: "2022.9.26.",
+      lastModifiedAt: "2022-09-29T18:54:46.996434",
       memberImage:
         "https://www.tocanvas.net/wp-content/uploads/2022/02/food-aesthetic.jpeg",
     },
@@ -46,7 +46,7 @@ const MyRecipeLikedBox = () => {
       likes: 50,
       views: 2220,
       numComments: 20,
-      date: "2022.9.26.",
+      lastModifiedAt: "2022-09-29T18:54:46.996434",
       memberImage:
         "https://www.tocanvas.net/wp-content/uploads/2022/02/food-aesthetic.jpeg",
     },
@@ -60,7 +60,7 @@ const MyRecipeLikedBox = () => {
       likes: 40,
       views: 50,
       numComments: 50,
-      date: "2022.9.26.",
+      lastModifiedAt: "2022-09-29T18:54:46.996434",
       memberImage:
         "https://www.tocanvas.net/wp-content/uploads/2022/02/food-aesthetic.jpeg",
     },
@@ -74,7 +74,7 @@ const MyRecipeLikedBox = () => {
       likes: 40,
       views: 50,
       numComments: 50,
-      date: "2022.9.26.",
+      lastModifiedAt: "2022-09-29T18:54:46.996434",
       memberImage:
         "https://www.tocanvas.net/wp-content/uploads/2022/02/food-aesthetic.jpeg",
     },
@@ -87,7 +87,7 @@ const MyRecipeLikedBox = () => {
           key={data.id}
           imagePath={data.imagePath}
           title={data.title}
-          date={data.date}
+          date={timeSince(Date.parse(data.lastModifiedAt))}
           icon2={<FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon>}
         >
           {/* <SpanWrapper>
