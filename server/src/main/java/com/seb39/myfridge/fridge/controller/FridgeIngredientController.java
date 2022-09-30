@@ -34,7 +34,7 @@ public class FridgeIngredientController {
     //냉장고 비우기 -> 배열 안에 있는 항목을 모두 지우고 POST
     //냉장고 수정 -> 배열 안에 있는 항목을 모두 지우고 새로운 요청 데이터 POST
     @PostMapping
-    public ResponseEntity postFridgeIngredient(@Valid @RequestBody FridgeDto.Post requestBody,
+    public ResponseEntity<FridgeDto.Response> postFridgeIngredient(@Valid @RequestBody FridgeDto.Post requestBody,
                                                @AuthMemberId Long memberId) {
         Fridge fridge = fridgeService.findFridge(memberId);
         List<FridgeIngredient> fridgeIngredients = fridgeIngredientService.createFridgeIngredient(fridge, requestBody);
@@ -44,7 +44,7 @@ public class FridgeIngredientController {
     }
 
     @GetMapping
-    public ResponseEntity getFridgeIngredient(@AuthMemberId Long memberId) {
+    public ResponseEntity<FridgeDto.Response> getFridgeIngredient(@AuthMemberId Long memberId) {
         Fridge fridge = fridgeService.findFridge(memberId);
         List<FridgeIngredient> fridgeIngredient = fridgeIngredientService.findFridgeIngredient(fridge.getId());
         FridgeDto.Response response = fridgeMapper.fridgeIngredientsToResponse(fridgeIngredient);
@@ -53,7 +53,7 @@ public class FridgeIngredientController {
     }
 
     @DeleteMapping
-    public ResponseEntity deleteFridgeIngredient(@AuthMemberId Long memberId) {
+    public ResponseEntity<String> deleteFridgeIngredient(@AuthMemberId Long memberId) {
         Fridge fridge = fridgeService.findFridge(memberId);
         fridgeIngredientService.deleteFridgeIngredient(fridge.getId());
         return new ResponseEntity<>(HttpStatus.OK);

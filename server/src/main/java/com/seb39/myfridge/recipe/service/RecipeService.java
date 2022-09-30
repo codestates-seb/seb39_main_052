@@ -56,7 +56,6 @@ public class RecipeService {
 
         ingredientService.createIngredient(recipe, recipeIngredients);
 
-        //recipe 이미지 지정
         fileUploadService.uploadImages(recipe, steps, files);
 
         Recipe savedRecipe = recipeRepository.save(recipe);
@@ -82,7 +81,6 @@ public class RecipeService {
         findRecipe.getSteps().clear();
         updateImage(findRecipe, files, steps);
 
-        //update를 하면 기존의 step이 중복으로 들어가는 문제 발생 -> update를 하기 이전에, step을 삭제(더 좋은 방법이 있을까?)
         stepRepository.deleteStepByRecipeId(findRecipe.getId());
         steps.forEach(step -> step.addRecipe(findRecipe));
         Recipe updateRecipe = recipeRepository.save(findRecipe);
@@ -94,8 +92,6 @@ public class RecipeService {
     public void deleteRecipe(long id, long memberId) {
         Recipe findRecipe = findRecipeById(id);
         verifyWriter(findRecipe, memberId);
-        //s3 버킷에서 해당 레시피에 관련된 이미지 삭제
-//        deleteImage(findRecipe);
         recipeRepository.delete(findRecipe);
     }
 
