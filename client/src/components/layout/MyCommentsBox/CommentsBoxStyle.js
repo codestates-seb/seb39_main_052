@@ -18,7 +18,9 @@ export const CommentsCollection = styled.div`
     display: flex;
     justify-content: center;
     flex-direction: row;
-    border-bottom: solid 1px var(--gray-300);
+    :not(:last-of-type) {
+      border-bottom: solid 1px var(--gray-300);
+    }
     //박스 높이 넘치면 ... 으로 나타내려고 height 지정 2칸 height 56px 넘어가면 ...으로 나타내기
     /* height: 56px; */
   }
@@ -27,6 +29,7 @@ export const CommentsCollection = styled.div`
     padding-right: 16px;
     flex-basis: 25%;
     display: flex;
+    cursor: pointer;
 
     &.comment {
       /* margin-bottom: 8px; */

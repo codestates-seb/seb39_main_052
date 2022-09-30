@@ -4,7 +4,9 @@ export const RecipeFrameContainer = styled.div`
   display: flex;
   align-items: center;
   padding: 16px;
-  border-bottom: solid 1px var(--gray-300);
+  :not(:last-of-type) {
+    border-bottom: solid 1px var(--gray-300);
+  }
 `;
 export const DisplayImg = styled.img`
   width: 100px;
