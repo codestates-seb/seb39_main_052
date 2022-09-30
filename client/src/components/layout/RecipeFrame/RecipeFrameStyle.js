@@ -10,12 +10,14 @@ export const DisplayImg = styled.img`
   width: 100px;
   height: 100px;
   flex-basis: 20%;
+  cursor: pointer;
 `;
 
 export const Description = styled.div`
   /* padding-right: 16px; */
   flex-basis: 70%;
   padding: 0 16px;
+  cursor: pointer;
 `;
 
 export const Title = styled.div`
@@ -49,5 +51,6 @@ export const Icon = styled.div`
 
   & > span {
     padding: 8px 0 8px 0;
+    cursor: pointer;
   }
 `;

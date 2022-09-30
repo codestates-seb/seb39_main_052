@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useState } from "react";
 import CommentsBox from "../MyCommentsBox/CommentsBox";
 import MyProfile from "../MyProfile/MyProfile";

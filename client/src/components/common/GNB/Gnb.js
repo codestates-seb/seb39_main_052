@@ -66,8 +66,12 @@ const Gnb = () => {
       <Nav>
         <LeftBox className="leftbox" isToggleOpen={isToggleOpen}>
           <Ul className="nav-menu-list">
-            <Li className="each-nav-menu-list">냉장고 파먹기</Li>
-            <Li className="each-nav-menu-list">나의 냉장고</Li>
+            <Li className="each-nav-menu-list">
+              <Link to="/search">냉장고 파먹기</Link>
+            </Li>
+            <Li className="each-nav-menu-list">
+              <Link to="/myfridge">나의 냉장고</Link>
+            </Li>
           </Ul>
         </LeftBox>
         {/* for Mobile toggle */}
