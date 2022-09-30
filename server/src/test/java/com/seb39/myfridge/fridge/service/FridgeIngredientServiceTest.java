@@ -173,7 +173,7 @@ class FridgeIngredientServiceTest {
         FridgeIngredient fridgeIngredient1 = new FridgeIngredient();
         fridgeIngredient1.setIngredient(ingredient1);
         fridgeIngredient1.setNote("서울우유");
-        fridgeIngredient1.setQuantity("1L");
+        fridgeIngredient1.setQuantity("700ml");
         fridgeIngredient1.setExpiration(LocalDate.of(2022, 10, 5));
         fridgeIngredient1.setFridge(fridge);
 

@@ -107,7 +107,7 @@ class HeartControllerTest {
         ));
     }
 
-//    @Test
+    @Test
     @DisplayName("레시피에 자신이 추가한 하트를 제거한다")
     void deleteHeart() throws Exception {
         //given

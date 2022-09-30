@@ -85,7 +85,7 @@ class FridgeIngredientControllerTest {
         memberRepository.deleteAll();
     }
 
-   /* @Test
+    /*@Test
     void 냉장고재료조회_테스트() throws Exception {
         //given
         Member member = memberRepository.findByEmail("test@gmail.com").get();
@@ -118,7 +118,7 @@ class FridgeIngredientControllerTest {
         FridgeDto.IngredientInfo ingredientInfo2 = fridgeMapper.fridgeIngredientToFridgeIngredientDto(fridgeIngredient2);
         infos.add(ingredientInfo2);
 
-        given(fridgeIngredientService.findFridgeIngredient(any())).willReturn(ingredients);
+        given(fridgeIngredientService.findFridgeIngredient(anyLong())).willReturn(ingredients);
 
         //when
         ResultActions perform = mockMvc.perform(get("/api/fridge").accept(MediaType.APPLICATION_JSON));
