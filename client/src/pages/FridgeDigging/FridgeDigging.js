@@ -12,13 +12,14 @@ const FridgeDigging = () => {
 
     // 무한 스크롤 관련 (Intersection Observer 사용)
     const [pageNum, setPageNum] = useState(1);
-const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const [searchResult, setSearchResult] = useState([]); // 서버 통신 후 레시피 목록을 할당할 상태
     const [sortMode, setSortMode] = useState("HEART"); // 정렬 default 값은 인기순
     const [totalNum, setTotalNum] = useState(""); // 총 레시피 순
     const [isThereSearch, setIsThereSearch] = useState(false); // 검색어 여부
     const [isThereResult, setIsThereResult] = useState(false); // 결과 값 여부
+    const [isRefreshNeeded, setIsRefreshNeeded] = useState(false); // 검색 후 새로운 검색어가 추가되었는지 확인
 
     const [searchParams, setSearchParams] = useSearchParams();
     // 어떤 컴포넌트에서든 searchParams의 키워드 값을 가져와 관련 http 요청을 보낼 수 있다.
@@ -43,7 +44,7 @@ const [isLoading, setIsLoading] = useState(false);
     useEffect(() => {
         // 상세보기에서 뒤로가기 한게 아닌 이상 검색 상태는 초기화
         if (!location.state) {
-            // console.log(`검색 상태 지우기`);
+            console.log(`검색 상태 지우기`);
             setSearchParams("");
         }
     }, [])
@@ -53,33 +54,43 @@ const [isLoading, setIsLoading] = useState(false);
         if (searchResult.length < totalNum) {
             setIsLoading(true);
         }
+        else {
+            setIsLoading(false);
+        }
     }, [searchResult, totalNum])
 
+        // 페이지 넘버, 정렬모드, 검색어 바뀔 때마다 새로 데이터 fetch
+        useEffect(() => {
+            console.log("fetch를 부르는 useEffect")
+            fetchData(pageNum);
+        }, [pageNum, sortMode, searchParams])
+
     const fetchData = async (pageNum) => {
+
         // 검색 요청 바디
         const payload = {
             title: nameSearchTerm ? nameSearchTerm : "", // 서치값 없을 때 null 요청 방지
             ingredients: tagSearchArr,
-            page: pageNum,
-            sort: sortMode
+            page: isRefreshNeeded? 1 : pageNum, // 검색어 바뀔 때 마다 페이지 넘버 초기화
+            sort: isRefreshNeeded? "HEART" : sortMode // 검색어 바뀔 때 마다 정렬모드 초기화
         }
         console.log("리퀘 바디", payload)
+
+        // 검색어 바뀔 때 마다 정렬모드, 페이지 넘버 초기화
+        if (isRefreshNeeded) {
+            setPageNum(1);
+            setSortMode("HEART");
+        }
 
         if (tagSearchArr.length > 0 || payload.title !== "") {
             setIsThereSearch(true);
             try {
-                // 결과 안에 
                 const { data } = await axios.post(`/api/recipes/search`, payload);
-                // console.log(response);
-                // console.log(response.data.data);
                 console.log("서버 데이터", data.data)
                 console.log("서버 데이터 몇개", data.pageInfo.totalElements);
                 data.pageInfo.totalElements > 0 ? setIsThereResult(true) : setIsThereResult(false);
                 setTotalNum(data.pageInfo.totalElements);
-                setSearchResult([...searchResult, ...data.data])
-                // const jsonData = await response.json();
-                // console.log(jsonData);
-                // setData(data => [...data, ...jsonData]);
+                isRefreshNeeded ? setSearchResult([...data.data]) : setSearchResult([...searchResult, ...data.data])
             }
             catch (error) {
                 console.log(error);
@@ -89,14 +100,13 @@ const [isLoading, setIsLoading] = useState(false);
         else {
             setIsThereSearch(false);
         }
+        // 추후 새로운 검색 input이 들어오는 것을 인식하기 위해 상태 초기화
+        setIsRefreshNeeded(false);
     };
-    // 페이지 넘버, 검색 값, 정렬모드 바뀔 때마다 새로 데이터 fetch
-    useEffect(() => {
-        fetchData(pageNum);
-    }, [pageNum, nameSearchTerm, tagSearchTerm, sortMode])
-    
+
+    // 더 불러오기 (페이지 수 1개 올리기);
     const loadMore = () => {
-        setPageNum(prevPageNum => prevPageNum + 1);
+        setPageNum(pageNum + 1);
     }
 
     const pageEnd = useRef();
@@ -113,27 +123,17 @@ const [isLoading, setIsLoading] = useState(false);
         }
     }, [isLoading]);
 
-    const dummyData = {
-        id: 1,
-        imagePath: "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
-        title: "백종원의 들깨칼국수칼국수",
-        memberImage: "https://i.pinimg.com/736x/81/03/37/810337c76e5b1d32c0a3ef2d376735eb.jpg",
-        memberName: "들깨러버",
-        likes: 221,
-        views: 1200,
-    }
-
     return (
         <Container>
             <SearchWrapper>
                 <Heading>
                     제목으로 레시피 검색하기
                 </Heading>
-                <NameSearchBar />
+                <NameSearchBar setIsRefreshNeeded={setIsRefreshNeeded}/>
                 <Heading>
                     재료로 레시피 검색하기
                 </Heading>
-                <TagSearchBar />
+                <TagSearchBar setIsRefreshNeeded={setIsRefreshNeeded}/>
             </SearchWrapper>
             {/* 아무 검색어도 입력하지 않았을 때 */}
             <Alert className={isThereSearch && "invisible"}> 
