@@ -31,7 +31,7 @@ const RecipeEditor = () => {
     // 해당 컴포넌트를 사용하는 페이지가 새 레시피 작성하기인지 레시피 수정하기인지 구분
     const { pathname } = useLocation();
 
-    // 페이지 나가면 작성 데이터 남지 않도록
+    // 새로 작성 페이지면 빈 input 창이 뜨도록
     useEffect(() => {
         // mount
 
@@ -40,7 +40,6 @@ const RecipeEditor = () => {
             if (pathname === "/recipes/new") {
                 dispatch(clearRecipe());
                 dispatch(clearImages());
-
             }
         }
     }, [])
@@ -225,6 +224,9 @@ const RecipeEditor = () => {
 
             const formData = new FormData(); //서버에 전달될 폼데이터
 
+            console.log("파일즈", files);
+            console.log("파일즈길이", files.length);
+
             //폼데이터에 이미지 파일 개별적으로 추가
             for (let i = 0; i < files.length; i++) {
                 formData.append('files', files[i]);
@@ -233,6 +235,8 @@ const RecipeEditor = () => {
             formData.append('requestBody', new Blob([JSON.stringify(recipe)], {
                 type: "application/json"
             }))
+
+            console.log("폼데이터", formData.files);
             // POST 요청 - 새 레시피 작성하기
             if (pathname === "/recipes/new") {
                 axios({
@@ -249,6 +253,8 @@ const RecipeEditor = () => {
                     // navigate(`/recipes/${response.data.id}`);
                     formData.delete('files');
                     formData.delete('requestBody');
+                    dispatch(clearRecipe());
+                    dispatch(clearImages());
                     alert(`성공적으로 게시되었습니다`)
                     navigate(`/recipes/${response.data.id}`)
                 })
@@ -275,6 +281,8 @@ const RecipeEditor = () => {
                     // navigate(`/recipes/${response.data.id}`);
                     formData.delete('files');
                     formData.delete('requestBody');
+                    dispatch(clearRecipe());
+                    dispatch(clearImages());
                     alert(`성공적으로 수정되었습니다`)
                     navigate(`/recipes/${response.data.id}`)
                 })
