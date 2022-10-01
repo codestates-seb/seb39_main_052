@@ -133,7 +133,7 @@ const TagSearchBar = ({ setIsRefreshNeeded }) => {
                 setSearchTags([...searchTags, el]);
             }
             else {
-                alert(`이미 등록한 재료입니다`);
+                alert(`이미 등록한 재료예요`);
             }
             setIsDropDownOpen(false);
             setCursor(-1);
@@ -149,7 +149,7 @@ const TagSearchBar = ({ setIsRefreshNeeded }) => {
                 setSearchTags([...searchTags, searchValue]);
             }
             else {
-                alert(`이미 등록한 재료입니다`)
+                alert(`이미 등록한 재료예요`)
             }
             setIsDropDownOpen(false);
             setCursor(-1);

@@ -33,12 +33,13 @@ const CommentRow = ({ comment, setIsUpdated }) => {
         })
         .then((response) => {
             console.log(response);
-            alert(`댓글이 삭제되었습니다`);
+            alert(`댓글을 삭제했어요 :)`);
             setIsUpdated(true);
         })
         .catch((error) => {
             // 예외 처리
             console.log(error.response);
+            alert(`댓글 삭제에 실패했어요ㅠㅠ`)
         })
     }
 
@@ -58,13 +59,14 @@ const CommentRow = ({ comment, setIsUpdated }) => {
         })
         .then((response) => {
             console.log(response)
-            alert(`댓글을 수정하였습니다.`)
+            alert(`댓글을 수정했어요 :)`)
             setIsEditable(false);
             setIsUpdated(true);
         })
         .catch((error) => {
             // 예외 처리
             console.log(error.response);
+            alert(`댓글 수정에 실패했어요ㅠㅠ`)
         })
     }
 

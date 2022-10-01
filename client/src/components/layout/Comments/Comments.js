@@ -52,7 +52,7 @@ const Comments = ({ id }) => {
         .then((response) => {
             console.log(response);
             setComment("");
-            alert(`댓글이 등록되었습니다.`)
+            alert(`댓글을 등록했어요! :)`)
             getCommentList();
         })
         .catch((error) => {

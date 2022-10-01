@@ -29,7 +29,7 @@ const ImageInputList = ({ stepFiles, setStepFiles }) => {
             dispatch(addElement());
         }
         else {
-            alert(`요리 순서는 10개 이하로 등록 가능합니다`);
+            alert(`요리 순서는 10개 이하로 등록 가능해요ㅠㅠ`);
         }
         // 마지막 추가된 input이 화면 안으로 들어오도록
         lastValueRef.current.scrollIntoView({

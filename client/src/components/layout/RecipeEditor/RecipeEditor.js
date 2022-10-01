@@ -255,7 +255,7 @@ const RecipeEditor = () => {
                     formData.delete('requestBody');
                     dispatch(clearRecipe());
                     dispatch(clearImages());
-                    alert(`성공적으로 게시되었습니다`)
+                    alert(`축하해요! 레시피가 등록됐어요!`)
                     navigate(`/recipes/${response.data.id}`)
                 })
                 .catch((error) => {
@@ -263,6 +263,7 @@ const RecipeEditor = () => {
                     console.log(error.response);
                     formData.delete('files');
                     formData.delete('requestBody');
+                    alert(`레시피 등록에 실패했어요ㅠㅠ`)
                 })
             }
             // else로 patch 요청
@@ -283,7 +284,7 @@ const RecipeEditor = () => {
                     formData.delete('requestBody');
                     dispatch(clearRecipe());
                     dispatch(clearImages());
-                    alert(`성공적으로 수정되었습니다`)
+                    alert(`성공적으로 수정했어요!`)
                     navigate(`/recipes/${response.data.id}`)
                 })
                 .catch((error) => {
@@ -291,6 +292,7 @@ const RecipeEditor = () => {
                     console.log(error.response);
                     formData.delete('files');
                     formData.delete('requestBody');
+                    alert(`레시피를 수정할 수 없어요ㅠㅠ`)
                 })
             }
         };

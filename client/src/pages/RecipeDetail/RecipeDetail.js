@@ -79,13 +79,13 @@ const RecipeDetail = () => {
         })
         .then((response) => {
             console.log(response);
-            alert(`레시피가 삭제되었습니다`);
+            alert(`레시피를 삭제했어요`);
             navigate(-1);
         })
         .catch((error) => {
             // 예외 처리
             console.log(error.response);
-            alert(`레시피를 삭제할 수 없습니다`);
+            alert(`레시피 삭제에 실패했습니다ㅠㅠ`);
         })
     }
 
