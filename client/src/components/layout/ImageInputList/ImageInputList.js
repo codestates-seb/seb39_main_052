@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ImageUploader from "../../common/ImageUploader/ImageUploader";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { editSteps, addStepsInput, deleteStepsInput } from "../../../features/recipeSlice";
-import { addElement } from "../../../features/imageSlice";
+import { addElement, deleteElement } from "../../../features/imageSlice";
 import { Block, Order, Input, ButtonWrapper, Button, StyledFontAwesomeIcon } from "./ImageInputListStyle";
 
 const ImageInputList = ({ stepFiles, setStepFiles }) => {
@@ -41,6 +41,7 @@ const ImageInputList = ({ stepFiles, setStepFiles }) => {
 
     const handleRemoveClick = (i) => {
         dispatch(deleteStepsInput({ index: i }));
+        dispatch(deleteElement({ index: i }));
     };
 
     return (
