@@ -81,6 +81,7 @@ export const Info = styled.div`
 
 export const PortionAndTime = styled.div`
     min-width: 60px;
+    max-width: 110px;
     height: 24px;
     border-radius: 10px;
     display: flex;
