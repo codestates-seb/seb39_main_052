@@ -27,7 +27,7 @@ const RecipeCard = ({
             <ContentWrapper>
                 <Title><Link to={recipeLink}>{title}</Link></Title>
                 <Doornob>
-                    <UserName image={memberImage} name={memberName} />
+                    <UserName image={memberImage} name={memberName} className="long"/>
                     <StyledFontAwesomeIcon icon={faGripLines}/>
                 </Doornob>
                 <LikesAndViews>

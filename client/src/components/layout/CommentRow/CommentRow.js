@@ -96,7 +96,7 @@ const CommentRow = ({ comment, setIsUpdated }) => {
                     <UserName
                         image={comment.member.profileImagePath}
                         name={comment.member.name}
-                        className="bold"
+                        className="bold red"
                     />
                     <Comment>{comment.content}</Comment>
                     <EditAndDelete isMine={comment.member.id === myId}/>
@@ -106,7 +106,7 @@ const CommentRow = ({ comment, setIsUpdated }) => {
                     <UserName
                         image={comment.member.profileImagePath}
                         name={comment.member.name}
-                        className="bold"
+                        className="short"
                     />
                     <Input 
                         className="small" 
