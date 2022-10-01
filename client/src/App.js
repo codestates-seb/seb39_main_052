@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import GlobalStyle from "./GlobalStyle";
-import { BrowserRouter, Routes, Route, useParams } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useParams, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import Nav from "./components/layout/Nav/Nav";
@@ -45,7 +45,7 @@ function App() {
             "Authorization"
           ] = `Bearer ${ACCESS_TOKEN}`; //요청헤더에 액세스 토큰 설정
 
-          console.log("App.js에서 재발급하는 ACCESS_TOKEN", ACCESS_TOKEN);
+          // console.log("App.js에서 재발급하는 ACCESS_TOKEN", ACCESS_TOKEN);
 
           //refesh로 새로받아온 액세스 토큰 리덕스에도 저장하기
           dispatch(setLoggedIn({ userToken: ACCESS_TOKEN }));
@@ -59,7 +59,7 @@ function App() {
 
   useEffect(() => {
     axios.defaults.headers.common["Authorization"] = `Bearer ${userToken}`; //요청헤더에 액세스 토큰 설정
-    console.log("가지고있는 리덕스 userToken으로 헤더에 설정", userToken);
+    // console.log("가지고있는 리덕스 userToken으로 헤더에 설정", userToken);
 
     if (isLoggedIn && userToken) {
       //새로고침하면 이전에 로그인 요청보내놓은것도 상태가 다 날라가는데.. 액세스토큰이 만료되면 재발급 받게하는 onSilentRefresh 함수를 넣지않으면
@@ -76,19 +76,19 @@ function App() {
         <GlobalStyle />
         <Nav />
         <Gnb />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<LogIn />} />
-          <Route path="/signup" element={<SignUpForm />} />
-          <Route path="/recipes/new" element={<NewRecipe />} />
-          <Route path="/auth/redirect" element={<OAuth2RedirectHandler />} />
-          <Route path="/recipes/edit" element={<EditRecipe />} />
-          <Route path="/recipes/:id" element={<RecipeDetail />} />
-          <Route path="/search" element={<FridgeDigging />} />
-          <Route path="/myfridge" element={<MyFridge />} />
-          <Route path="/mypage" element={<MyPage />} />
-        </Routes>
-        {/* <FloatingAction /> */}
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<LogIn />} />
+              <Route path="/signup" element={<SignUpForm />} />
+              <Route path="/recipes/new" element={<NewRecipe />} />
+              <Route path="/auth/redirect" element={<OAuth2RedirectHandler />} />
+              <Route path="/recipes/edit" element={<EditRecipe />} />
+              <Route path="/recipes/:id" element={<RecipeDetail />} />
+              <Route path="/search" element={<FridgeDigging />} />
+              <Route path="/myfridge" element={<MyFridge />} />
+              <Route path="/mypage" element={<MyPage />} />
+            </Routes>
+          {/* <FloatingAction /> */}
       </BrowserRouter>
     </>
   );
