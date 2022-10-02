@@ -10,19 +10,29 @@ export const Input = styled.input`
         height: 36px;
         border-radius: 8px;
     }
-    &.small {
-        height: 24px;
+    /* &.small {
+        height: 36px;
         border-radius: 6px;
         margin: 0 8px 0 6px;
         border: 1px solid var(--primary-500);
         padding-top: 1px;
-    }
+    } */
+`
+
+export const TextArea = styled.textarea`
+    flex-grow: 1;
+    padding: 2px 8px 0 8px;
+    height: 36px;
+    border-radius: 6px;
+    margin: 0 8px 0 6px;
+    border: 1px solid var(--primary-500);
+    display: flex;
 `
 
 export const CommentWrapper = styled.div`
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     margin: 0 0 8px 4px;
     font-size: 13px;
@@ -31,18 +41,30 @@ export const CommentWrapper = styled.div`
 export const Comment = styled.div`
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
     justify-content: flex-start;
-    margin: 0 0 0 16px;
-    width: 65%;
-    height: 24px;
+    margin: 0 0 0 8px;
+    width: 58%;
+    height: 36px;
+`
+
+export const Time = styled.div`
+    font-size: 12px;
+    width: 56px;
+    display: flex;
+    justify-content: center;
+    color: var(--fridge-800);
 `
 
 export const ButtonLikeWrapper = styled.div`
     display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    width: 68px;
+    flex-direction: column;
+    align-items: flex-end;
+    /* justify-content: flex-end; */
+    width: 28px;
+    > div:first-of-type {
+        margin-bottom: 4px;
+    }
 `
 
 export const ButtonLike = styled.div`
@@ -51,12 +73,12 @@ export const ButtonLike = styled.div`
     align-items: center;
     justify-content: center;
     font-size: 12px;
-    margin: 0 4px 0 4px;
-    color: var(--gray-800);
+    color: var(--gray-600);
     cursor: pointer;
     
     &:hover {
-        color: var(--black)
+        color: var(--black);
+        text-decoration: underline;
     }
 
     &.invisible {

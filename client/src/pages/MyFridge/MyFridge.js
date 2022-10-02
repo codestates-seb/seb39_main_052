@@ -45,6 +45,7 @@ const MyFridge = () => {
         }
         catch (error) {
             console.log(error);
+            dispatch(clearFridge());
             // console.log("실패");
             // alert("냉장고 정보를 가져오는데 실패했어요ㅠㅠ")
         }

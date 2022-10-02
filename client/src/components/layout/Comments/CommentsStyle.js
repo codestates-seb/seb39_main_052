@@ -6,7 +6,7 @@ export const Container = styled.div`
     /* background-color: var(--primary-200); */
     background-color: var(--gray-200);
     width: 548px;
-    max-height: 480px;
+    max-height: 600px;
     margin: 54px 0 32px 0;
     padding: 20px 20px;
     border-radius: 10px;

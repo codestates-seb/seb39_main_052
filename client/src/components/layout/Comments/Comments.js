@@ -70,7 +70,7 @@ const Comments = ({ id }) => {
                     onChange={(e) => setComment(e.target.value)}
                     onKeyPress={handleEnter}
                     type='text'
-                    maxLength='28'
+                    maxLength='46'
                     className="large"
                     value={comment}
                 />
