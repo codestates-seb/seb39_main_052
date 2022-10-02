@@ -6,7 +6,7 @@ export const SearchBar = styled.div`
   align-items: center;
   justify-content: center;
   /* width: 68%; //기존 */
-  width: 95%;
+  /* width: 95%; */
   height: 48px;
   border: 2px solid var(--fridge-300);
   background-color: var(--gray-050);
