@@ -1,5 +1,4 @@
 import GeneralModal from "./GeneralModal";
-
 import ModalSearchBar from "../ModalSearchBar.js/ModalSearchBar";
 import RecipeCard from "../RecipeCard/RecipeCard";
 import {
@@ -114,20 +113,26 @@ const SearchModal = ({ handleClose }) => {
       <ModalSearchBarWrapper>
         <ModalSearchBar />
       </ModalSearchBarWrapper>
-      <RecipeCardWrapper>
-        {dummyData.map((data) => (
-          <RecipeCard
-            imagePath={data.imagePath}
-            title={data.title}
-            memberName={data.memberName}
-            memberImage={data.memberImage}
-            likes={data.likes}
-            views={data.views}
-          />
-        ))}
-      </RecipeCardWrapper>
+      {
+        <RecipeCardWrapper>
+          {searchResult.map((el) => (
+            <RecipeCard
+              detectOnClick={handleClose}
+              key={el.id}
+              id={el.id}
+              imagePath={el.imagePath}
+              title={el.title}
+              memberName={el.member.name}
+              memberImage={el.member.profileImagePath}
+              heartCounts={el.heartCounts}
+              views={el.view}
+            />
+          ))}
+        </RecipeCardWrapper>
+      }
       <GeneralButtonWrapper>
         <GeneralButton
+          onClick={clickShowMore}
           className="small"
           backgroundColor="var(--mint-400)"
           hoverBackgroundColor={"var(--mint-500)"}
