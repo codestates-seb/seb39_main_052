@@ -1,13 +1,13 @@
 import styled from "styled-components";
 
 export const ProfileWrapper = styled.div`
-  padding: 16px;
+  /* padding: 16px; */
   display: flex;
   flex-direction: column;
   align-items: center;
 
   > h2 {
-    padding-bottom: 16px;
+    padding-bottom: 30px;
   }
   > div.cancel_done_button_wrapper {
     display: flex;
