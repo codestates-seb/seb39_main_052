@@ -17,16 +17,13 @@ import {
 import axios from "axios";
 
 const SearchModal = ({ handleClose }) => {
-  // 나중에 모달창에 검색어 불러올때 아래 코드로 불러오시면 됩니당
-  const [searchParams, setSearchParams] = useSearchParams();
-  const searchTerm = searchParams.get("keyword");
-  // 예) axios(`api/search?keyword=${searchTerm}`)
   const [isThereInput, setIsThereInput] = useState(false); // 검색어 있는지
   const [isThereResult, setIsThereResult] = useState(false); // 검색 결과 값 존재하는지
   const [searchResult, setSearchResult] = useState([]); //서버에서 받아온 레시피 목록 데이터 저장
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchTerm = searchParams.get("keyword");
   const navigate = useNavigate();
-  // const currentSearch = useSearch();
-  // const currentPage = currentSearch.page ?? 1;
+
   const { search } = useLocation();
 
   //레시피 검색 요청
@@ -80,29 +77,26 @@ const SearchModal = ({ handleClose }) => {
   }, [searchTerm]);
 
   //더보기 버튼 누르면 모달 닫히기 + 검색어 있는 채로 navigate 하기
-  // search?keyword=${}
   const clickShowMore = () => {
-    // navigate(`/search?keyword=${searchTerm}`);
+    console.log("searchTerm값", searchTerm);
+    navigate(`/search?keyword=${searchTerm}`); //냉장고파먹기 페이지에서 searchParams 초기화해주는 코드 지우니 잘됨!
+
     // navigate({
     //   pathname: "search",
     //   search: `?keyword=${searchTerm}`,
-    // }); //안됨 /search 로 초기화되서 navigate됨
-    // navigate({
-    //   pathname: "search",
-    //   search: {
-    //     keyword: `${searchTerm}`,
-    //   },
-    // }); //search.startsWith is not a function 에러
+    // }); //똑같이 작동
 
-    console.log("searchTerm값", searchTerm);
-    console.log("로케이션값", search);
     // const params = { keyword: searchTerm };
     // navigate({
     //   pathname: "search",
     //   search: `?${createSearchParams({ keyword: searchTerm })}`,
-    // }); //얘도 안됨. /search로 초기화되서 감.
+    // }); //얘도 잘 작동
 
-    navigate(`search${search}`);
+    //location 정보로 연결하기
+    //location 값 ?keyword=3 으로 연결
+    // console.log("로케이션값", search);
+    // navigate(`search${search}`); //잘 됨
+
     handleClose();
   };
 
