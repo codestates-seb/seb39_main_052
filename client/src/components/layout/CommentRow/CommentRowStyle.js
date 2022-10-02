@@ -1,24 +1,6 @@
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-
-export const Input = styled.input`
-    flex-grow: 1;
-    padding: 0px 8px 0 8px;
-    margin: 0 8px 0 0;
-    &.large {
-        height: 36px;
-        border-radius: 8px;
-    }
-    /* &.small {
-        height: 36px;
-        border-radius: 6px;
-        margin: 0 8px 0 6px;
-        border: 1px solid var(--primary-500);
-        padding-top: 1px;
-    } */
-`
-
 export const TextArea = styled.textarea`
     flex-grow: 1;
     padding: 2px 8px 0 8px;
@@ -34,8 +16,15 @@ export const CommentWrapper = styled.div`
     flex-direction: row;
     align-items: flex-start;
     justify-content: space-between;
-    margin: 0 0 8px 4px;
+    margin: 0 0 0 4px;
+    padding: 6px 0 2px 0;
     font-size: 13px;
+    :not(:last-of-type) {
+        border-bottom: 1px solid var(--gray-200);
+    }
+    &.editMode {
+        border-bottom: none;
+    }
 `
 
 export const Comment = styled.div`

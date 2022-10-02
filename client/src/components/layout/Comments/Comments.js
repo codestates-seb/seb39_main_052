@@ -78,17 +78,14 @@ const Comments = ({ id }) => {
             </InputWrapper>
             {commentList.map((comment, idx) => {
                 return (
-                    <CommentRow key={idx} comment={comment} setIsUpdated={setIsUpdated}/>
+                    <CommentRow 
+                        key={idx}
+                        comment={comment}
+                        setIsUpdated={setIsUpdated}
+                        page={page}
+                    />
                 )
             })}
-            {/* <CommentRow>
-                <UserName image={dummy.profile} name={dummy.username} className="bold"></UserName>
-                <Input className="small" type='text' maxLength='28' />
-                <GeneralButton className={`xsmall gray`}><StyledFontAwesomeIcon icon={faXmark} /></GeneralButton>
-                <GeneralButton className={`xsmall`} margin={"0 0 0 6px"} onClick={() => handleEdit(13)}>
-                    <StyledFontAwesomeIcon icon={faCheck} />
-                </GeneralButton>
-            </CommentRow> */}
       {/* limit보다 적은 수의 댓글이 있으면 페이지네이션 렌더링 필요 없음 */}
       {total > limit && (
         <Pagination

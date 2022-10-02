@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useSelector } from "react-redux";
 import { CommentWrapper, Input, Comment, ButtonLikeWrapper, ButtonLike, StyledFontAwesomeIcon, Time, TextArea } from "./CommentRowStyle";
 import UserName from "../../common/UserName/UserName";
@@ -7,9 +7,14 @@ import useConfirm from "../../../hooks/useConfirm";
 import { faXmark, faCheck } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
-const CommentRow = ({ comment, setIsUpdated }) => {
+const CommentRow = ({ comment, setIsUpdated, page }) => {
     const [isEditable, setIsEditable] = useState(false);
     const [editedComment, setEditedComment] = useState("");
+
+    // 댓글 수정 모드에서 페이지 변경 시 수정 모드 끄기
+    useEffect(() => {
+        setIsEditable(false);
+    }, [page])
 
     // 로그인 시 리덕스에 저장한 내 아이디
     const myId = useSelector((state) => {
@@ -33,12 +38,7 @@ const CommentRow = ({ comment, setIsUpdated }) => {
         }
         interval = seconds / 86400;
         if (interval > 1) {
-            if (Math.floor(interval) > 1) {
-                return Math.floor(interval) + "일 전";
-            }
-            else {
-                return "어제"
-            }
+            return Math.floor(interval) + "일 전";
         }
         interval = seconds / 3600;
         if (interval > 1) {
@@ -144,7 +144,7 @@ const CommentRow = ({ comment, setIsUpdated }) => {
                 </CommentWrapper>
                 :
                 // 작성글을 input 창에 넣어 수정 가능하게 하기
-                <CommentWrapper>
+                <CommentWrapper className="editMode">
                     <UserName
                         image={comment.member.profileImagePath}
                         name={comment.member.name}
