@@ -3,6 +3,8 @@ package com.seb39.myfridge.heart.controller;
 import com.seb39.myfridge.auth.annotation.AuthMemberId;
 import com.seb39.myfridge.heart.dto.HeartResponse;
 import com.seb39.myfridge.heart.service.HeartService;
+import com.seb39.myfridge.member.entity.Member;
+import com.seb39.myfridge.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;

@@ -59,7 +59,7 @@ public class RecipeController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteRecipe(@PathVariable("id") @Positive Long id,
-                                       @AuthMemberId Long memberId) {
+                                               @AuthMemberId Long memberId) {
 
         recipeService.deleteRecipe(id, memberId);
         return new ResponseEntity(HttpStatus.OK);
@@ -79,10 +79,11 @@ public class RecipeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RecipeDto.ResponseDetail> findRecipe(@PathVariable("id") @Positive Long id) {
+    public ResponseEntity<RecipeDto.ResponseDetail> findRecipe(@PathVariable("id") @Positive Long id, @AuthMemberId Long memberId) {
         Recipe recipe = recipeService.findRecipeWithDetails(id);
         int heartCounts = heartService.findHeartCounts(id);
-        RecipeDto.ResponseDetail response = recipeMapper.recipeToRecipeResponseDetail(recipe, heartCounts);
+        boolean heartExist = memberId != null && heartService.existHeart(memberId, id);
+        RecipeDto.ResponseDetail response = recipeMapper.recipeToRecipeResponseDetail(recipe, heartCounts, heartExist);
         return ResponseEntity.ok(response);
     }
 

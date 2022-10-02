@@ -41,6 +41,11 @@ public class HeartService {
         return heartRepository.findByMemberIdAndRecipeIds(memberId,recipeIds);
     }
 
+    public boolean existHeart(Long memberId, Long recipeId){
+        return heartRepository.existsByMemberIdAndRecipeId(memberId,recipeId);
+    }
+
+
     private Heart findHeart(Long memberId, Long recipeId){
         return heartRepository.findByMemberIdAndRecipeId(memberId, recipeId)
                 .orElseThrow(()-> new IllegalArgumentException("heart not exist. member = " + memberId + " recipe = " + recipeId));

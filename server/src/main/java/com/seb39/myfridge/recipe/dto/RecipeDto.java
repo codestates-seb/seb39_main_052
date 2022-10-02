@@ -121,9 +121,10 @@ public class RecipeDto {
         private List<Step> steps;
         private MemberDto.Response member;
         private int heartCounts;
+        private boolean heartExist;
 
         @Builder
-        public ResponseDetail(Long id, String title, int portion, int view, String time, LocalDateTime createdAt, LocalDateTime lastModifiedAt, ImageInfo imageInfo, List<Ingredient> ingredients , List<Step> steps, MemberDto.Response member, int heartCounts) {
+        private ResponseDetail(Long id, String title, int portion, int view, String time, LocalDateTime createdAt, LocalDateTime lastModifiedAt, ImageInfo imageInfo, List<Ingredient> ingredients , List<Step> steps, MemberDto.Response member, int heartCounts, boolean heartExist) {
             this.id = id;
             this.title = title;
             this.portion = portion;
@@ -136,6 +137,7 @@ public class RecipeDto {
             this.steps = steps;
             this.member = member;
             this.heartCounts = heartCounts;
+            this.heartExist = heartExist;
         }
     }
 

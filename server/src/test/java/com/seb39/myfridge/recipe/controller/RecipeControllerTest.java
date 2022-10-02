@@ -196,20 +196,20 @@ class RecipeControllerTest {
 
         Member member = memberRepository.findByEmail("test@email.com").get();
 
-        RecipeDto.ResponseDetail response = new RecipeDto.ResponseDetail(
-                1L,
-                "라면 맛있게 끓이는 법",
-                1,
-                0,
-                "5분",
-                LocalDateTime.now(),
-                LocalDateTime.now(),
-                imageInfo0,
-                ingredients,
-                stepList,
-                new MemberDto.Response(member),
-                0
-        );
+        RecipeDto.ResponseDetail response = RecipeDto.ResponseDetail.builder()
+                .id(1L)
+                .title("라면 맛있게 끓이는 법")
+                .portion(1)
+                .view(0)
+                .time("5분")
+                .createdAt(LocalDateTime.now())
+                .lastModifiedAt(LocalDateTime.now())
+                .imageInfo(imageInfo0)
+                .ingredients(ingredients)
+                .steps(stepList)
+                .member(new MemberDto.Response(member))
+                .heartCounts(0)
+                .build();
 
         willReturn(new Recipe())
                 .given(recipeMapper).recipePostToRecipe(any());
@@ -259,7 +259,8 @@ class RecipeControllerTest {
                                         fieldWithPath("member.id").type(JsonFieldType.NUMBER).description("작성자 식별자"),
                                         fieldWithPath("member.name").type(JsonFieldType.STRING).description("작성자 이름"),
                                         fieldWithPath("member.profileImagePath").type(JsonFieldType.STRING).description("작성자 프로필 이미지 경로").optional(),
-                                        fieldWithPath("heartCounts").type(JsonFieldType.NUMBER).description("받은 하트 개수")
+                                        fieldWithPath("heartCounts").type(JsonFieldType.NUMBER).description("받은 하트 개수"),
+                                        fieldWithPath("heartExist").type(JsonFieldType.BOOLEAN).description("(로그인 사용자의 경우) 자신이 하트를 눌렀는지 여부")
                                 )
                         )
                 ));
@@ -365,20 +366,21 @@ class RecipeControllerTest {
 
         Member member = memberRepository.findByEmail("test@email.com").get();
 
-        RecipeDto.ResponseDetail response = new RecipeDto.ResponseDetail(
-                1L,
-                "라면 맛있게 끓이는 법",
-                1,
-                0,
-                "5분",
-                LocalDateTime.now(),
-                LocalDateTime.now(),
-                imageInfo0,
-                ingredients,
-                stepList,
-                new MemberDto.Response(member),
-                0
-        );
+        RecipeDto.ResponseDetail response = RecipeDto.ResponseDetail.builder()
+                .id(1L)
+                .title("라면 맛있게 끓이는 법")
+                .portion(1)
+                .view(0)
+                .time("5분")
+                .createdAt(LocalDateTime.now())
+                .lastModifiedAt(LocalDateTime.now())
+                .imageInfo(imageInfo0)
+                .ingredients(ingredients)
+                .steps(stepList)
+                .member(new MemberDto.Response(member))
+                .heartCounts(0)
+                .build();
+
         willReturn(new Recipe()).given(recipeMapper).recipePatchToRecipe(Mockito.any(RecipeDto.Patch.class));
 //        given(recipeMapper.recipePatchToRecipe(Mockito.any(RecipeDto.Patch.class))).willReturn(new Recipe());
         given(recipeService.updateRecipe(any(), anyList(), anyLong(), anyList(), anyList())).willReturn(new Recipe());
@@ -434,7 +436,8 @@ class RecipeControllerTest {
                                         fieldWithPath("member.id").type(JsonFieldType.NUMBER).description("작성자 식별자"),
                                         fieldWithPath("member.name").type(JsonFieldType.STRING).description("작성자 이름"),
                                         fieldWithPath("member.profileImagePath").type(JsonFieldType.STRING).description("작성자 프로필 이미지 경로").optional(),
-                                        fieldWithPath("heartCounts").type(JsonFieldType.NUMBER).description("받은 하트 개수")
+                                        fieldWithPath("heartCounts").type(JsonFieldType.NUMBER).description("받은 하트 개수"),
+                                        fieldWithPath("heartExist").type(JsonFieldType.BOOLEAN).description("(로그인 사용자의 경우) 자신이 하트를 눌렀는지 여부")
                                 )
                         )
                 ));
@@ -585,7 +588,8 @@ class RecipeControllerTest {
                                         fieldWithPath("member.id").type(JsonFieldType.NUMBER).description("작성자 식별자"),
                                         fieldWithPath("member.name").type(JsonFieldType.STRING).description("작성자 이름"),
                                         fieldWithPath("member.profileImagePath").type(JsonFieldType.STRING).description("작성자 프로필 이미지 경로").optional(),
-                                        fieldWithPath("heartCounts").type(JsonFieldType.NUMBER).description("받은 하트 개수")
+                                        fieldWithPath("heartCounts").type(JsonFieldType.NUMBER).description("받은 하트 개수"),
+                                        fieldWithPath("heartExist").type(JsonFieldType.BOOLEAN).description("(로그인 사용자의 경우) 자신이 하트를 눌렀는지 여부")
                                 )
                         )
                 ));

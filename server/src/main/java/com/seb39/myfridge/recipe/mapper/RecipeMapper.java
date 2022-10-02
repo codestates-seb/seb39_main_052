@@ -56,7 +56,7 @@ public interface RecipeMapper {
         return recipeIngredients;
     }
 
-    default RecipeDto.ResponseDetail recipeToRecipeResponseDetail(Recipe recipe, int heartCounts) {
+    default RecipeDto.ResponseDetail recipeToRecipeResponseDetail(Recipe recipe, int heartCounts, boolean heartExist) {
         return RecipeDto.ResponseDetail.builder()
                 .id(recipe.getId())
                 .createdAt(recipe.getCreatedAt())
@@ -70,11 +70,12 @@ public interface RecipeMapper {
                 .steps(stepsToDto(recipe.getSteps()))
                 .member(new MemberDto.Response(recipe.getMember()))
                 .heartCounts(heartCounts)
+                .heartExist(heartExist)
                 .build();
     }
 
     default RecipeDto.ResponseDetail recipeToRecipeResponseDetail(Recipe recipe) {
-        return recipeToRecipeResponseDetail(recipe,0);
+        return recipeToRecipeResponseDetail(recipe,0, false);
     }
 
     default Recipe recipePatchToRecipe(RecipeDto.Patch requestBody) {
