@@ -5,6 +5,7 @@ import {
   RecipeCardWrapper,
   ModalSearchBarWrapper,
   GeneralButtonWrapper,
+  NoticeMsg,
 } from "./SearchModalStyle";
 import GeneralButton from "../../common/Button/GeneralButton";
 import { useEffect, useState } from "react";
@@ -17,7 +18,7 @@ import {
 import axios from "axios";
 
 const SearchModal = ({ handleClose }) => {
-  const [isThereInput, setIsThereInput] = useState(false); // 검색어 있는지
+  const [isThereInput, setIsThereInput] = useState(false); // 검색어 input 있는지
   const [isThereResult, setIsThereResult] = useState(false); // 검색 결과 값 존재하는지
   const [searchResult, setSearchResult] = useState([]); //서버에서 받아온 레시피 목록 데이터 저장
   const [searchParams, setSearchParams] = useSearchParams();
@@ -107,8 +108,21 @@ const SearchModal = ({ handleClose }) => {
       <ModalSearchBarWrapper>
         <ModalSearchBar />
       </ModalSearchBarWrapper>
+      {/* 검색어 input 없을때 */}
+      <NoticeMsg className={isThereInput && "invisible"}>
+        검색어를 입력하여 원하는 레시피를 찾아보세요!
+      </NoticeMsg>
+      {/* 검색어 input은 했는데 검색 결과값 없을때 */}
+      <NoticeMsg
+        className={!isThereInput || isThereResult ? "invisible" : null}
+      >
+        {`검색어를 찾을 수 없어요 ㅠㅠ \n 검색 범위를 넓혀 보는건 어때요?`}
+      </NoticeMsg>
+      {/* 검색어 input했고 검색결과 있어야지 레시피카드 + 더보기 버튼 띄우기 */}
       {
-        <RecipeCardWrapper>
+        <RecipeCardWrapper
+          className={!isThereInput || !isThereResult ? "invisible" : null}
+        >
           {searchResult.map((el) => (
             <RecipeCard
               detectOnClick={handleClose}
@@ -124,7 +138,9 @@ const SearchModal = ({ handleClose }) => {
           ))}
         </RecipeCardWrapper>
       }
-      <GeneralButtonWrapper>
+      <GeneralButtonWrapper
+        className={!isThereInput || !isThereResult ? "invisible" : null}
+      >
         <GeneralButton
           onClick={clickShowMore}
           className="small"
