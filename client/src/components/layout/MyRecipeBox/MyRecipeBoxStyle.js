@@ -5,6 +5,10 @@ export const RecipeFrameOuterContainer = styled.div`
   background-color: var(--gray-100);
   border-radius: 10px;
   padding: 16px;
+  min-height: 577px;
+  /* @media ${({ theme }) => theme.device.mobile} {
+    min-height: 450px;
+  } */
 `;
 
 export const SortingTabWrapper = styled.div`

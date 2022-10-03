@@ -6,10 +6,15 @@ export const CommentsBoxContainer = styled.div`
   border-radius: 10px;
   padding: 16px;
 `;
+
 export const CommentsCollection = styled.div`
   display: flex;
   justify-content: center;
   font-size: 14px;
+  min-height: 416px;
+  @media ${({ theme }) => theme.device.mobile} {
+    min-height: 450px;
+  }
 
   //each 댓글 박스
   & > div > div {
@@ -23,6 +28,10 @@ export const CommentsCollection = styled.div`
     }
     //박스 높이 넘치면 ... 으로 나타내려고 height 지정 2칸 height 56px 넘어가면 ...으로 나타내기
     /* height: 56px; */
+
+    @media ${({ theme }) => theme.device.mobile} {
+      min-width: 268px;
+    }
   }
 
   & > div > div > span {

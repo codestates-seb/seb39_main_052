@@ -146,12 +146,12 @@ const MyRecipeBox = ({ timeSince }) => {
             </SpanWrapper>
           </RecipeFrame>
         ))}
-        <Pagination
-          page={page}
-          setPage={setPage}
-          totalPages={totalPages}
-        ></Pagination>
       </RecipeFrameOuterContainer>
+      <Pagination
+        page={page}
+        setPage={setPage}
+        totalPages={totalPages}
+      ></Pagination>
     </>
   );
 };

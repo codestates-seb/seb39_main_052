@@ -7,9 +7,14 @@ export const RecipeFrameContainer = styled.div`
   :not(:last-of-type) {
     border-bottom: solid 1px var(--gray-300);
   }
+  min-width: 464px;
+
+  @media ${({ theme }) => theme.device.mobile} {
+    min-width: 268px;
+  }
 `;
 export const DisplayImg = styled.img`
-  width: 100px;
+  min-width: 100px;
   height: 100px;
   flex-basis: 20%;
   cursor: pointer;
