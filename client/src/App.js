@@ -18,6 +18,7 @@ import MyFridge from "./pages/MyFridge/MyFridge";
 import MyPage from "./pages/MyPage/MyPage";
 import axios from "axios";
 import { setLoggedIn } from "./features/userSlice";
+import Footer from "./components/layout/Footer/Footer";
 
 function App() {
   const dispatch = useDispatch(); //for redux dispatch
@@ -90,6 +91,7 @@ function App() {
             </Routes>
           {/* <FloatingAction /> */}
       </BrowserRouter>
+      <Footer />
     </>
   );
 }

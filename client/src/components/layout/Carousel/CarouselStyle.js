@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import Slider from "react-slick";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-// 커스텀 화살표
 export const StyledSlider = styled(Slider)`
+    // 커스텀 화살표
     .slick-arrow {
         display: flex;
         z-index: 10;
@@ -44,7 +44,7 @@ export const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
 
 export const Container = styled.div`
     width: 800px;
-    margin: 0 0 0px 24px;
+    margin: 0 0 0px 0px;
     /* overflow: hidden; */
     @media ${({ theme }) => theme.device.mobile} {
         width: 320px;
@@ -58,7 +58,6 @@ export const RecipeWrapper = styled.div`
     width: 180px;
     justify-content: center;
     align-items: center;
-    margin: 0 24px 0 0;
     @media ${({ theme }) => theme.device.mobile} {
         margin: 0 8px 0 0;
         width: 150px;
