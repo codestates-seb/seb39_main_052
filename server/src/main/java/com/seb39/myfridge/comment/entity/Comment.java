@@ -43,4 +43,9 @@ public class Comment extends BaseTimeEntity {
     public void updateContent(String content){
         this.content = content;
     }
+
+    public void verifyWriter(Long memberId){
+        if(!this.member.getId().equals(memberId))
+            throw new IllegalArgumentException("해당 Comment의 작성자가 아닙니다. commentId = " + this.getId() + " memberId = " + memberId);
+    }
 }
