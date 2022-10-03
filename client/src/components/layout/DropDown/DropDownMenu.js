@@ -16,7 +16,6 @@ import {
   Ul,
   Li,
 } from "./DropDownMenuStyle";
-import { useState } from "react";
 
 const DropDownMenu = ({ profileIconPhoto }) => {
   const dropdownRef = useRef(null);
@@ -25,10 +24,6 @@ const DropDownMenu = ({ profileIconPhoto }) => {
     setUserIsOpen(!userIsOpen);
   };
   // console.log("userIsOpen?", userIsOpen);
-
-  //내프로필이면 메뉴탭 0번째
-  //마이페이지이면 메뉴탭 1번째
-  const [currentTab, setCurrentTab] = useState(0);
 
   return (
     <DropDownContainer className="dropdown_container">
