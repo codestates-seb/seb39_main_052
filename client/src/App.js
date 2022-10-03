@@ -84,7 +84,7 @@ function App() {
     <>
       <BrowserRouter>
         <GlobalStyle />
-        <Nav />
+        {/* <Nav /> */}
         <Gnb />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -98,7 +98,7 @@ function App() {
           <Route path="/myfridge" element={<MyFridge />} />
           {/* <Route path="/mypage" element={<MyPage />} /> */}{" "}
           {/* 기존 마이페이지 메뉴탭에 useParams 적용 이전. 마이페이지 누르면 맨 처음 내프로필 */}
-          <Route path="/mypage/:id" element={<MenuTab />} />
+          <Route path="/mypage/:id" element={<MyPage />} />
         </Routes>
         {/* <FloatingAction /> */}
       </BrowserRouter>

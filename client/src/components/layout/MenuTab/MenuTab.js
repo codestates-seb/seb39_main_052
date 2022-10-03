@@ -6,7 +6,6 @@ import MyProfile from "../MyProfile/MyProfile";
 import MyRecipeBox from "../MyRecipeBox/MyRecipeBox";
 import MyRecipeLikedBox from "../MyRecipeLikedBox/MyRecipeLikedBox";
 import {
-  MyPageContainer,
   MenuTabContainer,
   Menu,
   Li,
@@ -88,36 +87,34 @@ const MenuTab = () => {
   };
 
   return (
-    <MyPageContainer>
-      <MenuTabContainer>
-        <Menu className="menu">
-          {menuArr.map((menu, idx) => (
-            //기존 menuTab에 useParams 적용 이전
-            // <Li
-            //   key={idx}
-            //   onClick={() => selectMenuHandler(idx)}
-            //   isFocused={idx === currentTab}
-            // >
-            //   {menu.name}
-            // </Li>
-            <Li key={idx} isFocused={idx === menu.id}>
-              {/* 탭 메뉴 요소에 링크달기 */}
-              {/* <Link to={`/mypage${menuArr[idx].pathname}`}>{menu.name}</Link> */}
-              {/* 링크랑 컴포넌트 탭 안에있는 컨텐트 연결 */}
-              <Link to={`/mypage/${menu.id}`}>{menu.name}</Link>
-            </Li>
-          ))}
-        </Menu>
-        <MenuTitle>
-          {/* {menuArr[currentTab].title} */}
-          {menuArr[id].title}
-        </MenuTitle>
-        <MenuContent className="MenuContent">
-          {/* {menuArr[currentTab].content} */}
-          {menuArr[id].content}
-        </MenuContent>
-      </MenuTabContainer>
-    </MyPageContainer>
+    <MenuTabContainer>
+      <Menu className="menu">
+        {menuArr.map((menu, idx) => (
+          //기존 menuTab에 useParams 적용 이전
+          // <Li
+          //   key={idx}
+          //   onClick={() => selectMenuHandler(idx)}
+          //   isFocused={idx === currentTab}
+          // >
+          //   {menu.name}
+          // </Li>
+          <Li key={idx} isFocused={idx === menu.id}>
+            {/* 탭 메뉴 요소에 링크달기 */}
+            {/* <Link to={`/mypage${menuArr[idx].pathname}`}>{menu.name}</Link> */}
+            {/* 링크랑 컴포넌트 탭 안에있는 컨텐트 연결 */}
+            <Link to={`/mypage/${menu.id}`}>{menu.name}</Link>
+          </Li>
+        ))}
+      </Menu>
+      <MenuTitle>
+        {/* {menuArr[currentTab].title} */}
+        {menuArr[id].title}
+      </MenuTitle>
+      <MenuContent className="MenuContent">
+        {/* {menuArr[currentTab].content} */}
+        {menuArr[id].content}
+      </MenuContent>
+    </MenuTabContainer>
   );
 };
 
