@@ -26,6 +26,10 @@
     --mint-400: #d0efef;
     --mint-500: #a0dfdf;
     --mint-600: #80b2b2;
+    --mint-700: #6c9d9d;
+    --mint-800: #548282;
+    --mint-900: #3c6262;
+    --mint-950: #223d3d;
     --mintgreen-300: #f1f6f3;
     --mintgreen-400: #e2ece8;
     --mintgreen-500: #cfe0d8;
@@ -40,6 +44,7 @@
     --red-500: #df2541;
     --red-600: #b21e34;
     --red-700: #861627;
+    --red-800: #5a0b16;
     --blue-050: #E6F2FF;
     --blue-100: #BBDCFF;
     --blue-200: #8FC7FF;
