@@ -37,12 +37,12 @@ const FridgeDigging = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        // 상세보기에서 뒤로가기 한게 아닌 이상 검색 상태는 초기화
-        if (!location.state) {
-            setSearchParams("");
-        }
-    }, [])
+    // useEffect(() => {
+    //     // 상세보기에서 뒤로가기 한게 아닌 이상 검색 상태는 초기화
+    //     if (!location.state) {
+    //         setSearchParams("");
+    //     }
+    // }, [])
 
     // 현재 보여지는 검색 결과 수가 총 결과 수보다 작을 때만 로딩 화면 뜨기
     useEffect(() => {
