@@ -3,6 +3,7 @@ import ModalSearchBar from "../ModalSearchBar.js/ModalSearchBar";
 import RecipeCard from "../RecipeCard/RecipeCard";
 import {
   RecipeCardWrapper,
+  RecipeCardWrapperMobile,
   ModalSearchBarWrapper,
   GeneralButtonWrapper,
   NoticeMsg,
@@ -16,6 +17,7 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import axios from "axios";
+import RecipeCardMobile from "../RecipeCardMobile/RecipeCardMobile";
 
 const SearchModal = ({ handleClose }) => {
   const [isThereInput, setIsThereInput] = useState(false); // 검색어 input 있는지
@@ -138,6 +140,24 @@ const SearchModal = ({ handleClose }) => {
           ))}
         </RecipeCardWrapper>
       }
+      {/* 모바일 버전 레시피 카드 */}
+      <RecipeCardWrapperMobile
+        className={!isThereInput || !isThereResult ? "invisible" : null}
+      >
+        {searchResult.map((el) => (
+          <RecipeCardMobile
+            detectOnClick={handleClose}
+            key={el.id}
+            id={el.id}
+            imagePath={el.imagePath}
+            title={el.title}
+            memberName={el.member.name}
+            memberImage={el.member.profileImagePath}
+            heartCounts={el.heartCounts}
+            views={el.view}
+          />
+        ))}
+      </RecipeCardWrapperMobile>
       <GeneralButtonWrapper
         className={!isThereInput || !isThereResult ? "invisible" : null}
       >
