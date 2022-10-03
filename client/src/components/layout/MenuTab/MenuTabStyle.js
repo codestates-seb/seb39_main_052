@@ -1,5 +1,13 @@
 import styled, { css } from "styled-components";
 
+export const MyPageContainer = styled.div`
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+`;
+
 export const MenuTabContainer = styled.div`
   width: 560px;
   height: fit-content;
