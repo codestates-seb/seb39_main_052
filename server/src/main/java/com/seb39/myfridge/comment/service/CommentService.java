@@ -49,27 +49,21 @@ public class CommentService {
 
     @Transactional
     public Comment updateComment(Long commentId, String content, Long memberId) {
-        verifyWriter(commentId, memberId);
         Comment comment = findComment(commentId);
+        comment.verifyWriter(memberId);
         comment.updateContent(content);
         return comment;
+    }
+
+    @Transactional
+    public void deleteComment(Long commentId, Long memberId) {
+        Comment comment = findComment(commentId);
+        comment.verifyWriter(memberId);
+        commentRepository.deleteById(commentId);
     }
 
     private Comment findComment(Long id) {
         return commentRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Comment not exist. id = " + id));
-    }
-
-    @Transactional
-    public void deleteComment(Long commentId, Long memberId) {
-        verifyWriter(commentId, memberId);
-        commentRepository.deleteById(commentId);
-    }
-
-    private void verifyWriter(Long commentId, Long memberId) {
-        Comment comment = findComment(commentId);
-        Long writerId = comment.getMember().getId();
-        if (!writerId.equals(memberId))
-            throw new IllegalArgumentException("작성자가 아니면 수정할 수 없습니다.");
     }
 }

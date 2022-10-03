@@ -4,7 +4,17 @@ import com.seb39.myfridge.member.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+
 public class MemberDto {
+
+
+    @Getter
+    @Setter
+    public static class Patch{
+        @NotBlank
+        private String name;
+    }
 
     @Getter
     @Setter

@@ -84,4 +84,8 @@ public class Member {
     public void changeProfileImagePath(String profileImagePath){
         this.profileImagePath = profileImagePath;
     }
+
+    public void changeName(String name){
+        this.name = name;
+    }
 }
