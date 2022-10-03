@@ -19,6 +19,7 @@ import MyPage from "./pages/MyPage/MyPage";
 import axios from "axios";
 import { setLoggedIn } from "./features/userSlice";
 import { useRef } from "react";
+import MenuTab from "./components/layout/MenuTab/MenuTab";
 
 function App() {
   const dispatch = useDispatch(); //for redux dispatch
@@ -95,7 +96,9 @@ function App() {
           <Route path="/recipes/:id" element={<RecipeDetail />} />
           <Route path="/search" element={<FridgeDigging />} />
           <Route path="/myfridge" element={<MyFridge />} />
-          <Route path="/mypage" element={<MyPage />} />
+          {/* <Route path="/mypage" element={<MyPage />} /> */}{" "}
+          {/* 기존 마이페이지 메뉴탭에 useParams 적용 이전. 마이페이지 누르면 맨 처음 내프로필 */}
+          <Route path="/mypage/:id" element={<MenuTab />} />
         </Routes>
         {/* <FloatingAction /> */}
       </BrowserRouter>

@@ -44,10 +44,16 @@ const DropDownMenu = ({ profileIconPhoto }) => {
       <Menu isDropped={userIsOpen}>
         <Ul>
           <Li>
-            <Link to="/mypage">내 프로필</Link>
+            <Link to="/mypage/0">내 프로필</Link>
           </Li>
           <Li>
-            <Link to="/mypage">마이페이지</Link>
+            <Link to="/mypage/1">내 레시피</Link>
+          </Li>
+          <Li>
+            <Link to="/mypage/2">내 좋아요</Link>
+          </Li>
+          <Li>
+            <Link to="/mypage/3">받은 댓글</Link>
           </Li>
           <Li>
             <LogOut />
