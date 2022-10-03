@@ -41,6 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs(uriHost = "seb39myfridge.ml", uriScheme = "https", uriPort = 443)
+@WithUserDetails(value = "test@gmail.com", userDetailsServiceBeanName = "principalDetailsService", setupBefore = TestExecutionEvent.TEST_EXECUTION)
 class HeartControllerTest {
 
     @Autowired
@@ -68,8 +69,6 @@ class HeartControllerTest {
         Recipe recipe = new Recipe();
         recipe.setMember(member);
         recipeRepository.save(recipe);
-
-        System.out.println("BeforeEach MemberId = " + member.getId() + " RecipeId = " + recipe.getId());
     }
 
     @AfterEach
@@ -80,13 +79,10 @@ class HeartControllerTest {
 
     @Test
     @DisplayName("레시피에 하트를 추가한다")
-    @WithUserDetails(value = "test@gmail.com", userDetailsServiceBeanName = "principalDetailsService", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void postHeart() throws Exception {
         //given
         Member member = memberRepository.findAll().get(0);
         Recipe recipe = recipeRepository.findAll().get(0);
-
-        System.out.println("PostHeart MemberId = " + member.getId() + " RecipeId = " + recipe.getId());
 
         //expected
         ResultActions result = mockMvc.perform(post("/api/recipes/{recipeId}/heart", recipe.getId())
@@ -116,16 +112,7 @@ class HeartControllerTest {
         //given
         Member member = memberRepository.findAll().get(0);
         Recipe recipe = recipeRepository.findAll().get(0);
-
-        System.out.println("DeleteHeart MemberId = " + member.getId() + " RecipeId = " + recipe.getId());
-
         heartRepository.save(new Heart(member,recipe));
-
-        List<Heart> hearts = heartRepository.findAll();
-        System.out.println("------- hearts -------");
-        for (Heart heart : hearts) {
-            System.out.println("  member: " + heart.getMember().getId() + " / recipe: " + heart.getRecipe().getId());
-        }
 
         //expected
         ResultActions result = mockMvc.perform(delete("/api/recipes/{recipeId}/heart", recipe.getId())

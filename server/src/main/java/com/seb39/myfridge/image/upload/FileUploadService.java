@@ -45,6 +45,7 @@ public class FileUploadService {
         }
     }
 
+
     private String setFileName(MultipartFile file) {
         String fileName = createFileName(file.getOriginalFilename());
         ObjectMetadata objectMetadata = new ObjectMetadata();
