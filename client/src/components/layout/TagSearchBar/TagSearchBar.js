@@ -9,6 +9,7 @@ const TagSearchBar = ({ setIsRefreshNeeded }) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [searchValue, setSearchValue] = useState(""); // 확정된 검색 태그 하나
     const [searchTags, setSearchTags] = useState([]); // 확정된 검색 태그 전체 배열
+    console.log("서치 태그 길이", searchTags.length)
     const [suggestedValue, setSuggestedValue] = useState([]); // 연관 검색어
     const [isDropDownOpen, setIsDropDownOpen] = useState(false);
     const [cursor, setCursor] = useState(-1);
@@ -128,9 +129,15 @@ const TagSearchBar = ({ setIsRefreshNeeded }) => {
         if (typeof el === "string") {
             // 중복 태그 방지
             if (!searchTags.includes(el)) {
-                searchParams.set("tags", [...searchTags, el])
-                setSearchParams(searchParams);
-                setSearchTags([...searchTags, el]);
+                // 태그 갯수 유효성 (10개 이하)
+                if (searchTags.length >= 10) {
+                    alert("태그는 10개 이하로만 추가할 수 있어요ㅠㅠ")
+                }
+                else {
+                    searchParams.set("tags", [...searchTags, el])
+                    setSearchParams(searchParams);
+                    setSearchTags([...searchTags, el]);
+                }
             }
             else {
                 alert(`이미 등록한 재료예요`);
@@ -143,10 +150,15 @@ const TagSearchBar = ({ setIsRefreshNeeded }) => {
         else if (searchValue.length > 0){
             // 중복 태그 방지
             if (!searchTags.includes(searchValue)) {
-                // 마우스로 드롭다운 요소 클릭 시 바로 검색 태그에 추가
-                searchParams.set("tags", [...searchTags, searchValue])
-                setSearchParams(searchParams);
-                setSearchTags([...searchTags, searchValue]);
+                if (searchTags.length >= 10) {
+                    alert("태그는 10개 이하로만 추가할 수 있어요ㅠㅠ")
+                }
+                else {
+                    // 마우스로 드롭다운 요소 클릭 시 바로 검색 태그에 추가
+                    searchParams.set("tags", [...searchTags, searchValue])
+                    setSearchParams(searchParams);
+                    setSearchTags([...searchTags, searchValue]);
+                }
             }
             else {
                 alert(`이미 등록한 재료예요`)
