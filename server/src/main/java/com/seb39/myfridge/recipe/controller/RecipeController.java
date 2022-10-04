@@ -9,6 +9,7 @@ import com.seb39.myfridge.ingredient.entity.RecipeIngredient;
 import com.seb39.myfridge.auth.annotation.AuthMemberId;
 import com.seb39.myfridge.recipe.dto.MyRecipeDto;
 import com.seb39.myfridge.recipe.dto.RecipeDto;
+import com.seb39.myfridge.recipe.dto.RecipeRecommendDto;
 import com.seb39.myfridge.recipe.dto.RecipeSearch;
 import com.seb39.myfridge.recipe.entity.Recipe;
 import com.seb39.myfridge.recipe.enums.RecipeSort;
@@ -131,5 +132,17 @@ public class RecipeController {
         Page<MyRecipeDto.Favorite> result = recipeService.findFavoriteRecipes(memberId, page);
         List<MyRecipeDto.Favorite> content = result.getContent();
         return ResponseEntity.ok(new MultiResponseDto<>(content, result));
+    }
+
+    @GetMapping("/recommend/recent")
+    public ResponseEntity getRecentRecipes() {
+        List<RecipeRecommendDto> recentRecipes = recipeService.findRecentRecipes();
+        return new ResponseEntity(recentRecipes, HttpStatus.OK);
+    }
+
+    @GetMapping("/recommend/popular")
+    public ResponseEntity getPopularRecipes() {
+        List<RecipeRecommendDto> popularRecipes = recipeService.findPopularRecipes();
+        return new ResponseEntity(popularRecipes, HttpStatus.OK);
     }
 }

@@ -10,6 +10,7 @@ import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.service.MemberService;
 import com.seb39.myfridge.recipe.dto.MyRecipeDto;
 import com.seb39.myfridge.recipe.dto.RecipeDto;
+import com.seb39.myfridge.recipe.dto.RecipeRecommendDto;
 import com.seb39.myfridge.recipe.dto.RecipeSearch;
 import com.seb39.myfridge.recipe.entity.Recipe;
 import com.seb39.myfridge.recipe.enums.RecipeSort;
@@ -143,5 +144,13 @@ public class RecipeService {
 
     public Page<MyRecipeDto.Favorite> findFavoriteRecipes(Long memberId, int page) {
         return recipeRepository.findFavoriteRecipes(memberId, page);
+    }
+
+    public List<RecipeRecommendDto> findPopularRecipes() {
+        return recipeRepository.findPopularRecipes();
+    }
+
+    public List<RecipeRecommendDto> findRecentRecipes() {
+        return recipeRepository.findRecentRecipes();
     }
 }

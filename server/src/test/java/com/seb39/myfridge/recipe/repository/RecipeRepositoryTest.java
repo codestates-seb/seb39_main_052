@@ -6,6 +6,7 @@ import com.seb39.myfridge.comment.repository.CommentRepository;
 import com.seb39.myfridge.config.QueryDslConfig;
 import com.seb39.myfridge.heart.entity.Heart;
 import com.seb39.myfridge.heart.repository.HeartRepository;
+import com.seb39.myfridge.heart.service.HeartService;
 import com.seb39.myfridge.image.entity.Image;
 import com.seb39.myfridge.ingredient.Repository.IngredientRepository;
 import com.seb39.myfridge.ingredient.Repository.RecipeIngredientRepository;
@@ -16,6 +17,7 @@ import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.repository.MemberRepository;
 import com.seb39.myfridge.recipe.dto.MyRecipeDto;
 import com.seb39.myfridge.recipe.dto.RecipeDto;
+import com.seb39.myfridge.recipe.dto.RecipeRecommendDto;
 import com.seb39.myfridge.recipe.dto.RecipeSearch;
 import com.seb39.myfridge.recipe.entity.Recipe;
 import com.seb39.myfridge.recipe.enums.RecipeSort;
@@ -46,6 +48,9 @@ class RecipeRepositoryTest {
 
     @Autowired
     RecipeRepository recipeRepository;
+
+    @Autowired
+    HeartService heartService;
 
     @Autowired
     MemberRepository memberRepository;
@@ -382,6 +387,30 @@ class RecipeRepositoryTest {
         assertThat(content.size()).isEqualTo(4);
     }
 
+    @Test
+    void 메인페이지_레시피인기순조회_테스트() {
+        //given
+        initSampleRecipesForPopularRecipe();
+        //when
+        List<RecipeRecommendDto> popularRecipes = recipeRepository.findPopularRecipes();
+        //then
+        assertThat(popularRecipes.size()).isEqualTo(8);
+    }
+
+    @Test
+    void 메인페이지_레시피최신순조회_테스트() throws InterruptedException {
+        //given
+        initSampleRecipesForRecentRecipes();
+        //when
+        List<RecipeRecommendDto> recentRecipes = recipeRepository.findRecentRecipes();
+//        for (RecipeRecommendDto recentRecipe : recentRecipes) {
+//            Recipe recipe = recipeRepository.findById(recentRecipe.getId()).get();
+//            System.out.println("recipe.getCreatedAt() = " + recipe.getCreatedAt());
+//        }
+        //then
+        assertThat(recentRecipes.size()).isEqualTo(8);
+    }
+
     private void initSampleRecipes() {
         for (int i = 1; i <= 5; i++) {
             Member member = Member.oauth2Builder()
@@ -419,6 +448,103 @@ class RecipeRepositoryTest {
             recipeRepository.save(recipe);
 
             int heartCount = (int) (Math.random() * 4) + 1;
+            for (int j = 0; j < heartCount; j++) {
+                heartRepository.save(new Heart(members.get(j % 5), recipe));
+            }
+
+            int commentCount = (int) (Math.random() * 3);
+            for (int j = 0; j < commentCount; j++) {
+                Comment comment = Comment.create("comment", members.get(i % 5), recipe);
+                commentRepository.save(comment);
+            }
+        }
+    }
+    private void initSampleRecipesForPopularRecipe() {
+        for (int i = 1; i <= 5; i++) {
+            Member member = Member.oauth2Builder()
+                    .name("member" + i)
+                    .profileImagePath("https://s3.aws.abcd/member" + i + ".jpeg")
+                    .buildOAuth2Member();
+            memberRepository.save(member);
+        }
+        List<Member> members = memberRepository.findAll();
+
+        for (int i = 1; i <= 4; i++) {
+            Ingredient ingredient = new Ingredient();
+            ingredient.setName("ingredient " + i);
+            ingredientRepository.save(ingredient);
+        }
+        List<Ingredient> ingredients = ingredientRepository.findAll();
+
+        for (int i = 1; i <= 40; i++) {
+            Recipe recipe = new Recipe();
+            recipe.setTitle("Recipe " + i);
+            recipe.setMember(members.get(i % 5));
+
+            for (int j = 0; j < (i / 10); j++) {
+                RecipeIngredient ri = new RecipeIngredient();
+                ri.addRecipe(recipe);
+                ri.addIngredient(ingredients.get(j));
+                ri.setQuantity("조금");
+            }
+
+            Image image = new Image();
+            image.setImagePath("https://s3.amazon.abcdefg/" + i + ".jpeg");
+            recipe.setImage(image);
+            int view = (int) ((Math.random() * 10000));
+            recipe.setView(view);
+            recipeRepository.save(recipe);
+
+            int heartCount = (int) (Math.random() * 100) + 1;
+            for (int j = 0; j < heartCount; j++) {
+                heartRepository.save(new Heart(members.get(j % 5), recipe));
+            }
+
+            int commentCount = (int) (Math.random() * 3);
+            for (int j = 0; j < commentCount; j++) {
+                Comment comment = Comment.create("comment", members.get(i % 5), recipe);
+                commentRepository.save(comment);
+            }
+        }
+    }
+    private void initSampleRecipesForRecentRecipes() throws InterruptedException {
+        for (int i = 1; i <= 5; i++) {
+            Member member = Member.oauth2Builder()
+                    .name("member" + i)
+                    .profileImagePath("https://s3.aws.abcd/member" + i + ".jpeg")
+                    .buildOAuth2Member();
+            memberRepository.save(member);
+        }
+        List<Member> members = memberRepository.findAll();
+
+        for (int i = 1; i <= 4; i++) {
+            Ingredient ingredient = new Ingredient();
+            ingredient.setName("ingredient " + i);
+            ingredientRepository.save(ingredient);
+        }
+        List<Ingredient> ingredients = ingredientRepository.findAll();
+
+        for (int i = 1; i <= 40; i++) {
+            Recipe recipe = new Recipe();
+            recipe.setTitle("Recipe " + i);
+            recipe.setMember(members.get(i % 5));
+
+            for (int j = 0; j < (i / 10); j++) {
+                RecipeIngredient ri = new RecipeIngredient();
+                ri.addRecipe(recipe);
+                ri.addIngredient(ingredients.get(j));
+                ri.setQuantity("조금");
+            }
+
+            Image image = new Image();
+            image.setImagePath("https://s3.amazon.abcdefg/" + i + ".jpeg");
+            recipe.setImage(image);
+            int view = (int) ((Math.random() * 10000));
+            recipe.setView(view);
+//            Thread.sleep(500);
+            recipeRepository.save(recipe);
+
+            int heartCount = (int) (Math.random() * 100) + 1;
             for (int j = 0; j < heartCount; j++) {
                 heartRepository.save(new Heart(members.get(j % 5), recipe));
             }
