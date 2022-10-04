@@ -29,76 +29,46 @@ const ImageUploader = ({ size, index, mode }) => {
     }); 
     // console.log("steps", steps);
 
-    // const imageHandler = (e) => {
-    //     // e.preventDefault();
-    //     setIsLoading(true);
-
-    //     if (e.target.files[0]) {
-    //         const uploadFile = e.target.files[0]
-
-    //         // 레시피 작성하기
-    //         if (pathname === "/recipes/new") {
-    //             // 메인 사진을 추가하는 경우
-    //             if (mode === `main`) {
-    //                 dispatch(addMainImage({ image: uploadFile }));
-    //                 dispatch(setMainImage({ mainImage: URL.createObjectURL(uploadFile)}));
-    //             }
-    //             // 요리 순서 사진을 추가하는 경우
-    //             if (mode === `steps`) {
-    //                 dispatch(addImage({ index: index, image: uploadFile }));
-    //                 dispatch(setStepImage({ index: index, imagePath: URL.createObjectURL(uploadFile)}))
-    //             }
-    //         }
-    //         // 레시피 수정하기
-    //         else {
-    //             if (mode === `main`) {
-    //                 dispatch(addMainImage({ image: uploadFile }));
-    //                 dispatch(editMainImage({ mainImage: URL.createObjectURL(uploadFile)}));
-    //             }
-    //             // 요리 순서 사진을 추가하는 경우
-    //             if (mode === `steps`) {
-    //                 dispatch(addImage({ index: index, image: uploadFile }));
-    //                 dispatch(editStepImage({ index: index, imagePath: URL.createObjectURL(uploadFile)}))
-    //             }
-    //         }
-
-    //     }
-    //     else {
-    //         setIsLoading(false);
-    //     }
-    // };
-
+    // 이미지 핸들러 (클릭시/드랍시 모두 가능)
     const imageHandler = (fileList) => {
-        // e.preventDefault();
         setIsLoading(true);
         setIsDragOver(false);
 
         if (fileList[0]) {
+            const maxSize = 2 * 1024 * 1024;
             const uploadFile = fileList[0]
-
-            // 레시피 작성하기
-            if (pathname === "/recipes/new") {
-                // 메인 사진을 추가하는 경우
-                if (mode === `main`) {
-                    dispatch(addMainImage({ image: uploadFile }));
-                    dispatch(setMainImage({ mainImage: URL.createObjectURL(uploadFile)}));
-                }
-                // 요리 순서 사진을 추가하는 경우
-                if (mode === `steps`) {
-                    dispatch(addImage({ index: index, image: uploadFile }));
-                    dispatch(setStepImage({ index: index, imagePath: URL.createObjectURL(uploadFile)}))
-                }
+            
+            // 용량 2MB로 제한
+            if (uploadFile.size > maxSize) {
+                setIsLoading(false);
+                alert("이미지 사이즈는 2MB 이내로만 등록할 수 있어요ㅠㅠ")
+                return false;
             }
-            // 레시피 수정하기
             else {
-                if (mode === `main`) {
-                    dispatch(addMainImage({ image: uploadFile }));
-                    dispatch(editMainImage({ mainImage: URL.createObjectURL(uploadFile)}));
+                // 레시피 작성하기
+                if (pathname === "/recipes/new") {
+                    // 메인 사진을 추가하는 경우
+                    if (mode === `main`) {
+                        dispatch(addMainImage({ image: uploadFile }));
+                        dispatch(setMainImage({ mainImage: URL.createObjectURL(uploadFile)}));
+                    }
+                    // 요리 순서 사진을 추가하는 경우
+                    if (mode === `steps`) {
+                        dispatch(addImage({ index: index, image: uploadFile }));
+                        dispatch(setStepImage({ index: index, imagePath: URL.createObjectURL(uploadFile)}))
+                    }
                 }
-                // 요리 순서 사진을 추가하는 경우
-                if (mode === `steps`) {
-                    dispatch(addImage({ index: index, image: uploadFile }));
-                    dispatch(editStepImage({ index: index, imagePath: URL.createObjectURL(uploadFile)}))
+                // 레시피 수정하기
+                else {
+                    if (mode === `main`) {
+                        dispatch(addMainImage({ image: uploadFile }));
+                        dispatch(editMainImage({ mainImage: URL.createObjectURL(uploadFile)}));
+                    }
+                    // 요리 순서 사진을 추가하는 경우
+                    if (mode === `steps`) {
+                        dispatch(addImage({ index: index, image: uploadFile }));
+                        dispatch(editStepImage({ index: index, imagePath: URL.createObjectURL(uploadFile)}))
+                    }
                 }
             }
 
@@ -130,14 +100,14 @@ const ImageUploader = ({ size, index, mode }) => {
 
     // 클릭으로 이미지 파일 추가
     const onClickFiles = (e) => {
-        console.log(e.target.files);
+        // console.log(e.target.files);
         e.preventDefault()
         imageHandler(e.target.files);
     };
 
     // drop으로 이미지 파일 추가
     const onDropFiles = (e) => {
-        console.log(e.dataTransfer.files);
+        // console.log(e.dataTransfer.files);
         e.preventDefault()
         imageHandler(e.dataTransfer.files);
     };
