@@ -1,11 +1,13 @@
 //redux toolkit related
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { persistor } from "../../..";
 import { setLoggedIn, setLoggedOut } from "../../../features/userSlice";
 
 const LogOut = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   //로그인 상태 가져와서 변수에 저장
   const isLoggedIn = useSelector((state) => {
@@ -33,7 +35,8 @@ const LogOut = () => {
           delete axios.defaults.headers.common["Authorization"]; //헤더에 설정해둔 액세스 토큰 권한부여 제거
           dispatch(setLoggedOut()); //로그아웃 상태로 바꿔주는 함수 호출
           purge(); //persistor 세션스토리지에 저장되어있는 로그인 상태 데이터 날려버리기
-          alert("로그아웃 완료!");
+          alert("로그아웃 완료");
+          navigate("/"); //홈으로 이동
         }
       })
       .catch((err) => alert(err));

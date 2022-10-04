@@ -13,9 +13,9 @@ const LogIn = () => {
           냉장고에 있는 재료로 만들 수 있는 요리를 추천받고 싶으신가요?
         </span> */}
 
-        <span id="signup">
+        {/* <span id="signup">
           <Link to="/signup">회원가입</Link>
-        </span>
+        </span> */}
       </div>
       <SocialForm />
     </LogInContainer>
@@ -26,10 +26,7 @@ const LogInContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  > div > span {
-    font-size: 14px;
-    color: var(--gray-500);
-  }
+  margin-top: 32px;
 `;
 
 export default LogIn;

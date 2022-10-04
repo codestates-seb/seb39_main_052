@@ -28,6 +28,20 @@ const userSlice = createSlice({
       //로그인 성공하면 이미지링크도 슬라이스에 저장하기 추가
     },
 
+    //프로필 닉네임 변경
+    editUserName(state, action) {
+      state.userName = action.payload.userName;
+    },
+
+    //프로필 사진 변경
+    editUserPhoto(state, action) {
+      state.userProfileImgPath = action.payload.userProfileImgPath;
+    },
+
+    deleteUserPhoto(state, action) {
+      state.userProfileImgPath = null;
+    },
+
     //로그아웃시 유저 로그인 상태 false, 저장된 정보 초기화
     setLoggedOut(state) {
       state.isLoggedIn = false;
@@ -44,4 +58,11 @@ const userSlice = createSlice({
 });
 
 export default userSlice;
-export const { setLoggedIn, setUserInfo, setLoggedOut } = userSlice.actions;
+export const {
+  setLoggedIn,
+  setUserInfo,
+  editUserName,
+  editUserPhoto,
+  deleteUserPhoto,
+  setLoggedOut,
+} = userSlice.actions;

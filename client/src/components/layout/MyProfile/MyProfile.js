@@ -45,6 +45,7 @@ const MyProfile = () => {
       {showProfileChangeModal && (
         <ProfileChangeModal
           handleClose={clickProfileChangeModal}
+          profileData={profileData}
         ></ProfileChangeModal>
       )}
     </MyProfileContainer>

@@ -3,6 +3,8 @@ import styled from "styled-components";
 export const LogInFormContainer = styled.section`
   display: flex;
   justify-content: center;
+  flex-direction: column;
+  color: var(--gray-700);
 
   > form {
     display: flex;
@@ -26,5 +28,21 @@ export const LogInFormContainer = styled.section`
   > form > span {
     font-size: 14px;
     color: var(--gray-600);
+  }
+`;
+
+export const SignUpDiv = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin: 8px;
+  font-size: 14px;
+  color: var(--gray-500);
+  & > span :first-of-type {
+    padding-left: 8px;
+    &:hover {
+      color: var(--fridge-800);
+      font-weight: bold;
+      font-size: 15px;
+    }
   }
 `;
