@@ -1,8 +1,27 @@
+import { useEffect, useRef } from "react";
 import RecipeEditor from "../../components/layout/RecipeEditor/RecipeEditor";
 import { PageName } from "./NewRecipeStyle";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const NewRecipe = () => {
+    const navigate = useNavigate();
+    const mountRef = useRef(false); // 두번 마운팅 방지
 
+    // 로그인 상태 가져와서 변수에 저장
+    const isLoggedIn = useSelector((state) => {
+        return state.user.isLoggedIn;
+    });
+    // 로그아웃 상태로 페이지 접속 시 로그인 창으로 navigate
+    useEffect(() => {
+        if (mountRef.current) {
+            if (!isLoggedIn) {
+                navigate("/login");
+                alert("로그인이 필요한 서비스입니다");
+            }
+        }
+        return () => { mountRef.current = true; }
+    }, [])
 
     return (
         <>
