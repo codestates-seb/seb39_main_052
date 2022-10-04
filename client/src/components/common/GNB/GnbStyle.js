@@ -4,8 +4,9 @@ export const Header = styled.header`
   min-height: 88px;
   width: 100%;
   background-color: var(--primary-400);
+  box-shadow: var(--shadow-medium);
   /* background-color: white; */
-  padding: 16px;
+  padding: 8px;
   /* display: flex;
   justify-content: center; */
   position: sticky;
@@ -15,7 +16,8 @@ export const Header = styled.header`
   /* media query 예시. theme.js에서 정의한 theme을 props로 받아서 mobile 사이즈 가져온다 */
   @media ${({ theme }) => theme.device.mobile} {
     /* color: pink; */
-    max-height: 88px;
+    /* max-height: 88px; */
+    /* min-height: 88px; */
   }
 `;
 
@@ -25,7 +27,7 @@ export const Nav = styled.nav`
   justify-content: space-between;
   align-items: center;
   @media ${({ theme }) => theme.device.mobile} {
-    max-height: 56px;
+    max-height: 80px;
   }
 `;
 
@@ -41,6 +43,8 @@ export const LeftBox = styled.div`
     left: 0;
     margin: 0;
     background-color: var(--fridge-300);
+    box-shadow: var(--shadow-high);
+    opacity: 90%;
   }
 `;
 
@@ -49,6 +53,8 @@ export const LeftBoxForMobile = styled.div`
   width: 20px;
   height: 20px;
   cursor: pointer;
+  padding-left: 16px;
+
   &.menuToggle {
     display: none; /* 모바일 화면 아닐떄는 안보임 */
   }
@@ -65,9 +71,14 @@ export const LeftBoxForMobile = styled.div`
 export const LogoBox = styled.div`
   /* display: flex; */
 `;
+
 export const RightBox = styled.div`
   width: 320px;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 68px;
+  }
 `;
+
 export const Img = styled.img`
   width: 118px;
   height: 68px;
@@ -83,6 +94,8 @@ export const Ul = styled.ul`
   @media ${({ theme }) => theme.device.mobile} {
     &.nav-menu-list {
       justify-content: space-around;
+      margin: 0;
+      height: 40px;
     }
   }
 `;
@@ -98,10 +111,16 @@ export const Li = styled.li`
   } //profile icon, photo 감싸고 있는 Li태그에서 이미지 크기 조정하면 안먹음 */
 
   @media ${({ theme }) => theme.device.mobile} {
+    //icon 이랑 돋보기
+    padding: 16px;
+
+    //냉장고 파먹기 나의 냉장고 글씨 li
     &.each-nav-menu-list {
+      padding: 8px;
       :hover {
-        border-radius: 10px;
+        border-radius: 25px;
         background-color: var(--fridge-500);
+        box-shadow: var(--shadow-3d);
       }
     }
   }

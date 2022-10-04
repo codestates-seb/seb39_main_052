@@ -1,5 +1,9 @@
 import RecipeFrame from "../RecipeFrame/RecipeFrame";
-import { RecipeFrameOuterContainer, SpanWrapper } from "./MyRecipeBoxStyle";
+import {
+  RecipeFrameOuterContainer,
+  SpanWrapper,
+  SortingTabWrapper,
+} from "./MyRecipeBoxStyle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPencil,
@@ -17,34 +21,33 @@ import SortingTab from "../../common/SortingTab/SortingTab";
 import { useDispatch, useSelector } from "react-redux";
 import { loadRecipe } from "../../../features/recipeSlice";
 
-const MyRecipeBox = () => {
+const MyRecipeBox = ({ timeSince }) => {
   const [myRecipeList, setMyRecipeList] = useState([]);
   const [page, setPage] = useState(1); // 페이지네이션으로 바뀔 현재 페이지 위치
   const [total, setTotal] = useState(0); //전체 게시글 수
   const [totalPages, setTotalPages] = useState(0); //전체 페이지 수
   const [isUpdated, setIsUpdated] = useState(false); //레시피 삭제,수정시 업뎃여부로 화면에 재렌더링 하려고
 
-  // const [sortMode, setSortMode] = useState("RECENT"); //정렬탭
+  const [sortMode, setSortMode] = useState("RECENT"); //정렬탭
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   // date 표기 (YYYY-MM-DD)
-  const dateConverter = (createdAt) => {
-    const date = new Date(+new Date(createdAt) + 3240 * 10000)
-      .toISOString()
-      .split("T")[0];
-    return date;
-  };
-  // console.log("sort모드?", sortMode);
+  // const dateConverter = (createdAt) => {
+  //   const date = new Date(+new Date(createdAt) + 3240 * 10000)
+  //     .toISOString()
+  //     .split("T")[0];
+  //   return date;
+  // };
 
   //최신순 내 레시피 목록 조회하기
   const getMyRecipeList = async () => {
     try {
       const { data } = await axios.get(
-        `/api/recipes/my?page=${page}&sort=RECENT`
+        `/api/recipes/my?page=${page}&sort=${sortMode}`
       );
       console.log(data);
-      // console.log("sort모드?", sortMode);
+      console.log("sort모드?", sortMode);
       setTotal(data.pageInfo.totalElements);
       setTotalPages(data.pageInfo.totalPages);
       setMyRecipeList([...data.data]);
@@ -53,11 +56,11 @@ const MyRecipeBox = () => {
     }
   };
 
-  //페이지 바뀔때, 레시피 수정삭제로 업데이트시 화면에 내 레시피 목록 재 렌더링
+  //페이지 바뀔때, 레시피 삭제로 업데이트시, 정렬 기준 바뀔때 화면에 내 레시피 목록 재 렌더링
   useEffect(() => {
     getMyRecipeList();
     setIsUpdated(false); //명시적으로 넣어주어야 RecipeFrame 컴포넌트에서 처음 삭제하고 setIsUpdated 상태 true가 된 이후에 기본 상태 false로 돌아간다.
-  }, [page, isUpdated]);
+  }, [page, isUpdated, sortMode]);
 
   //레시피 상세페이지로 navigate 시키기
   const clickRecipeDetail = (recipeId) => {
@@ -98,7 +101,9 @@ const MyRecipeBox = () => {
 
   return (
     <>
-      {/* <SortingTab sortMode={sortMode} setSortMode={setSortMode} /> */}
+      <SortingTabWrapper>
+        <SortingTab sortMode={sortMode} setSortMode={setSortMode} />
+      </SortingTabWrapper>
       <RecipeFrameOuterContainer>
         {myRecipeList.map((data) => (
           <RecipeFrame
@@ -115,7 +120,8 @@ const MyRecipeBox = () => {
             setIsUpdated={setIsUpdated}
             imagePath={data.imagePath}
             title={data.title}
-            date={dateConverter(data.lastModifiedAt)}
+            // date={dateConverter(data.lastModifiedAt)}
+            date={timeSince(Date.parse(data.lastModifiedAt))}
             icon1={<FontAwesomeIcon icon={faPencil}></FontAwesomeIcon>}
             icon2={<FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon>}
           >
@@ -140,12 +146,12 @@ const MyRecipeBox = () => {
             </SpanWrapper>
           </RecipeFrame>
         ))}
-        <Pagination
-          page={page}
-          setPage={setPage}
-          totalPages={totalPages}
-        ></Pagination>
       </RecipeFrameOuterContainer>
+      <Pagination
+        page={page}
+        setPage={setPage}
+        totalPages={totalPages}
+      ></Pagination>
     </>
   );
 };

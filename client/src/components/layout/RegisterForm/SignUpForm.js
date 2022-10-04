@@ -6,8 +6,11 @@ import axios from "axios";
 import GeneralButton from "../../common/Button/GeneralButton";
 
 import { SignUpFormContainer } from "./SignUpFormStyle";
+import { useNavigate } from "react-router-dom";
 
 const SignUpForm = () => {
+  const navigate = useNavigate();
+
   const formSchema = yup.object({
     email: yup.string().email("이메일 형식이 아닙니다").required(""),
     name: yup
@@ -52,6 +55,7 @@ const SignUpForm = () => {
         //회원가입 요청 성공시
         if (response.status === 201) {
           alert("회원가입 성공");
+          navigate("/login");
         }
       })
       .catch((error) => {

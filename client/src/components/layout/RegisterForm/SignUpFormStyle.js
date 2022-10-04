@@ -3,6 +3,8 @@ import styled from "styled-components";
 export const SignUpFormContainer = styled.section`
   display: flex;
   justify-content: center;
+  margin-top: 32px;
+  color: var(--gray-700);
 
   > form {
     display: flex;

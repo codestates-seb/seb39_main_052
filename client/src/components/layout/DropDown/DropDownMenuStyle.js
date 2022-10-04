@@ -27,14 +27,14 @@ export const Menu = styled.div`
   background: white;
   position: absolute;
   border-radius: 8px;
-  top: 40px;
+  top: 50px;
   /* right: 0; */
-  right: -250%;
+  right: -120%;
   width: 120px;
   text-align: center;
   box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
   opacity: 0;
-  visibility: hidden;
+  visibility: hidden; //document에는 남아있고 레이아웃에 공간도 차지하지만 안보이게 함
   transform: translateY(-20px);
   transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
   /* z-index: 9; */
@@ -53,5 +53,11 @@ export const Ul = styled.ul`
   padding: 8px;
 `;
 export const Li = styled.li`
-  padding: 4px;
+  padding: 8px;
+  /* margin: 8px; */
+
+  &:hover {
+    border-radius: 10px;
+    box-shadow: var(--shadow-3d);
+  }
 `;

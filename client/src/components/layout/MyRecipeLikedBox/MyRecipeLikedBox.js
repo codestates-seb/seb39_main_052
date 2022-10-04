@@ -7,8 +7,34 @@ import {
 import RecipeFrame from "../RecipeFrame/RecipeFrame";
 import UserName from "../../common/UserName/UserName";
 import Pagination from "../../common/Pagination/Pagination";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-const MyRecipeLikedBox = () => {
+const MyRecipeLikedBox = ({ timeSince }) => {
+  const [myLikedRecipeList, setMyLikedRecipeList] = useState([]);
+  const [page, setPage] = useState(1); // 페이지네이션으로 바뀔 현재 페이지 위치
+  const [total, setTotal] = useState(0); //전체 게시글 수
+  const [totalPages, setTotalPages] = useState(0); //전체 페이지 수
+  const [isUpdated, setIsUpdated] = useState(false); //좋아요한 레시피 삭제시 업뎃여부로 화면에 재렌더링 하려고
+
+  //내가 좋아한 레시피 목록 조회하기
+  const getMyLikedRecipeList = async () => {
+    try {
+      const { data } = await axios.get(`/api/recipes/favorite?page=${page}`);
+      console.log(data);
+      setTotal(data.pageInfo.totalElements);
+      setTotalPages(data.pageInfo.totalPages);
+      setMyLikedRecipeList([...data.data]);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //페이지 바뀔때, 좋아하는 레시피 목록에서 삭제할때마다 재렌더링
+  useEffect(() => {
+    getMyLikedRecipeList();
+  }, [page, isUpdated]);
+
   const dummyData = [
     {
       id: 1,
@@ -20,7 +46,7 @@ const MyRecipeLikedBox = () => {
       likes: 221,
       views: 1200,
       numComments: 3,
-      date: "2022.9.27.",
+      lastModifiedAt: "2022-09-29T18:54:46.996434",
       memberImage:
         "https://www.tocanvas.net/wp-content/uploads/2022/02/food-aesthetic.jpeg",
     },
@@ -33,7 +59,7 @@ const MyRecipeLikedBox = () => {
       likes: 10,
       views: 120,
       numComments: 10,
-      date: "2022.9.26.",
+      lastModifiedAt: "2022-09-29T18:54:46.996434",
       memberImage:
         "https://www.tocanvas.net/wp-content/uploads/2022/02/food-aesthetic.jpeg",
     },
@@ -46,7 +72,7 @@ const MyRecipeLikedBox = () => {
       likes: 50,
       views: 2220,
       numComments: 20,
-      date: "2022.9.26.",
+      lastModifiedAt: "2022-09-29T18:54:46.996434",
       memberImage:
         "https://www.tocanvas.net/wp-content/uploads/2022/02/food-aesthetic.jpeg",
     },
@@ -60,7 +86,7 @@ const MyRecipeLikedBox = () => {
       likes: 40,
       views: 50,
       numComments: 50,
-      date: "2022.9.26.",
+      lastModifiedAt: "2022-09-29T18:54:46.996434",
       memberImage:
         "https://www.tocanvas.net/wp-content/uploads/2022/02/food-aesthetic.jpeg",
     },
@@ -74,31 +100,57 @@ const MyRecipeLikedBox = () => {
       likes: 40,
       views: 50,
       numComments: 50,
-      date: "2022.9.26.",
+      lastModifiedAt: "2022-09-29T18:54:46.996434",
       memberImage:
         "https://www.tocanvas.net/wp-content/uploads/2022/02/food-aesthetic.jpeg",
     },
   ];
 
   return (
-    <RecipeFrameOuterContainer>
-      {dummyData.map((data) => (
-        <RecipeFrame
-          key={data.id}
-          imagePath={data.imagePath}
-          title={data.title}
-          date={data.date}
-          icon2={<FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon>}
-        >
-          {/* <SpanWrapper>
+    <>
+      <RecipeFrameOuterContainer>
+        {myLikedRecipeList.map((data) => (
+          <RecipeFrame
+            key={data.id}
+            imagePath={data.imagePath}
+            title={data.title}
+            date={timeSince(Date.parse(data.lastModifiedAt))}
+            icon2={<FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon>}
+          >
+            {/* <SpanWrapper>
             by <span>{data.memberName}</span>
           </SpanWrapper> */}
-          <UserName image={data.memberImage} name={data.memberName}></UserName>
-        </RecipeFrame>
-      ))}
-      <Pagination total="10" limit="4"></Pagination>
-    </RecipeFrameOuterContainer>
+            <UserName
+              image={data.member.profileImagePath}
+              name={data.member.name}
+            ></UserName>
+          </RecipeFrame>
+        ))}
+      </RecipeFrameOuterContainer>
+      <Pagination
+        page={page}
+        setPage={setPage}
+        totalPages={totalPages}
+      ></Pagination>
+    </>
   );
 };
 
 export default MyRecipeLikedBox;
+// {dummyData.map((data) => (
+//   <RecipeFrame
+//     key={data.id}
+//     imagePath={data.imagePath}
+//     title={data.title}
+//     date={timeSince(Date.parse(data.lastModifiedAt))}
+//     icon2={<FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon>}
+//   >
+//     {/* <SpanWrapper>
+//     by <span>{data.memberName}</span>
+//   </SpanWrapper> */}
+//     <UserName
+//       image={data.memberImage}
+//       name={data.memberName}
+//     ></UserName>
+//   </RecipeFrame>
+// ))}

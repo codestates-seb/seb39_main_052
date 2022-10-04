@@ -2,8 +2,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import GeneralButton from "../../common/Button/GeneralButton";
-import { LogInFormContainer } from "./LogInFormStyle";
-import { useNavigate } from "react-router-dom";
+import { LogInFormContainer, SignUpDiv } from "./LogInFormStyle";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setLoggedIn, setUserInfo } from "../../../features/userSlice";
 
@@ -223,6 +223,13 @@ const LogInForm = () => {
           로그인
         </GeneralButton>
       </form>
+
+      <SignUpDiv>
+        <span>오늘 뭐먹을지 고민중인가요?</span>
+        <span>
+          <Link to="/signup">회원가입</Link>
+        </span>
+      </SignUpDiv>
     </LogInFormContainer>
   );
 };
