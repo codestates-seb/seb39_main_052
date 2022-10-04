@@ -20,15 +20,30 @@ export const StyledSlider = styled(Slider)`
             display: none;
         }
     }
-
     .slick-next {
-        right: -8px;
+        right: -20px;
         top: 100px;
         cursor: pointer;
         // 기본 화살표 모양 없애기
         &::before {
             opacity: 0;
             display: none;
+        }
+    }
+    // 슬라이드
+    .slick-slide > * > * > * {
+        margin: 0 auto;
+        /* width: 180px; */
+    }
+    .slick-slide > * > * {
+        margin: 0 auto;
+        /* width: 180px; */
+    }
+    .slick-list {
+        width: ${(props) => props.width || "800px"};
+        @media ${({ theme }) => theme.device.mobile} {
+            width: 320px;
+            margin: 0 0 0px 8px;
         }
     }
 `
@@ -43,7 +58,7 @@ export const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
 `
 
 export const Container = styled.div`
-    width: 800px;
+    max-width: 800px;
     margin: 0 0 0px 0px;
     /* overflow: hidden; */
     @media ${({ theme }) => theme.device.mobile} {

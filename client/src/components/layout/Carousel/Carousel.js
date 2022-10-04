@@ -43,7 +43,7 @@ const Carousel = ({ dummyData }) => {
     speed: 500,
     autoplaySpeed: 2000,
     cssEase: "linear",
-    slidesToShow: 4,
+    slidesToShow: Math.min(dummyData.length, 4), // 데이터의 양이 4보다 적은 경우 적은 수를 slidesToShow로 지정한다
     slidesToScroll: 1,
     swipeToSlide: true,
     initialSlide: 0,
@@ -54,7 +54,7 @@ const Carousel = ({ dummyData }) => {
       {
         breakpoint: 600,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: Math.min(dummyData.length, 2),
           slidesToScroll: 1,
           initialSlide: 2,
           arrows: false,
@@ -64,9 +64,19 @@ const Carousel = ({ dummyData }) => {
     ]
   };
 
+  // 보여줄 수 있는 내용이 4개 이하일 때 carousel 길이 조정
+  const classNameMaker = () => {
+    if (dummyData.length === 3) {
+      return "600px";
+    } 
+    else if (dummyData.length === 2) {
+      return "400px";
+    } 
+  }
+
   return (
     <Container>
-      <StyledSlider {...settings}>
+      <StyledSlider {...settings} width={classNameMaker()}>
         {dummyData.map((el, idx) => {
           return (
             <RecipeWrapper key={idx}>

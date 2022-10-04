@@ -1,11 +1,14 @@
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import logoface from "../../assets/small_logoface.png";
-import { useEffect } from "react";
-import { Container, Header, Image, Name, RecipeWrapper } from "./HomeStyle";
+import { Container, EmptyBox, Header, Image, Name, RecipeWrapper } from "./HomeStyle";
 import Carousel from "../../components/layout/Carousel/Carousel";
 import IntroCarousel from "../../components/layout/Carousel/IntroCarousel";
 
 const Home = () => {
+
+  const [ isEmptyResult, setIsEmptyResult ] = useState(false);
 
   const dummyData = [{
     img: "https://mblogthumb-phinf.pstatic.net/MjAxNzA4MDRfMjQ2/MDAxNTAxODI4MTE3MjAz.TsMIHlbXW988cxCpFfALZYiOriewTcCvRt_MbLh53-Ug.UFBMekEe6fVE64VXmdl6IJtji1KP9F2ybmz652fdSDAg.JPEG.drea_min_g/%EB%9D%BC%EB%A9%B4%EC%9A%94%EB%A6%AC_%EB%9D%BC%EB%A9%B4%EC%83%89%EB%8B%A4%EB%A5%B4%EA%B2%8C_%EB%9D%BC%EB%A9%B4%EC%83%89%EB%8B%A4%EB%A5%B4%EA%B2%8C%EB%A8%B9%EA%B8%B0_%EB%9D%BC%EB%A9%B4%EB%A0%88%EC%8B%9C%ED%94%BC_%EC%BF%A0%EC%A7%80%EB%9D%BC%EC%9D%B4.jpg?type=w2", 
@@ -40,6 +43,13 @@ const Home = () => {
       <Carousel dummyData={dummyData} />
       <Header>인기 레시피</Header>
       <Carousel dummyData={dummyData} />
+      <Header>내가 만들 수 있는 레시피</Header>
+      <EmptyBox>
+        <div>
+          나의 냉장고에 재료를 추가하고 추천 레시피를 받아보세요!
+        </div>
+        <p><Link to="/myfridge">나의 냉장고 바로가기</Link></p>
+      </EmptyBox>
     </Container>
   );
 };
