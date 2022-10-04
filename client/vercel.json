@@ -1,0 +1,12 @@
+{
+    "rewrites": [
+      {
+        "source": "/api/:path*",
+        "destination": "https://api.seb39myfridge.ml/api/:path*"
+      },
+      {
+        "source": "/api/:path*/",
+        "destination": "https://api.seb39myfridge.ml/api/:path*/"
+      }
+    ]
+  }
