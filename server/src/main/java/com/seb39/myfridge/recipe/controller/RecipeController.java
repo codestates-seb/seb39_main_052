@@ -138,6 +138,7 @@ public class RecipeController {
     }
 
     @GetMapping("/recommend/fridge")
+    @Secured("ROLE_USER")
     public ResponseEntity<SingleResponseDto<List<RecipeRecommendDto>>> getRecommendRecipesByFridge(@AuthMemberId Long memberId){
         Fridge fridge = fridgeService.findFridge(memberId);
         List<RecipeRecommendDto> dtos = recipeService.recommendByFridge(fridge.getId());
