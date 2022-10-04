@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seb39.myfridge.auth.domain.AuthenticationToken;
 import com.seb39.myfridge.auth.enums.AppAuthExceptionCode;
 import com.seb39.myfridge.auth.exception.AppAuthenticationException;
+import com.seb39.myfridge.auth.repository.AuthenticationTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +24,8 @@ public class AuthenticationTokenService {
     @Value("${app.auth.jwt.secret}")
     private String secret;
 
-    private final Map<String, String> repository = new HashMap<>();
+    // private final Map<String, String> repository = new HashMap<>();
+    private final AuthenticationTokenRepository repository;
 
     private final AuthenticationTokenProvider tokenProvider;
 
@@ -55,7 +57,7 @@ public class AuthenticationTokenService {
     }
 
     public void removeToken(AuthenticationToken token){
-        repository.remove(token.getRefresh());
+        repository.deleteById(token.getRefresh());
     }
 
     private void verifyRefreshToken(String refreshToken) {
@@ -67,7 +69,7 @@ public class AuthenticationTokenService {
                     .build()
                     .verify(refreshToken);
         } catch (TokenExpiredException e) {
-            repository.remove(refreshToken);
+            repository.deleteById(refreshToken);
             throw new AppAuthenticationException(AppAuthExceptionCode.REFRESH_TOKEN_EXPIRED);
         }
     }
@@ -76,14 +78,14 @@ public class AuthenticationTokenService {
         String accessToken = token.getAccess();
         String refreshToken = token.getRefresh();
 
-        String savedAccessToken = Optional.ofNullable(repository.get(refreshToken))
+        AuthenticationToken findToken = repository.findById(refreshToken)
                 .orElseThrow(() -> new AppAuthenticationException(AppAuthExceptionCode.INVALID_ACCESS_TOKEN));
 
-        if (!savedAccessToken.equals(accessToken))
+        if (!findToken.getAccess().equals(accessToken))
             throw new AppAuthenticationException(AppAuthExceptionCode.INVALID_ACCESS_TOKEN);
     }
 
     private void saveToken(AuthenticationToken token) {
-        repository.put(token.getRefresh(), token.getAccess());
+        repository.save(token);
     }
 }

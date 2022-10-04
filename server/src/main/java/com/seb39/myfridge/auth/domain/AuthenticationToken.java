@@ -6,12 +6,16 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.seb39.myfridge.auth.util.JwtClaims;
 import lombok.Getter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
 
 @Getter
+@RedisHash("jwt")
 public class AuthenticationToken {
 
-    private String access;
+    @Id
     private final String refresh;
+    private String access;
 
     public AuthenticationToken(String access, String refresh) {
         this.access = access;
