@@ -3,7 +3,6 @@ import GlobalStyle from "./GlobalStyle";
 import { BrowserRouter, Routes, Route, useParams, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import Nav from "./components/layout/Nav/Nav";
 import SignUpForm from "./components/layout/RegisterForm/SignUpForm";
 import NewRecipe from "./pages/NewRecipe/NewRecipe";
 import Home from "./pages/Home/Home";
@@ -75,7 +74,6 @@ function App() {
     <>
       <BrowserRouter>
         <GlobalStyle />
-        <Nav />
         <Gnb />
             <Routes>
               <Route path="/" element={<Home />} />
@@ -89,7 +87,7 @@ function App() {
               <Route path="/myfridge" element={<MyFridge />} />
               <Route path="/mypage" element={<MyPage />} />
             </Routes>
-          {/* <FloatingAction /> */}
+          <FloatingAction />
       </BrowserRouter>
       <Footer />
     </>

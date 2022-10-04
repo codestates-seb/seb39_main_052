@@ -2,7 +2,9 @@ import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export const Container = styled.div`
-    margin-top: 48px;
+    position: relative;
+    z-index: 999;
+    margin-top: 48px;   
     width: 100vw;
     height: 120px;
     background-color: var(--fridge-900);

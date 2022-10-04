@@ -14,6 +14,7 @@ export const ButtonWrapper = styled.div`
   bottom: 30px;
   right: 40px;
   position: fixed;
+  z-index: 998;
   > * {
     display: flex;
     flex-direction: column;
@@ -26,6 +27,9 @@ export const ButtonWrapper = styled.div`
         color: red;
       }
     }
+  }
+  &.invisible {
+    display: none;
   }
 `
 
