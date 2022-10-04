@@ -35,10 +35,19 @@ export const StyledSlider = styled(Slider)`
         margin: 0 auto;
         /* width: 180px; */
     }
+    // 레시피 카드 하나
     .slick-slide > * > * {
-        margin: 0 auto;
+        margin: auto;
         /* width: 180px; */
     }
+    // 레시피 제목
+    .slick-slide > * > * > div {
+        display:flex;
+        align-items:center;
+        justify-content: center;
+        /* width: 180px; */
+    }
+    // 슬라이드 전체
     .slick-list {
         width: ${(props) => props.width || "800px"};
         @media ${({ theme }) => theme.device.mobile} {
