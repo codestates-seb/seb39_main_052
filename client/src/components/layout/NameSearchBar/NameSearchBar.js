@@ -4,7 +4,7 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { Container, DropDown, SearchBar, SearchInput, StyledFontAwesomeIcon, Suggestion } from "./NameSearchBarStyle";
 import axios from "axios";
 
-const NameSearchBar = () => {
+const NameSearchBar = ({ setIsRefreshNeeded }) => {
     
     const [searchParams, setSearchParams] = useSearchParams();
     const [searchValue, setSearchValue] = useState("");
@@ -104,12 +104,14 @@ const NameSearchBar = () => {
         if (e.key === 'Enter') {
             handleSearch();
             setSuggestedValue([]);
+            setIsRefreshNeeded(true); // 새로운 검색어가 추가되었는지 냉장고 파먹기 컴포넌트에 전달
             e.target.blur(); // 엔터 검색 후 input 박스에서 커서 제거
         }
     }
 
     // 엔터/서치 아이콘 클릭 시 하단에 키워드 결과 레시피 카드를 보여주는 함수
     const handleSearch = (el) => {
+        setIsRefreshNeeded(true); // 새로운 검색어가 추가되었는지 냉장고 파먹기 컴포넌트에 전달
         // 마우스로 드롭다운 요소 클릭 시 바로 검색 키워드 추가
         if (typeof el === "string") {
             searchParams.set("keyword", el);

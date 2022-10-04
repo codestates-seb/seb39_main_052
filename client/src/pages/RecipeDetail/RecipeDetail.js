@@ -14,6 +14,7 @@ const RecipeDetail = () => {
 
     const [isMyRecipe, setIsMyRecipe] = useState(false);
     // console.log("내 레시피니?", isMyRecipe);
+
     const { id } = useParams();
     // console.log("id", id);
     const dispatch = useDispatch();
@@ -47,6 +48,7 @@ const RecipeDetail = () => {
                 profileImagePath: data.member.profileImagePath,
                 createdAt: data.createdAt,
                 heartCounts: data.heartCounts,
+                heartExist: data.heartExist,
                 view: data.view,
                 title: data.title,
                 portion: data.portion,
@@ -79,13 +81,13 @@ const RecipeDetail = () => {
         })
         .then((response) => {
             console.log(response);
-            alert(`레시피가 삭제되었습니다`);
+            alert(`레시피를 삭제했어요`);
             navigate(-1);
         })
         .catch((error) => {
             // 예외 처리
             console.log(error.response);
-            alert(`레시피를 삭제할 수 없습니다`);
+            alert(`레시피 삭제에 실패했습니다ㅠㅠ`);
         })
     }
 
@@ -102,7 +104,11 @@ const RecipeDetail = () => {
                     <HeadLeftTop>
                         <Heading>{recipe.title}</Heading>
                         <LikeViewWrapper>
-                            <LikeHeart heartCounts={recipe.heartCounts} />
+                            <LikeHeart
+                                heartCounts={recipe.heartCounts}
+                                heartExist={recipe.heartExist}
+                                idx={recipe.id}
+                            />
                             <View>조회수 {recipe.view}</View>
                         </LikeViewWrapper>
                     </HeadLeftTop>
@@ -112,7 +118,6 @@ const RecipeDetail = () => {
                             <PortionAndTime>{recipe.portion} 인분</PortionAndTime>
                             <PortionAndTime>{recipe.time} 분 &nbsp;소요</PortionAndTime>
                         </Info>
-
                         <ButtonLikeWrapper>
                             <ButtonLike className={!isMyRecipe && "invisible"}>
                                 <Link to="/recipes/edit">수정</Link>
@@ -124,7 +129,6 @@ const RecipeDetail = () => {
                                 삭제
                             </ButtonLike>
                         </ButtonLikeWrapper>
-
                     </HeadLeftBottom>
                 </HeadLeft>
                 <Image src={recipe.imageInfo.imagePath} alt={'main'} />

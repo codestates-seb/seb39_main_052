@@ -16,10 +16,19 @@ export const Wrapper = styled.div`
         }
         font-size: 14px;
     }
-    // 레시피 카드같은 작은 요소에서는 길이를 넘어가면 ...이 보이게 하기
-    :not(.large) {
+    // 댓글 요소에서는 길이를 넘어가면 ...이 보이게 하기
+    &.short {
         > div {
-            width: 72px;
+            width: 80px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+    }
+    // 레시피 카드 요소에서는 길이를 넘어가면 ...이 보이게 하기
+    &.long {
+        > div {
+            width: 100px;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;

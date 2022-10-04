@@ -19,6 +19,7 @@ const RecipeCard = ({
   memberName,
   memberImage,
   heartCounts,
+  heartExist,
   views,
   detectOnClick, //서치 모달에서 레시피 카드 제목, 사진부분 눌렀을때 모달 닫혀야되어서 props 만듬
 }) => {
@@ -43,7 +44,11 @@ const RecipeCard = ({
           <StyledFontAwesomeIcon icon={faGripLines} />
         </Doornob>
         <LikesAndViews>
-          <LikeHeart heartCounts={heartCounts} />
+          <LikeHeart
+            idx={id}
+            heartCounts={heartCounts}
+            heartExist={heartExist}
+          />
           <div>조회수 {views}</div>
         </LikesAndViews>
       </ContentWrapper>

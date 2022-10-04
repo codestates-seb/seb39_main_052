@@ -1,22 +1,14 @@
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-
-export const Input = styled.input`
+export const TextArea = styled.textarea`
     flex-grow: 1;
-    padding: 0px 8px 0 8px;
-    margin: 0 8px 0 0;
-    &.large {
-        height: 36px;
-        border-radius: 8px;
-    }
-    &.small {
-        height: 24px;
-        border-radius: 6px;
-        margin: 0 8px 0 6px;
-        border: 1px solid var(--primary-500);
-        padding-top: 1px;
-    }
+    padding: 2px 8px 0 8px;
+    height: 36px;
+    border-radius: 6px;
+    margin: 0 8px 0 6px;
+    border: 1px solid var(--primary-500);
+    display: flex;
 `
 
 export const CommentWrapper = styled.div`
@@ -24,8 +16,15 @@ export const CommentWrapper = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    margin: 0 0 8px 4px;
+    margin: 0 0 0 4px;
+    padding: 6px 0 2px 0;
     font-size: 13px;
+    :not(:last-of-type) {
+        border-bottom: 1px solid var(--gray-200);
+    }
+    &.editMode {
+        border-bottom: none;
+    }
 `
 
 export const Comment = styled.div`
@@ -33,16 +32,28 @@ export const Comment = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-    margin: 0 0 0 16px;
-    width: 65%;
-    height: 24px;
+    margin: 0 0 0 8px;
+    width: 58%;
+    height: 36px;
+`
+
+export const Time = styled.div`
+    font-size: 12px;
+    width: 56px;
+    display: flex;
+    justify-content: center;
+    color: var(--fridge-800);
 `
 
 export const ButtonLikeWrapper = styled.div`
     display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    width: 68px;
+    flex-direction: column;
+    align-items: flex-end;
+    /* justify-content: flex-end; */
+    width: 28px;
+    > div:first-of-type {
+        margin-bottom: 4px;
+    }
 `
 
 export const ButtonLike = styled.div`
@@ -51,12 +62,12 @@ export const ButtonLike = styled.div`
     align-items: center;
     justify-content: center;
     font-size: 12px;
-    margin: 0 4px 0 4px;
-    color: var(--gray-800);
+    color: var(--gray-600);
     cursor: pointer;
     
     &:hover {
-        color: var(--black)
+        color: var(--black);
+        text-decoration: underline;
     }
 
     &.invisible {

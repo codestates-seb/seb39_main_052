@@ -33,6 +33,7 @@ const InputList = ({ titlesArr, placeholders }) => {
 
     const handleInputChange = (e, i) => {
         const { name, value } = e.target;
+        console.log(name, value);
 
         if (pathname === "/recipes/new" || pathname === "/recipes/edit") {
             dispatch(editIngredients({ index: i, key: name, value: value }));
@@ -48,7 +49,7 @@ const InputList = ({ titlesArr, placeholders }) => {
                 dispatch(addIngrInput({ index: i }));
             }
             else {
-                alert(`15개 이하로만 등록할 수 있습니다`);
+                alert(`15개 이하로만 등록할 수 있어요ㅠㅠ`);
             }
         }
         if (pathname === "/myfridge") {
@@ -56,7 +57,7 @@ const InputList = ({ titlesArr, placeholders }) => {
                 dispatch(addFrigIngrInput({ index: i }));
             }
             else {
-                alert(`30개 이하로만 등록할 수 있습니다`);
+                alert(`30개 이하로만 등록할 수 있어요ㅠㅠ`);
             }
         }
         // 나의 냉장고 스크롤는 조정되지 않음
@@ -144,7 +145,7 @@ const InputList = ({ titlesArr, placeholders }) => {
                         {titlesArr.map((title, index) => {
                             return (
                                 <Input
-                                    type={title === "date" ? "date" : "text"}
+                                    type={title === "expiration" ? "date" : "text"}
                                     maxLength='12'
                                     key={index}
                                     name={title}

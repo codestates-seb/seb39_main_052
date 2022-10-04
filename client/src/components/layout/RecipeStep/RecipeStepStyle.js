@@ -9,6 +9,8 @@ export const Container = styled.div`
 
 export const Image = styled.img`
     width: 160px;
+    height: 160px;
+    object-fit: cover;
     border-radius: 10px;
     box-shadow: var(--shadow-low);
 `

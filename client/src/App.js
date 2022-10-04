@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
 import GlobalStyle from "./GlobalStyle";
-import { BrowserRouter, Routes, Route, useParams } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useParams, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import Nav from "./components/layout/Nav/Nav";
 import SignUpForm from "./components/layout/RegisterForm/SignUpForm";
 import NewRecipe from "./pages/NewRecipe/NewRecipe";
 import Home from "./pages/Home/Home";
@@ -18,6 +17,8 @@ import MyFridge from "./pages/MyFridge/MyFridge";
 import MyPage from "./pages/MyPage/MyPage";
 import axios from "axios";
 import { setLoggedIn } from "./features/userSlice";
+import Footer from "./components/layout/Footer/Footer";
+
 import { useRef } from "react";
 import MenuTab from "./components/layout/MenuTab/MenuTab";
 
@@ -26,6 +27,7 @@ function App() {
   const effectedCalled = useRef(false); //useEffect 한번만 실행하려고
 
   //로그인 상태 가져와서 변수에 저장
+
   const isLoggedIn = useSelector((state) => {
     return state.user.isLoggedIn;
   });
@@ -53,7 +55,6 @@ function App() {
             "토큰 재발급 서버에 요청 후 App.js에서 재발급된 ACCESS_TOKEN",
             ACCESS_TOKEN
           );
-
           //refesh로 새로받아온 액세스 토큰 리덕스에도 저장하기
           dispatch(setLoggedIn({ userToken: ACCESS_TOKEN }));
           //액세스토큰 만료되기 1분 전 로그인 연장
@@ -65,6 +66,7 @@ function App() {
   };
 
   useEffect(() => {
+
     if (effectedCalled.current) return; //이미 useEffect 실행되었다면 useEffect실행안하고 탈출
     effectedCalled.current = true;
 
@@ -83,7 +85,6 @@ function App() {
     <>
       <BrowserRouter>
         <GlobalStyle />
-        {/* <Nav /> */}
         <Gnb />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -95,12 +96,11 @@ function App() {
           <Route path="/recipes/:id" element={<RecipeDetail />} />
           <Route path="/search" element={<FridgeDigging />} />
           <Route path="/myfridge" element={<MyFridge />} />
-          {/* <Route path="/mypage" element={<MyPage />} /> */}{" "}
-          {/* 기존 마이페이지 메뉴탭에 useParams 적용 이전. 마이페이지 누르면 맨 처음 내프로필 */}
           <Route path="/mypage/:id" element={<MyPage />} />
         </Routes>
-        {/* <FloatingAction /> */}
+        <FloatingAction />
       </BrowserRouter>
+      <Footer />
     </>
   );
 }

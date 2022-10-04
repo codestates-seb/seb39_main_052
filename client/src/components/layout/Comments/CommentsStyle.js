@@ -3,10 +3,10 @@ import styled from "styled-components";
 export const Container = styled.div`
     display: flex;
     flex-direction: column;
-    /* background-color: var(--primary-200); */
-    background-color: var(--gray-200);
+    /* background-color: var(--mintgreen-400); */
+    background-color: var(--gray-100);
     width: 548px;
-    max-height: 480px;
+    max-height: 610px;
     margin: 54px 0 32px 0;
     padding: 20px 20px;
     border-radius: 10px;

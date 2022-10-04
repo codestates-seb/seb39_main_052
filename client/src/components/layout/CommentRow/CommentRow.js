@@ -1,20 +1,56 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useSelector } from "react-redux";
-import { CommentWrapper, Input, Comment, ButtonLikeWrapper, ButtonLike, StyledFontAwesomeIcon } from "./CommentRowStyle";
+import { CommentWrapper, Input, Comment, ButtonLikeWrapper, ButtonLike, StyledFontAwesomeIcon, Time, TextArea } from "./CommentRowStyle";
 import UserName from "../../common/UserName/UserName";
 import GeneralButton from "../../common/Button/GeneralButton";
 import useConfirm from "../../../hooks/useConfirm";
 import { faXmark, faCheck } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
-const CommentRow = ({ comment, setIsUpdated }) => {
+const CommentRow = ({ comment, setIsUpdated, page }) => {
     const [isEditable, setIsEditable] = useState(false);
     const [editedComment, setEditedComment] = useState("");
+
+    // 댓글 수정 모드에서 페이지 변경 시 수정 모드 끄기
+    useEffect(() => {
+        setIsEditable(false);
+    }, [page])
 
     // 로그인 시 리덕스에 저장한 내 아이디
     const myId = useSelector((state) => {
         return state.user.userId;
     })
+
+    // 시간을 ago 기준으로 표시하는 함수
+    function timeSince (createdAt) {
+        const date = Date.parse(createdAt);
+    
+        let seconds = Math.floor((new Date() - date) / 1000);
+    
+        let interval = seconds / 31536000;
+    
+        if (interval > 1) {
+            return Math.floor(interval) + "년 전";
+        }
+        interval = seconds / 2592000;
+        if (interval > 1) {
+            return Math.floor(interval) + "달 전";
+        }
+        interval = seconds / 86400;
+        if (interval > 1) {
+            return Math.floor(interval) + "일 전";
+        }
+        interval = seconds / 3600;
+        if (interval > 1) {
+            return Math.floor(interval) + "시간 전";
+        }
+        interval = seconds / 60;
+        if (interval > 1) {
+            return Math.floor(interval) + "분 전";
+        }
+        return "방금";
+    };
+
 
     const confirm = (id) => {console.log("삭제 했습니다"); handleDelete(id)};
     const cancel = () => console.log("취소");
@@ -33,12 +69,13 @@ const CommentRow = ({ comment, setIsUpdated }) => {
         })
         .then((response) => {
             console.log(response);
-            alert(`댓글이 삭제되었습니다`);
+            alert(`댓글을 삭제했어요 :)`);
             setIsUpdated(true);
         })
         .catch((error) => {
             // 예외 처리
             console.log(error.response);
+            alert(`댓글 삭제에 실패했어요ㅠㅠ`)
         })
     }
 
@@ -58,13 +95,14 @@ const CommentRow = ({ comment, setIsUpdated }) => {
         })
         .then((response) => {
             console.log(response)
-            alert(`댓글을 수정하였습니다.`)
+            alert(`댓글을 수정했어요 :)`)
             setIsEditable(false);
             setIsUpdated(true);
         })
         .catch((error) => {
             // 예외 처리
             console.log(error.response);
+            alert(`댓글 수정에 실패했어요ㅠㅠ`)
         })
     }
 
@@ -92,26 +130,29 @@ const CommentRow = ({ comment, setIsUpdated }) => {
         <>
             {!isEditable
                 ?
+                // 작성글 보여주기
                 <CommentWrapper>
                     <UserName
                         image={comment.member.profileImagePath}
                         name={comment.member.name}
-                        className="bold"
+                        className="short"
                     />
                     <Comment>{comment.content}</Comment>
+                    <Time>{timeSince(comment.createdAt)}</Time>
+                    {/* <Time>23시간 전</Time> */}
                     <EditAndDelete isMine={comment.member.id === myId}/>
                 </CommentWrapper>
                 :
-                <CommentWrapper>
+                // 작성글을 input 창에 넣어 수정 가능하게 하기
+                <CommentWrapper className="editMode">
                     <UserName
                         image={comment.member.profileImagePath}
                         name={comment.member.name}
-                        className="bold"
+                        className="short"
                     />
-                    <Input 
-                        className="small" 
+                    <TextArea 
                         type='text' 
-                        maxLength='28'
+                        maxLength='46'
                         onChange={(e)=> {setEditedComment(e.target.value)}}
                         onKeyUp={handleEnter}
                         value={editedComment}

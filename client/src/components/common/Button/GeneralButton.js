@@ -51,8 +51,8 @@ const Button = styled.button`
   margin: ${(props) => props.margin || "20px 0 0 0"};
   &.large {
     margin-top: 0;
-    height: 80px;
-    width: 80px;
+    height: 68px;
+    width: 68px;
     font-size: 20px;
   }
   &.medium {
@@ -80,6 +80,9 @@ const Button = styled.button`
   }
   &.gray {
     background: var(--gray-400);
+  }
+  &.invisible {
+    display: none;
   }
   &:hover {
     /* background-color: var(--fridge-700); */

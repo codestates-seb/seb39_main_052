@@ -4,16 +4,17 @@ import { faMagnifyingGlass, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Container, DropDown, SearchBar, SearchInput, StyledFaXmark, StyledFontAwesomeIcon, Suggestion, Tag, TagWrapper } from "./TagSearchBarStyle";
 import axios from "axios";
 
-const TagSearchBar = () => {
+const TagSearchBar = ({ setIsRefreshNeeded }) => {
 
     const [searchParams, setSearchParams] = useSearchParams();
     const [searchValue, setSearchValue] = useState(""); // 확정된 검색 태그 하나
     const [searchTags, setSearchTags] = useState([]); // 확정된 검색 태그 전체 배열
+    console.log("서치 태그 길이", searchTags.length)
     const [suggestedValue, setSuggestedValue] = useState([]); // 연관 검색어
     const [isDropDownOpen, setIsDropDownOpen] = useState(false);
     const [cursor, setCursor] = useState(-1);
 
-    console.log("태그 추천 검색어", suggestedValue);
+    // console.log("태그 추천 검색어", suggestedValue);
 
     const searchBarRef = useRef(); // 서치바+드롭다운 창 밖 클릭을 인식하기 위한 ref
     const suggestionRef = useRef(null); // 스크롤이 드롭다운 내 선택된 요소를 따라가게 하기 위한 ref
@@ -63,7 +64,7 @@ const TagSearchBar = () => {
         }
     });
 
-    // 마우스로 클릭시 드롭다운 닫기
+    // 마우스로 외부 클릭시 드롭다운 닫기
     const handleClickOutside = (e) => {
         if (isDropDownOpen && !searchBarRef.current.contains(e.target)) {
             setIsDropDownOpen(false);
@@ -117,21 +118,29 @@ const TagSearchBar = () => {
         if (e.key === 'Enter') {
             handleSearch();
             setSuggestedValue([]);
+            setIsRefreshNeeded(true);
         }
     }
 
     // 엔터/서치 아이콘 클릭 시 하단에 태그 결과 레시피 카드를 보여주는 함수
     const handleSearch = (el) => {
+        setIsRefreshNeeded(true);
         // 마우스로 드롭다운 요소 클릭 시 바로 검색 태그에 추가
         if (typeof el === "string") {
             // 중복 태그 방지
             if (!searchTags.includes(el)) {
-                searchParams.set("tags", [...searchTags, el])
-                setSearchParams(searchParams);
-                setSearchTags([...searchTags, el]);
+                // 태그 갯수 유효성 (10개 이하)
+                if (searchTags.length >= 10) {
+                    alert("태그는 10개 이하로만 추가할 수 있어요ㅠㅠ")
+                }
+                else {
+                    searchParams.set("tags", [...searchTags, el])
+                    setSearchParams(searchParams);
+                    setSearchTags([...searchTags, el]);
+                }
             }
             else {
-                alert(`이미 등록한 재료입니다`);
+                alert(`이미 등록한 재료예요`);
             }
             setIsDropDownOpen(false);
             setCursor(-1);
@@ -141,13 +150,18 @@ const TagSearchBar = () => {
         else if (searchValue.length > 0){
             // 중복 태그 방지
             if (!searchTags.includes(searchValue)) {
-                // 마우스로 드롭다운 요소 클릭 시 바로 검색 태그에 추가
-                searchParams.set("tags", [...searchTags, searchValue])
-                setSearchParams(searchParams);
-                setSearchTags([...searchTags, searchValue]);
+                if (searchTags.length >= 10) {
+                    alert("태그는 10개 이하로만 추가할 수 있어요ㅠㅠ")
+                }
+                else {
+                    // 마우스로 드롭다운 요소 클릭 시 바로 검색 태그에 추가
+                    searchParams.set("tags", [...searchTags, searchValue])
+                    setSearchParams(searchParams);
+                    setSearchTags([...searchTags, searchValue]);
+                }
             }
             else {
-                alert(`이미 등록한 재료입니다`)
+                alert(`이미 등록한 재료예요`)
             }
             setIsDropDownOpen(false);
             setCursor(-1);
@@ -166,6 +180,7 @@ const TagSearchBar = () => {
         searchParams.set("tags", tmp);
         setSearchParams(searchParams);
         setSearchTags(tmp);
+        setIsRefreshNeeded(true);
     }
 
     // 외부 클릭 후 다시 Input창 클릭시 연관 검색어가 있으면 드롭다운을 다시 보여주는 함수

@@ -37,18 +37,24 @@ export const HeadLeftTop = styled.div`
     flex-direction: row;
     justify-content: space-between;
     margin: 0 0 8px 0;
-    height: 34px;
+    height: 40px;
 `
 
 export const Heading = styled.h1`
     margin: 0 0 0 0;
+    height: 40px;
+    width: 270px;
+    overflow: wrap;
+    font-size: 18px;
+    /* white-space: nowrap;
+    text-overflow: ellipsis; */
 `
 
 export const LikeViewWrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    justify-content: space-between;
+    justify-content: flex-start;
 `
 
 export const View = styled.div`
@@ -75,6 +81,7 @@ export const Info = styled.div`
 
 export const PortionAndTime = styled.div`
     min-width: 60px;
+    max-width: 110px;
     height: 24px;
     border-radius: 10px;
     display: flex;
@@ -121,12 +128,14 @@ export const ButtonLike = styled.div`
 export const Image = styled.img`
     height: 12.5rem;
     width: 12.5rem;
+    object-fit: cover;
     border-radius: 10px;
     box-shadow: var(--shadow-low);
 `
 
 export const SubHeading = styled.h2`
     width: 548px;
+    color: var(--gray-900);
 `
 export const Ingredients = styled.div`
     display: flex;    
