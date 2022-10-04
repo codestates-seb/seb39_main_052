@@ -14,7 +14,7 @@ export const TextArea = styled.textarea`
 export const CommentWrapper = styled.div`
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
     margin: 0 0 0 4px;
     padding: 6px 0 2px 0;
@@ -30,7 +30,7 @@ export const CommentWrapper = styled.div`
 export const Comment = styled.div`
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
+    align-items: center;
     justify-content: flex-start;
     margin: 0 0 0 8px;
     width: 58%;

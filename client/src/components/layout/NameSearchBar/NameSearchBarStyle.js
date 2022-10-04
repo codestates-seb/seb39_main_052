@@ -43,7 +43,7 @@ export const DropDown = styled.ul`
     font-size: 14px;
     background-color: var(--gray-050);
     position: absolute;
-    top: 200px;
+    top: 182px;
     z-index: 98;
     box-shadow: var(--shadow-medium);
     ::-webkit-scrollbar {

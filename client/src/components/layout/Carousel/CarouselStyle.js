@@ -43,7 +43,7 @@ export const StyledSlider = styled(Slider)`
         width: ${(props) => props.width || "800px"};
         @media ${({ theme }) => theme.device.mobile} {
             width: 320px;
-            margin: 0 0 0px 8px;
+            margin: 0 0 0px 0px;
         }
     }
 `
@@ -63,7 +63,7 @@ export const Container = styled.div`
     /* overflow: hidden; */
     @media ${({ theme }) => theme.device.mobile} {
         width: 320px;
-        margin: 0 0 0px 8px;
+        margin: 0 0 0px 0px;
     }
 `
 

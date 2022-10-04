@@ -10,7 +10,7 @@ export const Header = styled.h1 `
     margin: 32px 0 16px 0;
     color: var(--fridge-900);
     // 두번째 carousel 헤딩
-    :last-of-type {
+    :not(:first-of-type) {
         @media ${({ theme }) => theme.device.mobile} {
         margin-top: 60px;
         }

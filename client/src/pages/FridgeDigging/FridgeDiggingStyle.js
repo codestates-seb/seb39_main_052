@@ -25,6 +25,7 @@ export const Heading = styled.h1`
 
 export const Alert = styled.div`
     width: 736px;
+    height: 54vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -56,6 +57,7 @@ export const RecipeWrapper = styled.div`
     flex-direction: row;
     justify-content: flex-start;
     width: 754px;
+    min-height: 50vh;
     flex-wrap: wrap;
     &.invisible {
         display: none;
