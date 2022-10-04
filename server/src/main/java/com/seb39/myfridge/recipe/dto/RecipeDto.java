@@ -2,7 +2,6 @@ package com.seb39.myfridge.recipe.dto;
 
 
 import lombok.*;
-import com.querydsl.core.annotations.QueryProjection;
 import com.seb39.myfridge.member.dto.MemberDto;
 
 

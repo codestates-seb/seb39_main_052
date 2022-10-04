@@ -16,6 +16,7 @@ import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.repository.MemberRepository;
 import com.seb39.myfridge.recipe.dto.MyRecipeDto;
 import com.seb39.myfridge.recipe.dto.RecipeDto;
+import com.seb39.myfridge.recipe.dto.RecipeRecommendDto;
 import com.seb39.myfridge.recipe.dto.RecipeSearch;
 import com.seb39.myfridge.recipe.entity.Recipe;
 import com.seb39.myfridge.recipe.enums.RecipeSort;
@@ -380,6 +381,26 @@ class RecipeRepositoryTest {
         }
 
         assertThat(content.size()).isEqualTo(4);
+    }
+
+    @Test
+    @DisplayName("내가 가지고 있는 재료가 포함된 레시피 조회")
+    void recommendByIngredientNamesTest() throws Exception {
+        // given
+        initSampleRecipes();
+        em.flush();
+        em.clear();
+
+        // when
+        List<RecipeRecommendDto> result = recipeRepository.recommendByIngredientNames(List.of("ingredient 1", "ingredient 2"));
+
+        List<Recipe> recipes = result.stream()
+                .map(dto -> recipeRepository.findById(dto.getId()).get())
+                .collect(Collectors.toList());
+
+        // then
+        assertThat(recipes).isSortedAccordingTo((o1, o2) -> o2.getView() - o1.getView());
+        assertThat(result.size()).isEqualTo(8);
     }
 
     private void initSampleRecipes() {

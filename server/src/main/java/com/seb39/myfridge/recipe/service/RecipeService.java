@@ -1,5 +1,10 @@
 package com.seb39.myfridge.recipe.service;
 
+import com.seb39.myfridge.fridge.entity.Fridge;
+import com.seb39.myfridge.fridge.entity.FridgeIngredient;
+import com.seb39.myfridge.fridge.repository.FridgeRepository;
+import com.seb39.myfridge.fridge.service.FridgeIngredientService;
+import com.seb39.myfridge.fridge.service.FridgeService;
 import com.seb39.myfridge.heart.repository.HeartRepository;
 import com.seb39.myfridge.image.upload.FileUploadService;
 import com.seb39.myfridge.ingredient.Repository.IngredientRepository;
@@ -10,6 +15,7 @@ import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.service.MemberService;
 import com.seb39.myfridge.recipe.dto.MyRecipeDto;
 import com.seb39.myfridge.recipe.dto.RecipeDto;
+import com.seb39.myfridge.recipe.dto.RecipeRecommendDto;
 import com.seb39.myfridge.recipe.dto.RecipeSearch;
 import com.seb39.myfridge.recipe.entity.Recipe;
 import com.seb39.myfridge.recipe.enums.RecipeSort;
@@ -41,6 +47,7 @@ public class RecipeService {
     private final RecipeIngredientRepository recipeIngredientRepository;
     private final IngredientService ingredientService;
     private final HeartRepository heartRepository;
+    private final FridgeIngredientService fridgeIngredientService;
 
 
     public Recipe findRecipeWithDetails(Long recipeId) {
@@ -143,5 +150,13 @@ public class RecipeService {
 
     public Page<MyRecipeDto.Favorite> findFavoriteRecipes(Long memberId, int page) {
         return recipeRepository.findFavoriteRecipes(memberId, page);
+    }
+
+    public List<RecipeRecommendDto> recommendByFridge(Long fridgeId){
+        List<FridgeIngredient> fridgeIngredients = fridgeIngredientService.findFridgeIngredient(fridgeId);
+        List<String> ingredientNames = fridgeIngredients.stream()
+                .map(fi -> fi.getIngredient().getName())
+                .collect(Collectors.toList());
+        return recipeRepository.recommendByIngredientNames(ingredientNames);
     }
 }

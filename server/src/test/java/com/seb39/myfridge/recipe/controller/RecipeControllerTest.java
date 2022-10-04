@@ -2,6 +2,8 @@ package com.seb39.myfridge.recipe.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.seb39.myfridge.fridge.entity.Fridge;
+import com.seb39.myfridge.fridge.service.FridgeService;
 import com.seb39.myfridge.heart.entity.Heart;
 import com.seb39.myfridge.image.entity.Image;
 import com.seb39.myfridge.heart.service.HeartService;
@@ -12,6 +14,7 @@ import com.seb39.myfridge.member.entity.Member;
 import com.seb39.myfridge.member.repository.MemberRepository;
 import com.seb39.myfridge.recipe.dto.MyRecipeDto;
 import com.seb39.myfridge.recipe.dto.RecipeDto;
+import com.seb39.myfridge.recipe.dto.RecipeRecommendDto;
 import com.seb39.myfridge.recipe.dto.RecipeSearch;
 import com.seb39.myfridge.recipe.entity.Recipe;
 import com.seb39.myfridge.recipe.enums.RecipeSort;
@@ -53,6 +56,8 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.seb39.myfridge.util.ApiDocumentUtils.getRequestPreProcessor;
 import static com.seb39.myfridge.util.ApiDocumentUtils.getResponsePreProcessor;
@@ -80,6 +85,9 @@ class RecipeControllerTest {
 
     @MockBean
     private HeartService heartService;
+
+    @MockBean
+    private FridgeService fridgeService;
 
     @SpyBean
     private RecipeMapper recipeMapper;
@@ -788,6 +796,38 @@ class RecipeControllerTest {
                         fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("현재 사이즈"),
                         fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("레시피 전체 수"),
                         fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("총 페이지 개수")
+                )
+        ));
+    }
+
+    @Test
+    @DisplayName("냉장고 재료를 기준으로 레시피 추천")
+    void getRecommendRecipesByFridgeTest() throws Exception {
+        // given
+        Fridge fridge = new Fridge();
+        ReflectionTestUtils.setField(fridge,"id",1L);
+        willReturn(fridge).given(fridgeService).findFridge(anyLong());
+
+        List<RecipeRecommendDto> result = IntStream.range(1, 9)
+                .mapToObj(i -> new RecipeRecommendDto((long) i, "title " + i, "https://s3.aws.abcdefg/recipe" + i + ".jpeg"))
+                .collect(Collectors.toList());
+        willReturn(result).given(recipeService).recommendByFridge(anyLong());
+
+        // expected
+        ResultActions actions = mockMvc.perform(get("/api/recipes/recommend/fridge")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.data").isArray())
+                .andDo(MockMvcResultHandlers.print());
+
+        // docs
+        actions.andDo(document("recipe-recommend-fridge",
+                getRequestPreProcessor(),
+                getResponsePreProcessor(),
+                responseFields(
+                        fieldWithPath("data.[]").type(JsonFieldType.ARRAY).description("레시피 리스트"),
+                        fieldWithPath("data.[].id").type(JsonFieldType.NUMBER).description("검색된 레시피의 ID"),
+                        fieldWithPath("data.[].title").type(JsonFieldType.STRING).description("검색된 레시피의 제목"),
+                        fieldWithPath("data.[].imagePath").type(JsonFieldType.STRING).description("레시피의 대표 이미지 경로")
                 )
         ));
     }

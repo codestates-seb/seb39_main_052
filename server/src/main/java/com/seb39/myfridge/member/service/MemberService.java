@@ -52,7 +52,6 @@ public class MemberService {
         String encryptedPassword = passwordEncoder.encode(member.getPassword());
         member.saveEncryptedPassword(encryptedPassword);
         memberRepository.save(member);
-        //회원가입시 냉장고 생성
         fridgeService.createFridge(member);
     }
 
