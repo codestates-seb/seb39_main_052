@@ -79,18 +79,26 @@ const RecipeEditor = () => {
     // 재료 유효성 경고 창 뜬 후 재작성 했을 때 유효하다면 경고창 없애기 
     useEffect(() => {
         if (isSubmitClicked) {
-            if (recipe.ingredients[0].name.length > 0) {
-                recipe.ingredients[0].quantity.length > 0
-                    ? setIsIngrEmpty(false)
-                    : setIsIngrEmpty(true);
+            // 모든 재료가 빈칸이 없는지
+            for (let i = 0; i < recipe.ingredients.length; i++) {
+                if (recipe.ingredients[i].name.length <= 0 || recipe.ingredients[i].quantity.length <= 0) {
+                    setIsIngrEmpty(true);
+                    break;
+                }
+                setIsIngrEmpty(false);
             }
         }
     }, [recipe.ingredients])
 
-    // 요리 순서 유효성 경고 창 뜬 후 재작성 했을 때 유효하다면 경고창 없애기 
+    // 요리 순서 유효성 경고 창 뜬 후 재작성 했을 때 유효하다면 경고창 없애기
     useEffect(() => {
-        if (recipe.steps[0].content.length > 0) {
-            recipe.steps[0].content.length > 0 ? setIsStepsEmpty(false) : setIsStepsEmpty(true);
+        // 요리 순서에 빈칸이 없는지
+        for  (let i = 0; i < recipe.steps.length; i++) {
+            if (recipe.steps[i].content <= 0) {
+                setIsStepsEmpty(true);
+                break;
+            }
+            setIsStepsEmpty(false);
         }
     }, [recipe.steps])
 
@@ -116,10 +124,23 @@ const RecipeEditor = () => {
         // 필수 데이터 유효성 검사
         recipe.title.length > 0 ? setIsTitleEmpty(false) : setIsTitleEmpty(true);
         recipe.time.length > 0 ? setIsTimeEmpty(false) : setIsTimeEmpty(true);
-        recipe.ingredients[0].name.length > 0 && recipe.ingredients[0].quantity.length > 0
-            ? setIsIngrEmpty(false)
-            : setIsIngrEmpty(true);
-        recipe.steps[0].content.length > 0 ? setIsStepsEmpty(false) : setIsStepsEmpty(true);
+        // 재료에 빈칸이 없는지
+        for (let i = 0; i < recipe.ingredients.length; i++) {
+            if (recipe.ingredients[i].name.length <= 0 || recipe.ingredients[i].quantity.length <= 0) {
+                setIsIngrEmpty(true);
+                break;
+            }
+            setIsIngrEmpty(false);
+        }
+        // 요리 순서에 빈칸이 없는지
+        for  (let i = 0; i < recipe.steps.length; i++) {
+            if (recipe.steps[i].content <= 0) {
+                setIsStepsEmpty(true);
+                break;
+            }
+            setIsStepsEmpty(false);
+        }
+        // recipe.steps[0].content.length > 0 ? setIsStepsEmpty(false) : setIsStepsEmpty(true);
 
         // 메인 이미지 유효성 검사
         // 새 레시피 작성하기 
@@ -171,10 +192,25 @@ const RecipeEditor = () => {
         // 필수 데이터 유효성 검사
         recipe.title.length > 0 ? setIsTitleEmpty(false) : setIsTitleEmpty(true);
         recipe.time.length > 0 ? setIsTimeEmpty(false) : setIsTimeEmpty(true);
-        recipe.ingredients[0].name.length > 0 && recipe.ingredients[0].quantity.length > 0 
-            ? setIsIngrEmpty(false) 
-            : setIsIngrEmpty(true);
-        recipe.steps[0].content.length > 0 ? setIsStepsEmpty(false) : setIsStepsEmpty(true);
+        // recipe.ingredients[0].name.length > 0 && recipe.ingredients[0].quantity.length > 0 
+        //     ? setIsIngrEmpty(false) 
+        //     : setIsIngrEmpty(true);
+        // 모든 재료가 빈칸이 없는지
+        for (let i = 0; i < recipe.ingredients.length; i++) {
+            if (recipe.ingredients[i].name.length <= 0 || recipe.ingredients[i].quantity.length <= 0) {
+                setIsIngrEmpty(true);
+                break;
+            }
+            setIsIngrEmpty(false);
+        }
+        // 요리 순서에 빈칸이 없는지
+        for  (let i = 0; i < recipe.steps.length; i++) {
+            if (recipe.steps[i].content <= 0) {
+                setIsStepsEmpty(true);
+                break;
+            }
+            setIsStepsEmpty(false);
+        }
 
         // 메인 이미지 유효성 검사
         // 새 레시피 작성하기 
@@ -385,7 +421,7 @@ const RecipeEditor = () => {
             <Steps>
                 <h2>요리 순서</h2>
                 <ImageInputList />
-                {isSubmitClicked && <Warning className={isStepsEmpty ? null : "invisible"}>요리 순서를 최소 하나 이상 입력해주세요</Warning>}
+                {isSubmitClicked && <Warning className={isStepsEmpty ? null : "invisible"}>요리 순서는 빈칸이 될 수 없습니다. 최소 하나 이상 입력해주세요</Warning>}
                 {isSubmitClicked && <Warning className={isStepImgEmpty? null : "invisible"}>순서별 사진을 업로드해주세요</Warning>}
             </Steps>
             {pathname === "/recipes/new" && 
