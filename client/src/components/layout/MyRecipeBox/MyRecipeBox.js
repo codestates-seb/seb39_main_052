@@ -124,6 +124,7 @@ const MyRecipeBox = ({ timeSince }) => {
             date={timeSince(Date.parse(data.lastModifiedAt))}
             icon1={<FontAwesomeIcon icon={faPencil}></FontAwesomeIcon>}
             icon2={<FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon>}
+            mode={"my_recipe"}
           >
             {/* children props 로 자식 컴포넌트로 전달되는 요소들 */}
             <SpanWrapper>
