@@ -19,7 +19,7 @@ const FridgeDigging = () => {
     const [totalNum, setTotalNum] = useState(""); // 총 레시피 순
     const [isThereSearch, setIsThereSearch] = useState(false); // 검색어 여부
     const [isThereResult, setIsThereResult] = useState(false); // 결과 값 여부
-    const [isRefreshNeeded, setIsRefreshNeeded] = useState(false); // 검색 후 새로운 검색어가 추가되었는지 확인
+    const [isRefreshNeeded, setIsRefreshNeeded] = useState(false); // 검색 후 새로운 검색어가 추가되었는지, 정렬 모드가 바뀌었는지 확인
 
     const [searchParams, setSearchParams] = useSearchParams();
     // 어떤 컴포넌트에서든 searchParams의 키워드 값을 가져와 관련 http 요청을 보낼 수 있다.
@@ -36,13 +36,6 @@ const FridgeDigging = () => {
 
     const location = useLocation();
     const navigate = useNavigate();
-
-    // useEffect(() => {
-    //     // 상세보기에서 뒤로가기 한게 아닌 이상 검색 상태는 초기화
-    //     if (!location.state) {
-    //         setSearchParams("");
-    //     }
-    // }, [])
 
     // 현재 보여지는 검색 결과 수가 총 결과 수보다 작을 때만 로딩 화면 뜨기
     useEffect(() => {
@@ -66,14 +59,13 @@ const FridgeDigging = () => {
             title: nameSearchTerm ? nameSearchTerm : "", // 서치값 없을 때 null 요청 방지
             ingredients: tagSearchArr,
             page: isRefreshNeeded ? 1 : pageNum, // 검색어 바뀔 때 마다 페이지 넘버 초기화
-            sort: isRefreshNeeded ? "HEART" : sortMode // 검색어 바뀔 때 마다 정렬모드 초기화
+            sort: sortMode
         }
         // console.log("리퀘스트 바디", payload)
 
         // 검색어 바뀔 때 마다 정렬모드, 페이지 넘버 초기화
         if (isRefreshNeeded) {
             setPageNum(1);
-            setSortMode("HEART");
         }
 
         if (tagSearchArr.length > 0 || payload.title !== "") {
@@ -82,7 +74,7 @@ const FridgeDigging = () => {
                 const { data } = await axios.post(`/api/recipes/search`, payload);
                 data.pageInfo.totalElements > 0 ? setIsThereResult(true) : setIsThereResult(false); // 결과 값 여부 확인
                 setTotalNum(data.pageInfo.totalElements); // 총 결과 갯수 상태 저장
-                // input 값 업데이트 된 경우 결과 처음부터 쌓기, 페이지 네이션으로 불러와진 결과는 이전 결과에 쌓기
+                // input 값/정렬모드 업데이트 된 경우 결과 처음부터 쌓기, 페이지 네이션으로 불러와진 결과는 이전 결과에 쌓기
                 isRefreshNeeded ? setSearchResult([...data.data]) : setSearchResult([...searchResult, ...data.data])
             }
             catch (error) {
@@ -136,7 +128,7 @@ const FridgeDigging = () => {
             {/* 일치하는 검색 결과가 있을 때 */}
             <Option className={!isThereSearch || !isThereResult ? "invisible" : null}>
                 <ResultNum>총 <strong>{totalNum}</strong>개</ResultNum>
-                <SortingTab sortMode={sortMode} setSortMode={setSortMode} />
+                <SortingTab sortMode={sortMode} setSortMode={setSortMode} setIsRefreshNeeded={setIsRefreshNeeded}/>
             </Option>
             <RecipeWrapper className={!isThereSearch || !isThereResult ? "invisible" : null}>
                 {searchResult.map((el, i) => {
