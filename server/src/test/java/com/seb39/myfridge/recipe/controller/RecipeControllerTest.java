@@ -202,7 +202,7 @@ class RecipeControllerTest {
         RecipeDto.Post requestBody = new RecipeDto.Post("라면 맛있게 끓이는 법", 1, "5분", stepList, ingredients);
 
 
-        Member member = memberRepository.findByEmail("test@email.com").get();
+        Member member = memberRepository.findGeneralByEmail("test@email.com").get();
 
         RecipeDto.ResponseDetail response = RecipeDto.ResponseDetail.builder()
                 .id(1L)
@@ -372,7 +372,7 @@ class RecipeControllerTest {
                 .imageInfo(imageInfo0)
                 .build();
 
-        Member member = memberRepository.findByEmail("test@email.com").get();
+        Member member = memberRepository.findGeneralByEmail("test@email.com").get();
 
         RecipeDto.ResponseDetail response = RecipeDto.ResponseDetail.builder()
                 .id(1L)
@@ -455,7 +455,7 @@ class RecipeControllerTest {
     public void 레시피삭제_테스트() throws Exception {
         //given
         long recipeId = 1L;
-        Long memberId = memberRepository.findByEmail("test@email.com").get().getId();
+        Long memberId = memberRepository.findGeneralByEmail("test@email.com").get().getId();
         //when
         doNothing().when(recipeService).deleteRecipe(recipeId, memberId);
         ResultActions actions = mockMvc.perform(delete("/api/recipes/{id}", recipeId));

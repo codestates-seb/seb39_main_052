@@ -19,10 +19,10 @@ public class PrincipalDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        if(!memberService.existByEmail(email))
+        if(!memberService.existsGeneralByEmail(email))
             throw new AppAuthenticationException(AppAuthExceptionCode.INVALID_EMAIL_OR_PASSWORD);
 
-        Member member = memberService.findByEmail(email);
+        Member member = memberService.findGeneralByEmail(email);
         return PrincipalDetails.general(member);
     }
 }

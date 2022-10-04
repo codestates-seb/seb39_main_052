@@ -1,6 +1,5 @@
 package com.seb39.myfridge.fridge.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seb39.myfridge.fridge.dto.FridgeDto;
 import com.seb39.myfridge.fridge.entity.Fridge;
@@ -15,7 +14,6 @@ import com.seb39.myfridge.member.service.MemberService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -32,14 +30,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static com.seb39.myfridge.util.ApiDocumentUtils.*;
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -129,7 +123,7 @@ class FridgeIngredientControllerTest {
     @Test
     void 냉장고재료입력_테스트() throws Exception {
         //given
-        Member member = memberRepository.findByEmail("test@gmail.com").get();
+        Member member = memberRepository.findGeneralByEmail("test@gmail.com").get();
         Fridge fridge = fridgeService.findFridge(member.getId());
 
         List<FridgeDto.IngredientInfo> infos = new ArrayList<>();
