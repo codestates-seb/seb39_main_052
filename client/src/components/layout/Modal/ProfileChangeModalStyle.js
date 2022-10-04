@@ -24,13 +24,17 @@ export const ProfilePhoto = styled.img`
 export const ProfileName = styled.input`
   margin: 16px 0;
   /* border-radius: 10px; */
+
+  border: none;
+  border-bottom: 2px solid var(--fridge-500);
+  width: 160px;
 `;
 
 //프로필 이미지 변경 사진 업로더
 export const ImgContainer = styled.div`
   background-color: var(--white);
   position: relative;
-  box-shadow: var(--shadow-low);
+
   > *.upload {
     left: 78%;
     top: 78%;
@@ -40,17 +44,17 @@ export const ImgContainer = styled.div`
     }
   }
   > *.cancel {
-    left: 82%;
-    top: 0%;
+    left: 78%;
+    top: 78%;
     font-size: 40px;
     color: var(--white);
   }
 
   // 사진 추가 아이콘
   > *:nth-child(3) {
-    left: 34%;
+    left: 40%;
     top: 34%;
-    font-size: 10px;
+    font-size: 30px;
   }
   // 사진 추가 삭제 아이콘은 호버시에만 보이기
   :not(:hover) {
@@ -68,6 +72,7 @@ export const Img = styled.img`
   width: 100px;
   height: 100px;
   border-radius: 50%;
+  box-shadow: var(--shadow-medium);
   &.dragover {
     border: 2px solid var(--fridge-300);
   }
