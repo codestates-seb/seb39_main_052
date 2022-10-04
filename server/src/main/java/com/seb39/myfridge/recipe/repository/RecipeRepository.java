@@ -2,6 +2,7 @@ package com.seb39.myfridge.recipe.repository;
 
 import com.seb39.myfridge.recipe.entity.Recipe;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -14,4 +15,8 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> ,RecipeRep
 
      @Query("select r from Recipe r join fetch r.recipeIngredients ri join fetch ri.ingredient where r.id = :id")
      Optional<Recipe> findWithIngredients(@Param("id") Long id);
+
+     @Modifying
+     @Query("update Recipe r set r.view = r.view + 1 where r.id = :id")
+     int addView(@Param("id") Long id);
 }

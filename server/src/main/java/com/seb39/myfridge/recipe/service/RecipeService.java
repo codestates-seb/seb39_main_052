@@ -44,6 +44,7 @@ public class RecipeService {
 
 
     public Recipe findRecipeWithDetails(Long recipeId) {
+        recipeRepository.addView(recipeId);
         Recipe recipe = recipeRepository.findWithDetails(recipeId)
                 .orElseThrow(() -> new IllegalArgumentException("Recipe not exist. id = " + recipeId));
         // recipe.ingredients 영속화를 위한 호출
