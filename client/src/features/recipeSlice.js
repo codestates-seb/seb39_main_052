@@ -10,6 +10,7 @@ const initialState = {
     },
     createdAt: null,
     heartCounts: "",
+    heartExist: "",
     view: "",
     title: "",
     portion: "1",
@@ -104,6 +105,7 @@ const recipeSlice = createSlice({
         state.member.profileImagePath = action.payload.profileImagePath;
         state.createdAt = action.payload.createdAt;
         state.heartCounts = action.payload.heartCounts;
+        state.heartExist = action.payload.heartExist;
         state.view = action.payload.view;
         state.title = action.payload.title;
         state.portion = action.payload.portion;

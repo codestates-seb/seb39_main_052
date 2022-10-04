@@ -26,13 +26,13 @@ const FridgeDigging = () => {
     const nameSearchTerm = searchParams.get('keyword'); // 제목으로 레시피 검색한 값
     const tagSearchTerm = searchParams.get('tags'); // 태그로 레시피 검색한 값
     // string으로 된 태그 값을 배열로 변환
-    let tagSearchArr = []; 
+    let tagSearchArr = [];
     if (tagSearchTerm !== null) {
         // 태그 삭제 후 아무 값이 없을 때 빈문자열 방지
         if (tagSearchTerm.length > 0) {
             tagSearchArr = tagSearchTerm.split(",");
         }
-    } 
+    }
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -54,10 +54,10 @@ const FridgeDigging = () => {
         }
     }, [searchResult, totalNum])
 
-        // 페이지 넘버, 정렬모드, 검색어 바뀔 때마다 새로 데이터 fetch
-        useEffect(() => {
-            fetchData(pageNum);
-        }, [pageNum, sortMode, searchParams])
+    // 페이지 넘버, 정렬모드, 검색어 바뀔 때마다 새로 데이터 fetch
+    useEffect(() => {
+        fetchData(pageNum);
+    }, [pageNum, sortMode, searchParams])
 
     const fetchData = async (pageNum) => {
 
@@ -65,8 +65,8 @@ const FridgeDigging = () => {
         const payload = {
             title: nameSearchTerm ? nameSearchTerm : "", // 서치값 없을 때 null 요청 방지
             ingredients: tagSearchArr,
-            page: isRefreshNeeded? 1 : pageNum, // 검색어 바뀔 때 마다 페이지 넘버 초기화
-            sort: isRefreshNeeded? "HEART" : sortMode // 검색어 바뀔 때 마다 정렬모드 초기화
+            page: isRefreshNeeded ? 1 : pageNum, // 검색어 바뀔 때 마다 페이지 넘버 초기화
+            sort: isRefreshNeeded ? "HEART" : sortMode // 검색어 바뀔 때 마다 정렬모드 초기화
         }
         // console.log("리퀘스트 바디", payload)
 
@@ -102,14 +102,14 @@ const FridgeDigging = () => {
     }
 
     const pageEnd = useRef();
-
+    // 무한 스크롤
     useEffect(() => {
         if (isLoading) {
             const observer = new IntersectionObserver(entries => {
                 if (entries[0].isIntersecting) {
                     loadMore();
                 }
-            },{threshold: 0});
+            }, { threshold: 0 });
 
             observer.observe(pageEnd.current);
         }
@@ -121,15 +121,15 @@ const FridgeDigging = () => {
                 <Heading>
                     제목으로 레시피 검색하기
                 </Heading>
-                <NameSearchBar setIsRefreshNeeded={setIsRefreshNeeded}/>
+                <NameSearchBar setIsRefreshNeeded={setIsRefreshNeeded} />
                 <Heading>
                     재료로 레시피 검색하기
                 </Heading>
-                <TagSearchBar setIsRefreshNeeded={setIsRefreshNeeded}/>
+                <TagSearchBar setIsRefreshNeeded={setIsRefreshNeeded} />
             </SearchWrapper>
             {/* 아무 검색어도 입력하지 않았을 때 */}
-            <Alert className={isThereSearch && "invisible"}> 
-                검색어를 입력하여 원하는 레시피를 찾아보세요! 
+            <Alert className={isThereSearch && "invisible"}>
+                검색어를 입력하여 원하는 레시피를 찾아보세요!
             </Alert>
             {/* 일치하는 검색 결과가 없을 때 */}
             <Alert className={!isThereSearch || isThereResult ? "invisible" : null}>일치하는 결과가 없습니다. 검색 범위를 넓혀보는건 어떨까요?</Alert>
@@ -149,6 +149,7 @@ const FridgeDigging = () => {
                             memberName={el.member.name}
                             memberImage={el.member.profileImagePath}
                             heartCounts={el.heartCounts}
+                            heartExist={el.heartExist}
                             views={el.view}
                         />
                     )

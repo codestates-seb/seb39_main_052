@@ -11,7 +11,8 @@ const RecipeCard = ({
     memberName,
     memberImage,
     heartCounts,
-    views
+    heartExist,
+    views,
 }) => {
     
     const recipeLink = `/recipes/${id}`;
@@ -31,7 +32,11 @@ const RecipeCard = ({
                     <StyledFontAwesomeIcon icon={faGripLines}/>
                 </Doornob>
                 <LikesAndViews>
-                    <LikeHeart heartCounts={heartCounts} />
+                    <LikeHeart
+                        idx={id}
+                        heartCounts={heartCounts}
+                        heartExist={heartExist}
+                    />
                     <div>조회수 {views}</div>
                 </LikesAndViews>
             </ContentWrapper>
