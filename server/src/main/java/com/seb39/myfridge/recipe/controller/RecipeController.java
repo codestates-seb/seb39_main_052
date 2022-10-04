@@ -68,7 +68,7 @@ public class RecipeController {
     @PatchMapping("/{id}")
     public ResponseEntity<RecipeDto.ResponseDetail> updateRecipe(@PathVariable("id") @Positive Long id,
                                                                  @Valid @RequestPart RecipeDto.Patch requestBody,
-                                                                 @RequestPart List<MultipartFile> files,
+                                                                 @RequestPart(required = false) List<MultipartFile> files,
                                                                  @AuthMemberId Long memberId) {
         requestBody.setId(id);
         List<Step> stepList = recipeMapper.recipeDtoStepsToStepListForPatch(requestBody.getSteps());
