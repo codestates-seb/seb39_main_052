@@ -3,6 +3,8 @@ package com.seb39.myfridge.recipe.controller;
 
 import com.seb39.myfridge.dto.MultiResponseDto;
 import com.seb39.myfridge.dto.SingleResponseDto;
+import com.seb39.myfridge.fridge.entity.Fridge;
+import com.seb39.myfridge.fridge.service.FridgeService;
 import com.seb39.myfridge.heart.entity.Heart;
 import com.seb39.myfridge.heart.service.HeartService;
 import com.seb39.myfridge.ingredient.entity.RecipeIngredient;
@@ -39,6 +41,7 @@ public class RecipeController {
 
     private final RecipeService recipeService;
     private final HeartService heartService;
+    private final FridgeService fridgeService;
     private final RecipeMapper recipeMapper;
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -144,5 +147,14 @@ public class RecipeController {
     public ResponseEntity getPopularRecipes() {
         List<RecipeRecommendDto> popularRecipes = recipeService.findPopularRecipes();
         return new ResponseEntity(popularRecipes, HttpStatus.OK);
+        }
+
+    @GetMapping("/recommend/fridge")
+    @Secured("ROLE_USER")
+    public ResponseEntity<SingleResponseDto<List<RecipeRecommendDto>>> getRecommendRecipesByFridge(@AuthMemberId Long memberId){
+        Fridge fridge = fridgeService.findFridge(memberId);
+        List<RecipeRecommendDto> dtos = recipeService.recommendByFridge(fridge.getId());
+        return ResponseEntity.ok(new SingleResponseDto<>(dtos));
+
     }
 }

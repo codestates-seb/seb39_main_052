@@ -12,8 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.support.PageableExecutionUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -34,6 +32,9 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
 
     @Value("${app.pageable.size.my-recipe}")
     private int myRecipeSize;
+
+    @Value("${app.pageable.size.recommend}")
+    private int recommendSize;
 
     @Override
     public List<String> searchTitles(String title) {
@@ -81,7 +82,7 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
                 )
                 .groupBy(recipe.id)
                 .having(hasAllIngredientsByNames(ingredientNames))
-                .orderBy(recipeSearchOrderBy(request.getSort()))
+                .orderBy(recipeOrderBy(request.getSort()))
                 .offset(offset)
                 .limit(searchSize)
                 .fetch();
@@ -114,7 +115,7 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
         return ingredient.name.in(names);
     }
 
-    private OrderSpecifier recipeSearchOrderBy(RecipeSort sort) {
+    private OrderSpecifier recipeOrderBy(RecipeSort sort) {
         switch (sort) {
             case RECENT:
                 return recipe.lastModifiedAt.desc();
@@ -158,7 +159,7 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
                 .where(
                         recipe.member.id.eq(memberId)
                 )
-                .orderBy(recipeSearchOrderBy(sort))
+                .orderBy(recipeOrderBy(sort))
                 .offset(offset)
                 .limit(myRecipeSize)
                 .fetch();
@@ -274,4 +275,29 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
     }
     //endregion
 
+    //region recommend
+    @Override
+    public List<RecipeRecommendDto> recommendByIngredientNames(List<String> ingredientNames) {
+
+        return queryFactory
+                .select(
+                        new QRecipeRecommendDto(
+                                recipe.id,
+                                recipe.title,
+                                recipe.image.imagePath
+                        )
+                )
+                .from(recipe)
+                .leftJoin(recipe.image)
+                .leftJoin(recipe.recipeIngredients, recipeIngredient)
+                .leftJoin(recipeIngredient.ingredient, ingredient)
+                .where(
+                        hasIngredientByNames(ingredientNames)
+                )
+                .groupBy(recipe.id)
+                .orderBy(recipeOrderBy(RecipeSort.VIEW))
+                .limit(recommendSize)
+                .fetch();
+    }
+    //endregion
 }

@@ -256,6 +256,22 @@ include::{snippets}/recipe-favorite/http-response.adoc[]
 .response-fields
 include::{snippets}/recipe-favorite/response-fields.adoc[]
 
+=== 레시피 추천
+==== 냉장고 재료 기반
+***
+
+ 로그인 한 사용자의 냉장고 재료를 기준으로 레시피를 추천하는 API 입니다.
+ 추천 기준 : 냉장고 재료가 하나라도 레시피 재료에 포함될 경우
+
+.http-request
+include::{snippets}/recipe-recommend-fridge/http-request.adoc[]
+
+.http-response
+include::{snippets}/recipe-recommend-fridge/http-response.adoc[]
+
+.response-fields
+include::{snippets}/recipe-recommend-fridge/response-fields.adoc[]
+
 
 == 댓글 관련 API
 === 댓글 등록

@@ -1,6 +1,7 @@
 package com.seb39.myfridge.recipe.repository;
 
 
+import com.seb39.myfridge.ingredient.entity.Ingredient;
 import com.seb39.myfridge.recipe.dto.MyRecipeDto;
 import com.seb39.myfridge.recipe.dto.RecipeDto;
 import com.seb39.myfridge.recipe.dto.RecipeRecommendDto;
@@ -20,7 +21,11 @@ public interface RecipeRepositoryCustom {
 
     Page<MyRecipeDto.Favorite> findFavoriteRecipes(Long memberId, int page);
 
+
     List<RecipeRecommendDto> findPopularRecipes();
 
     List<RecipeRecommendDto> findRecentRecipes();
+
+    List<RecipeRecommendDto> recommendByIngredientNames(List<String> ingredientNames);
+
 }

@@ -13,7 +13,8 @@ public enum AppAuthExceptionCode {
     REFRESH_TOKEN_NOT_EXIST(6, "Refresh token not exist"),
     INVALID_EMAIL_OR_PASSWORD(7,"Invalid email or password"),
     DATA_DESERIALIZE_ERROR(8,"Failed to login request body deserialization"),
-    EXISTS_MEMBER(9,"Member already exists"),
+    EXISTS_EMAIL(9,"Member email already exists"),
+    EXISTS_NAME(9,"Member name already exists"),
     OAUTH2_AUTH_FAILURE(10, "Oauth2 Authentication failure"),
     INVALID_OAUTH2_PROVIDER(11,"Invalid oauth2 provider"),
     UNDEFINED(99, "Undefined");

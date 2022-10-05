@@ -29,8 +29,8 @@ public class MemberService {
                 .orElseThrow(() -> new IllegalArgumentException("Member not exist. id = " + id));
     }
 
-    public Member findByEmail(String email) {
-        return memberRepository.findByEmail(email)
+    public Member findGeneralByEmail(String email) {
+        return memberRepository.findGeneralByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Member not exist. email = " + email));
     }
 
@@ -39,8 +39,8 @@ public class MemberService {
                 .orElseThrow(() -> new IllegalArgumentException("Member not exist. provider = " + provider + " " + "providerId = " + providerId));
     }
 
-    public boolean existByEmail(String email) {
-        return memberRepository.existsByEmail(email);
+    public boolean existsGeneralByEmail(String email) {
+        return memberRepository.findGeneralByEmail(email).isPresent();
     }
 
     public boolean existById(Long id) {
@@ -52,14 +52,19 @@ public class MemberService {
         String encryptedPassword = passwordEncoder.encode(member.getPassword());
         member.saveEncryptedPassword(encryptedPassword);
         memberRepository.save(member);
-        //회원가입시 냉장고 생성
         fridgeService.createFridge(member);
     }
 
     private void verifyBeforeSignUpGeneral(Member member) {
-        String email = member.getEmail();
-        if (existByEmail(email))
-            throw new AppAuthenticationException(AppAuthExceptionCode.EXISTS_MEMBER);
+        if (existsGeneralByEmail(member.getEmail()))
+            throw new AppAuthenticationException(AppAuthExceptionCode.EXISTS_EMAIL);
+
+        if(existsByName(member.getName()))
+            throw new AppAuthenticationException(AppAuthExceptionCode.EXISTS_NAME);
+    }
+
+    private boolean existsByName(String name){
+        return memberRepository.existsByName(name);
     }
 
     public void signUpOauth2IfNotExists(Member member) {
@@ -68,7 +73,6 @@ public class MemberService {
         if (existOAuth2Member(provider, providerId))
             return;
         memberRepository.save(member);
-        //회원가입시 냉장고 생성
         fridgeService.createFridge(member);
     }
 
@@ -78,6 +82,9 @@ public class MemberService {
 
     @Transactional
     public void updateName(Member member, String newName) {
+        if(existsByName(member.getName()))
+            throw new IllegalArgumentException("UpdateName Error. name already exist. name = " + newName);
+
         member.changeName(newName);
     }
 
