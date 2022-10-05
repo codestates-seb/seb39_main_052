@@ -24,6 +24,11 @@ const MyFridge = () => {
         return state.user.isLoggedIn;
     });
 
+        // 로그인 상태 가져와서 변수에 저장
+    const userToken = useSelector((state) => {
+        return state.user.userToken;
+    });
+
     useEffect(() => {
         console.log("마운트");
         // 첫 마운트
@@ -34,6 +39,7 @@ const MyFridge = () => {
             }
         }
         if (isLoggedIn) {
+            console.log("유저토큰", userToken)
             getFridge();
         }
         return () => { mountRef.current = true; console.log("언마운트")}
@@ -48,7 +54,7 @@ const MyFridge = () => {
     // 냉장고 정보 서버에서 받아오기
     const getFridge = async () => {
         try {
-            const { data } = await axios.get(`/api/fridge`);
+            const { data } = await axios.get(`/api/fridge`, {headers: {Authorization: userToken}});
             const { fridgeIngredients } = data;
             console.log(data);
             // console.log("서버 냉장고재료", fridgeIngredients);
@@ -175,7 +181,6 @@ const MyFridge = () => {
                 <GeneralButton className="medium gray" onClick={handleCancel}>취소</GeneralButton>
                 <GeneralButton className="medium" onClick={useConfirm("정말 비우는건가요? 확인시 냉장고 상태를 되돌릴 수 없어요.", confirm, cancel)}>냉장고 비우기</GeneralButton>
                 <GeneralButton className="medium" onClick={handleSave}>냉장고 정리 끝</GeneralButton>
-                <GeneralButton className="medium" onClick={getFridge}>GET 요청</GeneralButton>
             </ButtonWrap>
         </Container>
     )
