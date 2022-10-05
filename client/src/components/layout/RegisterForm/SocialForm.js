@@ -15,7 +15,7 @@ const SocialForm = () => {
         backgroundColor="#4285F4"
         hoverBackgroundColor="#356bc3"
       >
-        <a href="https://seb39myfridge.ml/oauth2/authorization/google">
+        <a href="https://api.seb39myfridge.ml/oauth2/authorization/google">
           <FontAwesomeIcon
             icon={faGoogle}
             size="lg"
@@ -29,7 +29,7 @@ const SocialForm = () => {
         color="black"
         hoverBackgroundColor="#cfbd1b"
       >
-        <a href="https://seb39myfridge.ml/oauth2/authorization/kakao">
+        <a href="https://api.seb39myfridge.ml/oauth2/authorization/kakao">
           <FontAwesomeIcon
             icon={faComment}
             size="lg"
