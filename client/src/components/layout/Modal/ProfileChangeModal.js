@@ -45,22 +45,12 @@ const ProfileChangeModal = ({ handleClose, profileData }) => {
 
   //previewImg 있으면 수정한 사진 보내기, null이면 다시 대표이미지로 되돌리는거니 리덕스에도 이미지 삭제하기
   const changeProfile = () => {
-    if (previewImg === null) {
-      dispatch(deleteUserPhoto());
-    } else {
-      dispatch(editUserPhoto({ userProfileImgPath: previewImg }));
-    }
-    if (previewUserName) {
-      dispatch(editUserName({ userName: previewUserName }));
-    }
-
     console.log("체인지프로필부모에서 uploadFile객체?", uploadFile);
     //FileList {0: File, length: 1}
     //0: File {name: '소면.jpeg', lastModified: 1664802180985, lastModifiedDate:...}
 
     const formdata = new FormData();
     formdata.append("profileImage", uploadFile);
-
     formdata.append(
       "requestBody",
       new Blob([JSON.stringify({ name: previewUserName })], {
@@ -83,13 +73,24 @@ const ProfileChangeModal = ({ handleClose, profileData }) => {
     })
       .then((res) => {
         console.log(res);
+        //서버 통신 성공해야지 리덕스 상태 변경하기
+        if (previewImg === null) {
+          dispatch(deleteUserPhoto());
+        } else {
+          dispatch(editUserPhoto({ userProfileImgPath: previewImg }));
+        }
+        if (previewUserName) {
+          dispatch(editUserName({ userName: previewUserName }));
+        }
+
         formdata.delete("profileImage");
         formdata.delete("requestBody");
-        // alert("프로필이 잘 변경되었어요");
+        alert("프로필이 잘 변경되었어요");
         handleClose(); //모달창 닫기
       })
       .catch((err) => {
         console.log(err.response);
+        alert("프로필을 변경할 수 없어요ㅠㅠ");
         formdata.delete("profileImage");
         formdata.delete("requestBody");
       });
