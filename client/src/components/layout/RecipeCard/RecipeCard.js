@@ -41,7 +41,7 @@ const RecipeCard = ({
         </Title>
         <Doornob>
           <UserName image={memberImage} name={memberName} className="long"/>
-          <StyledFontAwesomeIcon icon={faGripLines} />
+          <Link to={recipeLink}><StyledFontAwesomeIcon icon={faGripLines} /></Link>
         </Doornob>
         <LikesAndViews>
           <LikeHeart
