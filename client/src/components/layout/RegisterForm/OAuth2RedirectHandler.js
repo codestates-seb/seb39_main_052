@@ -42,6 +42,31 @@ const OAuth2RedirectHandler = () => {
   const SocialUserId = location.searchParams.get("member-id");
   // console.log("쿼리파라미터로 받아오는 멤버아이디", SocialUserId);
 
+  const JWT_EXPIRY_TIME = 30 * 60 * 1000; //30분
+
+  //액세스토큰 재발급
+  const onSilentRefresh = () => {
+    axios
+      .post("/api/auth/refresh")
+      .then((response) => {
+        const ACCESS_TOKEN = response.headers["access-token"]; //eyJ0eX.. 서버에서 response header에 싣어보내는 토큰값
+        if (response.status === 200) {
+          axios.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${ACCESS_TOKEN}`; //요청헤더에 액세스 토큰 설정
+
+          console.log("ACCESS_TOKEN 재발급", ACCESS_TOKEN);
+
+          //refesh로 새로받아온 액세스 토큰 리덕스에도 저장하기
+          dispatch(setLoggedIn({ userToken: ACCESS_TOKEN }));
+          //액세스토큰 만료되기 1분 전 로그인 연장
+          setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
+          // setTimeout(onSilentRefresh, 3000); //3초로 실험
+        }
+      })
+      .catch((error) => console.log(error, "silent refresh 에러"));
+  };
+
   useEffect(() => {
     //요청헤더에 액세스 토큰 설정
     axios.defaults.headers.common[
@@ -65,6 +90,9 @@ const OAuth2RedirectHandler = () => {
       // alert("소셜 로그인 성공");
 
       navigate("/");
+
+      //소셜로그인하고 액세스토큰 만료되기 전 로그인 연장
+      setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
     } else {
       console.log("OAuth 액세스 토큰 없음");
       navigate("/login");

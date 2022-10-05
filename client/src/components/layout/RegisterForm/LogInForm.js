@@ -36,6 +36,7 @@ const LogInForm = () => {
   });
 
   const JWT_EXPIRY_TIME = 30 * 60 * 1000; //액세스 토큰 만료시간 30분을 밀리초로 표현
+  // const JWT_EXPIRY_TIME = 60 * 60 * 1000; //1시간으로설정
 
   const onSubmit = (data) => {
     // console.log(data); //{email: 'test1@email.com', password: 'aaaa1111'}
@@ -188,6 +189,7 @@ const LogInForm = () => {
           type="email"
           name="email"
           placeholder="이메일을 입력해주세요"
+          // value="test@email.com"
           {...register("email", {
             // required: true,
             pattern: {
@@ -204,6 +206,7 @@ const LogInForm = () => {
           type="password"
           name="password"
           placeholder="비밀번호를 입력해주세요"
+          // value="test1111"
           {...register("password", {
             // required: true,
             minLength: {
@@ -225,10 +228,18 @@ const LogInForm = () => {
       </form>
 
       <SignUpDiv>
-        <span>오늘 뭐먹을지 고민중인가요?</span>
+        {/* <span>오늘 뭐먹을지 고민중인가요?</span>
         <span>
           <Link to="/signup">회원가입</Link>
-        </span>
+        </span> */}
+        <span>오늘 뭐먹을지 고민중인가요?</span>
+        <GeneralButton
+          color={`var( --gray-600)`}
+          backgroundColor={"var(--red-075)"}
+          hoverBackgroundColor={"var(--red-150)"}
+        >
+          <Link to="/signup">회원가입</Link>
+        </GeneralButton>
       </SignUpDiv>
     </LogInFormContainer>
   );

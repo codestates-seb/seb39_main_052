@@ -10,6 +10,7 @@ import {
 } from "./CommentsBoxStyle";
 import logoface from "../../../assets/small_logoface.png";
 import { useNavigate } from "react-router-dom";
+import { NoticeMsgBox } from "../MyRecipeBox/MyRecipeBoxStyle";
 
 const CommentsBox = ({ timeSince }) => {
   const [commentsList, setCommentsList] = useState([]); //서버에서 받아오는 댓글 리스트 저장
@@ -48,48 +49,55 @@ const CommentsBox = ({ timeSince }) => {
 
   //Don't forget 리턴!!!
   return (
-    <CommentsBoxContainer className="CommentsBoxContainer">
-      <CommentsCollection className="CommentsCollection">
-        <div>
-          {commentsList.map((eachComment, idx) => (
-            <div key={idx}>
-              <span>
-                <UserImg
-                  src={
-                    eachComment.member.profileImagePath === null
-                      ? logoface
-                      : eachComment.member.profileImagePath
-                  }
-                />
-                <UserNameTag>{eachComment.member.name}</UserNameTag>
-                {/* <UserName
+    <>
+      {commentsList.length === 0 && (
+        <NoticeMsgBox>아직 받은 댓글이 없어요</NoticeMsgBox>
+      )}
+      {commentsList.length > 0 && (
+        <CommentsBoxContainer className="CommentsBoxContainer">
+          <CommentsCollection className="CommentsCollection">
+            <div>
+              {commentsList.map((eachComment, idx) => (
+                <div key={idx}>
+                  <span>
+                    <UserImg
+                      src={
+                        eachComment.member.profileImagePath === null
+                          ? logoface
+                          : eachComment.member.profileImagePath
+                      }
+                    />
+                    <UserNameTag>{eachComment.member.name}</UserNameTag>
+                    {/* <UserName
                   image={eachComment.member.profileImagePath}
                   name={eachComment.member.name}
                 ></UserName> */}
-              </span>
-              <span
-                className="comment"
-                onClick={() => clickRecipeDetail(eachComment.recipeId)}
-              >
-                {eachComment.content}
-              </span>
-              <span className="date">
-                {/* {dateConverter(eachComment.createdAt)} */}
-                {timeSince(Date.parse(eachComment.createdAt))}
-              </span>
+                  </span>
+                  <span
+                    className="comment"
+                    onClick={() => clickRecipeDetail(eachComment.recipeId)}
+                  >
+                    {eachComment.content}
+                  </span>
+                  <span className="date">
+                    {/* {dateConverter(eachComment.createdAt)} */}
+                    {timeSince(Date.parse(eachComment.createdAt))}
+                  </span>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </CommentsCollection>
-      {/* 페이지네이션 들어갈 자리 */}
-      {total > 10 && (
-        <Pagination
-          page={page}
-          setPage={setPage}
-          totalPages={totalPages}
-        ></Pagination>
+          </CommentsCollection>
+          {/* 페이지네이션 들어갈 자리 */}
+          {total > 10 && (
+            <Pagination
+              page={page}
+              setPage={setPage}
+              totalPages={totalPages}
+            ></Pagination>
+          )}
+        </CommentsBoxContainer>
       )}
-    </CommentsBoxContainer>
+    </>
   );
 };
 
