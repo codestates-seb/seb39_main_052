@@ -1,12 +1,13 @@
 // 주어진 제목 배열에 대한 다수의 값을 입력할 수 있는 Input 컴포넌트 (열 추가, 삭제 가능)
 // 레시피 재료, 냉장고 재료 등에 쓰일 수 있다.
+import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from 'react-router-dom'
-import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faMinus, faUtensils } from "@fortawesome/free-solid-svg-icons";
 import { editIngredients, addIngrInput, deleteIngrInput } from "../../../features/recipeSlice";
 import { editFrigIngredients, addFrigIngrInput, deleteFrigIngrInput } from "../../../features/fridgeSlice";
-import { Block, Order, Input, ButtonWrapper, Button, StyledFontAwesomeIcon } from "./InputListStyle";
+import { Block, Order, Input, ButtonWrapper, Button, StyledFontAwesomeIcon, RecipeLinker } from "./InputListStyle";
 
 // props로 input의 제목이 될 요소들을 배열의 형태로 받아온다. 
 // 예) titlesArr = ["food", "quantity", "expirationDate"] 
@@ -18,9 +19,9 @@ const InputList = ({ titlesArr, placeholders }) => {
     const lastValueRef = useRef(null); // 추가되는 input 박스가 화면 안에 위치할 수 있도록 ref 설정
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     // 어느 페이지에서 해당 컴포넌트를 불러오는지 확인
-    const { pathname } = useLocation()
-
+    const { pathname } = useLocation();
     // row 값 (한 열의 데이터 객체를 가지고 있는 배열)
     const data = useSelector((state) => {
         if (pathname === "/recipes/new" || pathname === "/recipes/edit") {
@@ -122,6 +123,7 @@ const InputList = ({ titlesArr, placeholders }) => {
 
     }
 
+    // 디데이 글자 컨버터 (4 => D-4, -4 => D+4)
     const dDayDisplay = (dDay) => {
         let display;
         if (dDay === "") {
@@ -136,27 +138,40 @@ const InputList = ({ titlesArr, placeholders }) => {
         return display;
     }
 
+    // input 창 내 아이콘 클릭시 해당 재료가 있는 레시피 검색
+    const handleClickFridge = (tag) => {
+        if (tag.length > 0) {
+            navigate(`/search?tags=${tag}`)
+        }
+    }
+
     return (
         <>
             {data.map((el, idx) => {
                 return (
                     <Block key={idx} id="row" ref={idx === data.length -1 ? lastValueRef : null}>
-                        {showOrder && <Order htmlFor="row">{idx+1}</Order>}
+                        {showOrder && <Order htmlFor="row">{idx + 1}</Order>}
                         {titlesArr.map((title, index) => {
                             return (
-                                <Input
-                                    type={title === "expiration" ? "date" : "text"}
-                                    maxLength='12'
-                                    key={index}
-                                    name={title}
-                                    value={title === "dDay" ? dDayDisplay(el[title]) : el[title]}
-                                    placeholder={placeholders[index]}
-                                    onChange={e => handleInputChange(e, idx)}
-                                    readOnly={title === "dDay" ? true : false} // D-Day 값은 입력/수정 안되도록
-                                    // className={title === "dDay" ? "small gray" : "small"}
-                                    // className={el.dDay > 0 ? "small red" : "small"}
-                                    className={classSetter(el, title)}
-                                />
+                                <React.Fragment key={index}>
+                                    {title === "name" && pathname === "/myfridge"
+                                        && <RecipeLinker onClick={() => handleClickFridge(el[title])} title={el[title]+"(으)로 레시피 검색하기"}>
+                                            <StyledFontAwesomeIcon icon={faUtensils} className={el[title].length > 0 ? "utensils hover" : "utensils"}/>
+                                        </RecipeLinker>
+                                    }
+                                    <Input
+                                        type={title === "expiration" ? "date" : "text"}
+                                        maxLength='12'
+                                        name={title}
+                                        value={title === "dDay" ? dDayDisplay(el[title]) : el[title]}
+                                        placeholder={placeholders[index]}
+                                        onChange={e => handleInputChange(e, idx)}
+                                        readOnly={title === "dDay" ? true : false} // D-Day 값은 입력/수정 안되도록
+                                        // className={title === "dDay" ? "small gray" : "small"}
+                                        // className={el.dDay > 0 ? "small red" : "small"}
+                                        className={classSetter(el, title)}
+                                    />
+                                </React.Fragment>
                             )
                         })}
                         <ButtonWrapper>
