@@ -48,7 +48,7 @@ const MenuTab = () => {
   /* <Route path="/mypage/:detail" element={<MenuTab />} /> */ //App.js Route 부분
   // const { detail } = useParams(); // /mypage/profile 이런식으로 pathname으로 나타내려고했을때
   const { id } = useParams();
-  console.log("usParmas아이디값", id);
+  // console.log("usParmas아이디값", id);
 
   const menuArr = [
     {
@@ -98,7 +98,7 @@ const MenuTab = () => {
           // >
           //   {menu.name}
           // </Li>
-          <Li key={idx} isFocused={idx === menu.id}>
+          <Li key={idx} isFocused={String(idx) === id}>
             {/* 탭 메뉴 요소에 링크달기 */}
             {/* <Link to={`/mypage${menuArr[idx].pathname}`}>{menu.name}</Link> */}
             {/* 링크랑 컴포넌트 탭 안에있는 컨텐트 연결 */}
