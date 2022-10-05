@@ -76,7 +76,7 @@ public class RecipeService {
     @Transactional
     public Recipe updateRecipe(Recipe recipe, List<Step> steps, Long memberId, List<MultipartFile> files, List<RecipeIngredient> recipeIngredients) {
         Recipe findRecipe = findRecipeById(recipe.getId());
-        recipe.verifyWriter(memberId);
+        findRecipe.verifyWriter(memberId);
 
         Optional.ofNullable(recipe.getTitle()).ifPresent(findRecipe::setTitle);
         Optional.ofNullable(recipe.getTime()).ifPresent(findRecipe::setTime);
