@@ -257,6 +257,35 @@ include::{snippets}/recipe-favorite/http-response.adoc[]
 include::{snippets}/recipe-favorite/response-fields.adoc[]
 
 === 레시피 추천
+==== 최신 레시피
+***
+ 비로그인 시 메인페이지에 접근할 때 최신 레시피를 제공하는 API 입니다.
+ 레시피의 생성일자를 기준으로 최신순으로 정렬됩니다.
+
+.http-request
+include::{snippets}/recent-recipe-recommend/http-request.adoc[]
+
+.http-response
+include::{snippets}/recent-recipe-recommend/http-response.adoc[]
+
+.response-fields
+include::{snippets}/recent-recipe-recommend/response-fields.adoc[]
+
+==== 인기 레시피
+***
+ 메인페이지에 접근할 때 인기 레시피를 제공하는 API 입니다.
+ 레시피의 좋아요가 많은 순서대로 정렬됩니다.
+
+.http-request
+include::{snippets}/popular-recipe-recommend/http-request.adoc[]
+
+.http-response
+include::{snippets}/popular-recipe-recommend/http-response.adoc[]
+
+.response-fields
+include::{snippets}/popular-recipe-recommend/response-fields.adoc[]
+
+
 ==== 냉장고 재료 기반
 ***
 

@@ -140,13 +140,13 @@ public class RecipeController {
     @GetMapping("/recommend/recent")
     public ResponseEntity getRecentRecipes() {
         List<RecipeRecommendDto> recentRecipes = recipeService.findRecentRecipes();
-        return new ResponseEntity(recentRecipes, HttpStatus.OK);
+        return new ResponseEntity(new SingleResponseDto<>(recentRecipes), HttpStatus.OK);
     }
 
     @GetMapping("/recommend/popular")
     public ResponseEntity getPopularRecipes() {
         List<RecipeRecommendDto> popularRecipes = recipeService.findPopularRecipes();
-        return new ResponseEntity(popularRecipes, HttpStatus.OK);
+        return new ResponseEntity(new SingleResponseDto<>(popularRecipes), HttpStatus.OK);
         }
 
     @GetMapping("/recommend/fridge")

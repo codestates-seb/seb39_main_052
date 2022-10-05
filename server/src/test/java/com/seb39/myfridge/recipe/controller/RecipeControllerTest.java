@@ -37,6 +37,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
@@ -798,6 +799,56 @@ class RecipeControllerTest {
                         fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("총 페이지 개수")
                 )
         ));
+    }
+
+    @Test
+    void 메인페이지_최신순추천_테스트() throws Exception {
+        //given
+        List<RecipeRecommendDto> result = IntStream.range(1, 9)
+                .mapToObj(i -> new RecipeRecommendDto((long) i, "title " + i, "https://s3.aws.abcdefg/recipe" + i + ".jpeg"))
+                .collect(Collectors.toList());
+        willReturn(result).given(recipeService).findRecentRecipes();
+
+        //when
+        ResultActions actions = mockMvc.perform(get("/api/recipes/recommend/recent")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.data").isArray());
+
+        //then
+        actions.andDo(document("recent-recipe-recommend",
+                getRequestPreProcessor(),
+                getResponsePreProcessor(),
+                responseFields(
+                        fieldWithPath("data.[]").type(JsonFieldType.ARRAY).description("레시피 리스트"),
+                        fieldWithPath("data.[].id").type(JsonFieldType.NUMBER).description("검색된 레시피의 ID"),
+                        fieldWithPath("data.[].title").type(JsonFieldType.STRING).description("검색된 레시피의 제목"),
+                        fieldWithPath("data.[].imagePath").type(JsonFieldType.STRING).description("레시피의 대표 이미지 경로")
+                )));
+    }
+
+    @Test
+    void 메인페이지_인기순추천_테스트() throws Exception {
+        //given
+        List<RecipeRecommendDto> result = IntStream.range(1, 9)
+                .mapToObj(i -> new RecipeRecommendDto((long) i, "title " + i, "https://s3.aws.abcdefg/recipe" + i + ".jpeg"))
+                .collect(Collectors.toList());
+        willReturn(result).given(recipeService).findPopularRecipes();
+
+        //when
+        ResultActions actions = mockMvc.perform(get("/api/recipes/recommend/popular")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.data").isArray());
+
+        //then
+        actions.andDo(document("popular-recipe-recommend",
+                getRequestPreProcessor(),
+                getResponsePreProcessor(),
+                responseFields(
+                        fieldWithPath("data.[]").type(JsonFieldType.ARRAY).description("레시피 리스트"),
+                        fieldWithPath("data.[].id").type(JsonFieldType.NUMBER).description("검색된 레시피의 ID"),
+                        fieldWithPath("data.[].title").type(JsonFieldType.STRING).description("검색된 레시피의 제목"),
+                        fieldWithPath("data.[].imagePath").type(JsonFieldType.STRING).description("레시피의 대표 이미지 경로")
+                )));
     }
 
     @Test
