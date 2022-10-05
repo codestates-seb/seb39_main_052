@@ -152,4 +152,32 @@ class MemberControllerTest {
                 )
         ));
     }
+
+    @Test
+    @DisplayName("기존 이름과 같은 이름으로 수정 요청시 에러가 발생하지 않아야 한다.")
+    @WithUserDetails(value = "test@gmail.com", userDetailsServiceBeanName = "principalDetailsService", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    void patchMemberNameEqualTest() throws Exception {
+        // given
+        Member member = memberRepository.findAll().get(0);
+
+        MemberDto.Patch requestBody = new MemberDto.Patch();
+        requestBody.setName(member.getName());
+        String requestJson = om.writeValueAsString(requestBody);
+
+        MockMultipartFile json = new MockMultipartFile("requestBody", "jsonData", "application/json", requestJson.getBytes(StandardCharsets.UTF_8));
+
+        // expected
+        mockMvc.perform(multipart("/api/members")
+                        .file(json)
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .with((request) -> {
+                            request.setMethod("PATCH");
+                            return request;
+                        }))
+                .andExpect(jsonPath("$.id").value(member.getId()))
+                .andExpect(jsonPath("$.name").value(requestBody.getName()))
+                .andDo(MockMvcResultHandlers.print());
+    }
 }

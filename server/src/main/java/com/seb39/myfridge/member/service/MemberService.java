@@ -82,6 +82,9 @@ public class MemberService {
 
     @Transactional
     public void updateName(Member member, String newName) {
+        if(member.getName().equals(newName))
+            return;
+
         if(existsByName(newName))
             throw new IllegalArgumentException("UpdateName Error. name already exist. name = " + newName);
 

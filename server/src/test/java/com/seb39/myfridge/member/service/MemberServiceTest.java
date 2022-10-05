@@ -86,6 +86,7 @@ class MemberServiceTest {
         assertThat(member.getName()).isEqualTo(newName);
     }
 
+
     @Test
     @DisplayName("회원의 프로필 사진을 업데이트 한다.")
     void updateProfileImageTest() throws Exception {
