@@ -154,7 +154,7 @@ class AuthenticationTest {
         ));
     }
 
-//    @Test
+    @Test
     @DisplayName("로그아웃시 서버에서 보관중인 Refresh token을 삭제한다")
     void logout() throws Exception {
         // given
