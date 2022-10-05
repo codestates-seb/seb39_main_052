@@ -32,9 +32,9 @@ const MyFridge = () => {
                 navigate("/login");
                 alert("로그인이 필요한 서비스입니다");
             }
-            else {
-                getFridge();
-            }
+        }
+        if (isLoggedIn) {
+            getFridge();
         }
         return () => { mountRef.current = true; console.log("언마운트")}
     }, [isLoggedIn])
