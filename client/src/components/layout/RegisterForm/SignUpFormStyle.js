@@ -5,6 +5,8 @@ export const SignUpFormContainer = styled.section`
   justify-content: center;
   margin-top: 32px;
   color: var(--gray-700);
+  width: 100vw;
+  height: 60vh;
 
   > form {
     display: flex;
@@ -25,8 +27,10 @@ export const SignUpFormContainer = styled.section`
     margin: 10px 0;
   }
 
+  //유효성검사 에러 메시지
   > form > span {
     font-size: 14px;
-    color: var(--gray-600);
+    /* color: var(--gray-600); */
+    color: var(--red-400);
   }
 `;

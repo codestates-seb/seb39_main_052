@@ -28,7 +28,7 @@ const SignUpForm = () => {
       .required()
       .matches(
         /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/,
-        "영문 숫자포함 8자리 이상 입력해주세요."
+        "영문 숫자포함 8자리 이상 입력해주세요"
       ),
     passwordConfirm: yup
       .string()
@@ -73,7 +73,7 @@ const SignUpForm = () => {
           id="name"
           type="name"
           name="name"
-          placeholder="닉네임을 입력해주세요"
+          placeholder="2자 이상 10자 이하로 입력해주세요"
           {...register("name")}
         ></input>
         {errors.name && <span>{errors.name.message}</span>}
@@ -93,7 +93,7 @@ const SignUpForm = () => {
           id="password"
           type="password"
           name="password"
-          placeholder="비밀번호를 입력해주세요"
+          placeholder="영문 숫자포함 8자리 이상 입력해주세요"
           {...register("password")}
         ></input>
         {errors.password && <span>{errors.password.message}</span>}
