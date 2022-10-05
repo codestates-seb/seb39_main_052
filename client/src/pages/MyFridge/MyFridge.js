@@ -15,7 +15,7 @@ const MyFridge = () => {
     const titlesArr = ["name", "quantity", "expiration", "dDay", "note"]; //재료 입력에서 각 column의 키값 배열
     const placeholders = ["예) 계란", "예) 30알", "예) 2100/01/01", "", "기타 정보를 작성하세요"];
     
-    const mountRef = useRef(true); // 두번 마운팅 방지 (첫 요청 실패, 두번째는 성공이라 두번째 요청만 살림)
+    const mountRef = useRef(false); // 두번 마운팅 방지 (첫 요청 실패, 두번째는 성공이라 두번째 요청만 살림)
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -24,19 +24,25 @@ const MyFridge = () => {
         return state.user.isLoggedIn;
     });
 
+        // 로그인 상태 가져와서 변수에 저장
+    const userToken = useSelector((state) => {
+        return state.user.userToken;
+    });
+
     useEffect(() => {
+        console.log("마운트");
         // 첫 마운트
-        if (mountRef.current) {
+        if (!mountRef.current) {
             if (!isLoggedIn) {
                 navigate("/login");
                 alert("로그인이 필요한 서비스입니다");
             }
         }
-        // 두번째 마운트
-        else {
-                getFridge();
+        if (isLoggedIn) {
+            console.log("유저토큰", userToken)
+            getFridge();
         }
-        return () => { mountRef.current = false;}
+        return () => { mountRef.current = true; console.log("언마운트")}
     }, [isLoggedIn])
 
     // 냉장고 재료
@@ -48,8 +54,9 @@ const MyFridge = () => {
     // 냉장고 정보 서버에서 받아오기
     const getFridge = async () => {
         try {
-            const { data } = await axios.get(`/api/fridge`);
+            const { data } = await axios.get(`/api/fridge`, {headers: {Authorization: userToken}});
             const { fridgeIngredients } = data;
+            console.log(data);
             // console.log("서버 냉장고재료", fridgeIngredients);
             // 서버에 재료 추가
             // 냉장고 초기 상태 또는 청소 후 빈 객체를 받아오는 경우 상태 변경하지 않도록
