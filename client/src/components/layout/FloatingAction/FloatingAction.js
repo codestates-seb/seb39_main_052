@@ -6,7 +6,6 @@ import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { ButtonWrapper, Text } from "./FloatingActionStyle";
 
 const FloatingAction = ({ isBottom }) => {
-    console.log(isBottom);
     const [ divClass, setDivClass ] = useState("");
     const [ isNotNeeded, setIsNotNeeded ] = useState(false);
     const { pathname } = useLocation();

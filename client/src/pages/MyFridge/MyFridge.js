@@ -24,7 +24,7 @@ const MyFridge = () => {
         return state.user.isLoggedIn;
     });
 
-        // 로그인 상태 가져와서 변수에 저장
+    // access token 상태 가져와서 변수에 저장 (새로고침시 통신 header에 바로 저장되지 않는 에러로 인한 임시 방편)
     const userToken = useSelector((state) => {
         return state.user.userToken;
     });
@@ -54,7 +54,7 @@ const MyFridge = () => {
     // 냉장고 정보 서버에서 받아오기
     const getFridge = async () => {
         try {
-            const { data } = await axios.get(`/api/fridge`, {headers: {Authorization: userToken}});
+            const { data } = await axios.get(`/api/fridge`, {headers: {Authorization: `Bearer ${userToken}`}});
             const { fridgeIngredients } = data;
             console.log(data);
             // console.log("서버 냉장고재료", fridgeIngredients);
@@ -180,7 +180,7 @@ const MyFridge = () => {
                 {/* 아래 onClick 13값은 변경 예정 */}
                 <GeneralButton className="medium gray" onClick={handleCancel}>취소</GeneralButton>
                 <GeneralButton className="medium" onClick={useConfirm("정말 비우는건가요? 확인시 냉장고 상태를 되돌릴 수 없어요.", confirm, cancel)}>냉장고 비우기</GeneralButton>
-                <GeneralButton className="medium" onClick={handleSave}>냉장고 정리 끝</GeneralButton>
+                <GeneralButton className="medium" onClick={handleSave}>냉장고 정리</GeneralButton>
             </ButtonWrap>
         </Container>
     )
