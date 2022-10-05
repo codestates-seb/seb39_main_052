@@ -25,20 +25,18 @@ const MyFridge = () => {
     });
 
     useEffect(() => {
+        console.log("마운트");
         // 첫 마운트
         if (!mountRef.current) {
-            console.log("마운트1");
             if (!isLoggedIn) {
                 navigate("/login");
                 alert("로그인이 필요한 서비스입니다");
             }
+            else {
+                getFridge();
+            }
         }
-        // 두번째 마운트
-        else {
-            console.log("마운트2");
-            getFridge();
-        }
-        return () => { mountRef.current = true;}
+        return () => { mountRef.current = true; console.log("언마운트")}
     }, [isLoggedIn])
 
     // 냉장고 재료
