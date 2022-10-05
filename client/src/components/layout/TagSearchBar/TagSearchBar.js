@@ -19,7 +19,7 @@ const TagSearchBar = ({ setIsRefreshNeeded }) => {
     const searchBarRef = useRef(); // 서치바+드롭다운 창 밖 클릭을 인식하기 위한 ref
     const suggestionRef = useRef(null); // 스크롤이 드롭다운 내 선택된 요소를 따라가게 하기 위한 ref
 
-    // 다른 페이지에서 searchParams에 tags로 담여서 온 키워드 배열에 담기
+    // 다른 페이지에서 searchParams에 tags로 담겨서 온 문자열 키워드를 담은 변수
     const tagSearchTerm = searchParams.get('tags'); // 태그로 레시피 검색한 값
     // string으로 된 태그 값을 배열로 변환
     let tagSearchArr = [];
