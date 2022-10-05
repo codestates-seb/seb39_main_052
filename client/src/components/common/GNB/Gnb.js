@@ -67,7 +67,7 @@ const Gnb = () => {
         <LeftBox className="leftbox" isToggleOpen={isToggleOpen}>
           <Ul className="nav-menu-list">
             <Li className="each-nav-menu-list">
-              <Link to="/search">냉장고 파먹기</Link>
+              <Link to="/search">레시피 검색</Link>
             </Li>
             <Li className="each-nav-menu-list">
               <Link to="/myfridge">나의 냉장고</Link>
