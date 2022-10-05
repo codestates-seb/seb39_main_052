@@ -15,6 +15,10 @@ export const SearchBar = styled.div`
     padding: 4px 4px 4px 8px;
     border-radius: 8px;
     z-index: 99;
+    @media ${({ theme }) => theme.device.mobile} {
+        height: 32px;
+        padding-left: 2px;
+    }  
 `
 export const SearchInput = styled.input`
     flex-grow: 1;
@@ -43,7 +47,7 @@ export const DropDown = styled.ul`
     font-size: 14px;
     background-color: var(--gray-050);
     position: absolute;
-    top: 182px;
+    top: 164px;
     z-index: 98;
     box-shadow: var(--shadow-medium);
     ::-webkit-scrollbar {
@@ -53,6 +57,9 @@ export const DropDown = styled.ul`
     ::-webkit-scrollbar-thumb {
         border-radius: 10px;
         background-color: var(--fridge-600);
+    }
+    @media ${({ theme }) => theme.device.mobile} {
+        top: 170px;
     }
 `
 export const Suggestion = styled.li`

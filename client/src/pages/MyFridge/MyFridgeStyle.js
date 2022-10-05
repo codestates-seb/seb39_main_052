@@ -4,7 +4,7 @@ export const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 70vh;
+    min-height: 80vh;
 `
 export const SortWrapper = styled.div`
     display: flex;
@@ -58,7 +58,7 @@ export const ColumnHeads = styled.div`
     display: flex;
     width: 100%;
     justify-content: space-around;
-    padding: 0 40px 0 0px;
+    padding: 0 40px 0 14px;
     margin: 0;
 `
 

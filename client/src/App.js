@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import GlobalStyle from "./GlobalStyle";
 import {
   BrowserRouter,
@@ -8,6 +8,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import styled from "styled-components";
 
 import SignUpForm from "./components/layout/RegisterForm/SignUpForm";
 import NewRecipe from "./pages/NewRecipe/NewRecipe";
@@ -31,11 +32,23 @@ import AdminSearchBar from "./components/layout/Admin/AdminSearchBar";
 import AdminPanel from "./components/layout/Admin/AdminPanel";
 
 function App() {
+
+  const [ isBottom, setIsBottom ] = useState(false); // 스크롤이 끝까지 내려갔는지 여부를 담은 상태
+
   const dispatch = useDispatch(); //for redux dispatch
   const effectedCalled = useRef(false); //useEffect 한번만 실행하려고
+  // Floating Action의 위치 조정을 위해 스크롤을 인식하는 함수
+  const handleScroll = (e) => {
+    const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
+    if (bottom) {
+      setIsBottom(true);
+    }
+    else {
+      setIsBottom(false);
+    }
+  }
 
   //로그인 상태 가져와서 변수에 저장
-
   const isLoggedIn = useSelector((state) => {
     return state.user.isLoggedIn;
   });
@@ -89,7 +102,7 @@ function App() {
   }, []);
 
   return (
-    <>
+    <Div onScroll={handleScroll}>
       <BrowserRouter>
         <GlobalStyle />
         <Gnb />
@@ -106,11 +119,17 @@ function App() {
           <Route path="/mypage/:id" element={<MyPage />} />
           <Route path="/admin" element={<AdminPanel />} />
         </Routes>
-        <FloatingAction />
+        <FloatingAction isBottom={isBottom}/>
       </BrowserRouter>
       <Footer />
-    </>
+    </Div>
   );
 }
+
+const Div = styled.div`
+  height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+`
 
 export default App;

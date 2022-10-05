@@ -9,7 +9,7 @@ const TagSearchBar = ({ setIsRefreshNeeded }) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [searchValue, setSearchValue] = useState(""); // 확정된 검색 태그 하나
     const [searchTags, setSearchTags] = useState([]); // 확정된 검색 태그 전체 배열
-    console.log("서치 태그 길이", searchTags.length)
+    // console.log("서치 태그 길이", searchTags.length)
     const [suggestedValue, setSuggestedValue] = useState([]); // 연관 검색어
     const [isDropDownOpen, setIsDropDownOpen] = useState(false);
     const [cursor, setCursor] = useState(-1);
@@ -19,9 +19,23 @@ const TagSearchBar = ({ setIsRefreshNeeded }) => {
     const searchBarRef = useRef(); // 서치바+드롭다운 창 밖 클릭을 인식하기 위한 ref
     const suggestionRef = useRef(null); // 스크롤이 드롭다운 내 선택된 요소를 따라가게 하기 위한 ref
 
-    // const suggestedValue = []
-    // const suggestedValue = ["순두부", "감자"]
-    // const dummyData = ["순두부", "감자", "미역", "간장", "계란", "밥", "돼지고기", "칼국수면", "고구마", "김치", "닭고기", "소고기", "두부"]
+    // 다른 페이지에서 searchParams에 tags로 담여서 온 키워드 배열에 담기
+    const tagSearchTerm = searchParams.get('tags'); // 태그로 레시피 검색한 값
+    // string으로 된 태그 값을 배열로 변환
+    let tagSearchArr = [];
+    if (tagSearchTerm !== null) {
+        // 태그 삭제 후 아무 값이 없을 때 빈문자열 방지
+        if (tagSearchTerm.length > 0) {
+            tagSearchArr = tagSearchTerm.split(",");
+        }
+    }
+
+    // 다른 페이지에서 searchParams에 tags로 담여서 온 키워드 있는 경우 태그 생성
+    useEffect(() => {
+        if (tagSearchArr.length > 0) {
+            setSearchTags([...tagSearchArr]);
+        }
+    }, [])
 
     // 관련 검색어 불러오기
     const getDropDownValue = async (keyword) => {

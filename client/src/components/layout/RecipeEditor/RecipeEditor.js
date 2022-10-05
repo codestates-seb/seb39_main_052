@@ -291,7 +291,7 @@ const RecipeEditor = () => {
                     formData.delete('requestBody');
                     dispatch(clearRecipe());
                     dispatch(clearImages());
-                    alert(`축하해요! 레시피가 등록됐어요!`)
+                    alert(`레시피를 등록했어요!`)
                     navigate(`/recipes/${response.data.id}`)
                 })
                 .catch((error) => {

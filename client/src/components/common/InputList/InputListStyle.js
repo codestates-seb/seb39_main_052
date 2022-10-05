@@ -61,6 +61,13 @@ export const Input = styled.input`
       }
 `;
 
+export const RecipeLinker = styled.div`
+    position: relative;
+    top: 0px;
+    right: -140px;
+    cursor: pointer;
+`
+
 export const ButtonWrapper = styled.div`
     display: flex;
     flex-direction: column;
@@ -68,7 +75,6 @@ export const ButtonWrapper = styled.div`
 
 export const Button = styled.button`
     background-color: inherit;
-    
 `
 
 export const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
@@ -77,5 +83,13 @@ export const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
     }
     &.add {
         color: var(--green-900);
+    }
+    &.utensils {
+        color: var(--gray-500);
+    }
+    &.hover {
+        &:hover {
+            color: var(--gray-800);
+        }
     }
 `;

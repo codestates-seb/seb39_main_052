@@ -14,14 +14,15 @@ const NewRecipe = () => {
     });
     // 로그아웃 상태로 페이지 접속 시 로그인 창으로 navigate
     useEffect(() => {
-        if (mountRef.current) {
+        if (!mountRef.current) {
+            console.log("마운트")
             if (!isLoggedIn) {
                 navigate("/login");
                 alert("로그인이 필요한 서비스입니다");
             }
         }
-        return () => { mountRef.current = true; }
-    }, [])
+        return () => { mountRef.current = true; console.log("언마운트")}
+    }, [isLoggedIn])
 
     return (
         <>

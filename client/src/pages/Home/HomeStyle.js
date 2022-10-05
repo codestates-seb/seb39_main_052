@@ -10,9 +10,13 @@ export const Header = styled.h1 `
     margin: 32px 0 16px 0;
     color: var(--fridge-900);
     // 두번째 carousel 헤딩
-    :not(:first-of-type) {
-        @media ${({ theme }) => theme.device.mobile} {
-        margin-top: 60px;
+    @media ${({ theme }) => theme.device.mobile} {
+        margin: 16px 0 16px 0;
+        :first-of-type {
+            margin-top: 0px;
+        }
+        :not(:first-of-type) {
+            margin-top: 60px;
         }
     }
 `
@@ -49,6 +53,15 @@ export const EmptyBox = styled.div `
         }
         :active {
             box-shadow: var(--shadow-low);
+        }
+    }
+    @media ${({ theme }) => theme.device.mobile} {
+        width: 312px;
+        height: 180px;
+        font-size: 14px;
+        > div {
+            width: 200px;
+            text-align: center;
         }
     }
 `

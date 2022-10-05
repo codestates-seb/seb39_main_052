@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export const Container = styled.div`
+    width: 100vw;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -20,19 +21,37 @@ export const SearchWrapper = styled.div`
 export const Heading = styled.h1`
     margin-top: 16px;
     color: var(--fridge-900);
+    > span {
+        font-size: 22px;
+    }
     /* color: var(--white); */
+    @media ${({ theme }) => theme.device.mobile} {
+        font-size: 16px;
+        > span {
+        font-size: 18px;
+        }
+    }
 `
 
 export const Alert = styled.div`
     width: 736px;
-    height: 54vh;
+    height: 56vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 16px 0 0 0;
     color: var(--fridge-900);
+    flex-wrap: wrap;
+    > p {
+        margin: 4px 0;
+    }
     &.invisible {
         display: none;
+    }
+    @media ${({ theme }) => theme.device.mobile} {
+        height: 50vh;
+        font-size: 14px;
     }
 `
 
@@ -44,6 +63,10 @@ export const Option = styled.div`
     margin: 0 0 16px 0;
     &.invisible {
         display: none;
+    }
+    @media ${({ theme }) => theme.device.mobile} {
+        width: 100vw;
+        padding: 0 16px;
     }
 `
 export const ResultNum = styled.div`
@@ -61,6 +84,10 @@ export const RecipeWrapper = styled.div`
     flex-wrap: wrap;
     &.invisible {
         display: none;
+    }
+    @media ${({ theme }) => theme.device.mobile} {
+        width: 100vw;
+        justify-content: center;
     }
 `
 

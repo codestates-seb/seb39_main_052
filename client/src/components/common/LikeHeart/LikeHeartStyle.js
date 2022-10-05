@@ -7,6 +7,13 @@ export const LikeWrapper = styled.div`
     justify-content: space-between;
     align-items: center;
     font-size: 0.625rem;
+    @media ${({ theme }) => theme.device.mobile} {
+        font-size: 11px;
+        flex-direction: row-reverse;
+        height: 30px;
+        align-items: flex-end;
+        color: var(--fridge-800);
+    }
 `
 
 export const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
@@ -19,5 +26,12 @@ export const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
     }
     &:hover {
         color: var(--red-400);
+    }
+    @media ${({ theme }) => theme.device.mobile} {
+        font-size: 28px;
+        margin: 0 0 0 4px;
+        &:active {
+            font-size: 27px;
+        }
     }
 `;

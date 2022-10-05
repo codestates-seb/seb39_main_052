@@ -34,7 +34,7 @@ const IntroCarousel = () => {
                             <p>만들 수 있는 <span>요리</span>가 궁금해?</p>
                         </Text>
                         <Link to="/search">
-                            <Button><strong>냉장고 파먹기</strong>&nbsp;바로가기</Button>
+                            <Button><strong>레시피 검색</strong>&nbsp;바로가기</Button>
                         </Link>
                     </Left>
                     <Right>
