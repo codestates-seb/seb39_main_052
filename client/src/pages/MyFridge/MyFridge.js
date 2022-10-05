@@ -15,7 +15,7 @@ const MyFridge = () => {
     const titlesArr = ["name", "quantity", "expiration", "dDay", "note"]; //재료 입력에서 각 column의 키값 배열
     const placeholders = ["예) 계란", "예) 30알", "예) 2100/01/01", "", "기타 정보를 작성하세요"];
     
-    const mountRef = useRef(true); // 두번 마운팅 방지 (첫 요청 실패, 두번째는 성공이라 두번째 요청만 살림)
+    const mountRef = useRef(false); // 두번 마운팅 방지 (첫 요청 실패, 두번째는 성공이라 두번째 요청만 살림)
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -26,7 +26,8 @@ const MyFridge = () => {
 
     useEffect(() => {
         // 첫 마운트
-        if (mountRef.current) {
+        if (!mountRef.current) {
+            console.log("마운트1");
             if (!isLoggedIn) {
                 navigate("/login");
                 alert("로그인이 필요한 서비스입니다");
@@ -34,9 +35,10 @@ const MyFridge = () => {
         }
         // 두번째 마운트
         else {
+            console.log("마운트2");
             getFridge();
         }
-        return () => { mountRef.current = false; }
+        return () => { mountRef.current = true;}
     }, [isLoggedIn])
 
     // 냉장고 재료
