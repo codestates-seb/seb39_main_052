@@ -32,10 +32,10 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         OAuth2UserInfo userInfo = UserInfoFactory.create(provider,oAuth2User.getAttributes())
                 .orElseThrow(()-> new AppAuthenticationException(AppAuthExceptionCode.INVALID_OAUTH2_PROVIDER));
 
-        String username = userInfo.getUsername();
         String email = userInfo.getEmail();
         String providerId = userInfo.getProviderId();
         String profileImagePath = userInfo.getProfileImagePath();
+        String username = createDefaultUsername(provider,providerId);
 
         Member member = Member.oauth2Builder()
                 .name(username)
@@ -48,5 +48,13 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
 
         Member findMember = memberService.findOAuth2Member(provider,providerId);
         return PrincipalDetails.oauth2(findMember, oAuth2User.getAttributes());
+    }
+
+    public String createDefaultUsername(String provider, String providerId){
+        StringBuilder sb = new StringBuilder();
+        sb.append(provider);
+        sb.append("_");
+        sb.append(providerId);
+        return sb.toString();
     }
 }

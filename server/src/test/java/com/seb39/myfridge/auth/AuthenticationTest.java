@@ -7,6 +7,7 @@ import com.seb39.myfridge.auth.domain.AuthenticationToken;
 import com.seb39.myfridge.auth.dto.LoginRequest;
 import com.seb39.myfridge.auth.dto.SignUpRequest;
 import com.seb39.myfridge.auth.enums.JwtTokenType;
+import com.seb39.myfridge.auth.repository.AuthenticationTokenRepository;
 import com.seb39.myfridge.auth.service.AuthenticationTokenProvider;
 import com.seb39.myfridge.auth.service.AuthenticationTokenService;
 import com.seb39.myfridge.auth.util.CookieUtils;
@@ -59,6 +60,10 @@ class AuthenticationTest {
     AuthenticationTokenService tokenService;
     @Autowired
     AuthenticationTokenProvider jwtProvider;
+
+    @Autowired
+    AuthenticationTokenRepository tokenRepository;
+
     @Value("${app.auth.jwt.secret}")
     private String secret;
 
@@ -175,8 +180,7 @@ class AuthenticationTest {
                         .cookie(refreshTokenCookie))
                 .andExpect(status().isOk());
 
-        Map<String, String> repository = (HashMap<String,String>) ReflectionTestUtils.getField(tokenService,"repository");
-        assertThat(repository.containsKey(refreshToken)).isFalse();
+        assertThat(tokenRepository.findById(refreshToken)).isEmpty();
 
         // docs
         result.andDo(document("logout-success",

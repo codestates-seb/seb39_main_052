@@ -66,14 +66,12 @@ class MemberControllerTest {
 
     @BeforeEach
     void beforeEach() {
-        Member member = Member.oauth2Builder()
+        Member member = Member.generalBuilder()
                 .name("USER01")
+                .password("abcdefgh")
                 .email("test@gmail.com")
-                .provider("google")
-                .providerId("111222333444")
-                .profileImagePath("https://lh3.googleusercontent.com/a/abcdefg")
-                .buildOAuth2Member();
-        memberService.signUpOauth2IfNotExists(member);
+                .buildGeneralMember();
+        memberService.signUpGeneral(member);
     }
 
     @AfterEach
@@ -104,7 +102,7 @@ class MemberControllerTest {
                 responseFields(
                         fieldWithPath("id").type(JsonFieldType.NUMBER).description("조회된 작성자 ID"),
                         fieldWithPath("name").type(JsonFieldType.STRING).description("조회된 사용자의 이름"),
-                        fieldWithPath("profileImagePath").type(JsonFieldType.STRING).description("조회된 사용자의 프로필 이미지 경로")
+                        fieldWithPath("profileImagePath").type(JsonFieldType.STRING).description("조회된 사용자의 프로필 이미지 경로").optional()
                 )
         ));
     }

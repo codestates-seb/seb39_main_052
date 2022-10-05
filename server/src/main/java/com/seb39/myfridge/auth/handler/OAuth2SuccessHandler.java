@@ -3,6 +3,7 @@ package com.seb39.myfridge.auth.handler;
 import com.seb39.myfridge.auth.PrincipalDetails;
 import com.seb39.myfridge.auth.domain.AuthenticationToken;
 import com.seb39.myfridge.auth.service.AuthenticationTokenService;
+import com.seb39.myfridge.auth.util.AuthenticationTokenUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -32,6 +33,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
         Long memberId = principal.getMemberId();
         AuthenticationToken token = authenticationTokenService.issueAuthenticationToken(memberId);
+        AuthenticationTokenUtils.addTokenInResponse(response, token);
         getRedirectStrategy().sendRedirect(request,response, createRedirectUri(token.getAccess(),memberId));
     }
 
