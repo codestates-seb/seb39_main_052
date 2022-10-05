@@ -21,7 +21,7 @@ public class CookieUtils {
         Cookie cookie = new Cookie(name, token);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
-        cookie.setDomain(".seb39myfridge.ml");
+        cookie.setDomain("seb39myfridge.ml");
         return cookie;
     }
 
@@ -29,6 +29,7 @@ public class CookieUtils {
         Cookie cookie = new Cookie(name,null);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
+        cookie.setDomain("seb39myfridge.ml");
         cookie.setMaxAge(0);
         return cookie;
     }
