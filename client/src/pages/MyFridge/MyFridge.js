@@ -32,10 +32,10 @@ const MyFridge = () => {
                 alert("로그인이 필요한 서비스입니다");
             }
         }
-        // 두번째 마운트
-        else {
-                getFridge();
-        }
+        // // 두번째 마운트
+        // else {
+            getFridge();
+        // }
         return () => { mountRef.current = false; }
     }, [])
 
@@ -50,6 +50,7 @@ const MyFridge = () => {
         try {
             const { data } = await axios.get(`/api/fridge`);
             const { fridgeIngredients } = data;
+            console.log(data);
             // console.log("서버 냉장고재료", fridgeIngredients);
             // 서버에 재료 추가
             // 냉장고 초기 상태 또는 청소 후 빈 객체를 받아오는 경우 상태 변경하지 않도록
