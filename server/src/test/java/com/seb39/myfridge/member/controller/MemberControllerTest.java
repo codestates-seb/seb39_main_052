@@ -102,7 +102,8 @@ class MemberControllerTest {
                 responseFields(
                         fieldWithPath("id").type(JsonFieldType.NUMBER).description("조회된 작성자 ID"),
                         fieldWithPath("name").type(JsonFieldType.STRING).description("조회된 사용자의 이름"),
-                        fieldWithPath("profileImagePath").type(JsonFieldType.STRING).description("조회된 사용자의 프로필 이미지 경로").optional()
+                        fieldWithPath("profileImagePath").type(JsonFieldType.STRING).description("조회된 사용자의 프로필 이미지 경로").optional(),
+                        fieldWithPath("roles").type(JsonFieldType.ARRAY).description("사용자 권한 리스트. (ROLE_USER: 일반 사용자, ROLE_ADMIN: 관리자)").optional()
                 )
         ));
     }

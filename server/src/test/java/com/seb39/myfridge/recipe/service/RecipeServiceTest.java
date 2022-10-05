@@ -12,6 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -155,6 +156,45 @@ class RecipeServiceTest {
         Recipe savedRecipe = recipeService.createRecipe(recipe, new ArrayList<>(), member.getId(), new ArrayList<>(), new ArrayList<>());
         //when
         recipeService.deleteRecipe(savedRecipe.getId(),member.getId());
+        //then
+        assertEquals(0, recipeRepository.findAll().size());
+    }
+
+    @Test
+    @DisplayName("관리자 계정일 경우 자신이 작성하지 않았더라도 레시피를 삭제할 수 있다.")
+    public void removeRecipe_admin() {
+        //given
+        Image image = new Image();
+        image.setIsUpdated("N");
+        image.setIdx(0);
+        image.setImagePath("imagePath");
+
+        Recipe recipe = new Recipe();
+        recipe.setTitle("Test title!");
+        recipe.setView(0);
+        recipe.setImage(image);
+        recipe.setCreatedAt(LocalDateTime.now());
+        recipe.setLastModifiedAt(LocalDateTime.now());
+
+        Member admin = Member.generalBuilder()
+                .name("admin")
+                .email("admin@naver.com")
+                .password("1234")
+                .buildGeneralMember();
+        ReflectionTestUtils.setField(admin,"roles","ROLE_ADMIN");
+        memberService.signUpGeneral(admin);
+
+        Member member = Member.generalBuilder()
+                .name("nameA")
+                .email("test@naver.com")
+                .password("1234")
+                .buildGeneralMember();
+        memberService.signUpGeneral(member);
+
+        Recipe savedRecipe = recipeService.createRecipe(recipe, new ArrayList<>(), member.getId(), new ArrayList<>(), new ArrayList<>());
+
+        //when
+        recipeService.deleteRecipe(savedRecipe.getId(),admin.getId());
         //then
         assertEquals(0, recipeRepository.findAll().size());
     }
