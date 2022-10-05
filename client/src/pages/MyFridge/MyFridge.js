@@ -6,6 +6,7 @@ import GeneralButton from "../../components/common/Button/GeneralButton";
 import InputList from "../../components/common/InputList/InputList";
 import { addFrigIngrInput, clearFridge, editFrigIngredients, loadFridge, setDDay, sortByAlphabet, sortByDate } from "../../features/fridgeSlice";
 import useConfirm from "../../hooks/useConfirm";
+import usePreventLeave from "../../hooks/usePreventLeave";
 import { Head, ColumnHeads, Container, Title, Fridge, InputWrapper, InnerContainer, ButtonWrap, SortWrapper, Option } from "./MyFridgeStyle";
 
 const MyFridge = () => {
@@ -13,11 +14,12 @@ const MyFridge = () => {
     const [sortMode, setSortMode] = useState("date");
     const [serverData, setServerData] = useState([]);
     const titlesArr = ["name", "quantity", "expiration", "dDay", "note"]; //재료 입력에서 각 column의 키값 배열
-    const placeholders = ["예) 계란", "예) 30알", "예) 2100/01/01", "", "기타 정보를 작성하세요"];
+    const placeholders = ["예) 계란", "예) 30알", "예) 2100/01/01", "", "기타 정보를 작성하세요"]; // 페이지 나갈 때 경고창
     
     const mountRef = useRef(false); // 두번 마운팅 방지 (첫 요청 실패, 두번째는 성공이라 두번째 요청만 살림)
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { enablePrevent, disablePrevent } = usePreventLeave(); // 페이지 나갈 때 경고창 훅
 
     // 로그인 상태 가져와서 변수에 저장
     const isLoggedIn = useSelector((state) => {
@@ -41,6 +43,7 @@ const MyFridge = () => {
         if (isLoggedIn) {
             console.log("유저토큰", userToken)
             getFridge();
+            enablePrevent(); // 페이지 나가는거 인식해서 경고창 띄우는 함수 실행
         }
         return () => { mountRef.current = true; console.log("언마운트")}
     }, [isLoggedIn])
