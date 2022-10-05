@@ -37,14 +37,9 @@ public class Recipe extends BaseTimeEntity {
     @ColumnDefault("0")
     private int view;
 
-//    private String imagePath;
-
-    //몇 인분
     private int portion;
 
-    //요리 소요 시간 ex) 1시간, 30분
     private String time;
-
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     private List<Step> steps = new ArrayList<>();
@@ -62,9 +57,6 @@ public class Recipe extends BaseTimeEntity {
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.REMOVE)
     private List<Heart> hearts = new ArrayList<>();
 
-    /**
-     * image
-     */
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "image_id")
     private Image image;
