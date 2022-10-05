@@ -69,4 +69,8 @@ public class Recipe extends BaseTimeEntity {
     @JoinColumn(name = "image_id")
     private Image image;
 
+    public void verifyWriter(Long memberId){
+        if(!member.getId().equals(memberId))
+            throw new IllegalArgumentException("작성자가 아닙니다. 검증요청 id = " + memberId + ", 작성자 id = " + member.getId());
+    }
 }

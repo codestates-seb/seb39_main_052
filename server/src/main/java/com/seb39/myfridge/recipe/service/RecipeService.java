@@ -77,11 +77,11 @@ public class RecipeService {
     @Transactional
     public Recipe updateRecipe(Recipe recipe, List<Step> steps, Long memberId, List<MultipartFile> files, List<RecipeIngredient> recipeIngredients) {
         Recipe findRecipe = findRecipeById(recipe.getId());
-        verifyWriter(findRecipe, memberId);
+        recipe.verifyWriter(memberId);
 
         Optional.ofNullable(recipe.getTitle()).ifPresent(findRecipe::setTitle);
         Optional.ofNullable(recipe.getTime()).ifPresent(findRecipe::setTime);
-        Optional.ofNullable(recipe.getPortion()).ifPresent(findRecipe::setPortion);
+        Optional.of(recipe.getPortion()).ifPresent(findRecipe::setPortion);
 
         findRecipe.getImage().setIsUpdated(recipe.getImage().getIsUpdated());
 
@@ -93,16 +93,25 @@ public class RecipeService {
 
         stepRepository.deleteStepByRecipeId(findRecipe.getId());
         steps.forEach(step -> step.addRecipe(findRecipe));
-        Recipe updateRecipe = recipeRepository.save(findRecipe);
-        return updateRecipe;
+        return recipeRepository.save(findRecipe);
     }
 
 
     @Transactional
-    public void deleteRecipe(long id, long memberId) {
-        Recipe findRecipe = findRecipeById(id);
-        verifyWriter(findRecipe, memberId);
-        recipeRepository.delete(findRecipe);
+    public void deleteRecipe(Long id, Long memberId) {
+        Recipe recipe = findRecipeById(id);
+        verifyCanDelete(recipe, memberId);
+        recipeRepository.delete(recipe);
+    }
+
+    private void verifyCanDelete(Recipe recipe, Long memberId) {
+        Member member = memberService.findById(memberId);
+        boolean isAdmin = member.getRoleList()
+                .stream()
+                .anyMatch(role -> role.equals("ROLE_ADMIN"));
+
+        if(!isAdmin)
+            recipe.verifyWriter(memberId);
     }
 
 
@@ -129,13 +138,6 @@ public class RecipeService {
         return optionalRecipe.orElseThrow(() -> new IllegalArgumentException("해당 레시피를 찾을 수 없습니다."));
     }
 
-    public void verifyWriter(Recipe recipe, Long memberId) {
-        Long writerId = recipe.getMember().getId();
-        if (!Objects.equals(writerId, memberId)) {
-            throw new IllegalArgumentException("작성자가 아니면 수정/삭제할 수 없습니다!");
-        }
-    }
-
     public List<String> findTitlesByContainsWord(String word) {
         List<String> result = recipeRepository.searchTitles(word);
         return result;
@@ -153,7 +155,6 @@ public class RecipeService {
         return recipeRepository.findFavoriteRecipes(memberId, page);
     }
 
-
     public List<RecipeRecommendDto> findPopularRecipes() {
         return recipeRepository.findPopularRecipes();
     }
@@ -161,12 +162,15 @@ public class RecipeService {
     public List<RecipeRecommendDto> findRecentRecipes() {
         return recipeRepository.findRecentRecipes();
     }
-    public List<RecipeRecommendDto> recommendByFridge(Long fridgeId){
+
+    public List<RecipeRecommendDto> recommendByFridge(Long fridgeId) {
         List<FridgeIngredient> fridgeIngredients = fridgeIngredientService.findFridgeIngredient(fridgeId);
+        if(fridgeIngredients.isEmpty())
+            return List.of();
+
         List<String> ingredientNames = fridgeIngredients.stream()
                 .map(fi -> fi.getIngredient().getName())
                 .collect(Collectors.toList());
         return recipeRepository.recommendByIngredientNames(ingredientNames);
-
     }
 }

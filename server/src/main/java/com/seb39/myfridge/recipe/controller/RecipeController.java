@@ -51,7 +51,6 @@ public class RecipeController {
         //1. 이미지 관련 exception 처리 필요
 
         List<RecipeIngredient> recipeIngredients = recipeMapper.ingredientsDtoToIngredients(requestBody.getIngredients());
-
         List<Step> stepList = recipeMapper.recipeDtoStepsToStepList(requestBody.getSteps());
         Recipe recipe = recipeMapper.recipePostToRecipe(requestBody);
 
@@ -62,11 +61,11 @@ public class RecipeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteRecipe(@PathVariable("id") @Positive Long id,
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    public ResponseEntity<Void> deleteRecipe(@PathVariable("id") @Positive Long id,
                                                @AuthMemberId Long memberId) {
-
         recipeService.deleteRecipe(id, memberId);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PatchMapping("/{id}")
@@ -155,6 +154,5 @@ public class RecipeController {
         Fridge fridge = fridgeService.findFridge(memberId);
         List<RecipeRecommendDto> dtos = recipeService.recommendByFridge(fridge.getId());
         return ResponseEntity.ok(new SingleResponseDto<>(dtos));
-
     }
 }
