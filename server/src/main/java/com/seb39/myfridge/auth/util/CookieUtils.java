@@ -21,6 +21,7 @@ public class CookieUtils {
         Cookie cookie = new Cookie(name, token);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
+        cookie.setDomain(".seb39myfridge.ml");
         return cookie;
     }
 
