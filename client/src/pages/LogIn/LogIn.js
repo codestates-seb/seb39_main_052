@@ -27,6 +27,8 @@ const LogInContainer = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 32px;
+  width: 100vw;
+  height: 70vh;
 `;
 
 export default LogIn;
