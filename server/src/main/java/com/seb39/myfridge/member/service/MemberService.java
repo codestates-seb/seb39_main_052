@@ -82,7 +82,7 @@ public class MemberService {
 
     @Transactional
     public void updateName(Member member, String newName) {
-        if(existsByName(member.getName()))
+        if(existsByName(newName))
             throw new IllegalArgumentException("UpdateName Error. name already exist. name = " + newName);
 
         member.changeName(newName);
