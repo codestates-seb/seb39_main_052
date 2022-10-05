@@ -15,6 +15,7 @@ export const Header = styled.header`
 
   /* media query 예시. theme.js에서 정의한 theme을 props로 받아서 mobile 사이즈 가져온다 */
   @media ${({ theme }) => theme.device.mobile} {
+    box-shadow: var(--shadow-low);
     /* color: pink; */
     /* max-height: 88px; */
     /* min-height: 88px; */

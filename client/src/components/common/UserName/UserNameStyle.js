@@ -43,4 +43,5 @@ export const Image = styled.img`
 `
 
 export const Name = styled.div`
-    margin: 0 0 0 8px;`
+    margin: 0 0 0 8px;
+`

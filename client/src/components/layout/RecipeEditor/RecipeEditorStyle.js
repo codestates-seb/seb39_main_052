@@ -12,6 +12,10 @@ export const Container = styled.div`
 export const Header = styled.div`
     display: flex;
     margin-bottom: 28px;
+    @media ${({ theme }) => theme.device.mobile} {
+        flex-direction: column-reverse;
+        align-items: center;
+    }
 `
 
 export const Warning = styled.div`
@@ -27,6 +31,14 @@ export const Main = styled.div`
     display: flex;
     flex-direction: column;
     margin-right: 28px;
+    @media ${({ theme }) => theme.device.mobile} {
+        width: 90%;
+        margin-right: 0;
+        margin-top: 24px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
 `
 export const ImageWrap = styled.div`
     display: flex;
@@ -75,6 +87,7 @@ export const Portion = styled.div`
         display: flex;
         align-items: center;
     }
+
 `
 
 export const Select = styled.select`
@@ -84,6 +97,9 @@ export const Select = styled.select`
     padding-left: 5px;
     border-radius: 4px;
     font-size: 10px;
+    @media ${({ theme }) => theme.device.mobile} {
+        height: 26px;
+    }
 `
 
 export const Time = styled.div`
@@ -94,6 +110,9 @@ export const Time = styled.div`
         display: flex;
         align-items: center;
     }
+    @media ${({ theme }) => theme.device.mobile} {
+        margin-top: 24px;
+    }
 `
 
 export const Ingredients = styled.div`
@@ -102,6 +121,14 @@ export const Ingredients = styled.div`
     align-items: flex-start;
     width: 548px;
     margin: 0px 0 30px 0;
+    @media ${({ theme }) => theme.device.mobile} {
+        width: 100vw;
+        align-items: center;
+        > *:not(:first-child) {
+            width: 100vw;
+            padding-left: 8%;
+        }
+    }
 `
 
 export const Steps = styled.div`
@@ -110,6 +137,10 @@ export const Steps = styled.div`
     justify-content: center;
     align-items: flex-start;
     width: 548px;
+    @media ${({ theme }) => theme.device.mobile} {
+        width: 100vw;
+        align-items: center;
+    }
 `
 export const ButtonWrap = styled.div`
     display: flex;
@@ -117,6 +148,10 @@ export const ButtonWrap = styled.div`
     justify-content: space-between;
     width: 548px;
     margin: 0px 0 0 0;
+    @media ${({ theme }) => theme.device.mobile} {
+        width: 100vw;
+        padding: 0 8%;
+    }
 `
 
 export const Button = styled.button`

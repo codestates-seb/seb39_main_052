@@ -89,13 +89,21 @@ export const RecipeWrapper = styled.div`
 `
 
 export const Image = styled.img`
-    width: 180px;
-    height: 180px;
+    width: 184px;
+    height: 184px;
     object-fit: cover;
     border-radius: 10px;
+    padding: 2px 2px;
+    :hover {
+        padding: 0 0;
+    }
     @media ${({ theme }) => theme.device.mobile} {
         width: 150px;
         height: 150px;
+        :hover {
+            width: 150px;
+            height: 150px;
+        }
     }
 `
 

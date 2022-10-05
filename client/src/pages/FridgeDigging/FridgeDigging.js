@@ -53,7 +53,7 @@ const FridgeDigging = () => {
     }, [pageNum, sortMode, searchParams])
 
     const fetchData = async (pageNum) => {
-
+        
         // 검색 요청 바디
         const payload = {
             title: nameSearchTerm ? nameSearchTerm : "", // 서치값 없을 때 null 요청 방지
@@ -62,28 +62,24 @@ const FridgeDigging = () => {
             sort: sortMode
         }
         // console.log("리퀘스트 바디", payload)
-
+        
         // 검색어 바뀔 때 마다 정렬모드, 페이지 넘버 초기화
         if (isRefreshNeeded) {
             setPageNum(1);
         }
+        
+        try {
+            const { data } = await axios.post(`/api/recipes/search`, payload);
+            data.pageInfo.totalElements > 0 ? setIsThereResult(true) : setIsThereResult(false); // 결과 값 여부 확인
+            setIsLoading(false); // 또 다음 무한 스크롤에 데이터를 가져와야 할 수 있으니 먼저 isLoading 상태 false로 변경 (이후, useEffect를 통해 필요한 경우 true로 변경 예정)
+            setTotalNum(data.pageInfo.totalElements); // 총 결과 갯수 상태 저장
+            // input 값/정렬모드 업데이트 된 경우 결과 처음부터 쌓기, 페이지 네이션으로 불러와진 결과는 이전 결과에 쌓기
+            isRefreshNeeded ? setSearchResult([...data.data]) : setSearchResult([...searchResult, ...data.data])
+        }
+        catch (error) {
+            console.log(error);
+        }
 
-        if (tagSearchArr.length > 0 || payload.title !== "") {
-            setIsThereSearch(true);
-            try {
-                const { data } = await axios.post(`/api/recipes/search`, payload);
-                data.pageInfo.totalElements > 0 ? setIsThereResult(true) : setIsThereResult(false); // 결과 값 여부 확인
-                setTotalNum(data.pageInfo.totalElements); // 총 결과 갯수 상태 저장
-                // input 값/정렬모드 업데이트 된 경우 결과 처음부터 쌓기, 페이지 네이션으로 불러와진 결과는 이전 결과에 쌓기
-                isRefreshNeeded ? setSearchResult([...data.data]) : setSearchResult([...searchResult, ...data.data])
-            }
-            catch (error) {
-                console.log(error);
-            }
-        }
-        else {
-            setIsThereSearch(false);
-        }
         // 추후 새로운 검색 input이 들어오는 것을 인식하기 위해 상태 초기화
         setIsRefreshNeeded(false);
     };
@@ -111,26 +107,29 @@ const FridgeDigging = () => {
         <Container>
             <SearchWrapper>
                 <Heading>
-                    제목으로 레시피 검색하기
+                    <span>제목</span>으로 레시피 검색하기
                 </Heading>
                 <NameSearchBar setIsRefreshNeeded={setIsRefreshNeeded} />
                 <Heading>
-                    재료로 레시피 검색하기
+                    <span>재료</span>로 레시피 검색하기
                 </Heading>
                 <TagSearchBar setIsRefreshNeeded={setIsRefreshNeeded} />
             </SearchWrapper>
             {/* 아무 검색어도 입력하지 않았을 때 */}
-            <Alert className={isThereSearch && "invisible"}>
+            {/* <Alert className={isThereSearch && "invisible"}>
                 검색어를 입력하여 원하는 레시피를 찾아보세요!
-            </Alert>
+            </Alert> */}
             {/* 일치하는 검색 결과가 없을 때 */}
-            <Alert className={!isThereSearch || isThereResult ? "invisible" : null}>일치하는 결과가 없습니다. 검색 범위를 넓혀보는건 어떨까요?</Alert>
+            <Alert className={isThereResult && "invisible"}>
+                <p>일치하는 결과가 없습니다.</p>
+                <p>검색 범위를 넓혀보는건 어떨까요?</p>
+            </Alert>
             {/* 일치하는 검색 결과가 있을 때 */}
-            <Option className={!isThereSearch || !isThereResult ? "invisible" : null}>
+            <Option className={!isThereResult && "invisible"}>
                 <ResultNum>총 <strong>{totalNum}</strong>개</ResultNum>
-                <SortingTab sortMode={sortMode} setSortMode={setSortMode} setIsRefreshNeeded={setIsRefreshNeeded}/>
+                <SortingTab sortMode={sortMode} setSortMode={setSortMode} setIsRefreshNeeded={setIsRefreshNeeded} />
             </Option>
-            <RecipeWrapper className={!isThereSearch || !isThereResult ? "invisible" : null}>
+            <RecipeWrapper className={!isThereResult && "invisible"}>
                 {searchResult.map((el, i) => {
                     return (
                         <RecipeCard

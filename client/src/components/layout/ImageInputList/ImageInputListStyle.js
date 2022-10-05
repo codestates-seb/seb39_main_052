@@ -10,6 +10,10 @@ export const Block = styled.div`
     border-radius: 10px;
     width: 548px;
     margin-bottom: 12px;
+    @media ${({ theme }) => theme.device.mobile} {
+        width: 360px;
+        height: 120px;
+    }
 `;
 
 export const Order = styled.label`
@@ -17,6 +21,10 @@ export const Order = styled.label`
     justify-content: center;
     width: 30px;
     margin-right: 4px;
+    @media ${({ theme }) => theme.device.mobile} {
+        font-size: 10px;
+        width: 20px;
+    }
 `
 
 export const Input = styled.textarea`
@@ -26,6 +34,11 @@ export const Input = styled.textarea`
     margin: 0 4px 0 12px;
     padding: 12px;
     flex-grow: 1;
+    @media ${({ theme }) => theme.device.mobile} {
+        flex-grow: 0;
+        width: 200px;
+        height: 101px;
+    }  
 `;
 
 export const ButtonWrapper = styled.div`
@@ -33,10 +46,21 @@ export const ButtonWrapper = styled.div`
     flex-direction: column;
     justify-content: space-around;
     height: 160px;
+    @media ${({ theme }) => theme.device.mobile} {
+        height: 90px;
+        width: 16px;
+        align-items: center;
+    }
 `;
 
 export const Button = styled.button`
     background-color: var(--primary-300);
+    @media ${({ theme }) => theme.device.mobile} {
+        width: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 `
 
 export const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`

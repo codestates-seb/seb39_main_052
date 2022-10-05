@@ -9,10 +9,18 @@ export const Container = styled.div`
         height: 12.5rem;
         width: 12.5rem;
         border-radius: 10px;
+        @media ${({ theme }) => theme.device.mobile} {
+            height: 260px;
+            width: 260px;
+        }
         > *.loading {
             left: 36%;
             top: 36%;
             font-size: 56px;
+            @media ${({ theme }) => theme.device.mobile} {
+                left: 40%;
+                top: 40%;
+            }
         }
         > *.upload {
             left: 78%;
@@ -27,6 +35,10 @@ export const Container = styled.div`
             top: 0%;
             font-size: 40px;
             color: var(--white);
+            @media ${({ theme }) => theme.device.mobile} {
+                top: 2%;
+                left: 85%;
+            }
         }
     }
     /* &.mobile {
@@ -38,10 +50,19 @@ export const Container = styled.div`
         height: 140px;
         width: 140px;
         border-radius: 10px;
+        @media ${({ theme }) => theme.device.mobile} {
+            height: 100px;
+            width: 100px;
+        }
         > *.loading {
             left: 34%;
             top: 34%;
             font-size: 44px;
+            @media ${({ theme }) => theme.device.mobile} {
+                font-size: 36px;
+                left: 32%;
+                top: 30%;
+            }
         }
         > *.upload {
             left: 78%;
@@ -50,12 +71,18 @@ export const Container = styled.div`
             :active {
                 color: var(--mint-600); 
             }
+            @media ${({ theme }) => theme.device.mobile} {
+                font-size: 18px;
+            }
         }
         > *.cancel {
             left: 84%;
             top: 2%;
             font-size: 24px;
             color: var(--white);
+            @media ${({ theme }) => theme.device.mobile} {
+                font-size: 18px;
+            }
         }
     }
     &.round {

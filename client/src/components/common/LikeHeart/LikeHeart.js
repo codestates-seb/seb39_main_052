@@ -15,8 +15,8 @@ const LikeHeart = ({ heartCounts, idx, heartExist }) => {
     const [isClicked, setIsClicked] = useState(heartExist);
     const [newHeartCounts, setNewHeartCounts] = useState(heartCounts);
 
+    // 서버에서 받아오는 값으로 로컬 상태 변경
     useEffect(() => {
-        console.log("유즈이펙트")
         setIsClicked(heartExist);
         setNewHeartCounts(heartCounts);
     }, [heartExist, heartCounts])

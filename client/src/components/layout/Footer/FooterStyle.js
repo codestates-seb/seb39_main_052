@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export const Container = styled.div`
     position: relative;
-    z-index: 999;
     margin-top: 48px;   
     width: 100vw;
     height: 120px;
@@ -14,6 +13,12 @@ export const Container = styled.div`
     display: flex;
     justify-content: space-between;
     padding: 28px 48px 28px  48px;
+    @media ${({ theme }) => theme.device.mobile} {
+        flex-direction: column-reverse;
+        height: 130px;
+        align-items: center;
+        padding: 16px 8px 24px  8px;
+    }
 `
 
 export const Left = styled.div`
@@ -44,6 +49,10 @@ export const LeftTop = styled.div`
             /* color: var(--blue-900);
             border-bottom: 1px solid var(--blue-900); */
         }
+        @media ${({ theme }) => theme.device.mobile} {
+            font-size: 12px;
+            width: 110px;
+        }
     }
 `
 
@@ -73,7 +82,13 @@ export const LeftBottom = styled.div`
     } */
     // 김용주
     > div:nth-of-type(2) {
-        margin-right: 20px;
+        margin-right: 22px;
+    }
+    @media ${({ theme }) => theme.device.mobile} {
+        font-size: 12px;
+        > div:nth-of-type(2) {
+            margin-right: 22px;
+        }
     }
 `
 
@@ -94,5 +109,19 @@ export const Right = styled.div`
         color: var(--fridge-400);
         margin-top: 4px;
         font-weight: bold;
+    }
+    @media ${({ theme }) => theme.device.mobile} {
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: row;
+        width: 360px;
+        > :not(div:last-of-type) {
+            font-size: 12px;
+            margin: 0;
+        }
+        > div:last-of-type {
+            font-size: 14px;
+            margin: 0;
+        }
     }
 `

@@ -36,8 +36,8 @@ const MyFridge = () => {
         else {
                 getFridge();
         }
-        return () => { mountRef.current = false; }
-    }, [])
+        return () => { mountRef.current = false;}
+    }, [isLoggedIn])
 
     // 냉장고 재료
     const fridgeData = useSelector((state) => {

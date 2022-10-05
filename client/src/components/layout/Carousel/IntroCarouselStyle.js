@@ -9,35 +9,9 @@ export const Banner = styled.div`
 
 // carousel (react-slick) 관련
 export const StyledSlider = styled(Slider)`
-    /* // 마지막 페이지 > 첫페이지 전환시 깜박임 문제 해결
-    .slick-slide,
-    .slick-slider .slick-track,
-    .slick-slider .slick-list
-    {
-    -webkit-transform: translate3d(0, 0, 0);
-    -moz-transform: translate3d(0, 0, 0);
-    -ms-transform: translate3d(0, 0, 0);
-    -o-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-
-    -webkit-transform: translateZ(0);
-    -moz-transform: translateZ(0);
-    -ms-transform: translateZ(0);
-    -o-transform: translateZ(0);
-    transform: translateZ(0);
-
-    -webkit-perspective: 1000;
-    -moz-perspective: 1000;
-    -ms-perspective: 1000;
-    perspective: 1000;
-    -webkit-backface-visibility: hidden;
-    -moz-backface-visibility: hidden;
-    -ms-backface-visibility: hidden;
-    backface-visibility: hidden;
-    } */
     // 하단 dots
     .slick-dots {
-        top: 88%;
+        top: 84%;
     }
     // 커스텀 화살표
     .slick-arrow {
@@ -68,6 +42,11 @@ export const StyledSlider = styled(Slider)`
             display: none;
         }
     }
+    .slick-list {
+        @media ${({ theme }) => theme.device.mobile} {
+            height: 220px;
+        }
+    }
     // 슬라이드 내 css
     .slick-slide > div > div {
         width: 100px;
@@ -75,7 +54,21 @@ export const StyledSlider = styled(Slider)`
         justify-content: center;
         align-items: center;
         padding-left: 24vw;
+        @media ${({ theme }) => theme.device.mobile} {
+            width: 600;
+            height: 220px;
+            margin: 0 0 0px 0px;
+            padding-left: 8vw;
+        }
     }
+    // 슬라이드 내 글
+    .slick-slide > div > div > div > div {
+        // 두번째 사진 (나의 냉장고 관련 배너)
+        @media ${({ theme }) => theme.device.mobile} {
+            height: 70px;
+        }
+    }
+    // 슬라이드 내 사진
     .slick-slide > div > div > div > img {
         position: relative;
         top: -8px;
@@ -83,6 +76,14 @@ export const StyledSlider = styled(Slider)`
         // 두번째 사진 (나의 냉장고 관련 배너)
         &.small {
             right: -274px;
+        }
+        @media ${({ theme }) => theme.device.mobile} {
+            top: 20px;
+            right: -80px;  
+            &.small {
+                right: -90px;
+                width: 300px;
+            }
         }
     }
 `
@@ -104,6 +105,9 @@ export const Container = styled.div`
         > div > div {
             color: var(--red-800);
         }
+    }
+    @media ${({ theme }) => theme.device.mobile} {
+        height: 220px;
     }
 `
 
@@ -137,6 +141,15 @@ export const Text = styled.div`
     &.pink {
         > p {
             background-color: var(--red-050);
+        }
+    }
+    @media ${({ theme }) => theme.device.mobile} {
+        > p {
+            margin: 4px 0;
+            font-size: 18px;
+            > span {
+                font-size: 20px;
+            }
         }
     }
 `
