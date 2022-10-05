@@ -14,6 +14,13 @@ export const Container = styled.div`
     > h2 {
         margin-left: 6px;
         margin-bottom: 12px;
+        @media ${({ theme }) => theme.device.mobile} {
+            font-size: 14px;
+        }
+    }
+    @media ${({ theme }) => theme.device.mobile} {
+        width: 360px;
+        max-height: fit-content;
     }
 `
 
@@ -22,6 +29,9 @@ export const InputWrapper = styled.div`
     flex-direction: row;
     justify-content: space-between;
     margin: 0 0 20px 0;
+    @media ${({ theme }) => theme.device.mobile} {
+        margin-bottom: 4px;
+    }
 `
 
 export const Input = styled.input`

@@ -10,6 +10,9 @@ export const TextArea = styled.textarea`
     border: 1px solid var(--primary-500);
     display: flex;
     resize: none;
+    @media ${({ theme }) => theme.device.mobile} {
+        height: 68px;
+    }
 `
 
 export const CommentWrapper = styled.div`
@@ -36,6 +39,11 @@ export const Comment = styled.div`
     margin: 0 0 0 8px;
     width: 58%;
     height: 36px;
+    @media ${({ theme }) => theme.device.mobile} {
+        font-size: 12px;
+        padding: 4px 2px 4px 0;
+        height: 80px;
+    }
 `
 
 export const Time = styled.div`
@@ -44,6 +52,9 @@ export const Time = styled.div`
     display: flex;
     justify-content: center;
     color: var(--fridge-800);
+    @media ${({ theme }) => theme.device.mobile} {
+        font-size: 10px;
+    }
 `
 
 export const ButtonLikeWrapper = styled.div`
@@ -74,6 +85,11 @@ export const ButtonLike = styled.div`
     &.invisible {
         display: none;
     }
+
+    @media ${({ theme }) => theme.device.mobile} {
+        font-size: 10px;
+        margin-left: 2px;
+    }
 `
 
 export const Button = styled.button`
@@ -85,6 +101,5 @@ export const Button = styled.button`
 `
 
 export const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
-
 
 `

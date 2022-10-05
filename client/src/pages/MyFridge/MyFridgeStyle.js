@@ -5,6 +5,9 @@ export const Container = styled.div`
     flex-direction: column;
     align-items: center;
     min-height: 80vh;
+    @media ${({ theme }) => theme.device.mobile} {
+        width: 100vw;
+    }
 `
 export const SortWrapper = styled.div`
     display: flex;
@@ -14,6 +17,10 @@ export const SortWrapper = styled.div`
     font-size: 13px;
     margin-bottom: 8px;
     width: 800px;
+    @media ${({ theme }) => theme.device.mobile} {
+        width: 100vw;
+        justify-content: center;
+    }
 `
 
 export const Option = styled.div`
@@ -34,11 +41,16 @@ export const Fridge = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 880px;
+    width: 890px;
     padding: 14px 14px 14px 14px;
     border-radius: 16px;
     background-color: var(--fridge-200);
     box-shadow: var(--shadow-medium);
+    @media ${({ theme }) => theme.device.mobile} {
+        width: 95vw;
+        overflow: scroll;
+        align-items: flex-start;
+    }  
 `
 
 export const InnerContainer = styled.div`
@@ -99,4 +111,10 @@ export const ButtonWrap = styled.div`
     justify-content: space-between;
     width: 480px;
     margin: 0px 0 0 0;
+    @media ${({ theme }) => theme.device.mobile} {
+        width: 96vw;
+        > * {
+            font-size: 14px;
+        }
+    }
 `
