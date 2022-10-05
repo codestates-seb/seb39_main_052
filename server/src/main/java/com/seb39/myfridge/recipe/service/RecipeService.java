@@ -51,7 +51,6 @@ public class RecipeService {
 
 
     public Recipe findRecipeWithDetails(Long recipeId) {
-        recipeRepository.addView(recipeId);
         Recipe recipe = recipeRepository.findWithDetails(recipeId)
                 .orElseThrow(() -> new IllegalArgumentException("Recipe not exist. id = " + recipeId));
         // recipe.ingredients 영속화를 위한 호출
@@ -96,12 +95,17 @@ public class RecipeService {
         return recipeRepository.save(findRecipe);
     }
 
-
     @Transactional
     public void deleteRecipe(Long id, Long memberId) {
         Recipe recipe = findRecipeById(id);
         verifyCanDelete(recipe, memberId);
         recipeRepository.delete(recipe);
+    }
+
+    @Transactional
+    public void addView(Long recipeId){
+        Recipe recipe = findRecipeById(recipeId);
+        recipe.addView();
     }
 
     private void verifyCanDelete(Recipe recipe, Long memberId) {

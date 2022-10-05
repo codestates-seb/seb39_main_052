@@ -87,6 +87,9 @@ public class RecipeController {
         int heartCounts = heartService.findHeartCounts(id);
         boolean heartExist = memberId != null && heartService.existHeart(memberId, id);
         RecipeDto.ResponseDetail response = recipeMapper.recipeToRecipeResponseDetail(recipe, heartCounts, heartExist);
+
+        recipeService.addView(id);
+
         return ResponseEntity.ok(response);
     }
 

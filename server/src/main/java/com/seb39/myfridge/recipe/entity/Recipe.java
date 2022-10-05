@@ -73,4 +73,8 @@ public class Recipe extends BaseTimeEntity {
         if(!member.getId().equals(memberId))
             throw new IllegalArgumentException("작성자가 아닙니다. 검증요청 id = " + memberId + ", 작성자 id = " + member.getId());
     }
+
+    public void addView(){
+        view++;
+    }
 }
