@@ -42,14 +42,21 @@ const MyRecipeBox = ({ timeSince }) => {
   //   return date;
   // };
 
+  const userToken = useSelector((state) => {
+    return state.user.userToken;
+  });
+
+  //redux에 로딩 상태 만들기 false 로. 의존성배열에 loading 넣어주기 로딩이끝났을떄 get 요청
+
   //최신순 내 레시피 목록 조회하기
   const getMyRecipeList = async () => {
     try {
       const { data } = await axios.get(
         `/api/recipes/my?page=${page}&sort=${sortMode}`
+        // { headers: { Authorization: `Bearer ${userToken}` } }
       );
       console.log(data);
-      console.log("sort모드?", sortMode);
+      // console.log("sort모드?", sortMode);
       setTotal(data.pageInfo.totalElements);
       setTotalPages(data.pageInfo.totalPages);
       setMyRecipeList([...data.data]);
@@ -58,8 +65,19 @@ const MyRecipeBox = ({ timeSince }) => {
     }
   };
 
+  // console.log(axios.defaults.headers.common);
+
   //페이지 바뀔때, 레시피 삭제로 업데이트시, 정렬 기준 바뀔때 화면에 내 레시피 목록 재 렌더링
+  //멘토님
+  // useEffect(() => {
+  //   if (userToken) {
+  //     getMyRecipeList();
+  //     setIsUpdated(false); //명시적으로 넣어주어야 RecipeFrame 컴포넌트에서 처음 삭제하고 setIsUpdated 상태 true가 된 이후에 기본 상태 false로 돌아간다.
+  //   }
+  // }, [page, isUpdated, sortMode, userToken]);
+
   useEffect(() => {
+    // setTimeout(getMyRecipeList, 1000);
     getMyRecipeList();
     setIsUpdated(false); //명시적으로 넣어주어야 RecipeFrame 컴포넌트에서 처음 삭제하고 setIsUpdated 상태 true가 된 이후에 기본 상태 false로 돌아간다.
   }, [page, isUpdated, sortMode]);
