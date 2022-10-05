@@ -24,9 +24,9 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/api/members/{memberId}")
-    public ResponseEntity<MemberDto.Response> getMember(@PathVariable Long memberId) {
+    public ResponseEntity<MemberDto.ResponseDetail> getMember(@PathVariable Long memberId) {
         Member member = memberService.findById(memberId);
-        return ResponseEntity.ok(new MemberDto.Response(member));
+        return ResponseEntity.ok(new MemberDto.ResponseDetail(member));
     }
 
     @PatchMapping(value = "/api/members", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})

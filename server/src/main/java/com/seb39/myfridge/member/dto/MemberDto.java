@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 public class MemberDto {
 
@@ -39,6 +40,25 @@ public class MemberDto {
                     ", name='" + name + '\'' +
                     ", profileImagePath='" + profileImagePath + '\'' +
                     '}';
+        }
+    }
+
+    @Getter
+    @Setter
+    public static class ResponseDetail{
+        private Long id;
+        private String name;
+        private String profileImagePath;
+        private List<String> roles;
+
+        public ResponseDetail() {
+        }
+
+        public ResponseDetail(Member member) {
+            this.id = member.getId();
+            this.name = member.getName();
+            this.profileImagePath = member.getProfileImagePath();
+            this.roles = member.getRoleList();
         }
     }
 }
