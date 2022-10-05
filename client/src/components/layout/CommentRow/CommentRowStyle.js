@@ -9,6 +9,7 @@ export const TextArea = styled.textarea`
     margin: 0 8px 0 6px;
     border: 1px solid var(--primary-500);
     display: flex;
+    resize: none;
 `
 
 export const CommentWrapper = styled.div`
