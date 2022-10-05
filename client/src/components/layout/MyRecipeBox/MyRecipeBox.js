@@ -3,6 +3,7 @@ import {
   RecipeFrameOuterContainer,
   SpanWrapper,
   SortingTabWrapper,
+  NoticeMsgBox,
 } from "./MyRecipeBoxStyle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -15,11 +16,12 @@ import {
 import Pagination from "../../common/Pagination/Pagination";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SortingTab from "../../common/SortingTab/SortingTab";
 
 import { useDispatch, useSelector } from "react-redux";
 import { loadRecipe } from "../../../features/recipeSlice";
+import GeneralButton from "../../common/Button/GeneralButton";
 
 const MyRecipeBox = ({ timeSince }) => {
   const [myRecipeList, setMyRecipeList] = useState([]);
@@ -101,57 +103,74 @@ const MyRecipeBox = ({ timeSince }) => {
 
   return (
     <>
-      <SortingTabWrapper>
-        <SortingTab sortMode={sortMode} setSortMode={setSortMode} />
-      </SortingTabWrapper>
-      <RecipeFrameOuterContainer>
-        {myRecipeList.map((data) => (
-          <RecipeFrame
-            onClickRecipeDetail={() => {
-              clickRecipeDetail(data.id);
-            }}
-            onClickIconEdit={() => clickRecipeEdit(data.id)}
-            // onClickIconDelete={
-            //   () => handleRecipeDelete(data.id)
-            //   // useConfirm("정말 삭제할까요?", confirm, cancel) //리액트훅은 콜백 안에서 쓰일 수 없다 에러
-            // }
-            key={data.id}
-            recipeIdProp={data.id}
-            setIsUpdated={setIsUpdated}
-            imagePath={data.imagePath}
-            title={data.title}
-            // date={dateConverter(data.lastModifiedAt)}
-            date={timeSince(Date.parse(data.lastModifiedAt))}
-            icon1={<FontAwesomeIcon icon={faPencil}></FontAwesomeIcon>}
-            icon2={<FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon>}
-          >
-            {/* children props 로 자식 컴포넌트로 전달되는 요소들 */}
-            <SpanWrapper>
-              <span>
-                <FontAwesomeIcon icon={faEye}></FontAwesomeIcon>
-              </span>
-              <span>{data.view}</span>
-            </SpanWrapper>
-            <SpanWrapper>
-              <span>
-                <FontAwesomeIcon icon={faHeart}></FontAwesomeIcon>
-              </span>
-              <span>{data.heartCounts}</span>
-            </SpanWrapper>
-            <SpanWrapper>
-              <span>
-                <FontAwesomeIcon icon={faCommentDots}></FontAwesomeIcon>
-              </span>
-              <span>{data.commentCounts}</span>
-            </SpanWrapper>
-          </RecipeFrame>
-        ))}
-      </RecipeFrameOuterContainer>
-      <Pagination
-        page={page}
-        setPage={setPage}
-        totalPages={totalPages}
-      ></Pagination>
+      {myRecipeList.length === 0 && (
+        <NoticeMsgBox>
+          아직 작성한 레시피가 없어요
+          <GeneralButton width={"180px"} className={"shadow"}>
+            <FontAwesomeIcon
+              icon={faPencil}
+              style={{ marginRight: 5 }}
+            ></FontAwesomeIcon>
+            <Link to="/recipes/new">레시피 작성하러가기</Link>
+          </GeneralButton>
+        </NoticeMsgBox>
+      )}
+      {myRecipeList.length > 0 && (
+        <div>
+          <SortingTabWrapper>
+            <SortingTab sortMode={sortMode} setSortMode={setSortMode} />
+          </SortingTabWrapper>
+          <RecipeFrameOuterContainer>
+            {myRecipeList.map((data) => (
+              <RecipeFrame
+                onClickRecipeDetail={() => {
+                  clickRecipeDetail(data.id);
+                }}
+                onClickIconEdit={() => clickRecipeEdit(data.id)}
+                // onClickIconDelete={
+                //   () => handleRecipeDelete(data.id)
+                //   // useConfirm("정말 삭제할까요?", confirm, cancel) //리액트훅은 콜백 안에서 쓰일 수 없다 에러
+                // }
+                key={data.id}
+                recipeIdProp={data.id}
+                setIsUpdated={setIsUpdated}
+                imagePath={data.imagePath}
+                title={data.title}
+                // date={dateConverter(data.lastModifiedAt)}
+                date={timeSince(Date.parse(data.lastModifiedAt))}
+                icon1={<FontAwesomeIcon icon={faPencil}></FontAwesomeIcon>}
+                icon2={<FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon>}
+                mode={"my_recipe"}
+              >
+                {/* children props 로 자식 컴포넌트로 전달되는 요소들 */}
+                <SpanWrapper>
+                  <span>
+                    <FontAwesomeIcon icon={faEye}></FontAwesomeIcon>
+                  </span>
+                  <span>{data.view}</span>
+                </SpanWrapper>
+                <SpanWrapper>
+                  <span>
+                    <FontAwesomeIcon icon={faHeart}></FontAwesomeIcon>
+                  </span>
+                  <span>{data.heartCounts}</span>
+                </SpanWrapper>
+                <SpanWrapper>
+                  <span>
+                    <FontAwesomeIcon icon={faCommentDots}></FontAwesomeIcon>
+                  </span>
+                  <span>{data.commentCounts}</span>
+                </SpanWrapper>
+              </RecipeFrame>
+            ))}
+          </RecipeFrameOuterContainer>
+          <Pagination
+            page={page}
+            setPage={setPage}
+            totalPages={totalPages}
+          ></Pagination>
+        </div>
+      )}
     </>
   );
 };

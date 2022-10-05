@@ -73,7 +73,7 @@ const MenuTab = () => {
       id: 2,
     },
     {
-      name: "내 받은 댓글",
+      name: "받은 댓글",
       title: "내가 받은 댓글",
       content: <CommentsBox timeSince={timeSince} />, //시간 변환 함수 내려주기
       pathname: "/received_comments",

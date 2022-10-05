@@ -22,6 +22,7 @@ import RecipeCardMobile from "../RecipeCardMobile/RecipeCardMobile";
 const SearchModal = ({ handleClose }) => {
   const [isThereInput, setIsThereInput] = useState(false); // 검색어 input 있는지
   const [isThereResult, setIsThereResult] = useState(false); // 검색 결과 값 존재하는지
+  const [isThereResultOver4, setIsThereResultOver4] = useState(false); // 검색 결과 값 네개 이상 존재하는지. 더보기 버튼 띄우기용
   const [searchResult, setSearchResult] = useState([]); //서버에서 받아온 레시피 목록 데이터 저장
   const [searchParams, setSearchParams] = useSearchParams();
   const searchTerm = searchParams.get("keyword");
@@ -59,11 +60,13 @@ const SearchModal = ({ handleClose }) => {
           const slicedSearchResult = initialSearchResult.slice(0, 4);
           setSearchResult([...slicedSearchResult]);
           console.log("4개이상일때 searchResult 저장된 상태?", searchResult);
+          setIsThereResultOver4(true);
         }
         //서버에서받는 데이터 4개이상아니면 모든 데이터를 상태에 저장
         else {
           setSearchResult([...data.data]);
           console.log("4개이하일때 searchResult 저장된 상태?", searchResult);
+          setIsThereResultOver4(false);
         }
       } catch (err) {
         console.log(err);
@@ -159,7 +162,9 @@ const SearchModal = ({ handleClose }) => {
         ))}
       </RecipeCardWrapperMobile>
       <GeneralButtonWrapper
-        className={!isThereInput || !isThereResult ? "invisible" : null}
+        // className={!isThereInput || !isThereResult ? "invisible" : null}
+        //레시피 4개이상 나와야 더보기 버튼
+        className={!isThereInput || !isThereResultOver4 ? "invisible" : null}
       >
         <GeneralButton
           onClick={clickShowMore}

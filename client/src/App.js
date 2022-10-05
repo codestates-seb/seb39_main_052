@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import GlobalStyle from "./GlobalStyle";
-import { BrowserRouter, Routes, Route, useParams, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useParams,
+  useLocation,
+} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 
@@ -22,6 +28,8 @@ import Footer from "./components/layout/Footer/Footer";
 
 import { useRef } from "react";
 import MenuTab from "./components/layout/MenuTab/MenuTab";
+import AdminSearchBar from "./components/layout/Admin/AdminSearchBar";
+import AdminPanel from "./components/layout/Admin/AdminPanel";
 
 function App() {
 
@@ -53,7 +61,7 @@ function App() {
   // });
 
   const JWT_EXPIRY_TIME = 30 * 60 * 1000; //액세스 토큰 만료시간 30분을 밀리초로 표현
-
+  // const JWT_EXPIRY_TIME = 60 * 60 * 1000; //1시간으로설정
   const onSilentRefresh = async () => {
     await axios
       .post("/api/auth/refresh")
@@ -79,7 +87,6 @@ function App() {
   };
 
   useEffect(() => {
-
     if (effectedCalled.current) return; //이미 useEffect 실행되었다면 useEffect실행안하고 탈출
     effectedCalled.current = true;
 
@@ -110,6 +117,7 @@ function App() {
           <Route path="/search" element={<FridgeDigging />} />
           <Route path="/myfridge" element={<MyFridge />} />
           <Route path="/mypage/:id" element={<MyPage />} />
+          <Route path="/admin" element={<AdminPanel />} />
         </Routes>
         <FloatingAction isBottom={isBottom}/>
       </BrowserRouter>
