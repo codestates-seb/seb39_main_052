@@ -175,6 +175,7 @@ const MyFridge = () => {
                 <GeneralButton className="medium gray" onClick={handleCancel}>취소</GeneralButton>
                 <GeneralButton className="medium" onClick={useConfirm("정말 비우는건가요? 확인시 냉장고 상태를 되돌릴 수 없어요.", confirm, cancel)}>냉장고 비우기</GeneralButton>
                 <GeneralButton className="medium" onClick={handleSave}>냉장고 정리 끝</GeneralButton>
+                <GeneralButton className="medium" onClick={getFridge}>GET 요청</GeneralButton>
             </ButtonWrap>
         </Container>
     )
