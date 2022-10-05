@@ -32,12 +32,12 @@ const MyFridge = () => {
                 alert("로그인이 필요한 서비스입니다");
             }
         }
-        // // 두번째 마운트
-        // else {
+        // 두번째 마운트
+        else {
             getFridge();
-        // }
+        }
         return () => { mountRef.current = false; }
-    }, [])
+    }, [isLoggedIn])
 
     // 냉장고 재료
     const fridgeData = useSelector((state) => {

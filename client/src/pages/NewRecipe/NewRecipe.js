@@ -21,7 +21,7 @@ const NewRecipe = () => {
             }
         }
         return () => { mountRef.current = true; }
-    }, [])
+    }, [isLoggedIn])
 
     return (
         <>
