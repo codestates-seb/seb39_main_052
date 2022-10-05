@@ -21,5 +21,11 @@ public interface RecipeRepositoryCustom {
 
     Page<MyRecipeDto.Favorite> findFavoriteRecipes(Long memberId, int page);
 
+
+    List<RecipeRecommendDto> findPopularRecipes();
+
+    List<RecipeRecommendDto> findRecentRecipes();
+
     List<RecipeRecommendDto> recommendByIngredientNames(List<String> ingredientNames);
+
 }

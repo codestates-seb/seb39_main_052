@@ -241,6 +241,38 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
                 .fetchOne();
         return count != null ? count : 0;
     }
+
+    public List<RecipeRecommendDto> findPopularRecipes() {
+        return queryFactory
+                .select(
+                        new QRecipeRecommendDto(
+                                recipe.id,
+                                recipe.title,
+                                recipe.image.imagePath
+                        )
+                )
+                .from(recipe)
+                .leftJoin(recipe.image)
+                .orderBy(recipe.hearts.size().desc())
+                .limit(8)
+                .fetch();
+    }
+
+    public List<RecipeRecommendDto> findRecentRecipes() {
+        return queryFactory
+                .select(
+                        new QRecipeRecommendDto(
+                                recipe.id,
+                                recipe.title,
+                                recipe.image.imagePath
+                        )
+                )
+                .from(recipe)
+                .leftJoin(recipe.image)
+                .orderBy(recipe.createdAt.desc())
+                .limit(8)
+                .fetch();
+    }
     //endregion
 
     //region recommend

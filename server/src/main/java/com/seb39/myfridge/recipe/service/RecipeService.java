@@ -153,11 +153,20 @@ public class RecipeService {
         return recipeRepository.findFavoriteRecipes(memberId, page);
     }
 
+
+    public List<RecipeRecommendDto> findPopularRecipes() {
+        return recipeRepository.findPopularRecipes();
+    }
+
+    public List<RecipeRecommendDto> findRecentRecipes() {
+        return recipeRepository.findRecentRecipes();
+    }
     public List<RecipeRecommendDto> recommendByFridge(Long fridgeId){
         List<FridgeIngredient> fridgeIngredients = fridgeIngredientService.findFridgeIngredient(fridgeId);
         List<String> ingredientNames = fridgeIngredients.stream()
                 .map(fi -> fi.getIngredient().getName())
                 .collect(Collectors.toList());
         return recipeRepository.recommendByIngredientNames(ingredientNames);
+
     }
 }

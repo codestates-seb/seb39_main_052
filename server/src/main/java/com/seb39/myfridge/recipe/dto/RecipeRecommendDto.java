@@ -1,10 +1,8 @@
 package com.seb39.myfridge.recipe.dto;
 
-
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
-
 @Getter
 @Setter
 public class RecipeRecommendDto {
@@ -20,3 +18,4 @@ public class RecipeRecommendDto {
         this.imagePath = imagePath;
     }
 }
+

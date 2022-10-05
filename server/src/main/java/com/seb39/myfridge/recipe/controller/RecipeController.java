@@ -137,11 +137,24 @@ public class RecipeController {
         return ResponseEntity.ok(new MultiResponseDto<>(content, result));
     }
 
+    @GetMapping("/recommend/recent")
+    public ResponseEntity getRecentRecipes() {
+        List<RecipeRecommendDto> recentRecipes = recipeService.findRecentRecipes();
+        return new ResponseEntity(recentRecipes, HttpStatus.OK);
+    }
+
+    @GetMapping("/recommend/popular")
+    public ResponseEntity getPopularRecipes() {
+        List<RecipeRecommendDto> popularRecipes = recipeService.findPopularRecipes();
+        return new ResponseEntity(popularRecipes, HttpStatus.OK);
+        }
+
     @GetMapping("/recommend/fridge")
     @Secured("ROLE_USER")
     public ResponseEntity<SingleResponseDto<List<RecipeRecommendDto>>> getRecommendRecipesByFridge(@AuthMemberId Long memberId){
         Fridge fridge = fridgeService.findFridge(memberId);
         List<RecipeRecommendDto> dtos = recipeService.recommendByFridge(fridge.getId());
         return ResponseEntity.ok(new SingleResponseDto<>(dtos));
+
     }
 }
