@@ -31,6 +31,16 @@ export const ButtonWrapper = styled.div`
   &.invisible {
     display: none;
   }
+  &.bottom {
+    bottom: 130px;
+    @media ${({ theme }) => theme.device.mobile} {
+      bottom: 140px;
+    }
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    bottom: 16px;
+    right: 16px;
+  }
 `
 
 export const Text = styled.div`
