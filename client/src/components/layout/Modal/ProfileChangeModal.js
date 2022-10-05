@@ -155,8 +155,16 @@ const ProfileImgUploader = ({ previewImg, setPreviewImg, setUploadFile }) => {
       // 미리보기 이미지는 따로 상태로 관리해야 함. 여기서 직접 리덕스에 저장하면 미리보기하는 이미지로 리덕스에 변경됨
       // 모달에서 완료버튼을 눌렀을때 서버랑통신하고, redux 상태도바꾸기
       // dispatch(editUserPhoto({ userProfileImgPath: URL.createObjectURL(uploadFile) }));
-      setUploadFile(fileList[0]); //부모 컴포넌트 ProfileChangeModal에서 파일 데이터 서버에 전송해야되니까 상태로 관리
-      setPreviewImg(URL.createObjectURL(fileList[0])); //미리보기 사진만 변경하기
+
+      //용량 제한하기
+      const maxSize = 2 * 1024 * 1024;
+      if (fileList[0].size > maxSize) {
+        alert("이미지 사이즈는 2MB 이내로만 등록할 수 있어요");
+        return false;
+      } else {
+        setUploadFile(fileList[0]); //부모 컴포넌트 ProfileChangeModal에서 파일 데이터 서버에 전송해야되니까 상태로 관리
+        setPreviewImg(URL.createObjectURL(fileList[0])); //미리보기 사진만 변경하기
+      }
       console.log("이미지핸들러에서 fileList[0] 객체?", fileList[0]);
       //FileList {0: File, length: 1}
       //0: File {name: '소면.jpeg', lastModified: 1664802180985, lastModifiedDate:...}
