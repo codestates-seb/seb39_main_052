@@ -23,3 +23,14 @@ export const SpanWrapper = styled.div`
     padding-right: 8px;
   }
 `;
+
+//아직 없어요 메시지
+export const NoticeMsgBox = styled.div`
+  padding: 16px;
+  height: 100px;
+  max-width: 18rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+`;

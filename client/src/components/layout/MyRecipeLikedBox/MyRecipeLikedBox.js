@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import {
   RecipeFrameOuterContainer,
-  SpanWrapper,
+  NoticeMsgBox,
 } from "../MyRecipeBox/MyRecipeBoxStyle";
 import RecipeFrame from "../RecipeFrame/RecipeFrame";
 import UserName from "../../common/UserName/UserName";
@@ -38,56 +38,47 @@ const MyRecipeLikedBox = ({ timeSince }) => {
 
   return (
     <>
-      <RecipeFrameOuterContainer>
-        {myLikedRecipeList.map((data) => (
-          <RecipeFrame
-            key={data.id}
-            recipeIdForLikedList={data.id}
-            setIsUpdatedForLikedList={setIsUpdatedForLikedList}
-            imagePath={data.imagePath}
-            title={data.title}
-            date={timeSince(Date.parse(data.lastModifiedAt))}
-            icon2={
-              <FontAwesomeIcon
-                icon={faTrashCan}
-                mode={"my_liked_recipe"}
-              ></FontAwesomeIcon>
-            }
-          >
-            {/* <SpanWrapper>
+      {myLikedRecipeList.length === 0 && (
+        <NoticeMsgBox>아직 내가 좋아한 레시피가 없어요</NoticeMsgBox>
+      )}
+      {myLikedRecipeList.length > 0 && (
+        <div>
+          <RecipeFrameOuterContainer>
+            {myLikedRecipeList.map((data) => (
+              <RecipeFrame
+                key={data.id}
+                recipeIdForLikedList={data.id}
+                setIsUpdatedForLikedList={setIsUpdatedForLikedList}
+                imagePath={data.imagePath}
+                title={data.title}
+                date={timeSince(Date.parse(data.lastModifiedAt))}
+                icon2={
+                  <FontAwesomeIcon
+                    icon={faTrashCan}
+                    mode={"my_liked_recipe"}
+                  ></FontAwesomeIcon>
+                }
+              >
+                {/* <SpanWrapper>
             by <span>{data.memberName}</span>
           </SpanWrapper> */}
-            <UserName
-              image={data.member.profileImagePath}
-              name={data.member.name}
-            ></UserName>
-          </RecipeFrame>
-        ))}
-      </RecipeFrameOuterContainer>
-      <Pagination
-        page={page}
-        setPage={setPage}
-        totalPages={totalPages}
-      ></Pagination>
+                <UserName
+                  image={data.member.profileImagePath}
+                  name={data.member.name}
+                ></UserName>
+              </RecipeFrame>
+            ))}
+          </RecipeFrameOuterContainer>
+
+          <Pagination
+            page={page}
+            setPage={setPage}
+            totalPages={totalPages}
+          ></Pagination>
+        </div>
+      )}
     </>
   );
 };
 
 export default MyRecipeLikedBox;
-// {dummyData.map((data) => (
-//   <RecipeFrame
-//     key={data.id}
-//     imagePath={data.imagePath}
-//     title={data.title}
-//     date={timeSince(Date.parse(data.lastModifiedAt))}
-//     icon2={<FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon>}
-//   >
-//     {/* <SpanWrapper>
-//     by <span>{data.memberName}</span>
-//   </SpanWrapper> */}
-//     <UserName
-//       image={data.memberImage}
-//       name={data.memberName}
-//     ></UserName>
-//   </RecipeFrame>
-// ))}
