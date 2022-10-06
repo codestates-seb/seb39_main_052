@@ -71,6 +71,10 @@ export const LeftBoxForMobile = styled.div`
 
 export const LogoBox = styled.div`
   /* display: flex; */
+  @media ${({ theme }) => theme.device.mobile} {
+    margin-left: 12%;
+    padding-top: 4px;
+  }
 `;
 
 export const RightBox = styled.div`
@@ -123,6 +127,9 @@ export const Li = styled.li`
         background-color: var(--fridge-500);
         box-shadow: var(--shadow-3d);
       }
+    }
+    &.login {
+      font-size: 13px;
     }
   }
 `;

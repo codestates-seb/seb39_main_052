@@ -87,7 +87,7 @@ const Gnb = () => {
         <RightBox className="rightbox">
           <Ul>
             {!isLoggedIn ? (
-              <Li>
+              <Li className="login">
                 <Link to="/login">로그인</Link>
               </Li>
             ) : (
