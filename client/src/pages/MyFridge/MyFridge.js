@@ -7,10 +7,11 @@ import InputList from "../../components/common/InputList/InputList";
 import { addFrigIngrInput, clearFridge, editFrigIngredients, loadFridge, setDDay, sortByAlphabet, sortByDate } from "../../features/fridgeSlice";
 import useConfirm from "../../hooks/useConfirm";
 import usePreventLeave from "../../hooks/usePreventLeave";
-import { Head, ColumnHeads, Container, Title, Fridge, InputWrapper, InnerContainer, ButtonWrap, SortWrapper, Option } from "./MyFridgeStyle";
+import { Head, ColumnHeads, Container, Title, Fridge, InputWrapper, InnerContainer, ButtonWrap, SortWrapper, Option, Guide } from "./MyFridgeStyle";
 
 const MyFridge = () => {
-    const [isEmpty, setIsEmpty] = useState(true); 
+    const [isShowing, setIsShowing] = useState(false); // 재료 관련 안내창 
+    const [isEmpty, setIsEmpty] = useState(true); // 재료 없음
     const [sortMode, setSortMode] = useState("date");
     const [serverData, setServerData] = useState([]);
     const titlesArr = ["name", "quantity", "expiration", "dDay", "note"]; //재료 입력에서 각 column의 키값 배열
@@ -44,6 +45,11 @@ const MyFridge = () => {
             console.log("유저토큰", userToken)
             getFridge();
             enablePrevent(); // 페이지 나가는거 인식해서 경고창 띄우는 함수 실행
+            setIsShowing(true);
+
+            setTimeout(() => {
+                setIsShowing(false);
+            }, 5000);
         }
         return () => { mountRef.current = true; console.log("언마운트")}
     }, [isLoggedIn])
@@ -185,6 +191,7 @@ const MyFridge = () => {
                 <GeneralButton className="medium" onClick={useConfirm("정말 비우는건가요? 확인시 냉장고 상태를 되돌릴 수 없어요.", confirm, cancel)}>냉장고 비우기</GeneralButton>
                 <GeneralButton className="medium" onClick={handleSave}>냉장고 정리</GeneralButton>
             </ButtonWrap>
+            {isShowing && <Guide>재료 옆 아이콘을 클릭하여 해당 재료로 만들 수 있는 레시피를 바로 검색해보세요!</Guide>}
         </Container>
     )
 }

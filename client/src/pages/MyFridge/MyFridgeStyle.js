@@ -9,6 +9,23 @@ export const Container = styled.div`
         width: 100vw;
     }
 `
+
+export const Guide = styled.div`
+    position: relative;
+    top: -570px;
+    padding: 16px;
+    border-radius: 8px;
+    background-color: white;
+    opacity: 0.8;
+    box-shadow: var(--shadow-low);
+    @media ${({ theme }) => theme.device.mobile} {
+        width: 360px;
+        top: -550px;
+        font-size: 12px;
+        text-align: center;
+    }
+`
+
 export const SortWrapper = styled.div`
     display: flex;
     justify-content: flex-end;
