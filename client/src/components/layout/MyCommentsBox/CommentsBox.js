@@ -11,6 +11,7 @@ import {
 import logoface from "../../../assets/small_logoface.png";
 import { useNavigate } from "react-router-dom";
 import { NoticeMsgBox } from "../MyRecipeBox/MyRecipeBoxStyle";
+import { useSelector } from "react-redux";
 
 const CommentsBox = ({ timeSince }) => {
   const [commentsList, setCommentsList] = useState([]); //서버에서 받아오는 댓글 리스트 저장
@@ -24,6 +25,10 @@ const CommentsBox = ({ timeSince }) => {
   // const date = "2022-09-29T18:54:46.996434";
   // console.log("함수실험", timeSince(Date.parse(date)));
 
+  const userToken = useSelector((state) => {
+    return state.user.userToken;
+  });
+
   useEffect(() => {
     getCommentsList();
   }, [page]); //page넣어줘야 page바뀔때마다 리스트 띄워줌
@@ -31,7 +36,9 @@ const CommentsBox = ({ timeSince }) => {
   //서버에서 받은 댓글 리스트 조회 통신 받아오기
   const getCommentsList = async () => {
     try {
-      const { data } = await axios.get(`/api/comments/received?page=${page}`); //axios promise객체 찍어보면 {data: {…}, status: 200, statusText: 'OK', headers: {…}, config: {…}, …} 나옴. response body에 해당되는 data만 구조분해할당
+      const { data } = await axios.get(`/api/comments/received?page=${page}`, {
+        headers: { Authorization: `Bearer ${userToken}` },
+      }); //axios promise객체 찍어보면 {data: {…}, status: 200, statusText: 'OK', headers: {…}, config: {…}, …} 나옴. response body에 해당되는 data만 구조분해할당
       console.log(data); //{data: Array(4), pageInfo: {…}}
       setTotal(data.pageInfo.totalElements);
       setTotalPages(data.pageInfo.totalPages);
