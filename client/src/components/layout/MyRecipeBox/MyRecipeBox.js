@@ -52,8 +52,8 @@ const MyRecipeBox = ({ timeSince }) => {
   const getMyRecipeList = async () => {
     try {
       const { data } = await axios.get(
-        `/api/recipes/my?page=${page}&sort=${sortMode}`
-        // { headers: { Authorization: `Bearer ${userToken}` } }
+        `/api/recipes/my?page=${page}&sort=${sortMode}`,
+        { headers: { Authorization: `Bearer ${userToken}` } }
       );
       console.log(data);
       // console.log("sort모드?", sortMode);

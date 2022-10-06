@@ -9,6 +9,7 @@ import UserName from "../../common/UserName/UserName";
 import Pagination from "../../common/Pagination/Pagination";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const MyRecipeLikedBox = ({ timeSince }) => {
   const [myLikedRecipeList, setMyLikedRecipeList] = useState([]);
@@ -17,10 +18,16 @@ const MyRecipeLikedBox = ({ timeSince }) => {
   const [totalPages, setTotalPages] = useState(0); //전체 페이지 수
   const [isUpdatedForLikedList, setIsUpdatedForLikedList] = useState(false); //좋아요한 레시피 삭제시 업뎃여부로 화면에 재렌더링 하려고
 
+  const userToken = useSelector((state) => {
+    return state.user.userToken;
+  });
+
   //내가 좋아한 레시피 목록 조회하기
   const getMyLikedRecipeList = async () => {
     try {
-      const { data } = await axios.get(`/api/recipes/favorite?page=${page}`);
+      const { data } = await axios.get(`/api/recipes/favorite?page=${page}`, {
+        headers: { Authorization: `Bearer ${userToken}` },
+      });
       console.log(data);
       setTotal(data.pageInfo.totalElements);
       setTotalPages(data.pageInfo.totalPages);
