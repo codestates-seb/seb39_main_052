@@ -39,9 +39,11 @@ const RecipeCard = ({
         <Title onClick={detectOnClick}>
           <Link to={recipeLink}>{title}</Link>
         </Title>
-        <Doornob>
-          <UserName image={memberImage} name={memberName} className="long"/>
-          <Link to={recipeLink}><StyledFontAwesomeIcon icon={faGripLines} /></Link>
+        <Doornob onClick={detectOnClick}>
+          <UserName image={memberImage} name={memberName} className="long" />
+          <Link to={recipeLink}>
+            <StyledFontAwesomeIcon icon={faGripLines} />
+          </Link>
         </Doornob>
         <LikesAndViews>
           <LikeHeart
