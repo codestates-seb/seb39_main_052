@@ -7,6 +7,7 @@ export const Container = styled.div`
     padding: 28px 0 0 0;
     width: 100%;
     font-size: 12px;
+    height: 90vh;
 `
 
 export const Header = styled.div`

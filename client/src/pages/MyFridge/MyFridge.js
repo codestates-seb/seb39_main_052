@@ -51,7 +51,10 @@ const MyFridge = () => {
                 setIsShowing(false);
             }, 5000);
         }
-        return () => { mountRef.current = true; console.log("언마운트")}
+        return () => { 
+            mountRef.current = true;
+            disablePrevent();
+        }
     }, [isLoggedIn])
 
     // 냉장고 재료
