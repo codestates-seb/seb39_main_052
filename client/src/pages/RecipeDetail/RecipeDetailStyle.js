@@ -5,6 +5,9 @@ export const RecipeWrapper = styled.div`
     flex-direction: column;
     align-items: center;
     margin: 40px 0 0 0;
+    @media ${({ theme }) => theme.device.mobile} {
+        
+    }
 `
 export const Extra = styled.div`
     display: flex;
@@ -12,6 +15,9 @@ export const Extra = styled.div`
     justify-content: space-between;
     font-size: 11px;
     width: 548px;
+    @media ${({ theme }) => theme.device.mobile} {
+        width: 360px;
+    }
 `
 
 export const RecipeId = styled.div`
@@ -23,6 +29,11 @@ export const Head = styled.div`
     flex-direction: row;
     width: 548px;
     justify-content: space-between;
+    @media ${({ theme }) => theme.device.mobile} {
+        width: 100vw;
+        align-items: center;
+        flex-direction: column-reverse;
+    }
 `
 
 export const HeadLeft = styled.div`
@@ -30,6 +41,12 @@ export const HeadLeft = styled.div`
     flex-direction: column;
     flex-grow: 1;
     padding: 0 24px 0 0;
+    @media ${({ theme }) => theme.device.mobile} {
+        align-items: center;
+        justify-content: center;
+        padding-right: 0;
+        margin-top: 16px;
+    }
 `
 
 export const HeadLeftTop = styled.div`
@@ -38,6 +55,10 @@ export const HeadLeftTop = styled.div`
     justify-content: space-between;
     margin: 0 0 8px 0;
     height: 40px;
+    @media ${({ theme }) => theme.device.mobile} {
+        flex-direction: column;
+        align-items: center;
+    }
 `
 
 export const Heading = styled.h1`
@@ -48,6 +69,11 @@ export const Heading = styled.h1`
     font-size: 18px;
     /* white-space: nowrap;
     text-overflow: ellipsis; */
+    @media ${({ theme }) => theme.device.mobile} {
+        text-align: center;
+        width: 360px;
+        font-size: 16px;
+    }
 `
 
 export const LikeViewWrapper = styled.div`
@@ -55,6 +81,13 @@ export const LikeViewWrapper = styled.div`
     flex-direction: column;
     align-items: flex-end;
     justify-content: flex-start;
+    @media ${({ theme }) => theme.device.mobile} {
+        flex-direction: row-reverse;
+        justify-content: space-between;
+        align-items: flex-end;
+        width: 300px;
+        margin-top: 8px;
+    }   
 `
 
 export const View = styled.div`
@@ -68,6 +101,9 @@ export const HeadLeftBottom = styled.div`
     font-size: 12px;
     justify-content: space-between;
     flex-grow: 1;
+    @media ${({ theme }) => theme.device.mobile} {
+        flex-direction: column;
+    }
 `
 
 export const Info = styled.div`
@@ -76,7 +112,24 @@ export const Info = styled.div`
     // 유저 프로필
     > *:nth-child(1) {
         margin: 0 0 24px 0;
+        @media ${({ theme }) => theme.device.mobile} {
+            margin-bottom: 0;
+            flex-grow: 0.5;
+        }
+    }
+    > *:not(:first-child) {
+        @media ${({ theme }) => theme.device.mobile} {
+            flex-grow: 1;
+        }
     } 
+    @media ${({ theme }) => theme.device.mobile} {
+        width: 300px;
+        margin-top: 18px;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+
+    }
 `
 
 export const PortionAndTime = styled.div`
@@ -91,6 +144,12 @@ export const PortionAndTime = styled.div`
     color: var(--fridge-800);
     box-shadow: var(--shadow-low);
     margin-top: 8px;
+    @media ${({ theme }) => theme.device.mobile} {
+        margin-top: 0;
+        font-size: 10px;
+        width: 10px;
+        margin-left: 4px;
+    }
 `
 
 export const ButtonLikeWrapper = styled.div`
@@ -99,6 +158,11 @@ export const ButtonLikeWrapper = styled.div`
     align-items: flex-end;
     justify-content: flex-start;
     padding: 16px 0 0px 0;
+    @media ${({ theme }) => theme.device.mobile} {
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+    }
 `
 
 export const ButtonLike = styled.div`
@@ -123,6 +187,9 @@ export const ButtonLike = styled.div`
     &.invisible {
         display: none;
     }
+    @media ${({ theme }) => theme.device.mobile} {
+        margin-right: 8px;
+    }
 `
 
 export const Image = styled.img`
@@ -136,6 +203,17 @@ export const Image = styled.img`
 export const SubHeading = styled.h2`
     width: 548px;
     color: var(--gray-900);
+    // 재료 계량
+    :first-of-type {
+        @media ${({ theme }) => theme.device.mobile} {
+            margin-top: 24px;
+        }
+    }
+    @media ${({ theme }) => theme.device.mobile} {
+        width: 100%;
+        text-align: center;
+        font-size: 14px;
+    }
 `
 export const Ingredients = styled.div`
     display: flex;    
@@ -148,9 +226,24 @@ export const Ingredients = styled.div`
         display: flex;
         margin: 4px 0;
     }
+    @media ${({ theme }) => theme.device.mobile} {
+        width: 100%;
+        align-items: center;
+    }
 `
 
 export const Ingredient = styled.div`
-        width: 100px;
-        margin: 0 8px 0 0;
+    width: 100px;
+    margin: 0 8px 0 0;
+    @media ${({ theme }) => theme.device.mobile} {
+        background-color: var(--gray-100);
+        padding: 2px 4px;
+        border-radius: 4px;
+        text-align: center;
+    }
+    &.darker {
+        @media ${({ theme }) => theme.device.mobile} {
+            background-color: var(--fridge-100);
+        }
+    }
 `

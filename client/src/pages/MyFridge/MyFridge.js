@@ -6,25 +6,28 @@ import GeneralButton from "../../components/common/Button/GeneralButton";
 import InputList from "../../components/common/InputList/InputList";
 import { addFrigIngrInput, clearFridge, editFrigIngredients, loadFridge, setDDay, sortByAlphabet, sortByDate } from "../../features/fridgeSlice";
 import useConfirm from "../../hooks/useConfirm";
-import { Head, ColumnHeads, Container, Title, Fridge, InputWrapper, InnerContainer, ButtonWrap, SortWrapper, Option } from "./MyFridgeStyle";
+import usePreventLeave from "../../hooks/usePreventLeave";
+import { Head, ColumnHeads, Container, Title, Fridge, InputWrapper, InnerContainer, ButtonWrap, SortWrapper, Option, Guide } from "./MyFridgeStyle";
 
 const MyFridge = () => {
-    const [isEmpty, setIsEmpty] = useState(true); 
+    const [isShowing, setIsShowing] = useState(false); // 재료 관련 안내창 
+    const [isEmpty, setIsEmpty] = useState(true); // 재료 없음
     const [sortMode, setSortMode] = useState("date");
     const [serverData, setServerData] = useState([]);
     const titlesArr = ["name", "quantity", "expiration", "dDay", "note"]; //재료 입력에서 각 column의 키값 배열
-    const placeholders = ["예) 계란", "예) 30알", "예) 2100/01/01", "", "기타 정보를 작성하세요"];
+    const placeholders = ["예) 계란", "예) 30알", "예) 2100/01/01", "", "기타 정보를 작성하세요"]; // 페이지 나갈 때 경고창
     
     const mountRef = useRef(false); // 두번 마운팅 방지 (첫 요청 실패, 두번째는 성공이라 두번째 요청만 살림)
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { enablePrevent, disablePrevent } = usePreventLeave(); // 페이지 나갈 때 경고창 훅
 
     // 로그인 상태 가져와서 변수에 저장
     const isLoggedIn = useSelector((state) => {
         return state.user.isLoggedIn;
     });
 
-        // 로그인 상태 가져와서 변수에 저장
+    // access token 상태 가져와서 변수에 저장 (새로고침시 통신 header에 바로 저장되지 않는 에러로 인한 임시 방편)
     const userToken = useSelector((state) => {
         return state.user.userToken;
     });
@@ -41,6 +44,12 @@ const MyFridge = () => {
         if (isLoggedIn) {
             console.log("유저토큰", userToken)
             getFridge();
+            enablePrevent(); // 페이지 나가는거 인식해서 경고창 띄우는 함수 실행
+            setIsShowing(true);
+
+            setTimeout(() => {
+                setIsShowing(false);
+            }, 5000);
         }
         return () => { mountRef.current = true; console.log("언마운트")}
     }, [isLoggedIn])
@@ -54,7 +63,7 @@ const MyFridge = () => {
     // 냉장고 정보 서버에서 받아오기
     const getFridge = async () => {
         try {
-            const { data } = await axios.get(`/api/fridge`, {headers: {Authorization: userToken}});
+            const { data } = await axios.get(`/api/fridge`, {headers: {Authorization: `Bearer ${userToken}`}});
             const { fridgeIngredients } = data;
             console.log(data);
             // console.log("서버 냉장고재료", fridgeIngredients);
@@ -180,8 +189,9 @@ const MyFridge = () => {
                 {/* 아래 onClick 13값은 변경 예정 */}
                 <GeneralButton className="medium gray" onClick={handleCancel}>취소</GeneralButton>
                 <GeneralButton className="medium" onClick={useConfirm("정말 비우는건가요? 확인시 냉장고 상태를 되돌릴 수 없어요.", confirm, cancel)}>냉장고 비우기</GeneralButton>
-                <GeneralButton className="medium" onClick={handleSave}>냉장고 정리 끝</GeneralButton>
+                <GeneralButton className="medium" onClick={handleSave}>냉장고 정리</GeneralButton>
             </ButtonWrap>
+            {isShowing && <Guide>재료 옆 아이콘을 클릭하여 해당 재료로 만들 수 있는 레시피를 바로 검색해보세요!</Guide>}
         </Container>
     )
 }

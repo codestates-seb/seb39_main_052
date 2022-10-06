@@ -3,10 +3,12 @@ import RecipeEditor from "../../components/layout/RecipeEditor/RecipeEditor";
 import { PageName } from "./NewRecipeStyle";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import usePreventLeave from "../../hooks/usePreventLeave";
 
 const NewRecipe = () => {
     const navigate = useNavigate();
     const mountRef = useRef(false); // 두번 마운팅 방지
+    const { enablePrevent, disablePrevent } = usePreventLeave(); // 페이지 나갈 때 경고창 훅
 
     // 로그인 상태 가져와서 변수에 저장
     const isLoggedIn = useSelector((state) => {
@@ -21,6 +23,7 @@ const NewRecipe = () => {
                 alert("로그인이 필요한 서비스입니다");
             }
         }
+        enablePrevent(); // 페이지 나가는거 인식해서 경고창 띄우는 함수 실행
         return () => { mountRef.current = true; console.log("언마운트")}
     }, [isLoggedIn])
 

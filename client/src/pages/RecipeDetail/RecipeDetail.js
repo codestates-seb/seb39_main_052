@@ -138,7 +138,7 @@ const RecipeDetail = () => {
                 {recipe.ingredients.map((item, idx) => {
                     return (
                         <div key={idx}>
-                            <Ingredient>{item.name}</Ingredient>
+                            <Ingredient className="darker">{item.name}</Ingredient>
                             <Ingredient>{item.quantity}</Ingredient>
                         </div>
                     )

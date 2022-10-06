@@ -14,15 +14,24 @@ const Home = () => {
     return state.user.isLoggedIn;
   });
 
+  // access 토큰 가져와서 변수에 저장 (새로고침시 통신 header에 바로 저장되지 않는 에러로 인한 임시 방편)
+  const userToken = useSelector((state) => {
+    return state.user.userToken;
+  });
+
   const [isEmptyResult, setIsEmptyResult] = useState(false);
   const [popularRecipes, setPopularRecipes] = useState([]); // 인기 레시피
   const [recentRecipes, setRecentRecipes] = useState([]); // 최신 레시피
   const [recipesForMe, setRecipesForMe] = useState([]);
 
   useEffect(() => {
+    if (isLoggedIn) {
+      fetchRecipesForMe();
+    }
+    else {
+      fetchRecentRecipes();
+    }
     fetchPopularRecipes();
-    fetchRecentRecipes();
-    fetchRecipesForMe();
   }, [isLoggedIn])
 
   // 인기 레시피
@@ -50,7 +59,7 @@ const Home = () => {
   // 내가 만들 수 있는 레시피
   const fetchRecipesForMe = async() => {
     try {
-      const { data } = await axios.get(`/api/recipes/recommend/fridge`);
+      const { data } = await axios.get(`/api/recipes/recommend/fridge`, {headers: {Authorization: `Bearer ${userToken}`}});
       // console.log("내가 만들 수 있는 레시피", data);
       setRecipesForMe([...data.data]);
     }

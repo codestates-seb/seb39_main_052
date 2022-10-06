@@ -86,21 +86,21 @@ function App() {
       .catch((error) => console.log(error, "silent refresh 에러"));
   };
 
-  // useEffect(() => {
-  if (effectedCalled.current) return; //이미 useEffect 실행되었다면 useEffect실행안하고 탈출
-  effectedCalled.current = true;
+  useEffect(() => {
+    // if (effectedCalled.current) return; //이미 useEffect 실행되었다면 useEffect실행안하고 탈출
+    // effectedCalled.current = true;
 
-  if (isLoggedIn && userToken) {
-    axios.defaults.headers.common["Authorization"] = `Bearer ${userToken}`; //요청헤더에 액세스 토큰 설정
-    // console.log(axios.defaults.headers.common);
-    console.log("이미있는 리덕스 userToken으로 헤더에 설정", userToken);
-    //새로고침하면 이전에 로그인 요청보내놓은것도 상태가 다 날라가는데.. 액세스토큰이 만료되면 재발급 받게하는 onSilentRefresh 함수를 넣지않으면
-    //새로고침 이후에는 이전에 가지고있는 토큰만 세션스토리지에 저장되어있고 토큰 재발급이 안되는듯..? 토큰 재발급 요청 보내기
-    // setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
-    // setTimeout(onSilentRefresh, 3000); //3초로 실험
-    onSilentRefresh(); //새로고침하면 바로 액세스토큰 재발급하는 함수실행
-  }
-  // }, []);
+    if (isLoggedIn && userToken) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${userToken}`; //요청헤더에 액세스 토큰 설정
+      // console.log(axios.defaults.headers.common);
+      console.log("이미있는 리덕스 userToken으로 헤더에 설정", userToken);
+      //새로고침하면 이전에 로그인 요청보내놓은것도 상태가 다 날라가는데.. 액세스토큰이 만료되면 재발급 받게하는 onSilentRefresh 함수를 넣지않으면
+      //새로고침 이후에는 이전에 가지고있는 토큰만 세션스토리지에 저장되어있고 토큰 재발급이 안되는듯..? 토큰 재발급 요청 보내기
+      // setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
+      // setTimeout(onSilentRefresh, 3000); //3초로 실험
+      onSilentRefresh(); //새로고침하면 바로 액세스토큰 재발급하는 함수실행
+    }
+  }, []);
   //useEffect 하면 모든 컴포넌트 렌더링 된 이후에 App.js가 실행
 
   return (

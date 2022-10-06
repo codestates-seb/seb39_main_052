@@ -11,7 +11,10 @@ const NameSearchBar = ({ setIsRefreshNeeded }) => {
     const [suggestedValue, setSuggestedValue] = useState([]);
     const [isDropDownOpen, setIsDropDownOpen] = useState(false);
     const [cursor, setCursor] = useState(-1);
-    
+
+    // 다른 페이지에서 searchParams에 keyword로 담겨서 온 문자열 키워드를 담은 변수
+    const nameSearchTerm = searchParams.get('keyword'); // 제목으로 레시피 검색한 값
+
     // console.log("드롭다운은 켜졌니?", isDropDownOpen);
     // console.log("서치파람스 값은?", searchParams);
     // console.log("검색어 예정은?", searchValue);
@@ -21,6 +24,13 @@ const NameSearchBar = ({ setIsRefreshNeeded }) => {
 
     const searchBarRef = useRef(); // 서치바+드롭다운 창 밖 클릭을 인식하기 위한 ref
     const suggestionRef = useRef(null); // 스크롤이 드롭다운 내 선택된 요소를 따라가게 하기 위한 ref
+
+    // 모달창에서 검색한 값이 서치페이지 검색창에 자동 입력 되도록
+    useEffect(() => {
+        if (nameSearchTerm) {
+            setSearchValue(nameSearchTerm);
+        }
+    }, [])
 
     // 관련 검색어 불러오기
     const getDropDownValue = async (keyword) => {
