@@ -37,32 +37,71 @@ const RecipeDetail = () => {
     });
     // console.log(`redux 레시피`, recipe);
 
+    // 로그인 상태 가져와서 변수에 저장
+    const isLoggedIn = useSelector((state) => {
+        return state.user.isLoggedIn;
+    });
+
+    // access token 상태 가져와서 변수에 저장 (새로고침시 통신 header에 바로 저장되지 않는 에러로 인한 임시 방편)
+    const userToken = useSelector((state) => {
+        return state.user.userToken;
+    });
+
     // 레시피 상세 데이터 불러오기
-    const getRecipe = async() => {
-        try {
-            const { data } = await axios.get(`/api/recipes/${id}`);
-            dispatch(loadRecipe({
-                recipeId: data.id,
-                memberName: data.member.name,
-                memberId: data.member.id,
-                profileImagePath: data.member.profileImagePath,
-                createdAt: data.createdAt,
-                heartCounts: data.heartCounts,
-                heartExist: data.heartExist,
-                view: data.view,
-                title: data.title,
-                portion: data.portion,
-                time: data.time,
-                mainImage: data.imageInfo.imagePath,
-                ingredients: data.ingredients,
-                steps: data.steps,
-            }))
-            // 해당 레시피가 내 레시피인지 확인 후 상태 변경
-            data.member.id === myId ? setIsMyRecipe(true) : setIsMyRecipe(false);
+    const getRecipe = async () => {
+        if (isLoggedIn) {
+            try {
+                const { data } = await axios.get(`/api/recipes/${id}`, { headers: { Authorization: `Bearer ${userToken}` }})
+                dispatch(loadRecipe({
+                    recipeId: data.id,
+                    memberName: data.member.name,
+                    memberId: data.member.id,
+                    profileImagePath: data.member.profileImagePath,
+                    createdAt: data.createdAt,
+                    heartCounts: data.heartCounts,
+                    heartExist: data.heartExist,
+                    view: data.view,
+                    title: data.title,
+                    portion: data.portion,
+                    time: data.time,
+                    mainImage: data.imageInfo.imagePath,
+                    ingredients: data.ingredients,
+                    steps: data.steps,
+                }))
+                // 해당 레시피가 내 레시피인지 확인 후 상태 변경
+                data.member.id === myId ? setIsMyRecipe(true) : setIsMyRecipe(false);
+            }
+            catch (error) {
+                console.log(error);
+            }
         }
-        catch (error) {
-            console.log(error);
+        else {
+            try {
+                const { data } = await axios.get(`/api/recipes/${id}`)
+                dispatch(loadRecipe({
+                    recipeId: data.id,
+                    memberName: data.member.name,
+                    memberId: data.member.id,
+                    profileImagePath: data.member.profileImagePath,
+                    createdAt: data.createdAt,
+                    heartCounts: data.heartCounts,
+                    heartExist: data.heartExist,
+                    view: data.view,
+                    title: data.title,
+                    portion: data.portion,
+                    time: data.time,
+                    mainImage: data.imageInfo.imagePath,
+                    ingredients: data.ingredients,
+                    steps: data.steps,
+                }))
+                // 해당 레시피가 내 레시피인지 확인 후 상태 변경
+                data.member.id === myId ? setIsMyRecipe(true) : setIsMyRecipe(false);
+            }
+            catch (error) {
+                console.log(error);
+            }
         }
+        
     }
 
     useEffect(() => {
