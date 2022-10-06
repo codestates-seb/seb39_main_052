@@ -9,6 +9,7 @@ import { Container, Header, Warning, Main, ImageWrap, Input, Select, Ingredients
 import GeneralButton from "../../common/Button/GeneralButton";
 import { setTitle, setPortion, setTime, clearRecipe } from "../../../features/recipeSlice";
 import { clearImages } from "../../../features/imageSlice";
+import Footer from "../Footer/Footer";
 
 const RecipeEditor = () => {
 
@@ -441,6 +442,7 @@ const RecipeEditor = () => {
                     <GeneralButton className="medium" onClick={handleSaveClick}>수정하기</GeneralButton>
                 </ButtonWrap>
             }
+            <Footer />
         </ Container>
     )
 };

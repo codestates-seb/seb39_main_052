@@ -5,6 +5,7 @@ export const RecipeWrapper = styled.div`
     flex-direction: column;
     align-items: center;
     margin: 40px 0 0 0;
+    min-height: 100%;
     @media ${({ theme }) => theme.device.mobile} {
         
     }
