@@ -8,6 +8,7 @@ import TagSearchBar from "../../components/layout/TagSearchBar/TagSearchBar";
 import SortingTab from "../../components/common/SortingTab/SortingTab";
 import { faEgg, faCarrot, faFish, faPizzaSlice, faBowlRice } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import Footer from "../../components/layout/Footer/Footer";
 
 const FridgeDigging = () => {
 
@@ -183,9 +184,7 @@ const FridgeDigging = () => {
                 </Loader>}
                 {/* <p ref={pageEnd}>Loading...</p> */}
             </RecipeWrapper>
-
-
-
+            <Footer />
         </Container>
     )
 };

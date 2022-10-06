@@ -5,6 +5,8 @@ export const MyPageContainer = styled.div`
   min-height: 100vh;
   height: fit-content;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   margin-top: 2rem;
 `;

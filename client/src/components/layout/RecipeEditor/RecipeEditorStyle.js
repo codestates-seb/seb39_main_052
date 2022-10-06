@@ -7,7 +7,8 @@ export const Container = styled.div`
     padding: 28px 0 0 0;
     width: 100%;
     font-size: 12px;
-    height: 90vh;
+    min-height: 90vh;
+    height: fit-content;
 `
 
 export const Header = styled.div`
@@ -148,7 +149,7 @@ export const ButtonWrap = styled.div`
     flex-direction: row;
     justify-content: space-between;
     width: 548px;
-    margin: 0px 0 0 0;
+    margin-bottom: 80px;
     @media ${({ theme }) => theme.device.mobile} {
         width: 100vw;
         padding: 0 8%;

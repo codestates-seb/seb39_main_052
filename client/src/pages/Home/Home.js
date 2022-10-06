@@ -6,6 +6,7 @@ import logoface from "../../assets/small_logoface.png";
 import { Container, EmptyBox, Header, Image, Name, RecipeWrapper } from "./HomeStyle";
 import Carousel from "../../components/layout/Carousel/Carousel";
 import IntroCarousel from "../../components/layout/Carousel/IntroCarousel";
+import Footer from "../../components/layout/Footer/Footer";
 
 const Home = () => {
 
@@ -96,6 +97,7 @@ const Home = () => {
           </>
         }
       </Container>
+      <Footer />
     </>
   );
 };

@@ -127,7 +127,7 @@ export const ButtonWrap = styled.div`
     flex-direction: row;
     justify-content: space-between;
     width: 480px;
-    margin: 0px 0 0 0;
+    margin: 0px 0 15vh 0;
     @media ${({ theme }) => theme.device.mobile} {
         width: 96vw;
         > * {

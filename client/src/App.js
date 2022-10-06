@@ -36,6 +36,7 @@ function App() {
 
   const dispatch = useDispatch(); //for redux dispatch
   const effectedCalled = useRef(false); //useEffect 한번만 실행하려고
+
   // Floating Action의 위치 조정을 위해 스크롤을 인식하는 함수
   const handleScroll = (e) => {
     const bottom =
@@ -104,33 +105,32 @@ function App() {
   //useEffect 하면 모든 컴포넌트 렌더링 된 이후에 App.js가 실행
 
   return (
-    <Div onScroll={handleScroll}>
-      <BrowserRouter>
-        <GlobalStyle />
-        <Gnb />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<LogIn />} />
-          <Route path="/signup" element={<SignUpForm />} />
-          <Route path="/recipes/new" element={<NewRecipe />} />
-          <Route path="/auth/redirect" element={<OAuth2RedirectHandler />} />
-          <Route path="/recipes/edit" element={<EditRecipe />} />
-          <Route path="/recipes/:id" element={<RecipeDetail />} />
-          <Route path="/search" element={<FridgeDigging />} />
-          <Route path="/myfridge" element={<MyFridge />} />
-          <Route path="/mypage/:id" element={<MyPage />} />
-          <Route path="/admin" element={<AdminPanel />} />
-        </Routes>
-        <FloatingAction isBottom={isBottom} />
-      </BrowserRouter>
-      <Footer />
-    </Div>
+      <Div onScroll={handleScroll}>
+        <BrowserRouter>
+          <GlobalStyle />
+          <Gnb />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<LogIn />} />
+            <Route path="/signup" element={<SignUpForm />} />
+            <Route path="/recipes/new" element={<NewRecipe />} />
+            <Route path="/auth/redirect" element={<OAuth2RedirectHandler />} />
+            <Route path="/recipes/edit" element={<EditRecipe />} />
+            <Route path="/recipes/:id" element={<RecipeDetail />} />
+            <Route path="/search" element={<FridgeDigging />} />
+            <Route path="/myfridge" element={<MyFridge />} />
+            <Route path="/mypage/:id" element={<MyPage />} />
+            <Route path="/admin" element={<AdminPanel />} />
+          </Routes>
+          <FloatingAction isBottom={isBottom} />
+        </BrowserRouter>
+      </Div>
   );
 }
 
 const Div = styled.div`
-  height: 100vh;
   width: 100vw;
+  height: 100vh;
   overflow-x: hidden;
 `;
 
