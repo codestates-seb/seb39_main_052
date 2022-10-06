@@ -34,13 +34,16 @@ const RecipeEditor = () => {
     // 새로 작성 페이지면 빈 input 창이 뜨도록
     useEffect(() => {
         // mount
-
+        if (pathname === "/recipes/new") {
+            dispatch(clearRecipe());
+            dispatch(clearImages());
+        }
         return () => {
-            // unmount
-            if (pathname === "/recipes/new") {
-                dispatch(clearRecipe());
-                dispatch(clearImages());
-            }
+            // // unmount
+            // if (pathname === "/recipes/new") {
+            //     dispatch(clearRecipe());
+            //     dispatch(clearImages());
+            // }
         }
     }, [])
 
