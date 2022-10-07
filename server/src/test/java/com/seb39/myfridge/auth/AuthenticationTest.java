@@ -155,6 +155,30 @@ class AuthenticationTest {
     }
 
     @Test
+    @DisplayName("게스트 로그인시 임의의 정보로 회원가입 후 일반 로그인과 동일하게 처리한다.")
+    void guestLogin() throws Exception {
+
+        // expected
+        ResultActions result = mockMvc.perform(post("/api/login/guest")
+                        .accept(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(header().exists(ACCESS_TOKEN))
+                .andExpect(cookie().exists(REFRESH_TOKEN));
+
+        // docs
+        result.andDo(document("login-guest",
+                getRequestPreProcessor(),
+                getResponsePreProcessor(),
+                responseHeaders(
+                        headerWithName(ACCESS_TOKEN).description("Access Token이 담긴 헤더. (Refresh token은 refresh-token 쿠키에 담아 전송)")
+                ),
+                responseFields(
+                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("로그인한 사용자의 ID")
+                )
+        ));
+    }
+
+    @Test
     @DisplayName("로그아웃시 서버에서 보관중인 Refresh token을 삭제한다")
     void logout() throws Exception {
         // given

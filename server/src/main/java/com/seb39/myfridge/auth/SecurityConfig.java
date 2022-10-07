@@ -1,6 +1,7 @@
 package com.seb39.myfridge.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.seb39.myfridge.auth.filter.GuestJwtAuthenticationFilter;
 import com.seb39.myfridge.auth.filter.JwtAuthenticationFilter;
 import com.seb39.myfridge.auth.filter.JwtAuthorizationFilter;
 import com.seb39.myfridge.auth.filter.JwtExceptionHandlingFilter;
@@ -88,9 +89,15 @@ public class SecurityConfig {
             jwtAuthenticationFilter.setFilterProcessesUrl("/api/login");
             jwtAuthenticationFilter.setAuthenticationFailureHandler(jwtAuthenticationFailureHandler);
 
+            GuestJwtAuthenticationFilter guestJwtAuthenticationFilter = new GuestJwtAuthenticationFilter(authenticationManager,authenticationTokenService,memberService);
+            guestJwtAuthenticationFilter.setFilterProcessesUrl("/api/login/guest");
+            guestJwtAuthenticationFilter.setAuthenticationFailureHandler(jwtAuthenticationFailureHandler);
+
             JwtAuthorizationFilter jwtAuthorizationFilter = new JwtAuthorizationFilter(authenticationManager, memberService, authenticationTokenService);
             JwtExceptionHandlingFilter jwtExceptionHandlingFilter = new JwtExceptionHandlingFilter(authenticationManager);
+
             builder
+                    .addFilter(guestJwtAuthenticationFilter)
                     .addFilter(jwtAuthenticationFilter)
                     .addFilter(jwtAuthorizationFilter)
                     .addFilterBefore(jwtExceptionHandlingFilter, JwtAuthenticationFilter.class);

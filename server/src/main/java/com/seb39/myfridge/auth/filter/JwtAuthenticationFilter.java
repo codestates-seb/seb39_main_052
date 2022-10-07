@@ -28,9 +28,9 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private final AuthenticationManager authenticationManager;
-    private final AuthenticationTokenService authenticationTokenService;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    protected final AuthenticationManager authenticationManager;
+    protected final AuthenticationTokenService authenticationTokenService;
+    protected final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException{
@@ -44,7 +44,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         return authenticationManager.authenticate(token);
     }
 
-    private LoginRequest requestBodyToLoginRequest(HttpServletRequest request) {
+    protected LoginRequest requestBodyToLoginRequest(HttpServletRequest request) {
         try {
             return objectMapper.readValue(request.getInputStream(), LoginRequest.class);
         } catch (IOException e) {

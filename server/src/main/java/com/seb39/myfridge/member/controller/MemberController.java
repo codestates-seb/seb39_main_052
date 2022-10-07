@@ -1,6 +1,7 @@
 package com.seb39.myfridge.member.controller;
 
 import com.seb39.myfridge.auth.annotation.AuthMemberId;
+import com.seb39.myfridge.auth.dto.LoginResponse;
 import com.seb39.myfridge.image.upload.FileUploadService;
 import com.seb39.myfridge.image.upload.UploadService;
 import com.seb39.myfridge.member.dto.MemberDto;

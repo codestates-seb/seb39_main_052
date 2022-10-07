@@ -104,8 +104,7 @@ public class RecipeService {
 
     @Transactional
     public void addView(Long recipeId){
-        Recipe recipe = findRecipeById(recipeId);
-        recipe.addView();
+        recipeRepository.addView(recipeId);
     }
 
     private void verifyCanDelete(Recipe recipe, Long memberId) {

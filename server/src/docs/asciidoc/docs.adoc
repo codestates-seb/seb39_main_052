@@ -70,6 +70,24 @@ include::{snippets}/logout-success/request-headers.adoc[]
 .http-response
 include::{snippets}/logout-success/http-response.adoc[]
 
+=== 게스트 로그인
+***
+
+ 게스트 로그인을 위한 API 입니다.
+
+.http-request
+include::{snippets}/login-guest/http-request.adoc[]
+
+.http-response
+include::{snippets}/login-guest/http-response.adoc[]
+
+.response-headers
+include::{snippets}/login-guest/response-headers.adoc[]
+
+.response-fields
+include::{snippets}/login-guest/response-fields.adoc[]
+
+
 === 회원가입
 ***
 
