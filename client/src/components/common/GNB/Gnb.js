@@ -36,6 +36,12 @@ const Gnb = () => {
   });
   // console.log("GNB에서 isLoggedIn이니?", isLoggedIn);
 
+  //관리자 상태 가져와서 변수에 저장
+  const isAdmin = useSelector((state) => {
+    return state.user.isAdmin;
+  });
+  // console.log("isAdmin상태", isAdmin);
+
   //userSlice 전체 상태 확인
   // useSelector((state) => {
   //   console.log("userSlice 전체상태?", state.user);
@@ -97,6 +103,11 @@ const Gnb = () => {
         </LogoBox>
         <RightBox className="rightbox">
           <Ul>
+            {isAdmin && (
+              <Li>
+                <Link to="/admin">관리자</Link>
+              </Li>
+            )}
             {!isLoggedIn ? (
               <Li className="login">
                 <Link to="/login">로그인</Link>
