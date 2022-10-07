@@ -3,6 +3,7 @@ package com.seb39.myfridge.recipe.dto;
 
 import lombok.*;
 import com.seb39.myfridge.member.dto.MemberDto;
+import org.hibernate.validator.constraints.Range;
 
 
 import javax.validation.constraints.NotBlank;
@@ -16,7 +17,9 @@ public class RecipeDto {
     public static class Post {
         @NotBlank(message = "레시피 제목은 공백이 아니어야 합니다.")
         private String title;
+        @Range(min = 1, max = 1000)
         private int portion;
+        @NotBlank(message = "요리 시간을 입력해주세요!")
         private String time;
         private List<Ingredient> ingredients;
         private List<Step> steps;
@@ -53,7 +56,10 @@ public class RecipeDto {
         @NotBlank(message = "수정할 레시피 제목은 공백이 아니어야 합니다.")
         private String title;
         private ImageInfo imageInfo;
+
+        @Range(min = 1, max = 1000)
         private int portion;
+        @NotBlank(message = "요리 시간을 입력해주세요!")
         private String time;
         private List<Ingredient> ingredients;
         private List<Step> steps;

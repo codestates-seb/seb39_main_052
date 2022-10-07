@@ -362,7 +362,7 @@ class RecipeControllerTest {
         RecipeDto.Post requestBody = new RecipeDto.Post("라면 맛있게 끓이는 법", 1, "5분", stepList, ingredients);
 
         String requestToJson = objectMapper.writeValueAsString(requestBody);
-        MockMultipartFile json = new MockMultipartFile("requestBody", "jsonData", "application/json", requestToJson.getBytes(StandardCharsets.UTF_8));
+        MockMultipartFile json = new MockMultipartFile("requestBody", "requestToJson", "application/json", requestToJson.getBytes(StandardCharsets.UTF_8));
 
         RecipeDto.Patch patch = RecipeDto.Patch.builder()
                 .id(1L)
