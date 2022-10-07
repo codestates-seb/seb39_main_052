@@ -179,6 +179,69 @@ const LogInForm = () => {
   //   console.log(isLoggedIn);
   // }, [isLoggedIn]);
 
+  //게스트 로그인
+  const onSubmitGuest = () => {
+    axios
+      .post("/api/login/guest")
+      .then((response) => {
+        const ACCESS_TOKEN = response.headers["access-token"]; //eyJ0eX.. 서버에서 response header에 싣어보내는 토큰값
+        if (response.status === 200) {
+          axios.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${ACCESS_TOKEN}`; //요청헤더에 액세스 토큰 설정
+          console.log("게스트 ACCESS_TOKEN", ACCESS_TOKEN);
+          //로그인 성공 상태 리덕스 저장소로 보내기
+          // dispatch(setLoggedIn({ userEmail: data.email }));
+          // console.log(response.data); //서버에서 응답바디로 주는것 {memberId: 2}
+
+          //userSlice에 로그인 상태 true 저장
+          dispatch(setLoggedIn({})); //{isLoggedIn: true, userId: null, userName: null, userProfileImgPath: null}
+
+          //액세스 토큰 리덕스에도 저장하기
+          dispatch(setLoggedIn({ userToken: ACCESS_TOKEN }));
+
+          //서버에서 받아오는 memberId를 가지고 사용자 정보조회하는 API로 get요청
+          getUserInfo(response.data.memberId);
+
+          alert("로그인 성공");
+          navigate("/");
+          //액세스토큰 만료되기 전 로그인 연장
+          setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
+          // setTimeout(onSilentRefresh, 3000); //3초로 실험
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        if (error.response.status === 401) {
+          alert("게스트로 로그인할 수 없어요ㅠㅠ\n" + error.message);
+        } else {
+          alert(error.message);
+        }
+      });
+
+    const onSilentRefresh = () => {
+      axios
+        .post("/api/auth/refresh")
+        .then((response) => {
+          const ACCESS_TOKEN = response.headers["access-token"]; //eyJ0eX.. 서버에서 response header에 싣어보내는 토큰값
+          if (response.status === 200) {
+            axios.defaults.headers.common[
+              "Authorization"
+            ] = `Bearer ${ACCESS_TOKEN}`; //요청헤더에 액세스 토큰 설정
+
+            console.log("ACCESS_TOKEN 재발급", ACCESS_TOKEN);
+
+            //refesh로 새로받아온 액세스 토큰 리덕스에도 저장하기
+            dispatch(setLoggedIn({ userToken: ACCESS_TOKEN }));
+            //액세스토큰 만료되기 1분 전 로그인 연장
+            setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
+            // setTimeout(onSilentRefresh, 3000); //3초로 실험
+          }
+        })
+        .catch((error) => console.log(error, "silent refresh 에러"));
+    };
+  };
+
   return (
     <LogInFormContainer>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -226,7 +289,13 @@ const LogInForm = () => {
           로그인
         </GeneralButton>
       </form>
-
+      <GeneralButton
+        onClick={onSubmitGuest}
+        backgroundColor="var(--gray-400)"
+        hoverBackgroundColor={"var(--gray-500)"}
+      >
+        게스트 로그인
+      </GeneralButton>
       <SignUpDiv>
         {/* <span>오늘 뭐먹을지 고민중인가요?</span>
         <span>
