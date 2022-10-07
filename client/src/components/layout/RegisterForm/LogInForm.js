@@ -5,7 +5,11 @@ import GeneralButton from "../../common/Button/GeneralButton";
 import { LogInFormContainer, SignUpDiv } from "./LogInFormStyle";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setLoggedIn, setUserInfo } from "../../../features/userSlice";
+import {
+  setIsAdmin,
+  setLoggedIn,
+  setUserInfo,
+} from "../../../features/userSlice";
 
 const LogInForm = () => {
   const navigate = useNavigate();
@@ -19,9 +23,9 @@ const LogInForm = () => {
   //isDirty: form 양식 어떤 input이라도 건드렸으면 true?
 
   //userSlice 전체 상태 확인 - 콘솔 확인용
-  // useSelector((state) => {
-  //   console.log("userSlice 전체상태?", state.user); //{isLoggedIn: false, userId: null, userEmail: null}
-  // });
+  useSelector((state) => {
+    console.log("userSlice 전체상태?", state.user); //{isLoggedIn: false, userId: null, userEmail: null}
+  });
 
   // //userSlice에서 가져오는 유저아이디
   // const userId = useSelector((state) => {
@@ -156,15 +160,22 @@ const LogInForm = () => {
       .then((response) => {
         // console.log(response);
         if (response.status === 200) {
-          // console.log(response); //response.data = {memberId: 2, name: 'test1', profileImagePath: null}
+          console.log("겟유저인포 response", response); //response.data = {memberId: 2, name: 'test1', profileImagePath: null}
+          //관리자 권한이면
+          if (response.data.roles[0] === "ROLE_ADMIN") {
+            dispatch(setIsAdmin({})); //관리자 상태 true 추가
+          }
+          //그냥 로그인이면..
           //요청시 받아오는 response.data로 리덕스에 유저정보 저장
-          dispatch(
-            setUserInfo({
-              userId: response.data.id,
-              userName: response.data.name,
-              userProfileImgPath: response.data.profileImagePath,
-            })
-          );
+          else {
+            dispatch(
+              setUserInfo({
+                userId: response.data.id,
+                userName: response.data.name,
+                userProfileImgPath: response.data.profileImagePath,
+              })
+            );
+          }
         }
       })
       .catch((error) => console.log("겟유저인포 fail", error));
