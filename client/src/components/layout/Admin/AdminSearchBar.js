@@ -9,17 +9,21 @@ const AdminSearchBar = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchValue, setSearchValue] = useState("");
 
-  const handleInput = (e) => {
-    setSearchValue(e.target.value);
-    //레시피 관리일때
-    setSearchParams({ recipe_id: e.target.value });
+  const handleOnkeyPress = (e) => {
+    if (e.key === "Enter") {
+      setSearchValue(e.target.value);
+      setSearchParams({ recipe_id: e.target.value });
+    }
   };
   console.log(searchValue);
 
   return (
     <SearchBar>
       <FontAwesomeIcon icon={faMagnifyingGlass} />
-      <SearchInput value={searchValue} onChange={handleInput}></SearchInput>
+      <SearchInput
+        // value={searchValue}
+        onKeyPress={handleOnkeyPress}
+      ></SearchInput>
     </SearchBar>
   );
 };

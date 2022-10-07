@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import GeneralButton from "../../common/Button/GeneralButton";
@@ -7,58 +8,84 @@ import AdminSearchBar from "./AdminSearchBar";
 
 const AdminPanel = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [recipeId, setRecipeId] = useState(); //레시피id
+  const [recipeTitle, setRecipeTitle] = useState(""); //레시피 제목
+  const [recipeMemberName, setRecipeMemberName] = useState(""); //작성자 이름
+  const [isUpdatedDone, setIsUpdatedDone] = useState(false); //삭제되어서 업데이트되었다는 상태
+  // const [recipeRow, setRecipeRow] = useState([]);
+  //서버에서 받는 개별 레시피 {} 데이터를 배열에 저장. 배열이 비면 업데이트된거니까.. 삭제하면 빈 리스트 띄워주려나? -no effect
 
   const recipeIdSearchParam = searchParams.get("recipe_id");
+  console.log("서치파람값?", recipeIdSearchParam);
 
-  //레시피서치 파람 바뀔때 요청보내기
-  useEffect(() => {}, [recipeIdSearchParam]);
+  //레시피 상세 조회 get 요청 보내기
+  const getRecipeId = async () => {
+    try {
+      const { data } = await axios.get(`/api/recipes/${recipeIdSearchParam}`);
+      console.log("데이터", data); //{id: 108, title: '햄버거', portion: 1, view: 111, time: '2', …}
+      setRecipeId(data.id);
+      setRecipeTitle(data.title);
+      setRecipeMemberName(data.member.name);
+      // setRecipeRow([data]); //[{}]
+    } catch (err) {
+      console.log(err);
+      alert(err);
+    }
+  };
 
-  const dummy = [
-    {
-      id: 1,
-      title:
-        "나는타이틀이야1 바닐라바닐라바닐라바닐라바닐라바닐라바닐라바닐라바닐라바닐라바닐라바닐라",
-    },
-    {
-      id: 2,
-      title: "abc나는타이틀이야2",
-      userName: "바닐라",
-    },
-    {
-      id: 3,
-      title: "나는타이틀이야3",
-      userName: "바닐라",
-    },
-  ];
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`/api/recipes/${recipeIdSearchParam}`);
+      alert("레시피 삭제 성공!");
+      setSearchParams({ recipe_id: "" }); //성공하면 서치파람 비우기
+      // setIsUpdatedDone(true); //삭제 완료되면 업데이트 상태 true로 바꾸기
+      setRecipeTitle(""); //아예 레시피 타이틀, 아이디, 작성자 칸을 비우기 그래야 삭제후 화면에 렌더링될때 안보임
+      setRecipeId("");
+      setRecipeMemberName("");
+    } catch (err) {
+      alert(err);
+    }
+  };
+
+  //검색어 바뀌고 난 이후, 삭제되고 난 이후 화면에 렌더링
+  useEffect(() => {
+    //처음 렌더링될때 검색어 있어야지만 레시피 받아오는 요청 보내기
+    if (recipeIdSearchParam) {
+      getRecipeId();
+    }
+  }, [recipeIdSearchParam]);
+  // }, [recipeIdSearchParam, isUpdatedDone]);
+  //상태에 저장되는건 검색을 하고나서만 일어나기때문에.. delete할때 목록에서 삭제해도 새로받아오는 리스트가 없기때문에 목록이 달라지는 렌더링은 일어나지않는다.
+  //업데이트 상태 isUpdatedDone이 false였다가 삭제하고 난후 true로 바뀌면 다시 렌더링하긴하지만 화면에 띄워주는데는 아무런 효과가없다.
+
   return (
     <>
       <AdminSearchBar />
+      <GeneralButton onClick={handleDelete} className="small">
+        삭제
+      </GeneralButton>
       <Panel>
         <span>레시피ID</span>
         <span>레시피제목</span>
-        <span>삭제</span>
-        <Contents>
-          {dummy.map((el, idx) => (
-            <Row key={idx} idx={idx} title={el.title} recipeId={el.id}></Row>
+        <span>작성자</span>
+        {/* <Contents>
+          {recipeRow.map((aRow) => (
+            <Row
+              recipeId={aRow.id}
+              recipeTitle={aRow.title}
+              recipeMemberName={aRow.member.name}
+            ></Row>
           ))}
-        </Contents>
-        <Pagination></Pagination>
+        </Contents> */}
+
+        <RowWrapper className="RowWrapper">
+          {/* //<span>{idx + 1}</span> */}
+          <span>{recipeId}</span>
+          <span className="title">{recipeTitle}</span>
+          <span>{recipeMemberName}</span>
+        </RowWrapper>
       </Panel>
     </>
-  );
-};
-
-const Row = ({ idx, title, recipeId }) => {
-  const handleRowDelete = () => {};
-  return (
-    <RowWrapper className="RowWrapper">
-      {/* <span>{idx + 1}</span> //넘버링 번호*/}
-      <span>{recipeId}</span>
-      <span className="title">{title}</span>
-      <GeneralButton onClick={handleRowDelete} className="xsmall">
-        삭제
-      </GeneralButton>
-    </RowWrapper>
   );
 };
 export default AdminPanel;
