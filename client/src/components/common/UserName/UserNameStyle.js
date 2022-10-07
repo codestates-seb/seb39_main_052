@@ -15,6 +15,12 @@ export const Wrapper = styled.div`
             height: 24px;
         }
         font-size: 14px;
+        > div {
+            width: 260px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
     }
     // 댓글 요소에서는 길이를 넘어가면 ...이 보이게 하기
     &.short {
