@@ -20,6 +20,7 @@ export const ProfilePhoto = styled.img`
   width: 100px;
   height: 100px;
   border-radius: 50%;
+  object-fit: cover;
 `;
 export const ProfileName = styled.input`
   margin: 16px 0;
@@ -73,6 +74,7 @@ export const Img = styled.img`
   height: 100px;
   border-radius: 50%;
   box-shadow: var(--shadow-medium);
+  object-fit: cover;
   &.dragover {
     border: 2px solid var(--fridge-300);
   }

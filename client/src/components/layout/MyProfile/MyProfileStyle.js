@@ -19,6 +19,7 @@ export const ProfilePhoto = styled.img`
   width: 100px;
   height: 100px;
   border-radius: 50%;
+  object-fit: cover;
 
   &.small_logoface {
     opacity: 70%;
