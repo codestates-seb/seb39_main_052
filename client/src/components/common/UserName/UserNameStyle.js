@@ -40,6 +40,7 @@ export const Image = styled.img`
     width: 16px;
     height: 16px;
     border-radius: 50%;
+    object-fit: cover;
 `
 
 export const Name = styled.div`

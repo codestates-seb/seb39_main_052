@@ -183,6 +183,7 @@ export const Right = styled.div`
 `
 
 export const Image = styled.img`
+    object-fit: cover;
     width: 500px;
     /* height: 260px; */
     position: relative;

@@ -65,6 +65,7 @@ export const UserImg = styled.img`
   width: 20px;
   height: 20px;
   border-radius: 50%;
+  object-fit: cover;
   /* margin: 5px 0 0 5px; */
 `;
 

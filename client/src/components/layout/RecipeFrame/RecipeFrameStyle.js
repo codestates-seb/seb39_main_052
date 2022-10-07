@@ -17,6 +17,7 @@ export const DisplayImg = styled.img`
   min-width: 100px;
   height: 100px;
   flex-basis: 20%;
+  object-fit: cover;
   cursor: pointer;
 `;
 

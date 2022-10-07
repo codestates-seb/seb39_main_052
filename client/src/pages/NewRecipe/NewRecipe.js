@@ -24,7 +24,10 @@ const NewRecipe = () => {
             }
         }
         enablePrevent(); // 페이지 나가는거 인식해서 경고창 띄우는 함수 실행
-        return () => { mountRef.current = true; console.log("언마운트")}
+        return () => { 
+            mountRef.current = true;
+            disablePrevent();
+        }
     }, [isLoggedIn])
 
     return (
