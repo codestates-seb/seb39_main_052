@@ -42,6 +42,6 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleMethodArgumentValidationException(MethodArgumentNotValidException e) {
-        return new ErrorResponse(e.getMessage());
+        return new ErrorResponse(e.getBindingResult().getFieldError().getDefaultMessage());
     }
 }
