@@ -5,6 +5,7 @@ export const LogInFormContainer = styled.section`
   justify-content: center;
   flex-direction: column;
   color: var(--gray-700);
+  align-items: center;
 
   > form {
     display: flex;
@@ -40,6 +41,7 @@ export const SignUpDiv = styled.div`
   font-size: 14px;
   color: var(--gray-500);
   border-top: solid 2px var(--gray-200);
+  margin-top: 16px;
 
   //회원가입 버튼으로 나타낼때 hook msg
   > span {
