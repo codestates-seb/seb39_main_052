@@ -1,15 +1,18 @@
 import { useState, useEffect } from "react"
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { CommentWrapper, Input, Comment, ButtonLikeWrapper, ButtonLike, StyledFontAwesomeIcon, Time, TextArea } from "./CommentRowStyle";
 import UserName from "../../common/UserName/UserName";
 import GeneralButton from "../../common/Button/GeneralButton";
 import useConfirm from "../../../hooks/useConfirm";
 import { faXmark, faCheck } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import { setWarningToast, setNoticeToast } from "../../../features/toastSlice";
 
 const CommentRow = ({ comment, setIsUpdated, page }) => {
     const [isEditable, setIsEditable] = useState(false);
     const [editedComment, setEditedComment] = useState("");
+
+    const dispatch = useDispatch();
 
     // 댓글 수정 모드에서 페이지 변경 시 수정 모드 끄기
     useEffect(() => {
@@ -69,13 +72,15 @@ const CommentRow = ({ comment, setIsUpdated, page }) => {
         })
         .then((response) => {
             console.log(response);
-            alert(`댓글을 삭제했어요 :)`);
+            // alert 창 대체
+            dispatch(setNoticeToast({ message: `댓글을 삭제했어요 :)` }))
             setIsUpdated(true);
         })
         .catch((error) => {
             // 예외 처리
             console.log(error.response);
-            alert(`댓글 삭제에 실패했어요ㅠㅠ`)
+            // alert 창 대체
+            dispatch(setWarningToast({ message: `댓글 삭제에 실패했어요ㅠㅠ` }))
         })
     }
 
@@ -92,17 +97,19 @@ const CommentRow = ({ comment, setIsUpdated, page }) => {
             method: `patch`,
             url: `/api/comments/${comment.commentId}`,
             data: { content: editedComment },
-        })
+    })
         .then((response) => {
             console.log(response)
-            alert(`댓글을 수정했어요 :)`)
+            // alert 창 대체
+            dispatch(setNoticeToast({ message: `댓글을 수정했어요 :)` }))
             setIsEditable(false);
             setIsUpdated(true);
         })
         .catch((error) => {
             // 예외 처리
             console.log(error.response);
-            alert(`댓글 수정에 실패했어요ㅠㅠ`)
+            // alert 창 대체
+            dispatch(setWarningToast({ message: `댓글 수정에 실패했어요ㅠㅠ` }))
         })
     }
 

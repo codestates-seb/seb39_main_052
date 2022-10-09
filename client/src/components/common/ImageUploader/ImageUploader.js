@@ -6,6 +6,7 @@ import { addImage, addMainImage, deleteImage, deleteMainImage } from "../../../f
 import { setMainImage, setStepImage, editMainImage, editStepImage, deleteMainImg, deleteStepImage } from "../../../features/recipeSlice";
 import { faSpinner, faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Container, Img, Input, Button, StyledFontAwesomeIcon } from "./ImageUploaderStyle";
+import { setWarningToast } from "../../../features/toastSlice";
 
 const ImageUploader = ({ size, index, mode }) => {
 
@@ -41,7 +42,8 @@ const ImageUploader = ({ size, index, mode }) => {
             // 용량 2MB로 제한
             if (uploadFile.size > maxSize) {
                 setIsLoading(false);
-                alert("이미지 사이즈는 2MB 이내로만 등록할 수 있어요ㅠㅠ")
+                // alert창 대체
+                dispatch(setWarningToast({ message: "이미지 사이즈는 2MB 이내로만 등록할 수 있어요ㅠㅠ" }))
                 return false;
             }
             else {

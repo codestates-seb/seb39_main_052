@@ -30,12 +30,26 @@ import { useRef } from "react";
 import MenuTab from "./components/layout/MenuTab/MenuTab";
 import AdminSearchBar from "./components/layout/Admin/AdminSearchBar";
 import AdminPanel from "./components/layout/Admin/AdminPanel";
+import CustomToast from "./components/common/CustomToast/CustomToast";
 
 function App() {
   const [isBottom, setIsBottom] = useState(false); // 스크롤이 끝까지 내려갔는지 여부를 담은 상태
 
   const dispatch = useDispatch(); //for redux dispatch
   const effectedCalled = useRef(false); //useEffect 한번만 실행하려고
+
+  // const toast = useSelector((state) => {
+  //   return state.toast;
+  // })
+
+  // alert 대신 사용되는 toast 관련 상태
+  const showToast = useSelector((state) => {
+    return state.toast.showToast;
+  })
+
+  // useEffect(() => {
+  //   console.log("토스트", toast)
+  // }, [toast])
 
   // Floating Action의 위치 조정을 위해 스크롤을 인식하는 함수
   const handleScroll = (e) => {
@@ -122,6 +136,9 @@ function App() {
             <Route path="/mypage/:id" element={<MyPage />} />
             <Route path="/admin" element={<AdminPanel />} />
           </Routes>
+          {/* alert창 대신 */}
+          {showToast && <CustomToast />}
+          {/* 우측 하단에 항상 있는 레시피 작성하기 */}
           <FloatingAction isBottom={isBottom} />
         </BrowserRouter>
       </Div>

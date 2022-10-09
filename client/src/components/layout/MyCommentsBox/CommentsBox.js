@@ -11,7 +11,8 @@ import {
 import logoface from "../../../assets/small_logoface.png";
 import { useNavigate } from "react-router-dom";
 import { NoticeMsgBox } from "../MyRecipeBox/MyRecipeBoxStyle";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setWarningToast } from "../../../features/toastSlice";
 
 const CommentsBox = ({ timeSince }) => {
   const [commentsList, setCommentsList] = useState([]); //서버에서 받아오는 댓글 리스트 저장
@@ -21,6 +22,7 @@ const CommentsBox = ({ timeSince }) => {
   const [totalPages, setTotalPages] = useState(0); //전체 댓글 페이지 수
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // const date = "2022-09-29T18:54:46.996434";
   // console.log("함수실험", timeSince(Date.parse(date)));
@@ -44,7 +46,8 @@ const CommentsBox = ({ timeSince }) => {
       setTotalPages(data.pageInfo.totalPages);
       setCommentsList([...data.data]); //[{…}, {…}, {…}, {…}]
     } catch (err) {
-      alert(err);
+      // alert 창 대체
+      dispatch(setWarningToast({ message: err }))
     }
   };
   // console.log("서버에서받아온 댓글리스트", commentsList);

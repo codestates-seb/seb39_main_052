@@ -9,6 +9,7 @@ import LikeHeart from "../../components/common/LikeHeart/LikeHeart";
 import { loadRecipe } from "../../features/recipeSlice";
 import { useDispatch, useSelector } from "react-redux";
 import useConfirm from "../../hooks/useConfirm";
+import { setWarningToast, setNoticeToast } from "../../features/toastSlice";
 
 const RecipeDetail = () => {
 
@@ -120,13 +121,15 @@ const RecipeDetail = () => {
         })
         .then((response) => {
             console.log(response);
-            alert(`레시피를 삭제했어요`);
-            navigate(-1);
+            // alert창 대체
+            dispatch(setNoticeToast({ message: `레시피를 삭제했어요` }));
+            navigate("/search");
         })
         .catch((error) => {
             // 예외 처리
             console.log(error.response);
-            alert(`레시피 삭제에 실패했습니다ㅠㅠ`);
+            // alert창 대체
+            dispatch(setWarningToast({ message: `레시피 삭제에 실패했습니다ㅠㅠ` }));
         })
     }
 

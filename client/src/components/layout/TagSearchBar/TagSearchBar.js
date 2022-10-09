@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { faMagnifyingGlass, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Container, DropDown, SearchBar, SearchInput, StyledFaXmark, StyledFontAwesomeIcon, Suggestion, Tag, TagWrapper } from "./TagSearchBarStyle";
 import axios from "axios";
+import { setWarningToast } from "../../../features/toastSlice";
 
 const TagSearchBar = ({ setIsRefreshNeeded }) => {
 
@@ -15,7 +17,7 @@ const TagSearchBar = ({ setIsRefreshNeeded }) => {
     const [cursor, setCursor] = useState(-1);
 
     // console.log("태그 추천 검색어", suggestedValue);
-
+    const dispatch = useDispatch();
     const searchBarRef = useRef(); // 서치바+드롭다운 창 밖 클릭을 인식하기 위한 ref
     const suggestionRef = useRef(null); // 스크롤이 드롭다운 내 선택된 요소를 따라가게 하기 위한 ref
 
@@ -145,7 +147,8 @@ const TagSearchBar = ({ setIsRefreshNeeded }) => {
             if (!searchTags.includes(el)) {
                 // 태그 갯수 유효성 (10개 이하)
                 if (searchTags.length >= 10) {
-                    alert("태그는 10개 이하로만 추가할 수 있어요ㅠㅠ")
+                    // alert창 대체
+                    dispatch(setWarningToast({ message: "태그는 10개 이하로만 추가할 수 있어요ㅠㅠ" }))
                 }
                 else {
                     searchParams.set("tags", [...searchTags, el])
@@ -154,7 +157,8 @@ const TagSearchBar = ({ setIsRefreshNeeded }) => {
                 }
             }
             else {
-                alert(`이미 등록한 재료예요`);
+                // alert창 대체
+                dispatch(setWarningToast({ message:`이미 등록한 재료예요` }))
             }
             setIsDropDownOpen(false);
             setCursor(-1);
@@ -165,7 +169,8 @@ const TagSearchBar = ({ setIsRefreshNeeded }) => {
             // 중복 태그 방지
             if (!searchTags.includes(searchValue)) {
                 if (searchTags.length >= 10) {
-                    alert("태그는 10개 이하로만 추가할 수 있어요ㅠㅠ")
+                    // alert창 대체
+                    dispatch(setWarningToast({ message: "태그는 10개 이하로만 추가할 수 있어요ㅠㅠ" }))
                 }
                 else {
                     // 마우스로 드롭다운 요소 클릭 시 바로 검색 태그에 추가
@@ -175,7 +180,8 @@ const TagSearchBar = ({ setIsRefreshNeeded }) => {
                 }
             }
             else {
-                alert(`이미 등록한 재료예요`)
+                // alert창 대체
+                dispatch(setWarningToast({ message: `이미 등록한 재료예요` }))
             }
             setIsDropDownOpen(false);
             setCursor(-1);
@@ -183,7 +189,8 @@ const TagSearchBar = ({ setIsRefreshNeeded }) => {
         }
         // 빈 검색어에 엔터
         else {
-            alert(`검색어를 입력해주세요`)
+            // alert창 대체
+            dispatch(setWarningToast({ message: `검색어를 입력해주세요` }));
         }
     };
     // console.log(searchTags, `검색했어요`)

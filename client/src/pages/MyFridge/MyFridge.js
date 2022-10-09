@@ -9,6 +9,7 @@ import { addFrigIngrInput, clearFridge, editFrigIngredients, loadFridge, setDDay
 import useConfirm from "../../hooks/useConfirm";
 import usePreventLeave from "../../hooks/usePreventLeave";
 import { Head, ColumnHeads, Container, Title, Fridge, InputWrapper, InnerContainer, ButtonWrap, SortWrapper, Option, Guide } from "./MyFridgeStyle";
+import { setWarningToast, setNoticeToast } from "../../features/toastSlice";
 
 const MyFridge = () => {
     const [isShowing, setIsShowing] = useState(false); // 재료 관련 안내창 
@@ -38,8 +39,9 @@ const MyFridge = () => {
         // 첫 마운트
         if (!mountRef.current) {
             if (!isLoggedIn) {
+                // alert창 대체
+                dispatch(setWarningToast({ message: "로그인이 필요한 서비스입니다" }));
                 navigate("/login");
-                alert("로그인이 필요한 서비스입니다");
             }
         }
         if (isLoggedIn) {
@@ -95,12 +97,14 @@ const MyFridge = () => {
         try {
             const data = await axios.post(`/api/fridge`, payload);
             console.log(data);
-            alert("냉장고를 청소했어요!")
+            // alert창 대체
+            dispatch(setNoticeToast({ message: "냉장고를 청소했어요!" }));
             dispatch(clearFridge());
         }
         catch (error) {
             console.log(error);
-            alert("냉장고를 비우는데 실패했어요ㅠㅠ")
+            // alert창 대체
+            dispatch(setWarningToast({ message: "냉장고를 비우는데 실패했어요ㅠㅠ" }));
         }
     }
     // 냉장고 취소 (새로고침)
@@ -112,7 +116,8 @@ const MyFridge = () => {
         let count = 0; // 모든 재료 이름 값이 있는지 확인하기 위한 카운트
         for (let i = 0; i < fridgeData.length; i++) {
             if (fridgeData[i].name.length <= 0) {
-                alert(`재료 이름은 빈칸이 될 수 없어요ㅠㅠ`);
+                // alert창 대체
+                dispatch(setWarningToast({ message: `재료 이름은 빈칸이 될 수 없어요ㅠㅠ` }));
                 break;
             }
             count++
@@ -124,12 +129,14 @@ const MyFridge = () => {
             try {
                 const data = await axios.post(`/api/fridge`, payload);
                 console.log(data);
-                alert("냉장고를 정리했어요!")
+                // alert창 대체
+                dispatch(setNoticeToast({ message: "냉장고를 정리했어요!" }));
                 getFridge();
             }
             catch (error) {
                 console.log(error);
-                alert("냉장고 정리에 실패했어요ㅠㅠ")
+                // alert창 대체
+                dispatch(setWarningToast({ message: "냉장고 정리에 실패했어요ㅠㅠ" }));
             }
         }
     }

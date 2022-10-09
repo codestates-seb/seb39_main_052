@@ -5,15 +5,15 @@ import axios from "axios";
 import ImageUploader from "../../common/ImageUploader/ImageUploader";
 import InputList from "../../common/InputList/InputList";
 import ImageInputList from "../ImageInputList/ImageInputList";
-import { Container, Header, Warning, Main, ImageWrap, Input, Select, Ingredients, Steps, Portion, Time, ButtonWrap } from "./RecipeEditorStyle";
+import { Container, Header, Warning, Main, ImageWrap, Input, Select, Ingredients, Steps, Portion, Time, ButtonWrap, Button } from "./RecipeEditorStyle";
 import GeneralButton from "../../common/Button/GeneralButton";
 import { setTitle, setPortion, setTime, clearRecipe } from "../../../features/recipeSlice";
 import { clearImages } from "../../../features/imageSlice";
 import Footer from "../Footer/Footer";
+import { setNoticeToast, setWarningToast } from "../../../features/toastSlice";
 
 const RecipeEditor = () => {
 
-    const [timeNum, setTimeNum] = useState(''); // 소요시간 상태
     const [isTitleEmpty, setIsTitleEmpty] = useState(true);
     const [isMainImgEmpty, setIsMainImgEmpty] = useState(true);
     const [isStepImgEmpty, setIsStepImgEmpty] = useState(true);
@@ -21,7 +21,6 @@ const RecipeEditor = () => {
     const [isIngrEmpty, setIsIngrEmpty] = useState(true);
     const [isStepsEmpty, setIsStepsEmpty] = useState(true);
     const [isSubmitClicked, setIsSubmitClicked] = useState(false);
-
     const titlesArr = ["name", "quantity"]; //재료 입력에서 각 column의 키값 배열
     const placeholders = ["예) 감자", "예) 100g"];
     const portionOptions = Array.from({length: 10}, (_, i) => i + 1); //인분 선택 dropdown
@@ -340,7 +339,8 @@ const RecipeEditor = () => {
                     formData.delete('requestBody');
                     dispatch(clearRecipe());
                     dispatch(clearImages());
-                    alert(`레시피를 등록했어요!`)
+                    // alert창 대체
+                    dispatch(setNoticeToast({message: `레시피를 등록했어요!`}))
                     navigate(`/recipes/${response.data.id}`)
                 })
                 .catch((error) => {
@@ -348,7 +348,8 @@ const RecipeEditor = () => {
                     console.log(error.response);
                     formData.delete('files');
                     formData.delete('requestBody');
-                    alert(`레시피 등록에 실패했어요ㅠㅠ`)
+                    // alert창 대체
+                    dispatch(setWarningToast({ message: `레시피 등록에 실패했어요ㅠㅠ`}))
                 })
             }
             // else로 patch 요청
@@ -364,12 +365,12 @@ const RecipeEditor = () => {
                 })
                 .then((response) => {
                     // 응답 처리
-                    // navigate(`/recipes/${response.data.id}`);
                     formData.delete('files');
                     formData.delete('requestBody');
                     dispatch(clearRecipe());
                     dispatch(clearImages());
-                    alert(`성공적으로 수정했어요!`)
+                    // alert창 대체
+                    dispatch(setNoticeToast({message: "성공적으로 수정했어요!"}))
                     navigate(`/recipes/${response.data.id}`)
                 })
                 .catch((error) => {
@@ -377,10 +378,15 @@ const RecipeEditor = () => {
                     console.log(error.response);
                     formData.delete('files');
                     formData.delete('requestBody');
-                    alert(`레시피를 수정할 수 없어요ㅠㅠ`)
+                    // alert창 대체
+                    dispatch(setWarningToast({ message: `레시피를 수정할 수 없어요ㅠㅠ`}))
                 })
             }
-        };
+        }
+        else {
+            // alert창 대체
+            dispatch(setWarningToast({ message: `입력하지 않은 칸이 있어요!`}))
+        }
     }
 
     // 작성된 모든 문자열이 띄어쓰기만으로 이루어진게 아닌지 확인하는 함수 (true는 글이 있다, false는 띄어쓰기 뿐이다)

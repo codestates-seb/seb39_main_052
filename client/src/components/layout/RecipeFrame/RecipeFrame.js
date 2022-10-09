@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import useConfirm from "../../../hooks/useConfirm";
+import { useDispatch } from "react-redux";
+import { setWarningToast, setNoticeToast } from "../../../features/toastSlice";
 import {
   RecipeFrameContainer,
   DisplayImg,
@@ -29,6 +31,7 @@ const RecipeFrame = ({
 }) => {
   //데이터는 RecipeFrame 상위 컴포넌트에서 불러와야함 그래야 레시피 프레임을 map으로 여러개 나타낼수있음
 
+  const dispatch = useDispatch();
   const { id } = useParams();
   // 내레시피 id = 1 , mode = "my_recipe"
   // 내좋아요 id = 2 , mode = "my_liked_recipe" 에 따라서 삭제핸들러 다르게 처리
@@ -64,11 +67,13 @@ const RecipeFrame = ({
   const handleRecipeDelete = async () => {
     try {
       await axios.delete(`/api/recipes/${recipeIdProp}`);
-      console.log("레시피 삭제 성공");
+      // alert창 대체
+      dispatch(setNoticeToast({ message: `레시피를 삭제 했어요!` }))
       setIsUpdated(true);
     } catch (err) {
       console.log(err);
-      alert(`${recipeIdProp}번 레시피를 삭제할 수 없어요 ㅠㅠ`);
+      // alert창 대체
+      dispatch(setWarningToast({ message: `${recipeIdProp}번 레시피를 삭제할 수 없어요 ㅠㅠ` }))
     }
   };
 
@@ -77,10 +82,13 @@ const RecipeFrame = ({
     try {
       await axios.delete(`/api/recipes/${recipeIdForLikedList}/heart`);
       console.log(`${recipeIdForLikedList}번 레시피 하트 삭제`);
+      // alert창 대체
+      dispatch(setNoticeToast({ message: `좋아요를 취소했어요 :)` }))
       setIsUpdatedForLikedList(true);
     } catch (err) {
       console.log(err);
-      alert(`좋아요 목록에서 삭제할 수 없어요`);
+      // alert창 대체
+      dispatch(setWarningToast({ message: `좋아요를 취소할 수 없어요` }))
     }
   };
 
