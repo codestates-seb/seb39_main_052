@@ -10,9 +10,11 @@ import { loadRecipe } from "../../features/recipeSlice";
 import { useDispatch, useSelector } from "react-redux";
 import useConfirm from "../../hooks/useConfirm";
 import { setWarningToast, setNoticeToast } from "../../features/toastSlice";
+import Footer from "../../components/layout/Footer/Footer";
 
 const RecipeDetail = () => {
 
+    const [isLoading, setIsLoading] = useState(false);
     const [isMyRecipe, setIsMyRecipe] = useState(false);
     // console.log("내 레시피니?", isMyRecipe);
 
@@ -134,71 +136,74 @@ const RecipeDetail = () => {
     }
 
     return (
-        <RecipeWrapper>
-            <Extra>
-                <RecipeId>등록일 &nbsp;{dateConverter(recipe.createdAt)} &nbsp; 게시글 #{recipe.id}</RecipeId>
-                <ButtonLike className="dark" >
-                    <Link to={"/search"} state={{ prevPath: "/recipes" }}>목록으로 돌아가기</Link>
-                </ButtonLike>
-            </Extra>
-            <Head>
-                <HeadLeft>
-                    <HeadLeftTop>
-                        <Heading>{recipe.title}</Heading>
-                        <LikeViewWrapper>
-                            <LikeHeart
-                                heartCounts={recipe.heartCounts}
-                                heartExist={recipe.heartExist}
-                                idx={recipe.id}
-                            />
-                            <View>조회수 {recipe.view}</View>
-                        </LikeViewWrapper>
-                    </HeadLeftTop>
-                    <HeadLeftBottom>
-                        <Info>
-                            <UserName image={recipe.member.profileImagePath} name={recipe.member.name} className="large" />
-                            <PortionAndTime>{recipe.portion} 인분</PortionAndTime>
-                            <PortionAndTime>{recipe.time} 분 &nbsp;소요</PortionAndTime>
-                        </Info>
-                        <ButtonLikeWrapper>
-                            <ButtonLike className={!isMyRecipe && "invisible"}>
-                                <Link to="/recipes/edit">수정</Link>
-                            </ButtonLike>
-                            <ButtonLike 
-                                onClick={useConfirm("정말 삭제하시겠습니까?", confirm, cancel, id)}
-                                className={!isMyRecipe && "invisible"}
-                            >
-                                삭제
-                            </ButtonLike>
-                        </ButtonLikeWrapper>
-                    </HeadLeftBottom>
-                </HeadLeft>
-                <Image src={recipe.imageInfo.imagePath} alt={'main'} />
-            </Head>
-            <SubHeading>재료(계량)</SubHeading>
-            <Ingredients>
-                {recipe.ingredients.map((item, idx) => {
+        <>
+            <RecipeWrapper>
+                <Extra>
+                    <RecipeId>등록일 &nbsp;{dateConverter(recipe.createdAt)} &nbsp; 게시글 #{recipe.id}</RecipeId>
+                    <ButtonLike className="dark" >
+                        <Link to={"/search"} state={{ prevPath: "/recipes" }}>목록으로 돌아가기</Link>
+                    </ButtonLike>
+                </Extra>
+                <Head>
+                    <HeadLeft>
+                        <HeadLeftTop>
+                            <Heading>{recipe.title}</Heading>
+                            <LikeViewWrapper>
+                                <LikeHeart
+                                    heartCounts={recipe.heartCounts}
+                                    heartExist={recipe.heartExist}
+                                    idx={recipe.id}
+                                />
+                                <View>조회수 {recipe.view}</View>
+                            </LikeViewWrapper>
+                        </HeadLeftTop>
+                        <HeadLeftBottom>
+                            <Info>
+                                <UserName image={recipe.member.profileImagePath} name={recipe.member.name} className="large" />
+                                <PortionAndTime>{recipe.portion} 인분</PortionAndTime>
+                                <PortionAndTime>{recipe.time} 분 &nbsp;소요</PortionAndTime>
+                            </Info>
+                            <ButtonLikeWrapper>
+                                <ButtonLike className={!isMyRecipe && "invisible"}>
+                                    <Link to="/recipes/edit">수정</Link>
+                                </ButtonLike>
+                                <ButtonLike
+                                    onClick={useConfirm("정말 삭제하시겠습니까?", confirm, cancel, id)}
+                                    className={!isMyRecipe && "invisible"}
+                                >
+                                    삭제
+                                </ButtonLike>
+                            </ButtonLikeWrapper>
+                        </HeadLeftBottom>
+                    </HeadLeft>
+                    <Image src={recipe.imageInfo.imagePath} alt={'main'} />
+                </Head>
+                <SubHeading>재료(계량)</SubHeading>
+                <Ingredients>
+                    {recipe.ingredients.map((item, idx) => {
+                        return (
+                            <div key={idx}>
+                                <Ingredient className="darker">{item.name}</Ingredient>
+                                <Ingredient>{item.quantity}</Ingredient>
+                            </div>
+                        )
+                    })}
+                </Ingredients>
+                <SubHeading>요리 순서</SubHeading>
+                {recipe.steps.map((step, idx) => {
                     return (
-                        <div key={idx}>
-                            <Ingredient className="darker">{item.name}</Ingredient>
-                            <Ingredient>{item.quantity}</Ingredient>
-                        </div>
+                        <RecipeStep
+                            key={idx}
+                            index={step.sequence}
+                            image={step.imageInfo.imagePath}
+                            content={step.content}
+                        />
                     )
                 })}
-            </Ingredients>
-            <SubHeading>요리 순서</SubHeading>
-            {recipe.steps.map((step, idx) => {
-                return (
-                    <RecipeStep
-                        key={idx}
-                        index={step.sequence}
-                        image={step.imageInfo.imagePath}
-                        content={step.content}
-                    />
-                )
-            })}
-            <Comments id={id} />
-        </RecipeWrapper>
+                <Comments id={id} />
+            </RecipeWrapper>
+            <Footer />
+        </>
     )
 };
 
