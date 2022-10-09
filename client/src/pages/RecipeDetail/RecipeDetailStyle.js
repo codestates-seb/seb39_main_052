@@ -115,12 +115,12 @@ export const Info = styled.div`
         margin: 0 0 24px 0;
         @media ${({ theme }) => theme.device.mobile} {
             margin-bottom: 0;
-            flex-grow: 0.5;
+            flex-grow: 1;
         }
     }
     > *:not(:first-child) {
         @media ${({ theme }) => theme.device.mobile} {
-            flex-grow: 1;
+            flex-grow: 0;
         }
     } 
     @media ${({ theme }) => theme.device.mobile} {
@@ -129,7 +129,6 @@ export const Info = styled.div`
         flex-direction: row;
         justify-content: space-around;
         align-items: center;
-
     }
 `
 
