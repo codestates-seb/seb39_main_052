@@ -19,10 +19,11 @@ const AdminSearchBar = () => {
 
   return (
     <SearchBar>
-      <FontAwesomeIcon icon={faMagnifyingGlass} />
+      <FontAwesomeIcon icon={faMagnifyingGlass} style={{ marginRight: 5 }} />
       <SearchInput
         // value={searchValue}
         onKeyPress={handleOnkeyPress}
+        placeholder="레시피 id로 검색"
       ></SearchInput>
     </SearchBar>
   );
@@ -30,5 +31,7 @@ const AdminSearchBar = () => {
 
 export default AdminSearchBar;
 
-const SearchBar = styled.div``;
+const SearchBar = styled.div`
+  margin: 16px 0;
+`;
 const SearchInput = styled.input``;
