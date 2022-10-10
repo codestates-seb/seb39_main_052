@@ -39,31 +39,31 @@ function App() {
   const [isBottom, setIsBottom] = useState(false); // 스크롤이 끝까지 내려갔는지 여부를 담은 상태
 
   const dispatch = useDispatch(); //for redux dispatch
-  const effectedCalled = useRef(false); //useEffect 한번만 실행하려고
-
-  // const toast = useSelector((state) => {
-  //   return state.toast;
-  // })
+  // const effectedCalled = useRef(false); //useEffect 한번만 실행하려고
 
   // alert 대신 사용되는 toast 관련 상태
   const showToast = useSelector((state) => {
     return state.toast.showToast;
   })
 
-  useEffect(() => {
-    console.log("스크스크")
-  }, [])
-
   // Floating Action의 위치 조정을 위해 스크롤을 인식하는 함수
-  const handleScroll = (e) => {
-    const bottom =
-      Math.floor(e.target.scrollHeight - e.target.scrollTop) === e.target.clientHeight;
-    if (bottom) {
-      setIsBottom(true);
-    } else {
-      setIsBottom(false);
-    }
-  };
+  useEffect(() => {
+    const handleScroll = (e) => {
+      const bottom =
+        ((window.innerHeight + window.scrollY) >= document.body.offsetHeight);
+      if (bottom) {
+        setIsBottom(true);
+      } else {
+        setIsBottom(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   //로그인 상태 가져와서 변수에 저장
   const isLoggedIn = useSelector((state) => {
@@ -122,7 +122,7 @@ function App() {
   //useEffect 하면 모든 컴포넌트 렌더링 된 이후에 App.js가 실행
 
   return (
-    <Div onScroll={handleScroll}>
+    <Div>
       <BrowserRouter>
         <GlobalStyle />
         <ScrollToTop>
@@ -154,7 +154,7 @@ function App() {
 
 const Div = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: fit-content;
   overflow-x: hidden;
 `;
 
