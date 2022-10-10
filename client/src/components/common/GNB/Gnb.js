@@ -104,7 +104,7 @@ const Gnb = () => {
         <RightBox className="rightbox">
           <Ul>
             {isAdmin && (
-              <Li>
+              <Li className="admin">
                 <Link to="/admin">관리자</Link>
               </Li>
             )}
