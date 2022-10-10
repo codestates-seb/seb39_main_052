@@ -1,4 +1,20 @@
 import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+export const LoadingPage = styled.div`
+    width: 100vw;
+    height: 80vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+`
+
+export const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
+    font-size: 24px;
+    color: var(--primary-600);
+    margin: 0 8px;
+`
 
 export const RecipeWrapper = styled.div`
     display: flex;
@@ -6,8 +22,8 @@ export const RecipeWrapper = styled.div`
     align-items: center;
     margin: 40px 0 0 0;
     min-height: 100%;
-    @media ${({ theme }) => theme.device.mobile} {
-        
+    &.invisible {
+        display: none;
     }
 `
 export const Extra = styled.div`

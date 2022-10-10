@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Heading, Ingredients, RecipeWrapper, SubHeading, Extra, Head, HeadLeft, Image, ButtonLike, HeadLeftTop, ButtonLikeWrapper, HeadLeftBottom, Info, PortionAndTime, RecipeId, LikeViewWrapper, View, Ingredient } from "./RecipeDetailStyle";
+import { Heading, Ingredients, RecipeWrapper, SubHeading, Extra, Head, HeadLeft, Image, ButtonLike, HeadLeftTop, ButtonLikeWrapper, HeadLeftBottom, Info, PortionAndTime, RecipeId, LikeViewWrapper, View, Ingredient, LoadingPage, StyledFontAwesomeIcon } from "./RecipeDetailStyle";
 import RecipeStep from "../../components/layout/RecipeStep/RecipeStep";
 import Comments from "../../components/layout/Comments/Comments";
 import UserName from "../../components/common/UserName/UserName";
@@ -11,10 +11,11 @@ import { useDispatch, useSelector } from "react-redux";
 import useConfirm from "../../hooks/useConfirm";
 import { setWarningToast, setNoticeToast } from "../../features/toastSlice";
 import Footer from "../../components/layout/Footer/Footer";
+import { faEgg, faCarrot, faFish, faPizzaSlice, faBowlRice } from "@fortawesome/free-solid-svg-icons";
 
 const RecipeDetail = () => {
 
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [isMyRecipe, setIsMyRecipe] = useState(false);
     // console.log("내 레시피니?", isMyRecipe);
 
@@ -50,11 +51,16 @@ const RecipeDetail = () => {
         return state.user.userToken;
     });
 
+    useEffect(() => {
+        getRecipe();
+    }, [id])
+
     // 레시피 상세 데이터 불러오기
     const getRecipe = async () => {
         if (isLoggedIn) {
             try {
                 const { data } = await axios.get(`/api/recipes/${id}`, { headers: { Authorization: `Bearer ${userToken}` }})
+                setIsLoading(false);
                 dispatch(loadRecipe({
                     recipeId: data.id,
                     memberName: data.member.name,
@@ -81,6 +87,7 @@ const RecipeDetail = () => {
         else {
             try {
                 const { data } = await axios.get(`/api/recipes/${id}`)
+                setIsLoading(false);
                 dispatch(loadRecipe({
                     recipeId: data.id,
                     memberName: data.member.name,
@@ -107,11 +114,6 @@ const RecipeDetail = () => {
         
     }
 
-    useEffect(() => {
-        getRecipe();
-    }, [id])
-
-
     const confirm = (id) => {console.log("삭제 했습니다"); handleDelete(id)};
     const cancel = () => console.log("취소");
 
@@ -137,7 +139,16 @@ const RecipeDetail = () => {
 
     return (
         <>
-            <RecipeWrapper>
+            {isLoading
+                && <LoadingPage>
+                    <StyledFontAwesomeIcon icon={faEgg} spin />
+                    <StyledFontAwesomeIcon icon={faCarrot} spin />
+                    <StyledFontAwesomeIcon icon={faFish} spin />
+                    <StyledFontAwesomeIcon icon={faPizzaSlice} spin />
+                    <StyledFontAwesomeIcon icon={faBowlRice} spin />
+                </LoadingPage>
+            }
+            <RecipeWrapper className={isLoading && "invisible"}>
                 <Extra>
                     <RecipeId>등록일 &nbsp;{dateConverter(recipe.createdAt)} &nbsp; 게시글 #{recipe.id}</RecipeId>
                     <ButtonLike className="dark" >
@@ -202,7 +213,6 @@ const RecipeDetail = () => {
                 })}
                 <Comments id={id} />
             </RecipeWrapper>
-            <Footer />
         </>
     )
 };

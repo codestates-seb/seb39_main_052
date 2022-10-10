@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import GeneralButton from "../../components/common/Button/GeneralButton";
 import InputList from "../../components/common/InputList/InputList";
-import Footer from "../../components/layout/Footer/Footer";
 import { addFrigIngrInput, clearFridge, editFrigIngredients, loadFridge, setDDay, sortByAlphabet, sortByDate } from "../../features/fridgeSlice";
 import useConfirm from "../../hooks/useConfirm";
 import usePreventLeave from "../../hooks/usePreventLeave";
@@ -203,7 +202,6 @@ const MyFridge = () => {
                 <GeneralButton className="medium" onClick={handleSave}>냉장고 정리</GeneralButton>
             </ButtonWrap>
             {isShowing && <Guide>재료 옆 아이콘을 클릭하여 해당 재료로 만들 수 있는 레시피를 바로 검색해보세요!</Guide>}
-            <Footer />
         </Container>
     )
 }

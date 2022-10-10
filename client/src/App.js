@@ -32,6 +32,9 @@ import AdminSearchBar from "./components/layout/Admin/AdminSearchBar";
 import AdminPanel from "./components/layout/Admin/AdminPanel";
 import CustomToast from "./components/common/CustomToast/CustomToast";
 
+// 페이지 이동마다 스크롤이 상단에 올 수 있도록 하는 컴포넌트
+import ScrollToTop from "./components/others/ScrollToTop";
+
 function App() {
   const [isBottom, setIsBottom] = useState(false); // 스크롤이 끝까지 내려갔는지 여부를 담은 상태
 
@@ -47,14 +50,14 @@ function App() {
     return state.toast.showToast;
   })
 
-  // useEffect(() => {
-  //   console.log("토스트", toast)
-  // }, [toast])
+  useEffect(() => {
+    console.log("스크스크")
+  }, [])
 
   // Floating Action의 위치 조정을 위해 스크롤을 인식하는 함수
   const handleScroll = (e) => {
     const bottom =
-      e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
+      Math.floor(e.target.scrollHeight - e.target.scrollTop) === e.target.clientHeight;
     if (bottom) {
       setIsBottom(true);
     } else {
@@ -119,9 +122,10 @@ function App() {
   //useEffect 하면 모든 컴포넌트 렌더링 된 이후에 App.js가 실행
 
   return (
-      <Div onScroll={handleScroll}>
-        <BrowserRouter>
-          <GlobalStyle />
+    <Div onScroll={handleScroll}>
+      <BrowserRouter>
+        <GlobalStyle />
+        <ScrollToTop>
           <Gnb />
           <Routes>
             <Route path="/" element={<Home />} />
@@ -136,12 +140,15 @@ function App() {
             <Route path="/mypage/:id" element={<MyPage />} />
             <Route path="/admin" element={<AdminPanel />} />
           </Routes>
-          {/* alert창 대신 */}
-          {showToast && <CustomToast />}
-          {/* 우측 하단에 항상 있는 레시피 작성하기 */}
-          <FloatingAction isBottom={isBottom} />
-        </BrowserRouter>
-      </Div>
+        </ScrollToTop>
+        {/* alert창 대신 */}
+        {showToast && <CustomToast />}
+        {/* 우측 하단에 항상 있는 레시피 작성하기 */}
+        {/* <OskiFooter>Hi I'm Oscar's Footer</OskiFooter> */}
+        <Footer />
+        <FloatingAction isBottom={isBottom} />
+      </BrowserRouter>
+    </Div>
   );
 }
 

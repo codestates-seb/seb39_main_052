@@ -503,7 +503,6 @@ const RecipeEditor = () => {
                     <GeneralButton className="medium" onClick={handleSaveClick}>수정하기</GeneralButton>
                 </ButtonWrap>
             }
-            <Footer />
         </ Container>
     )
 };
