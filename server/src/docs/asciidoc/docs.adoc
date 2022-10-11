@@ -1,0 +1,534 @@
+= My Fridge API Docs
+:sectnums:
+:toc: left
+:toclevels: 4
+:toc-title: 목차
+:source-highlighter: prettify
+
+***
+== 인증 관련 API
+=== 로그인
+***
+
+ 사용자 로그인을 위한 API 입니다.
+
+.http-request
+include::{snippets}/login-success/http-request.adoc[]
+
+.request-fields
+include::{snippets}/login-success/request-fields.adoc[]
+
+==== 응답 (성공)
+***
+
+.http-response
+include::{snippets}/login-success/http-response.adoc[]
+
+.response-headers
+include::{snippets}/login-success/response-headers.adoc[]
+
+.response-fields
+include::{snippets}/login-success/response-fields.adoc[]
+
+==== 응답 (실패)
+***
+.http-response
+include::{snippets}/login-fail/http-response.adoc[]
+
+.response-fields
+include::{snippets}/login-fail/response-fields.adoc[]
+
+
+
+=== OAuth2 Login
+***
+    구글 로그인 주소 : https://seb39myfridge.ml/oauth2/authorization/google
+    카카오 로그인 주소 : https://seb39myfridge.ml/oauth2/authorization/kakao
+
+    OAuth2 Login은 일반 Login과 다르게 동작한다.
+    위 주소로 요청을 하면 각 OAuth2 제공자의 로그인 페이지로 Redirect 되고,
+    Login을 성공시 {frontEnd 주소}/auth/redirect?access-token={access-token}&member-id={member-id}
+    으로 redirect한다.
+
+    Access token은 redirect 주소에 Query Parameter로 전달된다.
+    로그인한 사용자의 id는 redirect 주소에 Query Parameter로 전달된다.
+    Refresh token은 일반 로그인과 마찬가지로 HttpOnly cookie로 전달된다.
+
+=== 로그아웃
+***
+
+ 로그아웃을 위한 API 입니다.
+ 로그아웃시 Refresh-token은 서버에서 Set-cookie를 통해 삭제
+ Access token은 클라이언트에서 별도 삭제 필요
+
+.http-request
+include::{snippets}/logout-success/http-request.adoc[]
+
+.request-headers
+include::{snippets}/logout-success/request-headers.adoc[]
+
+.http-response
+include::{snippets}/logout-success/http-response.adoc[]
+
+=== 게스트 로그인
+***
+
+ 게스트 로그인을 위한 API 입니다.
+
+.http-request
+include::{snippets}/login-guest/http-request.adoc[]
+
+.http-response
+include::{snippets}/login-guest/http-response.adoc[]
+
+.response-headers
+include::{snippets}/login-guest/response-headers.adoc[]
+
+.response-fields
+include::{snippets}/login-guest/response-fields.adoc[]
+
+
+=== 회원가입
+***
+
+ 회원가입을 위한 API 입니다.
+
+.http-request
+include::{snippets}/signup-success/http-request.adoc[]
+
+.request-fields
+include::{snippets}/signup-success/request-fields.adoc[]
+
+.http-response
+include::{snippets}/signup-success/http-response.adoc[]
+
+.response-fields
+include::{snippets}/signup-success/response-fields.adoc[]
+
+=== Access Token 재발급
+***
+
+ Access token 재발급을 위한 API 입니다.
+  - Access Token이 필요한 주소로 요청했을 때 Status 401에 code가 1인 경우 Access Token 만료를 의미한다.
+  - 이 때 /api/auth/refresh 로 Access Token 재발급 요청을 할 수 있다.
+
+.http-request
+include::{snippets}/refresh-access-token/http-request.adoc[]
+
+.request-headers
+include::{snippets}/refresh-access-token/request-headers.adoc[]
+
+.http-response
+include::{snippets}/refresh-access-token/http-response.adoc[]
+
+.response-fields
+include::{snippets}/refresh-access-token/response-fields.adoc[]
+
+***
+== 사용자 정보 관련 API
+=== 사용자 정보 조회
+***
+
+ 사용자 정보 조회를 위한 API 입니다.
+
+.http-request
+include::{snippets}/member-read/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/member-read/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/member-read/http-response.adoc[]
+
+.response-fields
+include::{snippets}/member-read/response-fields.adoc[]
+
+=== 사용자 정보 수정
+***
+
+ 사용자 정보를 수정하기 위한 API 입니다.
+  - 로그인 한 사용자의 name과 프로필 이미지를 변경할 수 있습니다.
+  - form-data 형식으로 요청
+  - form-data item
+     - requestBody : json (포맷은 아래 request-part-requestBody 참조)
+     - profileImage : 이미지 파일 (변경하지 않았을 경우 미포함)
+
+.http-request
+include::{snippets}/member-update/http-request.adoc[]
+
+.curl-request
+include::{snippets}/member-update/curl-request.adoc[]
+
+.request-part-requestBody
+include::{snippets}/member-update/request-part-requestBody-body.adoc[]
+
+.http-response
+include::{snippets}/member-update/http-response.adoc[]
+
+.response-fields
+include::{snippets}/member-update/response-fields.adoc[]
+
+
+== 레시피 관련 API
+=== 레시피 생성
+***
+ 레시피 생성과 관련된 API 입니다.
+  - 레시피를 생성할 때는 요청 Header에 'Authorization : {Access Token 값}'을 담아 요청해야 합니다.
+  - form-data 형식으로 요청을 하고, requestBody에는 Json 데이터를, files에는 이미지를 추가하면 됩니다.
+
+.curl-request
+include::{snippets}/recipe-create/curl-request.adoc[]
+
+.http-response
+include::{snippets}/recipe-create/http-response.adoc[]
+
+.response-fields
+include::{snippets}/recipe-create/response-fields.adoc[]
+
+=== 레시피 수정
+ 레시피 수정과 관련된 API 입니다.
+  - 레시피를 수정할 때는 요청 URI에 수정할 레시피 id값을 전달해야 합니다.
+  - 레시피를 수정할 때는 요청 Header에 'Authorization : {Access Token 값}'을 담아 요청해야 합니다.
+  - form-data 형식으로 요청을 하고, requestBody에는 Json 데이터를, files에는 이미지를 추가하면 됩니다.
+  - 레시피와 요리 단계의 이미지를 수정할 때, 수정하고자 하는 레시피나 요리 단계의 isUpdated 값을 "Y"로 변경 후, files에 수정할 이미지를 요청하면 됩니다.
+  - 요리 단계를 추가하는 수정의 경우, idx값에 해당 요리 단계의 sequence 값을 넣고, isUpdated 값을 "Y"로 변경 후, files에 이미지를 추가하면 됩니다.
+    * imagePath에는 어떤 값이든 괜찮습니다. ex) imagePath = "", imagePath = "abc"
+  - 작성자가 아니면 수정할 수 없습니다.
+
+.http-request
+include::{snippets}/recipe-update/http-request.adoc[]
+
+.curl-request
+include::{snippets}/recipe-update/curl-request.adoc[]
+
+.http-response
+include::{snippets}/recipe-update/http-response.adoc[]
+
+.response-fields
+include::{snippets}/recipe-update/response-fields.adoc[]
+
+=== 레시피 삭제
+ 레시피 삭제와 관련된 API 입니다.
+  - 레시피를 삭제할 때는 요청 URI에 수정할 레시피 id값을 전달해야 합니다.
+  - 레시피를 삭제할 때는 요청 Header에 'Authorization : {Access Token 값}'을 담아 요청해야 합니다.
+  - 작성자가 아니면 삭제할 수 없습니다.
+
+.path-parameters
+include::{snippets}/recipe-delete/path-parameters.adoc[]
+
+.http-request
+include::{snippets}/recipe-delete/http-request.adoc[]
+
+.http-response
+include::{snippets}/recipe-delete/http-response.adoc[]
+
+=== 레시피 조회
+==== 레시피 상세 조회
+***
+ 특정 레시피를 조회하기 위한 API 입니다.
+
+.http-request
+include::{snippets}/recipe-read-detail/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/recipe-read-detail/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/recipe-read-detail/http-response.adoc[]
+
+.response-fields
+include::{snippets}/recipe-read-detail/response-fields.adoc[]
+
+==== 내가 작성한 레시피 리스트 조회
+***
+
+ 마이페이지에서 내가 작성한 레시피의 리스트를 조회하기 위한 API입니다.
+
+.http-request
+include::{snippets}/recipe-mine/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/recipe-mine/request-parameters.adoc[]
+
+.http-response
+include::{snippets}/recipe-mine/http-response.adoc[]
+
+.response-fields
+include::{snippets}/recipe-mine/response-fields.adoc[]
+
+==== 나의 선호 레시피 리스트 조회
+***
+
+ 마이페이지에서 내가 하트를 누른 레시피의 리스트를 하트를 누른 날짜를 기준으로
+ 최신순으로 조회하기 위한 API입니다.
+
+.http-request
+include::{snippets}/recipe-favorite/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/recipe-favorite/request-parameters.adoc[]
+
+.http-response
+include::{snippets}/recipe-favorite/http-response.adoc[]
+
+.response-fields
+include::{snippets}/recipe-favorite/response-fields.adoc[]
+
+=== 레시피 추천
+==== 최신 레시피
+***
+ 비로그인 시 메인페이지에 접근할 때 최신 레시피를 제공하는 API 입니다.
+ 레시피의 생성일자를 기준으로 최신순으로 정렬됩니다.
+
+.http-request
+include::{snippets}/recent-recipe-recommend/http-request.adoc[]
+
+.http-response
+include::{snippets}/recent-recipe-recommend/http-response.adoc[]
+
+.response-fields
+include::{snippets}/recent-recipe-recommend/response-fields.adoc[]
+
+==== 인기 레시피
+***
+ 메인페이지에 접근할 때 인기 레시피를 제공하는 API 입니다.
+ 레시피의 좋아요가 많은 순서대로 정렬됩니다.
+
+.http-request
+include::{snippets}/popular-recipe-recommend/http-request.adoc[]
+
+.http-response
+include::{snippets}/popular-recipe-recommend/http-response.adoc[]
+
+.response-fields
+include::{snippets}/popular-recipe-recommend/response-fields.adoc[]
+
+
+==== 냉장고 재료 기반
+***
+
+ 로그인 한 사용자의 냉장고 재료를 기준으로 레시피를 추천하는 API 입니다.
+ 추천 기준 : 냉장고 재료가 하나라도 레시피 재료에 포함될 경우
+
+.http-request
+include::{snippets}/recipe-recommend-fridge/http-request.adoc[]
+
+.http-response
+include::{snippets}/recipe-recommend-fridge/http-response.adoc[]
+
+.response-fields
+include::{snippets}/recipe-recommend-fridge/response-fields.adoc[]
+
+
+== 댓글 관련 API
+=== 댓글 등록
+***
+
+ 댓글 등록을 위한 API 입니다.
+
+.http-request
+include::{snippets}/comment-create/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/comment-create/path-parameters.adoc[]
+
+.request-fields
+include::{snippets}/comment-create/request-fields.adoc[]
+
+.http-response
+include::{snippets}/comment-create/http-response.adoc[]
+
+.response-fields
+include::{snippets}/comment-create/response-fields.adoc[]
+
+=== 댓글 수정
+***
+
+ 댓글 수정을 위한 API 입니다.
+ 자신이 작성한 댓글만 수정 가능합니다.
+
+.http-request
+include::{snippets}/comment-update/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/comment-update/path-parameters.adoc[]
+
+.request-fields
+include::{snippets}/comment-update/request-fields.adoc[]
+
+.http-response
+include::{snippets}/comment-update/http-response.adoc[]
+
+.response-fields
+include::{snippets}/comment-update/response-fields.adoc[]
+
+=== 댓글 삭제
+***
+
+ 댓글 삭제를 위한 API 입니다.
+ 자신이 작성한 댓글만 삭제 가능합니다.
+
+.http-request
+include::{snippets}/comment-delete/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/comment-delete/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/comment-delete/http-response.adoc[]
+
+=== 레시피 댓글 리스트 조회
+***
+ 특정 레시피에 달린 댓글 리스트를 조회하기 위한 API 입니다
+
+.http-request
+include::{snippets}/comments-recipe/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/comments-recipe/path-parameters.adoc[]
+
+.request-parameters
+include::{snippets}/comments-recipe/request-parameters.adoc[]
+
+.http-response
+include::{snippets}/comments-recipe/http-response.adoc[]
+
+.response-fields
+include::{snippets}/comments-recipe/response-fields.adoc[]
+
+=== 받은 댓글 리스트 조회
+***
+ 자신이 받은 댓글 리스트를 조회하기 위한 API 입니다.
+ 자신이 작성한 레시피에 달린 댓글을 최신순으로 조회할 수 있습니다.
+ (페이지당 댓글 16개)
+
+.http-request
+include::{snippets}/comments-received/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/comments-received/request-parameters.adoc[]
+
+.http-response
+include::{snippets}/comments-received/http-response.adoc[]
+
+.response-fields
+include::{snippets}/comments-received/response-fields.adoc[]
+
+== 검색 관련 API
+=== 레시피 검색
+***
+
+ 제목과 재료가 포함된 레시피 리스트를 검색하는 API 입니다.
+ 한 페이지당 16개의 레시피를 검색 할 수 있습니다.
+
+.http-request
+include::{snippets}/recipe-search-list/http-request.adoc[]
+
+.request-fields
+include::{snippets}/recipe-search-list/request-fields.adoc[]
+
+.http-response
+include::{snippets}/recipe-search-list/http-response.adoc[]
+
+.response-fields
+include::{snippets}/recipe-search-list/response-fields.adoc[]
+
+
+
+=== 레시피 이름 검색
+***
+
+  특정 단어가 포함된 레시피 제목 리스트 검색을 위한 API입니다. (최대 10개)
+  영문으로 검색할 경우 대소문자를 구분하지 않습니다.
+
+.http-request
+include::{snippets}/recipe-search-titles/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/recipe-search-titles/request-parameters.adoc[]
+
+.http-response
+include::{snippets}/recipe-search-titles/http-response.adoc[]
+
+.response-fields
+include::{snippets}/recipe-search-titles/response-fields.adoc[]
+
+=== 재료 이름 검색
+***
+
+  특정 단어가 포함된 재료 이름 검색을 위한 API입니다. (최대 10개)
+  영문으로 검색할 경우 대소문자를 구분하지 않습니다.
+
+.http-request
+include::{snippets}/ingredient-search-names/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/ingredient-search-names/request-parameters.adoc[]
+
+.http-response
+include::{snippets}/ingredient-search-names/http-response.adoc[]
+
+.response-fields
+include::{snippets}/ingredient-search-names/response-fields.adoc[]
+
+
+== 레시피 하트 관련 API
+=== 레시피 하트 추가
+***
+
+  레시피에 하트를 추가하기 위한 API입니다.
+  로그인한 사용자만 하트를 추가할 수 있습니다.
+  사용자가 이미 해당 레시피에 하트를 추가했을 경우 Http Status 400으로 응답합니다.
+
+.http-request
+include::{snippets}/heart-create/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/heart-create/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/heart-create/http-response.adoc[]
+
+.response-fields
+include::{snippets}/heart-create/response-fields.adoc[]
+
+=== 레시피 하트 삭제
+
+  레시피에 하트를 삭제하기 위한 API 입니다.
+  로그인한 사용자가 자신이 추가한 하트를 삭제할 수 있습니다.
+  사용자가 해당 레시피에 하트를 추가하지 않은 경우 Http Status 400으로 응답합니다.
+
+***
+
+.http-request
+include::{snippets}/heart-remove/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/heart-remove/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/heart-remove/http-response.adoc[]
+
+.response-fields
+include::{snippets}/heart-remove/response-fields.adoc[]
+
+== 냉장고 관련 API
+
+ 나의 냉장고 관련 API입니다.
+ 로그인한 사용자만 자신의 냉장고로 접근할 수 있습니다.
+ Get 요청을 할 때, 요청 Header에 Access Token 값을 넣어야 합니다.
+ Get 요청을 하면, 재료의 유통기한을 기준으로 정렬하여 response 합니다.
+
+=== 냉장고에 재료 추가
+.http-request
+include::{snippets}/fridgeIngredients-create/http-request.adoc[]
+
+.request-fields
+include::{snippets}/fridgeIngredients-create/request-fields.adoc[]
+
+.http-response
+include::{snippets}/fridgeIngredients-create/http-response.adoc[]
+
+.response-fields
+include::{snippets}/fridgeIngredients-create/response-fields.adoc[]
+
