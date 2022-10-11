@@ -49,7 +49,10 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     @Override
     public String getUsername() {
-        return member.getEmail();
+        if(member.isGeneralMember())
+            return member.getEmail();
+
+        return member.getName();
     }
 
     @Override
@@ -82,7 +85,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     @Override
     public String getName() {
-        return null;
+        return member.getName();
     }
     //endregion
 }

@@ -88,4 +88,8 @@ public class Member {
     public void changeName(String name){
         this.name = name;
     }
+
+    public boolean isGeneralMember(){
+        return !StringUtils.hasText(this.provider);
+    }
 }
