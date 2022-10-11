@@ -7,6 +7,7 @@ const initialState = {
   userId: null,
   userName: null,
   userProfileImgPath: null,
+  isAdmin: false,
 };
 
 const userSlice = createSlice({
@@ -54,6 +55,11 @@ const userSlice = createSlice({
     extraReducers: (builder) => {
       builder.addCase(PURGE, () => initialState);
     },
+
+    //관리자 권한일때
+    setIsAdmin(state, action) {
+      state.isAdmin = true;
+    },
   },
 });
 
@@ -65,4 +71,5 @@ export const {
   editUserPhoto,
   deleteUserPhoto,
   setLoggedOut,
+  setIsAdmin,
 } = userSlice.actions;

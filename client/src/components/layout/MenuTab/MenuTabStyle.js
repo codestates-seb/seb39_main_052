@@ -7,6 +7,10 @@ export const MenuTabContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 350px;
+  }
 `;
 
 export const Menu = styled.ul`

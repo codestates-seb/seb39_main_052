@@ -131,5 +131,14 @@ export const Li = styled.li`
     &.login {
       font-size: 13px;
     }
+
+    &.admin {
+      font-size: 13px;
+      padding: 4px;
+    }
+
+    &.admin + &.profile_icon_photo {
+      padding: 4px;
+    }
   }
 `;

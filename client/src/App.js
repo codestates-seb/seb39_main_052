@@ -105,26 +105,26 @@ function App() {
   //useEffect 하면 모든 컴포넌트 렌더링 된 이후에 App.js가 실행
 
   return (
-      <Div onScroll={handleScroll}>
-        <BrowserRouter>
-          <GlobalStyle />
-          <Gnb />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<LogIn />} />
-            <Route path="/signup" element={<SignUpForm />} />
-            <Route path="/recipes/new" element={<NewRecipe />} />
-            <Route path="/auth/redirect" element={<OAuth2RedirectHandler />} />
-            <Route path="/recipes/edit" element={<EditRecipe />} />
-            <Route path="/recipes/:id" element={<RecipeDetail />} />
-            <Route path="/search" element={<FridgeDigging />} />
-            <Route path="/myfridge" element={<MyFridge />} />
-            <Route path="/mypage/:id" element={<MyPage />} />
-            <Route path="/admin" element={<AdminPanel />} />
-          </Routes>
-          <FloatingAction isBottom={isBottom} />
-        </BrowserRouter>
-      </Div>
+    <Div onScroll={handleScroll}>
+      <BrowserRouter>
+        <GlobalStyle />
+        <Gnb />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<LogIn />} />
+          <Route path="/signup" element={<SignUpForm />} />
+          <Route path="/recipes/new" element={<NewRecipe />} />
+          <Route path="/auth/redirect" element={<OAuth2RedirectHandler />} />
+          <Route path="/recipes/edit" element={<EditRecipe />} />
+          <Route path="/recipes/:id" element={<RecipeDetail />} />
+          <Route path="/search" element={<FridgeDigging />} />
+          <Route path="/myfridge" element={<MyFridge />} />
+          <Route path="/mypage/:id" element={<MyPage />} />
+          <Route path="/admin" element={<AdminPanel />} />
+        </Routes>
+        <FloatingAction isBottom={isBottom} />
+      </BrowserRouter>
+    </Div>
   );
 }
 

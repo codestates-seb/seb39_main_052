@@ -76,9 +76,9 @@ const CommentsBox = ({ timeSince }) => {
                     />
                     <UserNameTag>{eachComment.member.name}</UserNameTag>
                     {/* <UserName
-                  image={eachComment.member.profileImagePath}
-                  name={eachComment.member.name}
-                ></UserName> */}
+                      image={eachComment.member.profileImagePath}
+                      name={eachComment.member.name}
+                    ></UserName> */}
                   </span>
                   <span
                     className="comment"
