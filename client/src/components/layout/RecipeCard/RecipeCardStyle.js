@@ -20,7 +20,19 @@ export const Container = styled.div`
         height: 150px;
         justify-content: space-between;
         margin-bottom: 16px;
-    }   
+    }
+    @media ${({ theme }) => theme.device.laptop} {
+        :hover {
+            width: 176px;
+            height: 254px;
+            padding: 8px 0px 0px 0;
+            margin: 0px 6px 20px 6px;
+            > * > img {
+                width: 144px;
+                height: 144px;
+            }
+        } 
+    }
 `
 
 export const Image = styled.img`
