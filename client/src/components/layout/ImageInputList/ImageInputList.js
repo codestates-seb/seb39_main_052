@@ -6,6 +6,7 @@ import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { editSteps, addStepsInput, deleteStepsInput } from "../../../features/recipeSlice";
 import { addElement, deleteElement } from "../../../features/imageSlice";
 import { Block, Order, Input, ButtonWrapper, Button, StyledFontAwesomeIcon } from "./ImageInputListStyle";
+import { setWarningToast } from "../../../features/toastSlice";
 
 const ImageInputList = ({ stepFiles, setStepFiles }) => {
 
@@ -29,7 +30,8 @@ const ImageInputList = ({ stepFiles, setStepFiles }) => {
             dispatch(addElement());
         }
         else {
-            alert(`요리 순서는 10개 이하로 등록 가능해요ㅠㅠ`);
+            // alert 창 대체
+            dispatch(setWarningToast({ message: `요리 순서는 10개 이하로 등록 가능해요ㅠㅠ` }))
         }
         // 마지막 추가된 input이 화면 안으로 들어오도록
         lastValueRef.current.scrollIntoView({

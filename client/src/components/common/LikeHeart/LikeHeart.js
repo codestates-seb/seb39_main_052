@@ -4,6 +4,7 @@ import { faHeart as faHeartLine} from "@fortawesome/free-regular-svg-icons";
 import { LikeWrapper, StyledFontAwesomeIcon } from "./LikeHeartStyle";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
+import { setWarningToast } from "../../../features/toastSlice";
 
 const LikeHeart = ({ heartCounts, idx, heartExist }) => {
       //로그인 상태 가져와서 변수에 저장
@@ -14,6 +15,8 @@ const LikeHeart = ({ heartCounts, idx, heartExist }) => {
     // redux에서 받아오는 heartExist로 하트 색 변화 반응 속도가 느려 useState 사용
     const [isClicked, setIsClicked] = useState(heartExist);
     const [newHeartCounts, setNewHeartCounts] = useState(heartCounts);
+
+    const dispatch = useDispatch();
 
     // 서버에서 받아오는 값으로 로컬 상태 변경
     useEffect(() => {
@@ -34,7 +37,8 @@ const LikeHeart = ({ heartCounts, idx, heartExist }) => {
             }
         }
         else {
-            alert(`로그인이 필요한 서비스입니다ㅠㅠ`)
+            // alert 창 대체
+            dispatch(setWarningToast({message: `로그인이 필요한 서비스입니다ㅠㅠ`}))
         }
     }
 

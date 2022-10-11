@@ -22,6 +22,7 @@ import SortingTab from "../../common/SortingTab/SortingTab";
 import { useDispatch, useSelector } from "react-redux";
 import { loadRecipe } from "../../../features/recipeSlice";
 import GeneralButton from "../../common/Button/GeneralButton";
+import { setWarningToast } from "../../../features/toastSlice";
 
 const MyRecipeBox = ({ timeSince }) => {
   const [myRecipeList, setMyRecipeList] = useState([]);
@@ -61,7 +62,8 @@ const MyRecipeBox = ({ timeSince }) => {
       setTotalPages(data.pageInfo.totalPages);
       setMyRecipeList([...data.data]);
     } catch (err) {
-      alert(err);
+      // alert 창 대체
+      dispatch(setWarningToast({ message: err }))
     }
   };
 

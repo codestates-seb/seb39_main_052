@@ -8,6 +8,7 @@ import { faPlus, faMinus, faUtensils } from "@fortawesome/free-solid-svg-icons";
 import { editIngredients, addIngrInput, deleteIngrInput } from "../../../features/recipeSlice";
 import { editFrigIngredients, addFrigIngrInput, deleteFrigIngrInput } from "../../../features/fridgeSlice";
 import { Block, Order, Input, ButtonWrapper, Button, StyledFontAwesomeIcon, RecipeLinker } from "./InputListStyle";
+import { setWarningToast } from "../../../features/toastSlice";
 
 // props로 input의 제목이 될 요소들을 배열의 형태로 받아온다. 
 // 예) titlesArr = ["food", "quantity", "expirationDate"] 
@@ -50,7 +51,8 @@ const InputList = ({ titlesArr, placeholders }) => {
                 dispatch(addIngrInput({ index: i }));
             }
             else {
-                alert(`15개 이하로만 등록할 수 있어요ㅠㅠ`);
+                // alert창 대체
+                dispatch(setWarningToast({message: `15개 이하로만 등록할 수 있어요ㅠㅠ`}))
             }
         }
         if (pathname === "/myfridge") {
@@ -58,7 +60,8 @@ const InputList = ({ titlesArr, placeholders }) => {
                 dispatch(addFrigIngrInput({ index: i }));
             }
             else {
-                alert(`30개 이하로만 등록할 수 있어요ㅠㅠ`);
+                // alert창 대체
+                dispatch(setWarningToast({message: `30개 이하로만 등록할 수 있어요ㅠㅠ`}))
             }
         }
         // 나의 냉장고 스크롤는 조정되지 않음

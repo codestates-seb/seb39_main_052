@@ -30,23 +30,40 @@ import { useRef } from "react";
 import MenuTab from "./components/layout/MenuTab/MenuTab";
 import AdminSearchBar from "./components/layout/Admin/AdminSearchBar";
 import AdminPanel from "./components/layout/Admin/AdminPanel";
+import CustomToast from "./components/common/CustomToast/CustomToast";
+
+// 페이지 이동마다 스크롤이 상단에 올 수 있도록 하는 컴포넌트
+import ScrollToTop from "./components/others/ScrollToTop";
 
 function App() {
   const [isBottom, setIsBottom] = useState(false); // 스크롤이 끝까지 내려갔는지 여부를 담은 상태
 
   const dispatch = useDispatch(); //for redux dispatch
-  const effectedCalled = useRef(false); //useEffect 한번만 실행하려고
+  // const effectedCalled = useRef(false); //useEffect 한번만 실행하려고
+
+  // alert 대신 사용되는 toast 관련 상태
+  const showToast = useSelector((state) => {
+    return state.toast.showToast;
+  })
 
   // Floating Action의 위치 조정을 위해 스크롤을 인식하는 함수
-  const handleScroll = (e) => {
-    const bottom =
-      e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
-    if (bottom) {
-      setIsBottom(true);
-    } else {
-      setIsBottom(false);
-    }
-  };
+  useEffect(() => {
+    const handleScroll = (e) => {
+      const bottom =
+        ((window.innerHeight + window.scrollY) >= document.body.offsetHeight);
+      if (bottom) {
+        setIsBottom(true);
+      } else {
+        setIsBottom(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   //로그인 상태 가져와서 변수에 저장
   const isLoggedIn = useSelector((state) => {
@@ -105,23 +122,29 @@ function App() {
   //useEffect 하면 모든 컴포넌트 렌더링 된 이후에 App.js가 실행
 
   return (
-    <Div onScroll={handleScroll}>
+    <Div>
       <BrowserRouter>
         <GlobalStyle />
-        <Gnb />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<LogIn />} />
-          <Route path="/signup" element={<SignUpForm />} />
-          <Route path="/recipes/new" element={<NewRecipe />} />
-          <Route path="/auth/redirect" element={<OAuth2RedirectHandler />} />
-          <Route path="/recipes/edit" element={<EditRecipe />} />
-          <Route path="/recipes/:id" element={<RecipeDetail />} />
-          <Route path="/search" element={<FridgeDigging />} />
-          <Route path="/myfridge" element={<MyFridge />} />
-          <Route path="/mypage/:id" element={<MyPage />} />
-          <Route path="/admin" element={<AdminPanel />} />
-        </Routes>
+        <ScrollToTop />
+          <Gnb />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<LogIn />} />
+            <Route path="/signup" element={<SignUpForm />} />
+            <Route path="/recipes/new" element={<NewRecipe />} />
+            <Route path="/auth/redirect" element={<OAuth2RedirectHandler />} />
+            <Route path="/recipes/edit" element={<EditRecipe />} />
+            <Route path="/recipes/:id" element={<RecipeDetail />} />
+            <Route path="/search" element={<FridgeDigging />} />
+            <Route path="/myfridge" element={<MyFridge />} />
+            <Route path="/mypage/:id" element={<MyPage />} />
+            <Route path="/admin" element={<AdminPanel />} />
+          </Routes>
+        {/* alert창 대신 */}
+        {showToast && <CustomToast />}
+        {/* 우측 하단에 항상 있는 레시피 작성하기 */}
+        {/* <OskiFooter>Hi I'm Oscar's Footer</OskiFooter> */}
+        <Footer />
         <FloatingAction isBottom={isBottom} />
       </BrowserRouter>
     </Div>
@@ -130,7 +153,7 @@ function App() {
 
 const Div = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: fit-content;
   overflow-x: hidden;
 `;
 

@@ -13,6 +13,7 @@ import fridgeSlice from "./features/fridgeSlice";
 import { persistReducer } from "redux-persist";
 import thunk from "redux-thunk";
 import storageSession from "redux-persist/lib/storage/session";
+import toastSlice from "./features/toastSlice";
 
 // // 기존코드
 // const store = configureStore({
@@ -38,6 +39,7 @@ const rootReducer = combineReducers({
   images: imageSlice.reducer,
   user: userSlice.reducer,
   fridge: fridgeSlice.reducer,
+  toast: toastSlice.reducer,
 });
 
 const persistConfig = {

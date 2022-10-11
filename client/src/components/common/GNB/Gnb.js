@@ -19,17 +19,18 @@ import {
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
 import DropDownMenu from "../../layout/DropDown/DropDownMenu";
+import useDetectOutsideClick from "../../../hooks/useDetectOutsideClick";
 
 //로그인 상태 가져오려고 리덕스 저장소 정보 import
 import { useSelector, useDispatch } from "react-redux";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import RecipeSearchModal from "../../layout/Modal/RecipeSearchModal"; //모달 컴포넌트 만들기 이전 레시피 서치 모달
 import SearchModal from "../../layout/Modal/SearchModal"; //컴포넌트로 만든 이후의 서치 모달
 
 const Gnb = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const toggleRef = useRef(null)
   //로그인 상태 가져와서 변수에 저장
   const isLoggedIn = useSelector((state) => {
     return state.user.isLoggedIn;
@@ -57,7 +58,7 @@ const Gnb = () => {
   const [showModal, setShowModal] = useState(false);
 
   //모바일 화면에서 보이는 왼쪽 상단 햄버거 메뉴 토글 상태
-  const [isToggleOpen, setIsToggleOpen] = useState(false);
+  const [isToggleOpen, setIsToggleOpen] = useDetectOutsideClick(toggleRef, false);
 
   //모달창 열때 서치파람 없애기
   useEffect(() => {
@@ -81,7 +82,7 @@ const Gnb = () => {
   return (
     <Header>
       <Nav>
-        <LeftBox className="leftbox" isToggleOpen={isToggleOpen}>
+        <LeftBox className="leftbox" isToggleOpen={isToggleOpen} ref={toggleRef}>
           <Ul className="nav-menu-list">
             <Li className="each-nav-menu-list">
               <Link to="/search">레시피 검색</Link>
@@ -92,7 +93,7 @@ const Gnb = () => {
           </Ul>
         </LeftBox>
         {/* for Mobile toggle */}
-        <LeftBoxForMobile className="menuToggle" onClick={handleToggle}>
+        <LeftBoxForMobile className="menuToggle" onClick={handleToggle} ref={toggleRef}>
           <FontAwesomeIcon icon={faBars} size="lg" />{" "}
         </LeftBoxForMobile>
 

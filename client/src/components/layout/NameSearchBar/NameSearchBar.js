@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { Container, DropDown, SearchBar, SearchInput, StyledFontAwesomeIcon, Suggestion } from "./NameSearchBarStyle";
 import axios from "axios";
+import { setWarningToast } from "../../../features/toastSlice";
 
 const NameSearchBar = ({ setIsRefreshNeeded }) => {
     
@@ -11,6 +13,8 @@ const NameSearchBar = ({ setIsRefreshNeeded }) => {
     const [suggestedValue, setSuggestedValue] = useState([]);
     const [isDropDownOpen, setIsDropDownOpen] = useState(false);
     const [cursor, setCursor] = useState(-1);
+    
+    const dispatch = useDispatch();
 
     // 다른 페이지에서 searchParams에 keyword로 담겨서 온 문자열 키워드를 담은 변수
     const nameSearchTerm = searchParams.get('keyword'); // 제목으로 레시피 검색한 값
@@ -138,6 +142,8 @@ const NameSearchBar = ({ setIsRefreshNeeded }) => {
         // 빈 검색어에 엔터 누를 경우 이전 검색어 지우기
         else {
             searchParams.set("keyword", "");
+            // alert창 대체
+            dispatch(setWarningToast({ message: `검색어를 입력해주세요` }));
             setSearchParams(searchParams);
         }
         setIsDropDownOpen(false);
