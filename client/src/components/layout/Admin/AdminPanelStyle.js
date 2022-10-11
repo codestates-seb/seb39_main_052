@@ -5,6 +5,7 @@ export const AdminPanelContainer = styled.div`
   flex-direction: column;
   align-items: center;
   margin: 32px 0;
+  min-height: 60vh;
 `;
 
 export const Panel = styled.div`

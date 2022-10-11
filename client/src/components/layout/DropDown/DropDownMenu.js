@@ -16,6 +16,7 @@ import {
   Ul,
   Li,
 } from "./DropDownMenuStyle";
+import { useSelector } from "react-redux";
 
 const DropDownMenu = ({ profileIconPhoto }) => {
   const dropdownRef = useRef(null);
@@ -24,6 +25,11 @@ const DropDownMenu = ({ profileIconPhoto }) => {
     setUserIsOpen(!userIsOpen);
   };
   // console.log("userIsOpen?", userIsOpen);
+
+  //관리자 상태 가져와서 변수에 저장
+  const isAdmin = useSelector((state) => {
+    return state.user.isAdmin;
+  });
 
   return (
     <DropDownContainer className="dropdown_container">
@@ -38,18 +44,22 @@ const DropDownMenu = ({ profileIconPhoto }) => {
       </DropDownButton>
       <Menu isDropped={userIsOpen}>
         <Ul>
-          <Li>
-            <Link to="/mypage/0">내 프로필</Link>
-          </Li>
-          <Li>
-            <Link to="/mypage/1">내 레시피</Link>
-          </Li>
-          <Li>
-            <Link to="/mypage/2">내 좋아요</Link>
-          </Li>
-          <Li>
-            <Link to="/mypage/3">받은 댓글</Link>
-          </Li>
+          {!isAdmin && ( //관리자 아닐때만 보여주기
+            <>
+              <Li>
+                <Link to="/mypage/0">내 프로필</Link>
+              </Li>
+              <Li>
+                <Link to="/mypage/1">내 레시피</Link>
+              </Li>
+              <Li>
+                <Link to="/mypage/2">내 좋아요</Link>
+              </Li>
+              <Li>
+                <Link to="/mypage/3">받은 댓글</Link>
+              </Li>{" "}
+            </>
+          )}
           <Li>
             <LogOut />
           </Li>
