@@ -50,6 +50,7 @@ const userSlice = createSlice({
       state.userName = null;
       state.userProfileImgPath = null;
       state.userToken = null; //액세스 토큰 저장된 정보도 초기화
+      state.isAdmin = false; //관리자 권한 초기화
     },
     //로그아웃시 초기상태로 store purge 작업
     extraReducers: (builder) => {
