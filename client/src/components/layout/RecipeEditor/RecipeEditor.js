@@ -89,6 +89,16 @@ const RecipeEditor = () => {
                     setIsIngrEmpty(true);
                     break;
                 }
+                // 재료에 빈칸만 쓴 경우는 비어진 것으로 처리
+                else if (!notOnlySpaces(recipe.ingredients[i].name)) {
+                    setIsIngrEmpty(true);
+                    break;
+                }
+                // 계량에 빈칸만 쓴 경우는 비어진 것으로 처리
+                else if (!notOnlySpaces(recipe.ingredients[i].quantity)) { 
+                    setIsIngrEmpty(true);
+                    break;
+                }
                 setIsIngrEmpty(false);
             }
         }
@@ -99,6 +109,11 @@ const RecipeEditor = () => {
         // 요리 순서에 빈칸이 없는지
         for  (let i = 0; i < recipe.steps.length; i++) {
             if (recipe.steps[i].content <= 0) {
+                setIsStepsEmpty(true);
+                break;
+            }
+            // 요리 순서에 빈칸만 작성한 경우
+            else if (!notOnlySpaces(recipe.steps[i].content)) {
                 setIsStepsEmpty(true);
                 break;
             }
@@ -125,8 +140,8 @@ const RecipeEditor = () => {
 
     const checkValidation = () => {
 
-        // 필수 데이터 유효성 검사
-        recipe.title.length > 0 ? setIsTitleEmpty(false) : setIsTitleEmpty(true);
+        // 필수 데이터 유효성 검사 (길이가 0 이상이고 전체 텍스트가 띄어쓰기로만 이루어진게 아닌 경우)
+        recipe.title.length > 0 && notOnlySpaces(recipe.title) ? setIsTitleEmpty(false) : setIsTitleEmpty(true);
         recipe.time.length > 0 ? setIsTimeEmpty(false) : setIsTimeEmpty(true);
         // 재료에 빈칸이 없는지
         for (let i = 0; i < recipe.ingredients.length; i++) {
@@ -134,11 +149,26 @@ const RecipeEditor = () => {
                 setIsIngrEmpty(true);
                 break;
             }
-            setIsIngrEmpty(false);
+            // 재료에 빈칸만 쓴 경우는 비어진 것으로 처리
+            else if (!notOnlySpaces(recipe.ingredients[i].name)) {
+                setIsIngrEmpty(true);
+                break;
+            }
+            // 계량에 빈칸만 쓴 경우는 비어진 것으로 처리
+            else if (!notOnlySpaces(recipe.ingredients[i].quantity)) {
+                setIsIngrEmpty(true);
+                break;
+            }
+            setIsIngrEmpty(false);  
         }
         // 요리 순서에 빈칸이 없는지
         for  (let i = 0; i < recipe.steps.length; i++) {
             if (recipe.steps[i].content <= 0) {
+                setIsStepsEmpty(true);
+                break;
+            }
+            // 요리 순서에 빈칸만 작성한 경우
+            else if (!notOnlySpaces(recipe.steps[i].content)) {
                 setIsStepsEmpty(true);
                 break;
             }
@@ -193,8 +223,8 @@ const RecipeEditor = () => {
     const handleSaveClick = () => {
         setIsSubmitClicked(true);
 
-        // 필수 데이터 유효성 검사
-        recipe.title.length > 0 ? setIsTitleEmpty(false) : setIsTitleEmpty(true);
+        // 필수 데이터 유효성 검사 (길이가 0 이상이고 전체 텍스트가 띄어쓰기로만 이루어진게 아닌 경우)
+        recipe.title.length > 0 && notOnlySpaces(recipe.title) ? setIsTitleEmpty(false) : setIsTitleEmpty(true);
         recipe.time.length > 0 ? setIsTimeEmpty(false) : setIsTimeEmpty(true);
         // recipe.ingredients[0].name.length > 0 && recipe.ingredients[0].quantity.length > 0 
         //     ? setIsIngrEmpty(false) 
@@ -205,11 +235,26 @@ const RecipeEditor = () => {
                 setIsIngrEmpty(true);
                 break;
             }
+            // 재료에 빈칸만 쓴 경우는 비어진 것으로 처리
+            else if (!notOnlySpaces(recipe.ingredients[i].name)) {
+                setIsIngrEmpty(true);
+                break;
+            }
+            // 계량에 빈칸만 쓴 경우는 비어진 것으로 처리
+            else if (!notOnlySpaces(recipe.ingredients[i].quantity)) {
+                setIsIngrEmpty(true);
+                break;
+            }
             setIsIngrEmpty(false);
         }
         // 요리 순서에 빈칸이 없는지
         for  (let i = 0; i < recipe.steps.length; i++) {
             if (recipe.steps[i].content <= 0) {
+                setIsStepsEmpty(true);
+                break;
+            }
+            // 요리 순서에 빈칸만 작성한 경우
+            else if (!notOnlySpaces(recipe.steps[i].content)) {
                 setIsStepsEmpty(true);
                 break;
             }
@@ -338,6 +383,16 @@ const RecipeEditor = () => {
         };
     }
 
+    // 작성된 모든 문자열이 띄어쓰기만으로 이루어진게 아닌지 확인하는 함수 (true는 글이 있다, false는 띄어쓰기 뿐이다)
+    const notOnlySpaces = (text) => {
+        for (let i = 0; i < text.length; i++) {
+            if (text[i] !== " ") {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // 인분 수 선택하는 드랍다운
     const SelectBox = ({ defaultValue }) => {
 
@@ -346,7 +401,7 @@ const RecipeEditor = () => {
         }
 
         return (
-            <Select onChange={handleChange}>
+            <Select onChange={handleChange} value={recipe.portion}>
                 {portionOptions.map((option) => {
                     return (
                         <option
@@ -374,7 +429,7 @@ const RecipeEditor = () => {
                         value={recipe.title}
                         onChange={(e) => {
                             dispatch(setTitle({ title: e.target.value }));
-                            e.target.value.length > 0 ? setIsTitleEmpty(false) : setIsTitleEmpty(true);
+                            e.target.value.length > 0 && notOnlySpaces(e.target.value) ? setIsTitleEmpty(false) : setIsTitleEmpty(true);
                         }}
                     />
                     {isSubmitClicked && <Warning className={isTitleEmpty ? null : "invisible"}>제목을 입력해주세요</Warning>}
