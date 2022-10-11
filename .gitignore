@@ -74,3 +74,5 @@ application-production.yml
 **/src/main/generated/ 
 **/src/main/resources/static/docs/
 **/log/
+
+.DS_Store
