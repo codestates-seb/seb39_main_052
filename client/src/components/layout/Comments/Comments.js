@@ -1,10 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Container, Input, InputWrapper } from "./CommentsStyle";
 import GeneralButton from "../../common/Button/GeneralButton";
 import Pagination from "../../common/Pagination/Pagination";
 import CommentRow from "../CommentRow/CommentRow";
+import { setNoticeToast } from "../../../features/toastSlice";
 
 const Comments = ({ id }) => {
     const [comment, setComment] = useState(""); // input에 내가 작성하는 댓글
@@ -15,6 +16,8 @@ const Comments = ({ id }) => {
     const [page, setPage] = useState(1); // 페이지네이션으로 바뀔 현 페이지 위치
     const [total, setTotal] = useState(0); // 서버에서 받아올 전체 댓글 수
     const [totalPages, setTotalPages] = useState(0); // 서버에서 받아올 전체 댓글 수
+
+    const dispatch = useDispatch();
 
     // 로그인 상태 가져와서 변수에 저장
     const isLoggedIn = useSelector((state) => {
@@ -58,7 +61,8 @@ const Comments = ({ id }) => {
         .then((response) => {
             console.log(response);
             setComment("");
-            alert(`댓글을 등록했어요! :)`)
+            // alert 창 대체
+            dispatch(setNoticeToast({ message: `댓글을 등록했어요! :)` }))
             getCommentList();
         })
         .catch((error) => {

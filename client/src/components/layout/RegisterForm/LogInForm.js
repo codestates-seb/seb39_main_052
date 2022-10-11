@@ -10,6 +10,7 @@ import {
   setLoggedIn,
   setUserInfo,
 } from "../../../features/userSlice";
+import { setWarningToast, setNoticeToast } from "../../../features/toastSlice";
 
 const LogInForm = () => {
   const navigate = useNavigate();
@@ -92,7 +93,8 @@ const LogInForm = () => {
           //서버에서 받아오는 memberId를 가지고 사용자 정보조회하는 API로 get요청
           getUserInfo(response.data.memberId);
 
-          alert("로그인 성공");
+          // alert창 대체
+          dispatch(setNoticeToast({ message: `로그인 성공` }))
           navigate("/");
           //액세스토큰 만료되기 전 로그인 연장
           setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
@@ -102,9 +104,11 @@ const LogInForm = () => {
       .catch((error) => {
         console.log(error);
         if (error.response.status === 401) {
-          alert("아이디 혹은 비밀번호가 일치하지 않아요\n" + error.message);
+          // alert창 대체
+          dispatch(setWarningToast({ message: `아이디 혹은 비밀번호가 일치하지 않아요\n` }))
         } else {
-          alert(error.message);
+          // alert창 대체
+          dispatch(setWarningToast({ message: error.message }))
         }
       });
     //=============================
@@ -214,7 +218,8 @@ const LogInForm = () => {
           //서버에서 받아오는 memberId를 가지고 사용자 정보조회하는 API로 get요청
           getUserInfo(response.data.memberId);
 
-          alert("로그인 성공");
+          // alert창 대체
+          dispatch(setNoticeToast({ message: `게스트 로그인 성공` }))
           navigate("/");
           //액세스토큰 만료되기 전 로그인 연장
           setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
@@ -224,9 +229,11 @@ const LogInForm = () => {
       .catch((error) => {
         console.log(error);
         if (error.response.status === 401) {
-          alert("게스트로 로그인할 수 없어요ㅠㅠ\n" + error.message);
+          // alert창 대체
+          dispatch(setWarningToast({ message: `게스트로 로그인할 수 없어요ㅠㅠ\n` }))
         } else {
-          alert(error.message);
+          // alert창 대체
+          dispatch(setWarningToast({ message: error.message }))
         }
       });
 

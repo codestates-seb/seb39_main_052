@@ -1,11 +1,13 @@
 import { useEffect, useRef } from "react";
 import RecipeEditor from "../../components/layout/RecipeEditor/RecipeEditor";
 import { PageName } from "./NewRecipeStyle";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import usePreventLeave from "../../hooks/usePreventLeave";
+import { setWarningToast } from "../../features/toastSlice";
 
 const NewRecipe = () => {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const mountRef = useRef(false); // 두번 마운팅 방지
     const { enablePrevent, disablePrevent } = usePreventLeave(); // 페이지 나갈 때 경고창 훅
@@ -19,8 +21,9 @@ const NewRecipe = () => {
         if (!mountRef.current) {
             console.log("마운트")
             if (!isLoggedIn) {
+                // alert창 대체
+                dispatch(setWarningToast({ message: "로그인이 필요한 서비스입니다" }));
                 navigate("/login");
-                alert("로그인이 필요한 서비스입니다");
             }
         }
         enablePrevent(); // 페이지 나가는거 인식해서 경고창 띄우는 함수 실행

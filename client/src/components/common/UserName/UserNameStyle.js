@@ -20,6 +20,9 @@ export const Wrapper = styled.div`
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
+            @media ${({ theme }) => theme.device.mobile} {
+                width: 150px;
+            }
         }
     }
     // 댓글 요소에서는 길이를 넘어가면 ...이 보이게 하기

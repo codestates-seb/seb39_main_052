@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { StyledFontAwesomeIcon } from "../../common/ImageUploader/ImageUploaderStyle";
 import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import { setWarningToast, setNoticeToast } from "../../../features/toastSlice";
 
 const ProfileChangeModal = ({ handleClose, profileData }) => {
   const navigate = useNavigate();
@@ -85,12 +86,15 @@ const ProfileChangeModal = ({ handleClose, profileData }) => {
 
         formdata.delete("profileImage");
         formdata.delete("requestBody");
-        alert("프로필이 잘 변경되었어요");
+
+        // alert 창 대체
+        dispatch(setNoticeToast({ message: "프로필이 잘 변경되었어요" }))
         handleClose(); //모달창 닫기
       })
       .catch((err) => {
         console.log(err.response);
-        alert("프로필을 변경할 수 없어요ㅠㅠ");
+        // alert 창 대체
+        dispatch(setWarningToast({ message: "프로필을 변경할 수 없어요ㅠㅠ" }))
         formdata.delete("profileImage");
         formdata.delete("requestBody");
       });
@@ -145,6 +149,7 @@ const ProfileImgUploader = ({ previewImg, setPreviewImg, setUploadFile }) => {
   const [isDragOver, setIsDragOver] = useState(false);
 
   const imgRef = useRef(); // input 내장 버튼을 직접 만든 버튼과 연결하기 위한 ref
+  const dispatch = useDispatch();
 
   const imageHandler = (fileList) => {
     // e.preventDefault();
@@ -159,7 +164,8 @@ const ProfileImgUploader = ({ previewImg, setPreviewImg, setUploadFile }) => {
       //용량 제한하기
       const maxSize = 2 * 1024 * 1024;
       if (fileList[0].size > maxSize) {
-        alert("이미지 사이즈는 2MB 이내로만 등록할 수 있어요");
+        // alert 창 대체
+        dispatch(setWarningToast({ message: "이미지 사이즈는 2MB 이내로만 등록할 수 있어요" }))
         return false;
       } else {
         setUploadFile(fileList[0]); //부모 컴포넌트 ProfileChangeModal에서 파일 데이터 서버에 전송해야되니까 상태로 관리

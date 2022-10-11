@@ -6,7 +6,6 @@ const MyPage = () => {
   return (
     <MyPageContainer>
       <MenuTab></MenuTab>
-      {/* <Footer /> */}
     </MyPageContainer>
   );
 };

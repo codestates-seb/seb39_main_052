@@ -2,6 +2,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { setWarningToast, setNoticeToast } from "../../../features/toastSlice";
 
 import GeneralButton from "../../common/Button/GeneralButton";
 
@@ -10,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 
 const SignUpForm = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const formSchema = yup.object({
     email: yup.string().email("이메일 형식이 아닙니다").required(""),
@@ -54,13 +57,15 @@ const SignUpForm = () => {
         // console.log(response.data)// {success: true, code: 0, failureReason: ''}
         //회원가입 요청 성공시
         if (response.status === 201) {
-          alert("회원가입 성공");
+          // alert창 대체
+          dispatch(setNoticeToast({ message: `회원가입 성공` }))
           navigate("/login");
         }
       })
       .catch((error) => {
         console.log(error);
-        alert(error.message);
+        // alert창 대체
+        dispatch(setWarningToast({ message: error.message }))
         //서버에서 예외처리 구현하면 실패 코드 응답에 따라 분기 나누기. 이미 가입된 회원입니다.
       });
   };
