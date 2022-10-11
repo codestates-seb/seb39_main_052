@@ -20,7 +20,9 @@ const RecipeEditor = () => {
     const [isTimeEmpty, setIsTimeEmpty] = useState(true);
     const [isIngrEmpty, setIsIngrEmpty] = useState(true);
     const [isStepsEmpty, setIsStepsEmpty] = useState(true);
-    const [isSubmitClicked, setIsSubmitClicked] = useState(false);
+    const [isSubmitClicked, setIsSubmitClicked] = useState(false); // 첫 요청 이후 onChange마다 유효성 검사를 위한 상태
+    const [isRequestNeeded, setIsRequestNeeded] = useState(false); // 클릭시 요청이 필요한지 여부 상태
+
     const titlesArr = ["name", "quantity"]; //재료 입력에서 각 column의 키값 배열
     const placeholders = ["예) 감자", "예) 100g"];
     const portionOptions = Array.from({length: 10}, (_, i) => i + 1); //인분 선택 dropdown
@@ -133,10 +135,95 @@ const RecipeEditor = () => {
         }
     }, [files])
 
+    // 게시하기 클릭 시 (유효성 검사 후) 요청 보내기
     useEffect(() => {
-        checkValidation();
-    }, [isSubmitClicked])
+        if (isRequestNeeded) {
+            // 유효성 검사 통과시 서버에 데이터 전달
+            if (!isTitleEmpty && !isTimeEmpty && !isIngrEmpty && !isStepsEmpty && !isMainImgEmpty && !isStepImgEmpty) {
 
+                const formData = new FormData(); //서버에 전달될 폼데이터
+
+                //폼데이터에 이미지 파일 개별적으로 추가
+                for (let i = 0; i < files.length; i++) {
+                    formData.append('files', files[i]);
+                }
+                //폼데이터에 레시피 데이터 객체(이미지 제외)로 추가
+                formData.append('requestBody', new Blob([JSON.stringify(recipe)], {
+                    type: "application/json"
+                }))
+
+                console.log("폼데이터", formData.files);
+                // POST 요청 - 새 레시피 작성하기
+                if (pathname === "/recipes/new") {
+                    axios({
+                        method: "post",
+                        url: '/api/recipes',
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                        data: formData,
+                    })
+                        .then((response) => {
+                            // 응답 처리
+                            console.log(response);
+                            // navigate(`/recipes/${response.data.id}`);
+                            formData.delete('files');
+                            formData.delete('requestBody');
+                            dispatch(clearRecipe());
+                            dispatch(clearImages());
+                            // alert창 대체
+                            dispatch(setNoticeToast({ message: `레시피를 등록했어요!` }))
+                            navigate(`/recipes/${response.data.id}`)
+                        })
+                        .catch((error) => {
+                            // 예외 처리
+                            console.log(error.response);
+                            formData.delete('files');
+                            formData.delete('requestBody');
+                            // alert창 대체
+                            dispatch(setWarningToast({ message: `레시피 등록에 실패했어요ㅠㅠ` }))
+                        })
+                }
+                // else로 patch 요청
+                // // PATCH 요청 - 레시피 수정하기
+                if (pathname === "/recipes/edit") {
+                    axios({
+                        method: "patch",
+                        url: `/api/recipes/${recipeId}`,
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                        data: formData,
+                    })
+                        .then((response) => {
+                            // 응답 처리
+                            formData.delete('files');
+                            formData.delete('requestBody');
+                            dispatch(clearRecipe());
+                            dispatch(clearImages());
+                            // alert창 대체
+                            dispatch(setNoticeToast({ message: "성공적으로 수정했어요!" }))
+                            navigate(`/recipes/${response.data.id}`)
+                        })
+                        .catch((error) => {
+                            // 예외 처리
+                            console.log(error.response);
+                            formData.delete('files');
+                            formData.delete('requestBody');
+                            // alert창 대체
+                            dispatch(setWarningToast({ message: `레시피를 수정할 수 없어요ㅠㅠ` }))
+                        })
+                }
+            }
+            else if (isTitleEmpty || isTimeEmpty || isIngrEmpty || isStepsEmpty || isMainImgEmpty || isStepImgEmpty) {
+                // alert창 대체
+                dispatch(setWarningToast({ message: `입력하지 않은 칸이 있어요!` }))
+            }
+        }
+        setIsRequestNeeded(false); // 요청 보냈으니 다시 상태 초기화
+    }, [isRequestNeeded])
+
+    // 유효성 검사
     const checkValidation = () => {
 
         // 필수 데이터 유효성 검사 (길이가 0 이상이고 전체 텍스트가 띄어쓰기로만 이루어진게 아닌 경우)
@@ -219,174 +306,11 @@ const RecipeEditor = () => {
         }
     }    
 
+    // 게시하기 클릭 시 유효성 검사, 요청 필요 여부 상태 바꾸기
     const handleSaveClick = () => {
+        checkValidation();
+        setIsRequestNeeded(true);
         setIsSubmitClicked(true);
-
-        // 필수 데이터 유효성 검사 (길이가 0 이상이고 전체 텍스트가 띄어쓰기로만 이루어진게 아닌 경우)
-        recipe.title.length > 0 && notOnlySpaces(recipe.title) ? setIsTitleEmpty(false) : setIsTitleEmpty(true);
-        recipe.time.length > 0 ? setIsTimeEmpty(false) : setIsTimeEmpty(true);
-        // recipe.ingredients[0].name.length > 0 && recipe.ingredients[0].quantity.length > 0 
-        //     ? setIsIngrEmpty(false) 
-        //     : setIsIngrEmpty(true);
-        // 모든 재료가 빈칸이 없는지
-        for (let i = 0; i < recipe.ingredients.length; i++) {
-            if (recipe.ingredients[i].name.length <= 0 || recipe.ingredients[i].quantity.length <= 0) {
-                setIsIngrEmpty(true);
-                break;
-            }
-            // 재료에 빈칸만 쓴 경우는 비어진 것으로 처리
-            else if (!notOnlySpaces(recipe.ingredients[i].name)) {
-                setIsIngrEmpty(true);
-                break;
-            }
-            // 계량에 빈칸만 쓴 경우는 비어진 것으로 처리
-            else if (!notOnlySpaces(recipe.ingredients[i].quantity)) {
-                setIsIngrEmpty(true);
-                break;
-            }
-            setIsIngrEmpty(false);
-        }
-        // 요리 순서에 빈칸이 없는지
-        for  (let i = 0; i < recipe.steps.length; i++) {
-            if (recipe.steps[i].content <= 0) {
-                setIsStepsEmpty(true);
-                break;
-            }
-            // 요리 순서에 빈칸만 작성한 경우
-            else if (!notOnlySpaces(recipe.steps[i].content)) {
-                setIsStepsEmpty(true);
-                break;
-            }
-            setIsStepsEmpty(false);
-        }
-
-        // 메인 이미지 유효성 검사
-        // 새 레시피 작성하기 
-        if (pathname === "/recipes/new") {
-            files[0] === null ? setIsMainImgEmpty(true) : setIsMainImgEmpty(false);
-        }
-        // 레시피 수정하기
-        else {
-            if (files[0] === null && recipe.imageInfo.isUpdated === "Y") {
-                setIsMainImgEmpty(true)
-            }
-            else {
-                setIsMainImgEmpty(false)
-            }
-        }
-        // 요리순서 이미지 유효성 검사
-        // 새 레시피 작성하기 
-        if (pathname === "/recipes/new") {
-            for (let i = 1; i < files.length; i++) {
-                if (files[i] === null) {
-                    setIsStepImgEmpty(true);
-                    break;
-                }
-                setIsStepImgEmpty(false);
-            }
-        }
-        // 레시피 수정하기
-        else {
-            let counter = 0;
-            for (let i = 1; i < files.length; i++) {
-                if (files[i] !== null) {
-                    counter++
-                }
-            }
-            for (let i = 0; i < recipeSteps.length; i++) {
-                if (recipeSteps[i].imageInfo.isUpdated === "N") {
-                    counter++
-                }
-            }
-            // 수정 시 새로 등록된 파일 수와 수정되지 않은 이미지의 합이 총 요리순서 step의 수보다 작은 경우
-            // "순서별 사진을 업로드해주세요" 메세지가 뜨도록 한다
-            counter < recipeSteps.length ? setIsStepImgEmpty(true) : setIsStepImgEmpty(false);
-        }
-
-        // 유효성 검사 통과시 서버에 데이터 전달
-        if (!isTitleEmpty && !isTimeEmpty && !isIngrEmpty && !isStepsEmpty && !isMainImgEmpty &&!isStepImgEmpty) {
-
-            const formData = new FormData(); //서버에 전달될 폼데이터
-
-            console.log("파일즈", files);
-            console.log("파일즈길이", files.length);
-
-            //폼데이터에 이미지 파일 개별적으로 추가
-            for (let i = 0; i < files.length; i++) {
-                formData.append('files', files[i]);
-            }
-            //폼데이터에 레시피 데이터 객체(이미지 제외)로 추가
-            formData.append('requestBody', new Blob([JSON.stringify(recipe)], {
-                type: "application/json"
-            }))
-
-            console.log("폼데이터", formData.files);
-            // POST 요청 - 새 레시피 작성하기
-            if (pathname === "/recipes/new") {
-                axios({
-                    method: "post",
-                    url: '/api/recipes',
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                    data: formData,
-                })
-                .then((response) => {
-                    // 응답 처리
-                    console.log(response);
-                    // navigate(`/recipes/${response.data.id}`);
-                    formData.delete('files');
-                    formData.delete('requestBody');
-                    dispatch(clearRecipe());
-                    dispatch(clearImages());
-                    // alert창 대체
-                    dispatch(setNoticeToast({message: `레시피를 등록했어요!`}))
-                    navigate(`/recipes/${response.data.id}`)
-                })
-                .catch((error) => {
-                    // 예외 처리
-                    console.log(error.response);
-                    formData.delete('files');
-                    formData.delete('requestBody');
-                    // alert창 대체
-                    dispatch(setWarningToast({ message: `레시피 등록에 실패했어요ㅠㅠ`}))
-                })
-            }
-            // else로 patch 요청
-            // // PATCH 요청 - 레시피 수정하기
-            if (pathname === "/recipes/edit") {
-                axios({
-                    method: "patch",
-                    url: `/api/recipes/${recipeId}`,
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                    data: formData,
-                })
-                .then((response) => {
-                    // 응답 처리
-                    formData.delete('files');
-                    formData.delete('requestBody');
-                    dispatch(clearRecipe());
-                    dispatch(clearImages());
-                    // alert창 대체
-                    dispatch(setNoticeToast({message: "성공적으로 수정했어요!"}))
-                    navigate(`/recipes/${response.data.id}`)
-                })
-                .catch((error) => {
-                    // 예외 처리
-                    console.log(error.response);
-                    formData.delete('files');
-                    formData.delete('requestBody');
-                    // alert창 대체
-                    dispatch(setWarningToast({ message: `레시피를 수정할 수 없어요ㅠㅠ`}))
-                })
-            }
-        }
-        else {
-            // alert창 대체
-            dispatch(setWarningToast({ message: `입력하지 않은 칸이 있어요!`}))
-        }
     }
 
     // 작성된 모든 문자열이 띄어쓰기만으로 이루어진게 아닌지 확인하는 함수 (true는 글이 있다, false는 띄어쓰기 뿐이다)
