@@ -9,9 +9,8 @@ export default function ScrollToTop(props) {
     console.log(pathname)
 
     useEffect(() => {
-        console.log("여기!!!!!!!!!!!!", window)
         window.scrollTo({top: 0, left: 0, behavior: 'instant'});
     }, [pathname]);
 
-    return <>{props.children}</>;
+    return null;
 }

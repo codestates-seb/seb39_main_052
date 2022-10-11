@@ -125,7 +125,7 @@ function App() {
     <Div>
       <BrowserRouter>
         <GlobalStyle />
-        <ScrollToTop>
+        <ScrollToTop />
           <Gnb />
           <Routes>
             <Route path="/" element={<Home />} />
@@ -140,7 +140,6 @@ function App() {
             <Route path="/mypage/:id" element={<MyPage />} />
             <Route path="/admin" element={<AdminPanel />} />
           </Routes>
-        </ScrollToTop>
         {/* alert창 대신 */}
         {showToast && <CustomToast />}
         {/* 우측 하단에 항상 있는 레시피 작성하기 */}
