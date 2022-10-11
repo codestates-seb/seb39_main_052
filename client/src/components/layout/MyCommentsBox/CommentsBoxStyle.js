@@ -73,6 +73,7 @@ export const UserNameTag = styled.div`
   padding-left: 8px;
   margin-bottom: 8px;
   font-size: 12px;
+  width: 62px;
   //2줄 넘어가면 ellipsis ...으로 보여주기
   text-overflow: ellipsis;
   overflow: hidden;
