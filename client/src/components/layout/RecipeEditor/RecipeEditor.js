@@ -419,8 +419,9 @@ const RecipeEditor = () => {
                     {/* 작성페이지에서 취소시 메인페이지로 연결 */}
                     <GeneralButton className="medium gray" onClick={() => navigate("/")} >취소하기</GeneralButton>
                     <GeneralButton 
-                        className="medium" 
+                        className="medium disabled" 
                         // onClick={handleSaveClick}
+                        onClick={() => dispatch(setWarningToast({ message: `서비스 시연 기간이 종료되어 게시하기 버튼이 비활성화되었습니다.` }))}
                     >게시하기</GeneralButton>
                 </ButtonWrap>
             }
@@ -429,8 +430,9 @@ const RecipeEditor = () => {
                     {/* 수정페이지에서 취소시 레시피 상세 페이지로 연결 예정 */}
                     <GeneralButton className="medium gray" onClick={() => navigate(-1)}>취소하기</GeneralButton>
                     <GeneralButton 
-                        className="medium" 
+                        className="medium disabled" 
                         // onClick={handleSaveClick}
+                        onClick={() => dispatch(setWarningToast({ message: `서비스 시연 기간이 종료되어 수정하기 버튼이 비활성화되었습니다.` }))}
                     >수정하기</GeneralButton>
                 </ButtonWrap>
             }
