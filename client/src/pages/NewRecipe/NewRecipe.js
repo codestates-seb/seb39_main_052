@@ -1,3 +1,4 @@
+// 레시피 작성하기 기능 비활성화됨
 import { useEffect, useRef } from "react";
 import RecipeEditor from "../../components/layout/RecipeEditor/RecipeEditor";
 import { PageName } from "./NewRecipeStyle";
@@ -24,6 +25,9 @@ const NewRecipe = () => {
                 // alert창 대체
                 dispatch(setWarningToast({ message: "로그인이 필요한 서비스입니다" }));
                 navigate("/login");
+            }
+            else {
+                dispatch(setWarningToast({ message: `서비스 시연 기간이 종료되어 게시하기 버튼이 비활성화되었습니다.` }))
             }
         }
         enablePrevent(); // 페이지 나가는거 인식해서 경고창 띄우는 함수 실행
