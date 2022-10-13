@@ -84,6 +84,12 @@ const Button = styled.button`
   &.invisible {
     display: none;
   }
+  &.disabled {
+    cursor: default;
+    &:hover {
+      background-color: var(--fridge-500);
+    }
+  }
   &:hover {
     /* background-color: var(--fridge-700); */
     background-color: ${(props) =>
