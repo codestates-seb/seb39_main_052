@@ -1,3 +1,4 @@
+// 레시피 작성하기, 수정하기 기능 비활성화
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from "react-redux";
@@ -417,14 +418,20 @@ const RecipeEditor = () => {
                 <ButtonWrap>
                     {/* 작성페이지에서 취소시 메인페이지로 연결 */}
                     <GeneralButton className="medium gray" onClick={() => navigate("/")} >취소하기</GeneralButton>
-                    <GeneralButton className="medium" onClick={handleSaveClick}>게시하기</GeneralButton>
+                    <GeneralButton 
+                        className="medium" 
+                        // onClick={handleSaveClick}
+                    >게시하기</GeneralButton>
                 </ButtonWrap>
             }
             {pathname === "/recipes/edit" &&
                 <ButtonWrap>
                     {/* 수정페이지에서 취소시 레시피 상세 페이지로 연결 예정 */}
                     <GeneralButton className="medium gray" onClick={() => navigate(-1)}>취소하기</GeneralButton>
-                    <GeneralButton className="medium" onClick={handleSaveClick}>수정하기</GeneralButton>
+                    <GeneralButton 
+                        className="medium" 
+                        // onClick={handleSaveClick}
+                    >수정하기</GeneralButton>
                 </ButtonWrap>
             }
         </ Container>
