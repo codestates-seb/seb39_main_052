@@ -96,6 +96,7 @@ const Button = styled.button`
 
   &.disabled-btn {
     background-color: var(--gray-400);
+    cursor: none;
   }
 `;
 
