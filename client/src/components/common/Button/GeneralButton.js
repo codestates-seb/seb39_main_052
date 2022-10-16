@@ -49,7 +49,15 @@ const Button = styled.button`
   color: ${(props) => props.color || "var(--white)"};
   font-size: 16px;
   margin: ${(props) => props.margin || "20px 0 0 0"};
-  &.large {
+  &:disabled {
+    background-color: var(--gray-400);
+    cursor: none;
+    &:hover {
+      background-color: var(--gray-400);
+    }
+  }
+
+  disable &.large {
     margin-top: 0;
     height: 68px;
     width: 68px;
