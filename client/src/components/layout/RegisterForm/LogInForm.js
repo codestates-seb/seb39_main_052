@@ -18,7 +18,7 @@ const LogInForm = () => {
     register,
     handleSubmit,
     formState: { isSubmitting, errors, isDirty, isValid },
-  } = useForm();
+  } = useForm({ mode: "onChange" });
   //isValid: errors 객체 비어있으면 true
   //isDirty: form 양식 어떤 input이라도 건드렸으면 true?
 
@@ -288,9 +288,6 @@ const LogInForm = () => {
           })}
         ></input>
         {errors.email && <span>{errors.email.message}</span>}
-        {errors.email && errors.email.type === "required" && (
-          <span>이메일은 필수 입력이에요</span>
-        )}
         <label>비밀번호</label>
         <input
           id="password"
@@ -305,20 +302,12 @@ const LogInForm = () => {
             },
           })}
         ></input>
-        {/* {errors.password && <span>{errors.password.message}</span>} */}
-        {errors.password && errors.password.type === "minLength" && (
-          <span>{errors.password.message}</span>
-        )}
-        {errors.password && errors.password.type === "required" && (
-          <span>비밀번호는 필수 입력이에요</span>
-        )}
+        {errors.password && <span>{errors.password.message}</span>}
         <GeneralButton
-          // disabled={errors.email && errors.password}
-          // disabled={!(isValid && isDirty)}
           // className={!(isValid && isDirty) ? "disabled-btn" : ""} //isDirty 는 input 전체 클릭하기만 해도 true가 되어서 빈문자열일때도 disabled해제
-          // disabled={!isValid}
-          className={!isValid ? "disabled-btn" : ""}
-          // className={!isValid && "disabled-btn"}
+          disabled={!isValid || isSubmitting}
+          // className={!isValid ? "disabled-btn" : ""}
+          // className={!isValid && "disabled-btn"} //class로 해도 똑같이 작동
         >
           로그인
         </GeneralButton>
