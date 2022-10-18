@@ -17,7 +17,7 @@ const LogInForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting, errors, isDirty, isValid },
+    formState: { isSubmitting, errors, isValid },
   } = useForm({ mode: "onChange" });
   //isValid: errors 객체 비어있으면 true
   //isDirty: form 양식 어떤 input이라도 건드렸으면 true?
