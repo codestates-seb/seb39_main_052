@@ -314,8 +314,9 @@ const LogInForm = () => {
       </form>
       <GeneralButton
         onClick={onSubmitGuest}
-        backgroundColor="var(--gray-400)"
-        hoverBackgroundColor={"var(--gray-500)"}
+        // color={`var( --gray-600)`}
+        backgroundColor="var(--mint-500)"
+        hoverBackgroundColor={"var(--mint-600)"}
       >
         게스트 로그인
       </GeneralButton>

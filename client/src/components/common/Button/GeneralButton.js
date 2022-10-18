@@ -57,7 +57,7 @@ const Button = styled.button`
     }
   }
 
-  disable &.large {
+  &.large {
     margin-top: 0;
     height: 68px;
     width: 68px;
