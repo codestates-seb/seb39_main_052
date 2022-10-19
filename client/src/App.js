@@ -44,13 +44,13 @@ function App() {
   // alert 대신 사용되는 toast 관련 상태
   const showToast = useSelector((state) => {
     return state.toast.showToast;
-  })
+  });
 
   // Floating Action의 위치 조정을 위해 스크롤을 인식하는 함수
   useEffect(() => {
     const handleScroll = (e) => {
       const bottom =
-        ((window.innerHeight + window.scrollY) >= document.body.offsetHeight);
+        window.innerHeight + window.scrollY >= document.body.offsetHeight;
       if (bottom) {
         setIsBottom(true);
       } else {
@@ -58,10 +58,10 @@ function App() {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
@@ -126,20 +126,20 @@ function App() {
       <BrowserRouter>
         <GlobalStyle />
         <ScrollToTop />
-          <Gnb />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<LogIn />} />
-            <Route path="/signup" element={<SignUpForm />} />
-            <Route path="/recipes/new" element={<NewRecipe />} />
-            <Route path="/auth/redirect" element={<OAuth2RedirectHandler />} />
-            <Route path="/recipes/edit" element={<EditRecipe />} />
-            <Route path="/recipes/:id" element={<RecipeDetail />} />
-            <Route path="/search" element={<FridgeDigging />} />
-            <Route path="/myfridge" element={<MyFridge />} />
-            <Route path="/mypage/:id" element={<MyPage />} />
-            <Route path="/admin" element={<AdminPanel />} />
-          </Routes>
+        <Gnb />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<LogIn />} />
+          <Route path="/signup" element={<SignUpForm />} />
+          <Route path="/recipes/new" element={<NewRecipe />} />
+          <Route path="/auth/redirect" element={<OAuth2RedirectHandler />} />
+          <Route path="/recipes/edit" element={<EditRecipe />} />
+          <Route path="/recipes/:id" element={<RecipeDetail />} />
+          <Route path="/search" element={<FridgeDigging />} />
+          <Route path="/myfridge" element={<MyFridge />} />
+          <Route path="/mypage/:id" element={<MyPage />} />
+          <Route path="/admin" element={<AdminPanel />} />
+        </Routes>
         {/* alert창 대신 */}
         {showToast && <CustomToast />}
         {/* 우측 하단에 항상 있는 레시피 작성하기 */}
@@ -154,7 +154,7 @@ function App() {
 const Div = styled.div`
   width: 100vw;
   height: fit-content;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */ //gnb 상위요소인데 부모요소에 스크롤 제한을 걸어두면 gnb sticky가 안되어서..
 `;
 
 export default App;
