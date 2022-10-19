@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import GeneralButton from "../../common/Button/GeneralButton";
 import { LogInFormContainer, SignUpDiv } from "./LogInFormStyle";
@@ -18,8 +17,8 @@ const LogInForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting, errors, isDirty, isValid },
-  } = useForm();
+    formState: { isSubmitting, errors, isValid },
+  } = useForm({ mode: "onChange" });
   //isValid: errors 객체 비어있으면 true
   //isDirty: form 양식 어떤 input이라도 건드렸으면 true?
 
@@ -45,6 +44,10 @@ const LogInForm = () => {
 
   const onSubmit = (data) => {
     // console.log(data); //{email: 'test1@email.com', password: 'aaaa1111'}
+    // if (data.email === "" && data.password === "") {
+    //   alert("아이디랑 비밀번호를 입력해주세요");
+    // } //이렇게만 하면 빈 상태로 로그인 버튼 눌렀을떄 앨럿창 뜨고 서버 통신도 감
+
     //로그인 만료전 연장
     const onSilentRefresh = () => {
       axios
@@ -94,7 +97,7 @@ const LogInForm = () => {
           getUserInfo(response.data.memberId);
 
           // alert창 대체
-          dispatch(setNoticeToast({ message: `로그인 성공` }))
+          dispatch(setNoticeToast({ message: `로그인 성공` }));
           navigate("/");
           //액세스토큰 만료되기 전 로그인 연장
           setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
@@ -105,10 +108,14 @@ const LogInForm = () => {
         console.log(error);
         if (error.response.status === 401) {
           // alert창 대체
-          dispatch(setWarningToast({ message: `아이디 혹은 비밀번호가 일치하지 않아요\n` }))
+          dispatch(
+            setWarningToast({
+              message: `아이디 혹은 비밀번호가 일치하지 않아요\n`,
+            })
+          );
         } else {
           // alert창 대체
-          dispatch(setWarningToast({ message: error.message }))
+          dispatch(setWarningToast({ message: error.message }));
         }
       });
     //=============================
@@ -219,7 +226,7 @@ const LogInForm = () => {
           getUserInfo(response.data.memberId);
 
           // alert창 대체
-          dispatch(setNoticeToast({ message: `게스트 로그인 성공` }))
+          dispatch(setNoticeToast({ message: `게스트 로그인 성공` }));
           navigate("/");
           //액세스토큰 만료되기 전 로그인 연장
           setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
@@ -230,10 +237,12 @@ const LogInForm = () => {
         console.log(error);
         if (error.response.status === 401) {
           // alert창 대체
-          dispatch(setWarningToast({ message: `게스트로 로그인할 수 없어요ㅠㅠ\n` }))
+          dispatch(
+            setWarningToast({ message: `게스트로 로그인할 수 없어요ㅠㅠ\n` })
+          );
         } else {
           // alert창 대체
-          dispatch(setWarningToast({ message: error.message }))
+          dispatch(setWarningToast({ message: error.message }));
         }
       });
 
@@ -270,9 +279,8 @@ const LogInForm = () => {
           type="email"
           name="email"
           placeholder="이메일을 입력해주세요"
-          // value="test@email.com"
           {...register("email", {
-            // required: true,
+            required: true,
             pattern: {
               value: /\S+@\S+\.\S+/,
               message: "올바른 이메일 형식이 아니에요",
@@ -280,16 +288,14 @@ const LogInForm = () => {
           })}
         ></input>
         {errors.email && <span>{errors.email.message}</span>}
-
         <label>비밀번호</label>
         <input
           id="password"
           type="password"
           name="password"
           placeholder="비밀번호를 입력해주세요"
-          // value="test1111"
           {...register("password", {
-            // required: true,
+            required: true,
             minLength: {
               value: 8,
               message: "비밀번호는 8자 이상이에요",
@@ -298,19 +304,19 @@ const LogInForm = () => {
         ></input>
         {errors.password && <span>{errors.password.message}</span>}
         <GeneralButton
-          // disabled={errors.email && errors.password}
-          // disabled={!(isValid && isDirty)}
           // className={!(isValid && isDirty) ? "disabled-btn" : ""} //isDirty 는 input 전체 클릭하기만 해도 true가 되어서 빈문자열일때도 disabled해제
-          disabled={!isValid}
+          disabled={!isValid || isSubmitting}
           // className={!isValid ? "disabled-btn" : ""}
+          // className={!isValid && "disabled-btn"} //class로 해도 똑같이 작동
         >
           로그인
         </GeneralButton>
       </form>
       <GeneralButton
         onClick={onSubmitGuest}
-        backgroundColor="var(--gray-400)"
-        hoverBackgroundColor={"var(--gray-500)"}
+        // color={`var( --gray-600)`}
+        backgroundColor="var(--mint-500)"
+        hoverBackgroundColor={"var(--mint-600)"}
       >
         게스트 로그인
       </GeneralButton>

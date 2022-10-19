@@ -28,7 +28,7 @@ const LogInContainer = styled.div`
   align-items: center;
   margin-top: 32px;
   width: 100vw;
-  height: 70vh;
+  height: 80vh;
 `;
 
 export default LogIn;
