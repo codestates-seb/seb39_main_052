@@ -42,7 +42,7 @@ const SignUpForm = () => {
     register,
     handleSubmit,
     formState: { isSubmitting, errors, isValid },
-  } = useForm({ resolver: yupResolver(formSchema) });
+  } = useForm({ resolver: yupResolver(formSchema), mode: "onChange" });
 
   const onSubmit = (data) => {
     console.log(data); // {name: '나나', email: 'test@email.com', password: 'aaaa1111', passwordConfirm: 'aaaa1111'}
@@ -58,14 +58,14 @@ const SignUpForm = () => {
         //회원가입 요청 성공시
         if (response.status === 201) {
           // alert창 대체
-          dispatch(setNoticeToast({ message: `회원가입 성공` }))
+          dispatch(setNoticeToast({ message: `회원가입 성공` }));
           navigate("/login");
         }
       })
       .catch((error) => {
         console.log(error);
         // alert창 대체
-        dispatch(setWarningToast({ message: error.message }))
+        dispatch(setWarningToast({ message: error.message }));
         //서버에서 예외처리 구현하면 실패 코드 응답에 따라 분기 나누기. 이미 가입된 회원입니다.
       });
   };
@@ -115,7 +115,9 @@ const SignUpForm = () => {
           <span>{errors.passwordConfirm.message}</span>
         )}
 
-        <GeneralButton>회원가입</GeneralButton>
+        <GeneralButton disabled={!isValid || isSubmitting}>
+          회원가입
+        </GeneralButton>
       </form>
     </SignUpFormContainer>
   );
