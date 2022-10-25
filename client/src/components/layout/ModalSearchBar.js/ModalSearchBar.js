@@ -48,7 +48,11 @@ const ModalSearchBar = () => {
           onChange={handleInput}
           ref={keywordInput}
         />
-        <StyledFontAwesomeIcon icon={faXmarkCircle} onClick={handleXButton} />
+        <StyledFontAwesomeIcon
+          icon={faXmarkCircle}
+          onClick={handleXButton}
+          style={{ cursor: "pointer" }}
+        />
       </SearchBar>
     </>
   );
