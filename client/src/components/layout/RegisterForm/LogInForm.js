@@ -44,35 +44,10 @@ const LogInForm = () => {
 
   const onSubmit = (data) => {
     // console.log(data); //{email: 'test1@email.com', password: 'aaaa1111'}
-    // if (data.email === "" && data.password === "") {
-    //   alert("아이디랑 비밀번호를 입력해주세요");
-    // } //이렇게만 하면 빈 상태로 로그인 버튼 눌렀을떄 앨럿창 뜨고 서버 통신도 감
 
-    //로그인 만료전 연장
-    const onSilentRefresh = () => {
-      axios
-        .post("/api/auth/refresh")
-        .then((response) => {
-          const ACCESS_TOKEN = response.headers["access-token"]; //eyJ0eX.. 서버에서 response header에 싣어보내는 토큰값
-          if (response.status === 200) {
-            axios.defaults.headers.common[
-              "Authorization"
-            ] = `Bearer ${ACCESS_TOKEN}`; //요청헤더에 액세스 토큰 설정
-
-            console.log("ACCESS_TOKEN 재발급", ACCESS_TOKEN);
-
-            //refesh로 새로받아온 액세스 토큰 리덕스에도 저장하기
-            dispatch(setLoggedIn({ userToken: ACCESS_TOKEN }));
-            //액세스토큰 만료되기 1분 전 로그인 연장
-            setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
-            // setTimeout(onSilentRefresh, 3000); //3초로 실험
-          }
-        })
-        .catch((error) => console.log(error, "silent refresh 에러"));
-    };
-
+    //기존 일반 게스트 로그인 분기 나누기 이전 일반 로그인 코드
     //=======================
-    //로그인 요청. 액세스 토큰을 요청헤더에 설정
+    // 로그인 요청. 액세스 토큰을 요청헤더에 설정
     axios
       .post("/api/login", data)
       .then((response) => {
@@ -119,6 +94,28 @@ const LogInForm = () => {
         }
       });
     //=============================
+    //로그인 만료전 연장
+    const onSilentRefresh = () => {
+      axios
+        .post("/api/auth/refresh")
+        .then((response) => {
+          const ACCESS_TOKEN = response.headers["access-token"]; //eyJ0eX.. 서버에서 response header에 싣어보내는 토큰값
+          if (response.status === 200) {
+            axios.defaults.headers.common[
+              "Authorization"
+            ] = `Bearer ${ACCESS_TOKEN}`; //요청헤더에 액세스 토큰 설정
+
+            console.log("ACCESS_TOKEN 재발급", ACCESS_TOKEN);
+
+            //refesh로 새로받아온 액세스 토큰 리덕스에도 저장하기
+            dispatch(setLoggedIn({ userToken: ACCESS_TOKEN }));
+            //액세스토큰 만료되기 1분 전 로그인 연장
+            setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
+            // setTimeout(onSilentRefresh, 3000); //3초로 실험
+          }
+        })
+        .catch((error) => console.log(error, "silent refresh 에러"));
+    };
 
     // refresh 토큰없이 액세스 토큰만 받아오는 기존코드
     // accessToken을 로컬스토리지, 쿠키에 저장하지 않고 API 요청하는 콜마다 request 헤더에 담아 보내주는 방법. 요청헤더에 토큰 안담기는 문제 해결!
@@ -137,29 +134,6 @@ const LogInForm = () => {
     //       // navigate("/");
     //     }
     //   })
-
-    //액세스 토큰 로컬스토리지에 저장
-    // axios
-    //   .post("/api/login", data)
-    //   .then((response) => {
-    //     console.log(response);
-    //     if (response.status === 200) {
-    //       const ACCESS_TOKEN = response.headers["access-token"]; //eyJ0eX..
-    //       localStorage.setItem("ACEESS_TOKEN", ACCESS_TOKEN); //로컬스토리지에 토큰 저장
-    //       //요청 헤더에 토큰 넣어주기
-
-    //       setIsLoggedIn(true);
-    //       alert("로그인 성공");
-    //     }
-    //   })
-    // .catch((error) => {
-    //   console.log(error);
-    //   if (error.response.status === 401) {
-    //     alert("아이디 혹은 비밀번호가 일치하지 않아요\n" + error.message);
-    //   } else {
-    //     alert(error.message);
-    //   }
-    // })
   }; //onSubmit 함수끝
 
   //로그인 요청시 서버에서 보내주는 memberId로 사용자 정보를 조회
@@ -192,15 +166,6 @@ const LogInForm = () => {
       .catch((error) => console.log("겟유저인포 fail", error));
   };
 
-  //로그인 상태 true일떄만 유저 정보 불러오기 - 안됨
-  // useEffect(() => {
-  // if (isLoggedIn) {
-  //   getUserInfo();
-  //   console.log(memberId);
-  // }
-  //   console.log(isLoggedIn);
-  // }, [isLoggedIn]);
-
   //게스트 로그인
   const onSubmitGuest = () => {
     axios
@@ -212,12 +177,6 @@ const LogInForm = () => {
             "Authorization"
           ] = `Bearer ${ACCESS_TOKEN}`; //요청헤더에 액세스 토큰 설정
           console.log("게스트 ACCESS_TOKEN", ACCESS_TOKEN);
-          //로그인 성공 상태 리덕스 저장소로 보내기
-          // dispatch(setLoggedIn({ userEmail: data.email }));
-          // console.log(response.data); //서버에서 응답바디로 주는것 {memberId: 2}
-
-          //userSlice에 로그인 상태 true 저장
-          dispatch(setLoggedIn({})); //{isLoggedIn: true, userId: null, userName: null, userProfileImgPath: null}
 
           //액세스 토큰 리덕스에도 저장하기
           dispatch(setLoggedIn({ userToken: ACCESS_TOKEN }));
@@ -275,6 +234,7 @@ const LogInForm = () => {
         <label>이메일</label>
 
         <input
+          autoFocus
           id="email"
           type="email"
           name="email"
@@ -304,6 +264,7 @@ const LogInForm = () => {
         ></input>
         {errors.password && <span>{errors.password.message}</span>}
         <GeneralButton
+          // name="normal"
           // className={!(isValid && isDirty) ? "disabled-btn" : ""} //isDirty 는 input 전체 클릭하기만 해도 true가 되어서 빈문자열일때도 disabled해제
           disabled={!isValid || isSubmitting}
           // className={!isValid ? "disabled-btn" : ""}
@@ -311,15 +272,17 @@ const LogInForm = () => {
         >
           로그인
         </GeneralButton>
+        <GeneralButton
+          // name="guest"
+          onClick={onSubmitGuest}
+          // color={`var( --gray-600)`}
+          backgroundColor="var(--mint-500)"
+          hoverBackgroundColor={"var(--mint-600)"}
+        >
+          게스트 로그인
+        </GeneralButton>
       </form>
-      <GeneralButton
-        onClick={onSubmitGuest}
-        // color={`var( --gray-600)`}
-        backgroundColor="var(--mint-500)"
-        hoverBackgroundColor={"var(--mint-600)"}
-      >
-        게스트 로그인
-      </GeneralButton>
+
       <SignUpDiv>
         {/* <span>오늘 뭐먹을지 고민중인가요?</span>
         <span>
