@@ -44,6 +44,7 @@ const ModalSearchBar = () => {
           onClick={() => keywordInput.current.focus()}
         />
         <SearchInput
+          autoFocus
           value={searchValue}
           onChange={handleInput}
           ref={keywordInput}
