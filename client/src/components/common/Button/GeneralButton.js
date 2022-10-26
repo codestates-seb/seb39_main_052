@@ -12,6 +12,7 @@ const GeneralButton = ({
   hoverColor,
   onClick,
   margin,
+  name,
 }) => {
   return (
     <Button
@@ -25,6 +26,7 @@ const GeneralButton = ({
       hoverColor={hoverColor}
       onClick={onClick}
       margin={margin}
+      name={name}
     >
       {" "}
       {children}{" "}
@@ -50,10 +52,10 @@ const Button = styled.button`
   font-size: 16px;
   margin: ${(props) => props.margin || "20px 0 0 0"};
   &:disabled {
-    background-color: var(--gray-400);
+    background-color: var(--gray-300);
     cursor: none;
     &:hover {
-      background-color: var(--gray-400);
+      background-color: var(--gray-300);
     }
   }
 

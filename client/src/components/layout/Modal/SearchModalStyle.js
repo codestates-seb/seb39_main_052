@@ -50,9 +50,10 @@ export const NoticeMsg = styled.div`
   }
 `;
 export const ModalSearchBarWrapper = styled.div`
-  padding: 16px;
-  margin-left: 8px; //레시피 카드랑 시작점 맞추기
-  padding-right: 40px; //레시피 카드랑 끝나는 라인 맞추기
+  /* padding: 16px; */
+  /* margin-left: 8px; //레시피 카드랑 시작점 맞추기 */
+  /* padding-right: 40px; //레시피 카드랑 끝나는 라인 맞추기 */
+  margin: 0 40px 16px 24px;
 
   @media ${({ theme }) => theme.device.mobile} {
     //모바일 화면에서 서치바 위치
