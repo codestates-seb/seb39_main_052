@@ -272,17 +272,16 @@ const LogInForm = () => {
         >
           로그인
         </GeneralButton>
-        <GeneralButton
-          // name="guest"
-          onClick={onSubmitGuest}
-          // color={`var( --gray-600)`}
-          backgroundColor="var(--mint-500)"
-          hoverBackgroundColor={"var(--mint-600)"}
-        >
-          게스트 로그인
-        </GeneralButton>
       </form>
-
+      <GeneralButton
+        // name="guest"
+        onClick={onSubmitGuest}
+        // color={`var( --gray-600)`}
+        backgroundColor="var(--mint-500)"
+        hoverBackgroundColor={"var(--mint-600)"}
+      >
+        게스트 로그인
+      </GeneralButton>
       <SignUpDiv>
         {/* <span>오늘 뭐먹을지 고민중인가요?</span>
         <span>
