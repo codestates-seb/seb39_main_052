@@ -25,10 +25,9 @@ const MyRecipeLikedBox = ({ timeSince }) => {
   //내가 좋아한 레시피 목록 조회하기
   const getMyLikedRecipeList = async () => {
     try {
-      const { data } = await axios.get(
-        `/api/recipes/favorite?page=${page}`
-        // {headers: { Authorization: `Bearer ${userToken}` },}
-      );
+      const { data } = await axios.get(`/api/recipes/favorite?page=${page}`, {
+        headers: { Authorization: `Bearer ${userToken}` },
+      });
       console.log(data);
       setTotal(data.pageInfo.totalElements);
       setTotalPages(data.pageInfo.totalPages);

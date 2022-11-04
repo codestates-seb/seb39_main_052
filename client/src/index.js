@@ -26,7 +26,7 @@ export let persistor = persistStore(store);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 // disable all console.log
-// console.log = function() {}
+console.log = function () {};
 
 root.render(
   <React.StrictMode>
