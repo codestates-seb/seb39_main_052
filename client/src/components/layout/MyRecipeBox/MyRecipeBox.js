@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadRecipe } from "../../../features/recipeSlice";
 import GeneralButton from "../../common/Button/GeneralButton";
 import { setWarningToast } from "../../../features/toastSlice";
+import { instance } from "../../../api/config";
 
 const MyRecipeBox = ({ timeSince }) => {
   const [myRecipeList, setMyRecipeList] = useState([]);
@@ -53,9 +54,10 @@ const MyRecipeBox = ({ timeSince }) => {
   const getMyRecipeList = async () => {
     try {
       const { data } = await axios.get(
-        `/api/recipes/my?page=${page}&sort=${sortMode}`,
-        { headers: { Authorization: `Bearer ${userToken}` } }
+        `/api/recipes/my?page=${page}&sort=${sortMode}`
+        // { headers: { Authorization: `Bearer ${userToken}` } }
       );
+
       console.log(data);
       // console.log("sort모드?", sortMode);
       setTotal(data.pageInfo.totalElements);
@@ -63,7 +65,7 @@ const MyRecipeBox = ({ timeSince }) => {
       setMyRecipeList([...data.data]);
     } catch (err) {
       // alert 창 대체
-      dispatch(setWarningToast({ message: err }))
+      dispatch(setWarningToast({ message: err }));
     }
   };
 
@@ -76,7 +78,7 @@ const MyRecipeBox = ({ timeSince }) => {
   //     getMyRecipeList();
   //     setIsUpdated(false); //명시적으로 넣어주어야 RecipeFrame 컴포넌트에서 처음 삭제하고 setIsUpdated 상태 true가 된 이후에 기본 상태 false로 돌아간다.
   //   }
-  // }, [page, isUpdated, sortMode, userToken]);
+  // }, [userToken, page, isUpdated, sortMode]);
 
   useEffect(() => {
     // setTimeout(getMyRecipeList, 1000);

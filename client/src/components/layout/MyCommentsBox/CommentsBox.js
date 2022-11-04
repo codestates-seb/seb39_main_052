@@ -38,16 +38,17 @@ const CommentsBox = ({ timeSince }) => {
   //서버에서 받은 댓글 리스트 조회 통신 받아오기
   const getCommentsList = async () => {
     try {
-      const { data } = await axios.get(`/api/comments/received?page=${page}`, {
-        headers: { Authorization: `Bearer ${userToken}` },
-      }); //axios promise객체 찍어보면 {data: {…}, status: 200, statusText: 'OK', headers: {…}, config: {…}, …} 나옴. response body에 해당되는 data만 구조분해할당
+      const { data } = await axios.get(
+        `/api/comments/received?page=${page}`
+        // { headers: { Authorization: `Bearer ${userToken}` },}
+      ); //axios promise객체 찍어보면 {data: {…}, status: 200, statusText: 'OK', headers: {…}, config: {…}, …} 나옴. response body에 해당되는 data만 구조분해할당
       console.log(data); //{data: Array(4), pageInfo: {…}}
       setTotal(data.pageInfo.totalElements);
       setTotalPages(data.pageInfo.totalPages);
       setCommentsList([...data.data]); //[{…}, {…}, {…}, {…}]
     } catch (err) {
       // alert 창 대체
-      dispatch(setWarningToast({ message: err }))
+      dispatch(setWarningToast({ message: err }));
     }
   };
   // console.log("서버에서받아온 댓글리스트", commentsList);
