@@ -16,12 +16,17 @@ import store from "./store";
 //redux persist 관련
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
+
+//axios interceptors config 관련
+// import { injectStore } from "./api/config";
+// injectStore(store);
+
 export let persistor = persistStore(store);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 // disable all console.log
-console.log = function() {}
+// console.log = function() {}
 
 root.render(
   <React.StrictMode>
