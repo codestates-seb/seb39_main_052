@@ -1,31 +1,42 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import GlobalStyle from "./GlobalStyle";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 
+import Gnb from "./components/common/GNB/Gnb";
 import SignUpForm from "./components/layout/RegisterForm/SignUpForm";
-import NewRecipe from "./pages/NewRecipe/NewRecipe";
-import Home from "./pages/Home/Home";
 import LogIn from "./pages/LogIn/LogIn";
+import NewRecipe from "./pages/NewRecipe/NewRecipe";
 import OAuth2RedirectHandler from "./components/layout/RegisterForm/OAuth2RedirectHandler";
 import EditRecipe from "./pages/EditRecipe/EditRecipe";
-import RecipeDetail from "./pages/RecipeDetail/RecipeDetail";
+
+// import Home from "./pages/Home/Home";
+// import RecipeDetail from "./pages/RecipeDetail/RecipeDetail";
+// import FridgeDigging from "./pages/FridgeDigging/FridgeDigging";
+// import MyFridge from "./pages/MyFridge/MyFridge";
+// import MyPage from "./pages/MyPage/MyPage";
+// import AdminPanel from "./components/layout/Admin/AdminPanel";
+
 import FloatingAction from "./components/layout/FloatingAction/FloatingAction";
-import Gnb from "./components/common/GNB/Gnb";
-import FridgeDigging from "./pages/FridgeDigging/FridgeDigging";
-import MyFridge from "./pages/MyFridge/MyFridge";
-import MyPage from "./pages/MyPage/MyPage";
 import axios from "axios";
 import { setLoggedIn } from "./features/userSlice";
 import Footer from "./components/layout/Footer/Footer";
 
 import { useRef } from "react";
-import AdminPanel from "./components/layout/Admin/AdminPanel";
 import CustomToast from "./components/common/CustomToast/CustomToast";
 
 // 페이지 이동마다 스크롤이 상단에 올 수 있도록 하는 컴포넌트
 import ScrollToTop from "./components/others/ScrollToTop";
+import Loading from "./components/common/Loading/Loading";
+
+//React Lazy로 변환
+const Home = lazy(() => import("./pages/Home/Home"));
+const RecipeDetail = lazy(() => import("./pages/RecipeDetail/RecipeDetail"));
+const FridgeDigging = lazy(() => import("./pages/FridgeDigging/FridgeDigging"));
+const MyFridge = lazy(() => import("./pages/MyFridge/MyFridge"));
+const MyPage = lazy(() => import("./pages/MyPage/MyPage"));
+const AdminPanel = lazy(() => import("./components/layout/Admin/AdminPanel"));
 
 function App() {
   const [isBottom, setIsBottom] = useState(false); // 스크롤이 끝까지 내려갔는지 여부를 담은 상태
@@ -119,19 +130,21 @@ function App() {
         <GlobalStyle />
         <ScrollToTop />
         <Gnb />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<LogIn />} />
-          <Route path="/signup" element={<SignUpForm />} />
-          <Route path="/recipes/new" element={<NewRecipe />} />
-          <Route path="/auth/redirect" element={<OAuth2RedirectHandler />} />
-          <Route path="/recipes/edit" element={<EditRecipe />} />
-          <Route path="/recipes/:id" element={<RecipeDetail />} />
-          <Route path="/search" element={<FridgeDigging />} />
-          <Route path="/myfridge" element={<MyFridge />} />
-          <Route path="/mypage/:id" element={<MyPage />} />
-          <Route path="/admin" element={<AdminPanel />} />
-        </Routes>
+        <Suspense fallback={<Loading />}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<LogIn />} />
+            <Route path="/signup" element={<SignUpForm />} />
+            <Route path="/recipes/new" element={<NewRecipe />} />
+            <Route path="/auth/redirect" element={<OAuth2RedirectHandler />} />
+            <Route path="/recipes/edit" element={<EditRecipe />} />
+            <Route path="/recipes/:id" element={<RecipeDetail />} />
+            <Route path="/search" element={<FridgeDigging />} />
+            <Route path="/myfridge" element={<MyFridge />} />
+            <Route path="/mypage/:id" element={<MyPage />} />
+            <Route path="/admin" element={<AdminPanel />} />
+          </Routes>
+        </Suspense>
         {/* alert창 대신 */}
         {showToast && <CustomToast />}
         {/* 우측 하단에 항상 있는 레시피 작성하기 */}
