@@ -39,7 +39,7 @@ const CommentsBox = ({ timeSince }) => {
   const getCommentsList = async () => {
     try {
       const { data } = await axios.get(`/api/comments/received?page=${page}`, {
-        headers: { Authorization: `Bearer ${userToken}` },
+        // headers: { Authorization: `Bearer ${userToken}` },
       }); //axios promise객체 찍어보면 {data: {…}, status: 200, statusText: 'OK', headers: {…}, config: {…}, …} 나옴. response body에 해당되는 data만 구조분해할당
       console.log(data); //{data: Array(4), pageInfo: {…}}
       setTotal(data.pageInfo.totalElements);
