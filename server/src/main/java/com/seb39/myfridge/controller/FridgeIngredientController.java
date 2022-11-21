@@ -1,4 +1,4 @@
-package com.seb39.myfridge.domain.fridge.controller;
+package com.seb39.myfridge.controller;
 
 import com.seb39.myfridge.domain.auth.annotation.AuthMemberId;
 import com.seb39.myfridge.domain.fridge.dto.FridgeDto;

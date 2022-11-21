@@ -21,7 +21,7 @@ import com.seb39.myfridge.domain.recipe.enums.RecipeSort;
 import com.seb39.myfridge.domain.recipe.mapper.RecipeMapper;
 import com.seb39.myfridge.domain.recipe.repository.RecipeRepository;
 import com.seb39.myfridge.domain.recipe.service.RecipeService;
-import com.seb39.myfridge.domain.step.entity.Step;
+import com.seb39.myfridge.domain.recipe.entity.Step;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

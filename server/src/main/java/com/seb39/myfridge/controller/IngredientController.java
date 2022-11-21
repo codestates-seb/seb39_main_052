@@ -1,4 +1,4 @@
-package com.seb39.myfridge.domain.ingredient.controller;
+package com.seb39.myfridge.controller;
 
 import com.seb39.myfridge.domain.ingredient.service.IngredientService;
 import com.seb39.myfridge.global.dto.SingleResponseDto;

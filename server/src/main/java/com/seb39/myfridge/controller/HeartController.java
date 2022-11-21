@@ -1,4 +1,4 @@
-package com.seb39.myfridge.domain.heart.controller;
+package com.seb39.myfridge.controller;
 
 import com.seb39.myfridge.domain.auth.annotation.AuthMemberId;
 import com.seb39.myfridge.domain.heart.dto.HeartResponse;

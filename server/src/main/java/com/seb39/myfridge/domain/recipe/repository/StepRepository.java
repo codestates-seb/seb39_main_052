@@ -1,6 +1,6 @@
-package com.seb39.myfridge.domain.step.repository;
+package com.seb39.myfridge.domain.recipe.repository;
 
-import com.seb39.myfridge.domain.step.entity.Step;
+import com.seb39.myfridge.domain.recipe.entity.Step;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

@@ -11,21 +11,23 @@ import java.io.InputStream;
 
 @RequiredArgsConstructor
 @Component
-public class AWSS3UploadService implements UploadService{
+public class AWSS3UploadService implements UploadService {
 
     private final AmazonS3 amazonS3;
     private final S3Component component;
 
     @Override
     public void uploadFile(InputStream inputStream, ObjectMetadata objectMetadata, String fileName) {
-
-        amazonS3.putObject(new PutObjectRequest(component.getBucket(), fileName, inputStream, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
+        amazonS3
+                .putObject(new PutObjectRequest(component.getBucket(), fileName, inputStream, objectMetadata)
+                        .withCannedAcl(CannedAccessControlList.PublicRead));
     }
 
     @Override
     public String getFileUrl(String fileName) {
         return amazonS3.getUrl(component.getBucket(), fileName).toString();
     }
+
     @Override
     public void deleteFile(String fileName) {
         String s3FileName = getFileName(fileName);

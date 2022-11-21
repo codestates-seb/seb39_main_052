@@ -1,4 +1,4 @@
-package com.seb39.myfridge.domain.recipe.controller;
+package com.seb39.myfridge.controller;
 
 
 import com.seb39.myfridge.domain.recipe.dto.RecipeSearch;
@@ -16,7 +16,7 @@ import com.seb39.myfridge.domain.auth.annotation.AuthMemberId;
 import com.seb39.myfridge.domain.recipe.dto.MyRecipeDto;
 import com.seb39.myfridge.domain.recipe.dto.RecipeDto;
 import com.seb39.myfridge.domain.recipe.dto.RecipeRecommendDto;
-import com.seb39.myfridge.domain.step.entity.Step;
+import com.seb39.myfridge.domain.recipe.entity.Step;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;

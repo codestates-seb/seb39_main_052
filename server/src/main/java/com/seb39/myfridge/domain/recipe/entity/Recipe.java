@@ -6,7 +6,6 @@ import com.seb39.myfridge.global.BaseTimeEntity;
 import com.seb39.myfridge.domain.image.entity.Image;
 import com.seb39.myfridge.domain.ingredient.entity.RecipeIngredient;
 import com.seb39.myfridge.domain.member.entity.Member;
-import com.seb39.myfridge.domain.step.entity.Step;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

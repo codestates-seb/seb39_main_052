@@ -6,7 +6,7 @@ import com.seb39.myfridge.domain.ingredient.entity.Ingredient;
 import com.seb39.myfridge.domain.ingredient.entity.RecipeIngredient;
 import com.seb39.myfridge.domain.member.dto.MemberDto;
 import com.seb39.myfridge.domain.recipe.dto.RecipeDto;
-import com.seb39.myfridge.domain.step.entity.Step;
+import com.seb39.myfridge.domain.recipe.entity.Step;
 import org.mapstruct.Mapper;
 
 import java.util.ArrayList;

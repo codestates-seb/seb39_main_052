@@ -1,4 +1,4 @@
-package com.seb39.myfridge.domain.step.entity;
+package com.seb39.myfridge.domain.recipe.entity;
 
 import com.seb39.myfridge.domain.image.entity.Image;
 import com.seb39.myfridge.domain.recipe.entity.Recipe;
@@ -25,8 +25,6 @@ public class Step {
     @Lob
     private String content;
 
-//    private String imagePath;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
@@ -48,9 +46,6 @@ public class Step {
                 '}';
     }
 
-    /**
-     * image
-     */
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "image_id")
     private Image image;

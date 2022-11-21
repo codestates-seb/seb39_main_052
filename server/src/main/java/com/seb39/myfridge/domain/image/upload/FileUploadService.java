@@ -4,7 +4,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.seb39.myfridge.domain.image.entity.Image;
 import com.seb39.myfridge.domain.image.repository.ImageRepository;
 import com.seb39.myfridge.domain.recipe.entity.Recipe;
-import com.seb39.myfridge.domain.step.entity.Step;
+import com.seb39.myfridge.domain.recipe.entity.Step;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

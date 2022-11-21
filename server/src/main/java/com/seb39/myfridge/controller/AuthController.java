@@ -1,5 +1,6 @@
-package com.seb39.myfridge.domain.auth.controller;
+package com.seb39.myfridge.controller;
 
+import com.seb39.myfridge.domain.auth.annotation.AuthMemberId;
 import com.seb39.myfridge.domain.auth.domain.AuthenticationToken;
 import com.seb39.myfridge.domain.auth.dto.AuthResponse;
 import com.seb39.myfridge.domain.auth.dto.SignUpRequest;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,5 +39,11 @@ public class AuthController {
         authenticationTokenService.refresh(token);
         AuthenticationTokenUtils.addTokenInResponse(response,token);
         return ResponseEntity.ok(AuthResponse.success());
+    }
+
+    @GetMapping("/api/authtest")
+    @Secured("ROLE_USER")
+    public String authTest(@AuthMemberId Long memberId){
+        return ""+memberId;
     }
 }

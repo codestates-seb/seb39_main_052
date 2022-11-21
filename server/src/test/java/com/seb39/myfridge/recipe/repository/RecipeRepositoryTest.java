@@ -20,8 +20,7 @@ import com.seb39.myfridge.domain.recipe.dto.RecipeRecommendDto;
 import com.seb39.myfridge.domain.recipe.dto.RecipeSearch;
 import com.seb39.myfridge.domain.recipe.entity.Recipe;
 import com.seb39.myfridge.domain.recipe.enums.RecipeSort;
-import com.seb39.myfridge.domain.step.entity.Step;
-import com.seb39.myfridge.domain.step.repository.StepRepository;
+import com.seb39.myfridge.domain.recipe.entity.Step;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,9 +54,6 @@ class RecipeRepositoryTest {
 
     @Autowired
     IngredientRepository ingredientRepository;
-
-    @Autowired
-    StepRepository stepRepository;
 
     @Autowired
     HeartRepository heartRepository;
