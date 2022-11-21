@@ -1,13 +1,12 @@
 package com.seb39.myfridge.heart.controller;
 
-import com.seb39.myfridge.heart.entity.Heart;
-import com.seb39.myfridge.heart.repository.HeartRepository;
-import com.seb39.myfridge.heart.service.HeartService;
-import com.seb39.myfridge.member.entity.Member;
-import com.seb39.myfridge.member.repository.MemberRepository;
-import com.seb39.myfridge.recipe.entity.Recipe;
-import com.seb39.myfridge.recipe.repository.RecipeRepository;
-import org.assertj.core.api.Assertions;
+import com.seb39.myfridge.domain.heart.entity.Heart;
+import com.seb39.myfridge.domain.heart.repository.HeartRepository;
+import com.seb39.myfridge.domain.heart.service.HeartService;
+import com.seb39.myfridge.domain.member.entity.Member;
+import com.seb39.myfridge.domain.member.repository.MemberRepository;
+import com.seb39.myfridge.domain.recipe.entity.Recipe;
+import com.seb39.myfridge.domain.recipe.repository.RecipeRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -22,11 +21,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.util.List;
-
 import static com.seb39.myfridge.util.ApiDocumentUtils.getRequestPreProcessor;
 import static com.seb39.myfridge.util.ApiDocumentUtils.getResponsePreProcessor;
-import static org.assertj.core.api.Assertions.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;

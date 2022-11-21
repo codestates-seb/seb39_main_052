@@ -1,44 +1,39 @@
 package com.seb39.myfridge.recipe.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.seb39.myfridge.comment.entity.Comment;
-import com.seb39.myfridge.comment.repository.CommentRepository;
-import com.seb39.myfridge.config.QueryDslConfig;
-import com.seb39.myfridge.heart.entity.Heart;
-import com.seb39.myfridge.heart.repository.HeartRepository;
-import com.seb39.myfridge.heart.service.HeartService;
-import com.seb39.myfridge.image.entity.Image;
-import com.seb39.myfridge.ingredient.Repository.IngredientRepository;
-import com.seb39.myfridge.ingredient.Repository.RecipeIngredientRepository;
-import com.seb39.myfridge.ingredient.entity.Ingredient;
-import com.seb39.myfridge.ingredient.entity.RecipeIngredient;
-import com.seb39.myfridge.member.dto.MemberDto;
-import com.seb39.myfridge.member.entity.Member;
-import com.seb39.myfridge.member.repository.MemberRepository;
-import com.seb39.myfridge.recipe.dto.MyRecipeDto;
-import com.seb39.myfridge.recipe.dto.RecipeDto;
-import com.seb39.myfridge.recipe.dto.RecipeRecommendDto;
-import com.seb39.myfridge.recipe.dto.RecipeSearch;
-import com.seb39.myfridge.recipe.entity.Recipe;
-import com.seb39.myfridge.recipe.enums.RecipeSort;
-import com.seb39.myfridge.step.entity.Step;
-import com.seb39.myfridge.step.repository.StepRepository;
-import org.assertj.core.api.Assertions;
+import com.seb39.myfridge.domain.comment.entity.Comment;
+import com.seb39.myfridge.domain.comment.repository.CommentRepository;
+import com.seb39.myfridge.domain.recipe.repository.RecipeRepository;
+import com.seb39.myfridge.global.config.QueryDslConfig;
+import com.seb39.myfridge.domain.heart.entity.Heart;
+import com.seb39.myfridge.domain.heart.repository.HeartRepository;
+import com.seb39.myfridge.domain.heart.service.HeartService;
+import com.seb39.myfridge.domain.image.entity.Image;
+import com.seb39.myfridge.domain.ingredient.Repository.IngredientRepository;
+import com.seb39.myfridge.domain.ingredient.Repository.RecipeIngredientRepository;
+import com.seb39.myfridge.domain.ingredient.entity.Ingredient;
+import com.seb39.myfridge.domain.ingredient.entity.RecipeIngredient;
+import com.seb39.myfridge.domain.member.entity.Member;
+import com.seb39.myfridge.domain.member.repository.MemberRepository;
+import com.seb39.myfridge.domain.recipe.dto.MyRecipeDto;
+import com.seb39.myfridge.domain.recipe.dto.RecipeRecommendDto;
+import com.seb39.myfridge.domain.recipe.dto.RecipeSearch;
+import com.seb39.myfridge.domain.recipe.entity.Recipe;
+import com.seb39.myfridge.domain.recipe.enums.RecipeSort;
+import com.seb39.myfridge.domain.step.entity.Step;
+import com.seb39.myfridge.domain.step.repository.StepRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.seb39.myfridge.heart.entity.QHeart.*;
-import static com.seb39.myfridge.recipe.entity.QRecipe.*;
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest

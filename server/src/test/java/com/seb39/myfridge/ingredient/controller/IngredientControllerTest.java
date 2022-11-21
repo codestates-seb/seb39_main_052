@@ -1,7 +1,7 @@
 package com.seb39.myfridge.ingredient.controller;
 
-import com.seb39.myfridge.ingredient.Repository.IngredientRepository;
-import com.seb39.myfridge.ingredient.entity.Ingredient;
+import com.seb39.myfridge.domain.ingredient.Repository.IngredientRepository;
+import com.seb39.myfridge.domain.ingredient.entity.Ingredient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,17 +12,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.security.test.context.support.TestExecutionEvent;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static com.seb39.myfridge.util.ApiDocumentUtils.getRequestPreProcessor;
 import static com.seb39.myfridge.util.ApiDocumentUtils.getResponsePreProcessor;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.willReturn;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;

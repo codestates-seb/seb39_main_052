@@ -1,13 +1,9 @@
 package com.seb39.myfridge.member.entity;
 
-import org.assertj.core.api.Assertions;
+import com.seb39.myfridge.domain.member.entity.Member;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 class MemberTest {
 

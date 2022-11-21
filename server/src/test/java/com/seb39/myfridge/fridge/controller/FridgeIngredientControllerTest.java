@@ -1,16 +1,16 @@
 package com.seb39.myfridge.fridge.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.seb39.myfridge.fridge.dto.FridgeDto;
-import com.seb39.myfridge.fridge.entity.Fridge;
-import com.seb39.myfridge.fridge.entity.FridgeIngredient;
-import com.seb39.myfridge.fridge.mapper.FridgeMapper;
-import com.seb39.myfridge.fridge.service.FridgeIngredientService;
-import com.seb39.myfridge.fridge.service.FridgeService;
-import com.seb39.myfridge.ingredient.entity.Ingredient;
-import com.seb39.myfridge.member.entity.Member;
-import com.seb39.myfridge.member.repository.MemberRepository;
-import com.seb39.myfridge.member.service.MemberService;
+import com.seb39.myfridge.domain.fridge.dto.FridgeDto;
+import com.seb39.myfridge.domain.fridge.entity.Fridge;
+import com.seb39.myfridge.domain.fridge.entity.FridgeIngredient;
+import com.seb39.myfridge.domain.fridge.mapper.FridgeMapper;
+import com.seb39.myfridge.domain.fridge.service.FridgeIngredientService;
+import com.seb39.myfridge.domain.fridge.service.FridgeService;
+import com.seb39.myfridge.domain.ingredient.entity.Ingredient;
+import com.seb39.myfridge.domain.member.entity.Member;
+import com.seb39.myfridge.domain.member.repository.MemberRepository;
+import com.seb39.myfridge.domain.member.service.MemberService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,13 +1,10 @@
 package com.seb39.myfridge.member.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.seb39.myfridge.comment.dto.CommentDto;
-import com.seb39.myfridge.comment.entity.Comment;
-import com.seb39.myfridge.member.dto.MemberDto;
-import com.seb39.myfridge.member.entity.Member;
-import com.seb39.myfridge.member.repository.MemberRepository;
-import com.seb39.myfridge.member.service.MemberService;
-import com.seb39.myfridge.recipe.entity.Recipe;
+import com.seb39.myfridge.domain.member.dto.MemberDto;
+import com.seb39.myfridge.domain.member.entity.Member;
+import com.seb39.myfridge.domain.member.repository.MemberRepository;
+import com.seb39.myfridge.domain.member.service.MemberService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.servlet.server.Encoding;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -28,15 +24,12 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.sound.sampled.AudioFormat;
 import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 import static com.seb39.myfridge.util.ApiDocumentUtils.getRequestPreProcessor;
 import static com.seb39.myfridge.util.ApiDocumentUtils.getResponsePreProcessor;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;

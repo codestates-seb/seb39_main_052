@@ -1,17 +1,10 @@
 package com.seb39.myfridge.step.service;
 
-import com.seb39.myfridge.recipe.entity.Recipe;
-import com.seb39.myfridge.recipe.service.RecipeService;
-import com.seb39.myfridge.step.entity.Step;
+import com.seb39.myfridge.domain.recipe.service.RecipeService;
+import com.seb39.myfridge.domain.step.service.StepService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import javax.persistence.EntityManager;
-import java.time.LocalDateTime;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class StepServiceTest {

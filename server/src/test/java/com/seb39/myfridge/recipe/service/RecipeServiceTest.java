@@ -1,22 +1,20 @@
 package com.seb39.myfridge.recipe.service;
 
-import com.seb39.myfridge.image.entity.Image;
-import com.seb39.myfridge.member.entity.Member;
-import com.seb39.myfridge.member.service.MemberService;
-import com.seb39.myfridge.recipe.entity.Recipe;
-import com.seb39.myfridge.recipe.mapper.RecipeMapper;
-import com.seb39.myfridge.recipe.repository.RecipeRepository;
-import com.seb39.myfridge.step.entity.Step;
-import org.junit.jupiter.api.Assertions;
+import com.seb39.myfridge.domain.recipe.service.RecipeService;
+import com.seb39.myfridge.domain.image.entity.Image;
+import com.seb39.myfridge.domain.member.entity.Member;
+import com.seb39.myfridge.domain.member.service.MemberService;
+import com.seb39.myfridge.domain.recipe.entity.Recipe;
+import com.seb39.myfridge.domain.recipe.mapper.RecipeMapper;
+import com.seb39.myfridge.domain.recipe.repository.RecipeRepository;
+import com.seb39.myfridge.domain.step.entity.Step;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

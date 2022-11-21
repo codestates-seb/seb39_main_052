@@ -1,11 +1,12 @@
 package com.seb39.myfridge.heart.service;
 
-import com.seb39.myfridge.heart.entity.Heart;
-import com.seb39.myfridge.heart.repository.HeartRepository;
-import com.seb39.myfridge.member.entity.Member;
-import com.seb39.myfridge.member.service.MemberService;
-import com.seb39.myfridge.recipe.entity.Recipe;
-import com.seb39.myfridge.recipe.service.RecipeService;
+import com.seb39.myfridge.domain.heart.entity.Heart;
+import com.seb39.myfridge.domain.heart.repository.HeartRepository;
+import com.seb39.myfridge.domain.heart.service.HeartService;
+import com.seb39.myfridge.domain.member.entity.Member;
+import com.seb39.myfridge.domain.member.service.MemberService;
+import com.seb39.myfridge.domain.recipe.entity.Recipe;
+import com.seb39.myfridge.domain.recipe.service.RecipeService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

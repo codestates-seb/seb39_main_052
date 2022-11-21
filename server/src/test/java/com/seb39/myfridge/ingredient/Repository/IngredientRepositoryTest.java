@@ -1,8 +1,8 @@
 package com.seb39.myfridge.ingredient.Repository;
 
-import com.seb39.myfridge.config.QueryDslConfig;
-import com.seb39.myfridge.ingredient.entity.Ingredient;
-import com.seb39.myfridge.recipe.entity.Recipe;
+import com.seb39.myfridge.domain.ingredient.Repository.IngredientRepository;
+import com.seb39.myfridge.global.config.QueryDslConfig;
+import com.seb39.myfridge.domain.ingredient.entity.Ingredient;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,8 +13,6 @@ import org.springframework.context.annotation.Import;
 import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @Import(QueryDslConfig.class)

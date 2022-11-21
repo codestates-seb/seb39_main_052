@@ -1,22 +1,16 @@
 package com.seb39.myfridge.fridge.service;
 
-import com.seb39.myfridge.fridge.dto.FridgeDto;
-import com.seb39.myfridge.fridge.entity.Fridge;
-import com.seb39.myfridge.fridge.entity.FridgeIngredient;
-import com.seb39.myfridge.fridge.mapper.FridgeMapper;
-import com.seb39.myfridge.ingredient.Repository.IngredientRepository;
-import com.seb39.myfridge.ingredient.entity.Ingredient;
-import com.seb39.myfridge.member.entity.Member;
-import com.seb39.myfridge.member.service.MemberService;
-import org.junit.jupiter.api.Assertions;
+import com.seb39.myfridge.domain.fridge.entity.Fridge;
+import com.seb39.myfridge.domain.fridge.mapper.FridgeMapper;
+import com.seb39.myfridge.domain.fridge.service.FridgeIngredientService;
+import com.seb39.myfridge.domain.fridge.service.FridgeService;
+import com.seb39.myfridge.domain.ingredient.Repository.IngredientRepository;
+import com.seb39.myfridge.domain.member.entity.Member;
+import com.seb39.myfridge.domain.member.service.MemberService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,11 +1,12 @@
 package com.seb39.myfridge.comment.repository;
 
-import com.seb39.myfridge.comment.entity.Comment;
-import com.seb39.myfridge.config.QueryDslConfig;
-import com.seb39.myfridge.member.entity.Member;
-import com.seb39.myfridge.member.repository.MemberRepository;
-import com.seb39.myfridge.recipe.entity.Recipe;
-import com.seb39.myfridge.recipe.repository.RecipeRepository;
+import com.seb39.myfridge.domain.comment.entity.Comment;
+import com.seb39.myfridge.domain.comment.repository.CommentRepository;
+import com.seb39.myfridge.global.config.QueryDslConfig;
+import com.seb39.myfridge.domain.member.entity.Member;
+import com.seb39.myfridge.domain.member.repository.MemberRepository;
+import com.seb39.myfridge.domain.recipe.entity.Recipe;
+import com.seb39.myfridge.domain.recipe.repository.RecipeRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

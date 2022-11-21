@@ -1,13 +1,12 @@
 package com.seb39.myfridge.ingredient.service;
 
-import com.seb39.myfridge.ingredient.Repository.IngredientRepository;
-import com.seb39.myfridge.ingredient.entity.Ingredient;
+import com.seb39.myfridge.domain.ingredient.Repository.IngredientRepository;
+import com.seb39.myfridge.domain.ingredient.entity.Ingredient;
+import com.seb39.myfridge.domain.ingredient.service.IngredientService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class IngredientServiceTest {
